@@ -13,11 +13,19 @@ public class Medico {
 	private Long id;
 	
 	private String nombre;
+	private String apellido;
 	private String matricula;
     private String especialidad;
     private String email;
     private String telefono;
     
+    
+	public String getApellido() {
+		return apellido;
+	}
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
 	public Long getId() {
 		return id;
 	}
