@@ -1,8 +1,8 @@
 package com.imb2025.smedico.service.jpa;
 
-import com.imb2025.smedico.entity.RecetaMedicamento;
-import com.imb2025.smedico.repository.RecetaMedicamentoRepository;
-import com.imb2025.smedico.service.RecetaMedicamentoService;
+import com.imb2025.smedico.entity.DetalleReceta;
+import com.imb2025.smedico.repository.DetalleRecetaRepository;
+import com.imb2025.smedico.service.DetalleRecetaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,28 +10,28 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class RecetaMedicamentoServiceImpl implements RecetaMedicamentoService {
+public class DetalleRecetaServicelmlp implements DetalleRecetaService {
 
     @Autowired
-    private RecetaMedicamentoRepository repository;
+    private DetalleRecetaRepository repository;
 
     @Override
-    public List<RecetaMedicamento> findAll() {
+    public List<DetalleReceta> findAll() {
         return repository.findAll();
     }
 
     @Override
-    public Optional<RecetaMedicamento> findById(Long id) {
+    public Optional<DetalleReceta> findById(Long id) {
         return repository.findById(id);
     }
 
     @Override
-    public RecetaMedicamento save(RecetaMedicamento recetaMedicamento) {
+    public DetalleReceta save(DetalleReceta recetaMedicamento) {
         return repository.save(recetaMedicamento);
     }
 
     @Override
-    public RecetaMedicamento update(Long id, RecetaMedicamento recetaMedicamento) {
+    public DetalleReceta update(Long id, DetalleReceta recetaMedicamento) {
         recetaMedicamento.setId(id);
         return repository.save(recetaMedicamento);
     }

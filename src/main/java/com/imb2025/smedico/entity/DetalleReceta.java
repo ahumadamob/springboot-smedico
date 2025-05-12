@@ -3,8 +3,8 @@ package com.imb2025.smedico.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "receta_medicamento")
-public class RecetaMedicamento {
+@Table(name = "detalle_receta")
+public class DetalleReceta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,10 +16,10 @@ public class RecetaMedicamento {
     private String frecuencia;
 
     // Constructores
-    public RecetaMedicamento() {
+    public DetalleReceta() {
     }
 
-    public RecetaMedicamento(Long recetaId, Long medicamentoId, String dosis, String frecuencia) {
+    public DetalleReceta(Long recetaId, Long medicamentoId, String dosis, String frecuencia) {
         this.recetaId = recetaId;
         this.medicamentoId = medicamentoId;
         this.dosis = dosis;
