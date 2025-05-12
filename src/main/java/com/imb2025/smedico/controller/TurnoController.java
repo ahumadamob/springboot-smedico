@@ -32,23 +32,9 @@ public class TurnoController {
         return service.save(turno);
     }
 
-    @PutMapping("/turno/{idturno}")
-    public Turno updateTurno(@PathVariable("idturno") Long idturno, @RequestBody Turno datosTurno) {
-        Turno turnoExistente = service.findById(idturno);
-
-        // Validación simple por si no existe
-        if (turnoExistente == null) {
-            throw new RuntimeException("Turno no encontrado con ID: " + idturno);
-        }
-
-        // Actualizamos los campos
-        turnoExistente.setFecha(datosTurno.getFecha());
-        turnoExistente.setHora(datosTurno.getHora());
-        turnoExistente.setPacienteId(datosTurno.getPacienteId());
-        turnoExistente.setMedicoId(datosTurno.getMedicoId());
-        turnoExistente.setEstadoTurnoId(datosTurno.getEstadoTurnoId());
-
-        return service.save(turnoExistente);
+    @PutMapping("/turno")
+    public Turno updateTurno(@RequestBody Turno turno) {
+        return service.save(turno);
     }
 
 
