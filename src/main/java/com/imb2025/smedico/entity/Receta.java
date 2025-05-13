@@ -14,9 +14,9 @@ public class Receta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private LocalDate fecha;
-	private Long MedicoId;
-	private Long PacienteId;
-	private String Observaciones;
+	private Long medicoId;
+	private Long pacienteId;
+	private String observaciones;
 	
 	
 	public Long getId() {
@@ -30,22 +30,22 @@ public class Receta {
 		this.fecha = fecha;
 	}
 	public Long getMedicoId() {
-		return MedicoId;
+		return medicoId;
 	}
 	public void setMedicoId(Long medicoId) {
-		MedicoId = medicoId;
+		this.medicoId = medicoId;
 	}
 	public Long getPacienteId() {
-		return PacienteId;
+		return pacienteId;
 	}
 	public void setPacienteId(Long pacienteId) {
-		PacienteId = pacienteId;
+		this.pacienteId = pacienteId;
 	}
 	public String getObservaciones() {
-		return Observaciones;
+		return observaciones;
 	}
 	public void setObservaciones(String observaciones) {
-		Observaciones = observaciones;
+		this.observaciones = observaciones;
 	}
 	
 
