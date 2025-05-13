@@ -16,25 +16,23 @@ public class FacturaController {
     private IFacturaService facturaService;
 
     @GetMapping
-    public ResponseEntity<List<Factura>> findAll(){
-        List<Factura> facturas = facturaService.findAll();
-        return ResponseEntity.ok(facturas);
+    public List<Factura> findAll(){
+        return facturaService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Factura> findById(@PathVariable Long id){
-        Factura factura = facturaService.findById(id);
-        return ResponseEntity.ok(factura);
+    public Factura findById(@PathVariable Long id){
+        return facturaService.findById(id);
     }
 
     @PostMapping
-    public ResponseEntity<Factura> createFactura(@RequestBody Factura factura){
-        return ResponseEntity.ok(facturaService.save(factura));
+    public Factura createFactura(@RequestBody Factura factura){
+        return facturaService.save(factura);
     }
 
     @PutMapping
-    public ResponseEntity<Factura> updateFactura(@RequestBody Factura factura){
-        return ResponseEntity.ok(facturaService.save(factura));
+    public Factura updateFactura(@RequestBody Factura factura){
+        return facturaService.save(factura);
     }
 
     @DeleteMapping("/{id}")

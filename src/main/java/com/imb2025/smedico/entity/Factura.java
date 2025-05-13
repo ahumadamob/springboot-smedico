@@ -22,17 +22,6 @@ public class Factura {
 
     private Long medioPagoId;
 
-    public Factura() {
-    }
-
-    public Factura(Long id, LocalDate fecha, Long pacienteId, Double monto, Long medioPagoId) {
-        this.id = id;
-        this.fecha = fecha;
-        this.pacienteId = pacienteId;
-        this.monto = monto;
-        this.medioPagoId = medioPagoId;
-    }
-
     public Long getId() {
         return id;
     }
