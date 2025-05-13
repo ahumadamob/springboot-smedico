@@ -1,8 +1,7 @@
 
 package com.example.api.repository;
 
-import com.example.api.model.UserModel;
-import java.util.Optional;
+import com.example.api.entity.Afiliacion;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -11,13 +10,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
  
 
-public interface IUserRepository extends JpaRepository<UserModel, Long> {
-    Optional<UserModel> findByCorreoElectronico(String correoElectronico);
-    boolean existsByCorreoElectronicoAndContrasena(String correoElectronico, String contrasena);
-      boolean existsByCorreoElectronico(String correoElectronico);
-   
 
+public interface AfiliacionRepository extends JpaRepository<Afiliacion, Long> {
 }
+
 
     
 
