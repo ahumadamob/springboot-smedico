@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 
 
 @Entity
-@Table(name="Aisitente_Clinica-medica")
-public class AsistenteEntity {
+public class Asistente {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

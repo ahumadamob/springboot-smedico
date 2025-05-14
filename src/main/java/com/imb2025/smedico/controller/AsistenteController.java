@@ -5,33 +5,33 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.imb2025.smedico.entity.AsistenteEntity;
-import com.imb2025.smedico.service.Iasistente;
+import com.imb2025.smedico.entity.Asistente;
+import com.imb2025.smedico.service.IAsistenteService;
 
 @RestController
 @RequestMapping("/asistente")
 public class AsistenteController {
 
     @Autowired
-    private Iasistente service;
+    private IAsistenteService service;
 
     @GetMapping
-    public List<AsistenteEntity> findAll() {
+    public List<Asistente> findAll() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public AsistenteEntity findById(@PathVariable("id") Long id) {
+    public Asistente findById(@PathVariable("id") Long id) {
         return service.findById(id);
     }
 
     @PostMapping
-    public AsistenteEntity save(@RequestBody AsistenteEntity asistenteEntity) {
+    public Asistente save(@RequestBody Asistente asistenteEntity) {
         return service.save(asistenteEntity);
     }
 
     @PutMapping("/{id}")
-    public AsistenteEntity update(@PathVariable("id") Long id, @RequestBody AsistenteEntity asistenteActualizado) {
+    public Asistente update(@PathVariable("id") Long id, @RequestBody Asistente asistenteActualizado) {
         return service.update(id, asistenteActualizado);
     }
 
