@@ -13,11 +13,12 @@ public class Afiliacion {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private Long pacienteId;
-    private LocalDate fechaAlta;
-    private LocalDate fechaBaja;
-    private Boolean estado;
-    
+	private Long pacienteId;	
+	private String obraSocialId ;
+	private Long numeroAfiliado ;
+	private LocalDate fechaVigenciaDesde ;
+	private LocalDate fechaHasta ;
+	
 	public Long getId() {
 		return id;
 	}
@@ -30,23 +31,29 @@ public class Afiliacion {
 	public void setPacienteId(Long pacienteId) {
 		this.pacienteId = pacienteId;
 	}
-	public LocalDate getFechaAlta() {
-		return fechaAlta;
+	public String getObraSocialId() {
+		return obraSocialId;
 	}
-	public void setFechaAlta(LocalDate fechaAlta) {
-		this.fechaAlta = fechaAlta;
+	public void setObraSocialId(String obraSocialId) {
+		this.obraSocialId = obraSocialId;
 	}
-	public LocalDate getFechaBaja() {
-		return fechaBaja;
+	public Long getNumeroAfiliado() {
+		return numeroAfiliado;
 	}
-	public void setFechaBaja(LocalDate fechaBaja) {
-		this.fechaBaja = fechaBaja;
+	public void setNumeroAfiliado(Long numeroAfiliado) {
+		this.numeroAfiliado = numeroAfiliado;
 	}
-	public Boolean getEstado() {
-		return estado;
+	public LocalDate getFechaVigenciaDesde() {
+		return fechaVigenciaDesde;
 	}
-	public void setEstado(Boolean estado) {
-		this.estado = estado;
+	public void setFechaVigenciaDesde(LocalDate fechaVigenciaDesde) {
+		this.fechaVigenciaDesde = fechaVigenciaDesde;
 	}
-    
+	public LocalDate getFechaHasta() {
+		return fechaHasta;
+	}
+	public void setFechaHasta(LocalDate fechaHasta) {
+		this.fechaHasta = fechaHasta;
+	}
+
 }
