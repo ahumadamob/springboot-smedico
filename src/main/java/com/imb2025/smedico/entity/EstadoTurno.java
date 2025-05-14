@@ -1,4 +1,4 @@
-package com.imb2025.smedico.EntityET;
+package com.imb2025.smedico.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,21 +8,12 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "estado_turno") // Especifica el nombre de la tabla en la BD
-public class EstadoTurnoE {
+public class EstadoTurno {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Generación automática del ID
     private Long id;
     private String nombre;
-
-    // Constructor vacío
-    public EstadoTurnoE() {}
-
-    // Constructor con parámetros
-    public EstadoTurnoE(Long id, String nombre) {
-        this.id = id;
-        this.nombre = nombre;
-    }
 
     // Getters
     public Long getId() {
