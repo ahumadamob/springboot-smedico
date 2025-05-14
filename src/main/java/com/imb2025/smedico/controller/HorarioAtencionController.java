@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import com.imb2025.smedico.entity.HorarioAtencionEntity;
+import com.imb2025.smedico.entity.HorarioAtencion;
 import com.imb2025.smedico.service.HorarioAtencionService;
 
 @RestController
@@ -16,22 +16,22 @@ public class HorarioAtencionController {
     private HorarioAtencionService horarioAtencionService;
 
     @GetMapping
-    public List<HorarioAtencionEntity> getAllHorarioAtencion() {
+    public List<HorarioAtencion> getAllHorarioAtencion() {
         return horarioAtencionService.getAllHorarioAtencion();
     }
 
     @GetMapping("/{id}")
-    public HorarioAtencionEntity getHorarioAtencionById(@PathVariable Long id) {
+    public HorarioAtencion getHorarioAtencionById(@PathVariable Long id) {
         return horarioAtencionService.getHorarioAtencionById(id);
     }
 
     @PostMapping
-    public HorarioAtencionEntity createHorarioAtencion(@RequestBody HorarioAtencionEntity horarioAtencionEntity) {
+    public HorarioAtencion createHorarioAtencion(@RequestBody HorarioAtencion horarioAtencionEntity) {
         return horarioAtencionService.createHorarioAtencion(horarioAtencionEntity);
     }
 
     @PutMapping("/{id}")
-    public HorarioAtencionEntity updateHorarioAtencion(@PathVariable Long id, @RequestBody HorarioAtencionEntity horarioAtencionEntity) {
+    public HorarioAtencion updateHorarioAtencion(@PathVariable Long id, @RequestBody HorarioAtencion horarioAtencionEntity) {
         return horarioAtencionService.updateHorarioAtencion(id, horarioAtencionEntity);
     }
     

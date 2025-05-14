@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import com.imb2025.smedico.entity.HorarioAtencionEntity;
+import com.imb2025.smedico.entity.HorarioAtencion;
 import com.imb2025.smedico.repository.HorarioAtencionRepository;
 import com.imb2025.smedico.service.HorarioAtencionService;
 
@@ -16,13 +16,13 @@ public class IHorarioAtencionServiceImp implements HorarioAtencionService {
 	private HorarioAtencionRepository repo;
 
 	@Override
-	public List<HorarioAtencionEntity> getAllHorarioAtencion() {
+	public List<HorarioAtencion> getAllHorarioAtencion() {
 		return repo.findAll();
 	}
 
 	@Override
-	public HorarioAtencionEntity getHorarioAtencionById(Long id) {
-		Optional<HorarioAtencionEntity> opt;
+	public HorarioAtencion getHorarioAtencionById(Long id) {
+		Optional<HorarioAtencion> opt;
 		opt = repo.findById(id);
 		if (opt.isPresent()) {
 			return opt.get();
@@ -32,12 +32,12 @@ public class IHorarioAtencionServiceImp implements HorarioAtencionService {
 	}
 
 	@Override
-	public HorarioAtencionEntity createHorarioAtencion(HorarioAtencionEntity horarioAtencionEntity) {
+	public HorarioAtencion createHorarioAtencion(HorarioAtencion horarioAtencionEntity) {
 		return repo.save(horarioAtencionEntity);
 	}
 
 	@Override
-	public HorarioAtencionEntity updateHorarioAtencion(Long id, HorarioAtencionEntity horarioAtencionEntity) {
+	public HorarioAtencion updateHorarioAtencion(Long id, HorarioAtencion horarioAtencionEntity) {
 		if (repo.existsById(id)) {
 			horarioAtencionEntity.setId(id);
 			return repo.save(horarioAtencionEntity);

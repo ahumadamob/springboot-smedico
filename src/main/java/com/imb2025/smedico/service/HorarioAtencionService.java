@@ -2,17 +2,17 @@ package com.imb2025.smedico.service;
 
 import java.util.List;
 
-import com.imb2025.smedico.entity.HorarioAtencionEntity;
+import com.imb2025.smedico.entity.HorarioAtencion;
 
 public interface HorarioAtencionService {
 
-	    public List<HorarioAtencionEntity> getAllHorarioAtencion() ;
+	    public List<HorarioAtencion> getAllHorarioAtencion() ;
 	    
-	    public HorarioAtencionEntity getHorarioAtencionById(Long id);
+	    public HorarioAtencion getHorarioAtencionById(Long id);
 	    
-	    public HorarioAtencionEntity createHorarioAtencion( HorarioAtencionEntity horarioAtencionEntity);
+	    public HorarioAtencion createHorarioAtencion( HorarioAtencion horarioAtencionEntity);
 	    
-	    public HorarioAtencionEntity updateHorarioAtencion(Long id, HorarioAtencionEntity horarioAtencionEntity);
+	    public HorarioAtencion updateHorarioAtencion(Long id, HorarioAtencion horarioAtencionEntity);
 	    
 	    public void deleteHorarioAtencion(Long id);	
 }
