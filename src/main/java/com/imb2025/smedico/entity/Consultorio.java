@@ -15,10 +15,6 @@ public class Consultorio {
 	private String ubicacion;
 	private int piso;
 	
-	public Consultorio() {
-		
-	}
-	
 	public Long getId() {
 		return id;
 	}

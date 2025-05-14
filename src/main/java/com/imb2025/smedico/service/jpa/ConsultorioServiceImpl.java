@@ -1,4 +1,4 @@
-package com.imb2025.smedico.service;
+package com.imb2025.smedico.service.jpa;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.imb2025.smedico.entity.Consultorio;
 import com.imb2025.smedico.repository.ConsultorioRepository;
+import com.imb2025.smedico.service.IConsultorioService;
 
 @Service
 public class ConsultorioServiceImpl implements IConsultorioService {
