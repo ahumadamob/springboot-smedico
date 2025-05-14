@@ -12,6 +12,5 @@ public interface IHistorialPacienteService {
 	public HistorialPaciente findById(Long id);
 	public HistorialPaciente save(HistorialPaciente historial);
 	public void deleteById(Long id);
-	HistorialPaciente update(Long id, HistorialPaciente historial);
 
 }

@@ -41,18 +41,5 @@ public class HistorialPacienteServiceImpl implements IHistorialPacienteService {
 	public void deleteById(Long id) {
 		repo.deleteById(id);		
 	}
-	@Override
-	public HistorialPaciente update(Long id, HistorialPaciente historial) {
-	    HistorialPaciente existente = findById(id);
-	    if (existente != null) {
-	        existente.setPacienteId(historial.getPacienteId());
-	        existente.setEvento(historial.getEvento());
-	        existente.setFecha(historial.getFecha());
-	        existente.setObservacion(historial.getObservacion());
-	        return repo.save(existente);
-	    } else {
-	        return null;
-	    }
-	}
 
 }
