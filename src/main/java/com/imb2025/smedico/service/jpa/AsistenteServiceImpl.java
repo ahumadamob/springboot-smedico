@@ -5,29 +5,29 @@ import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.imb2025.smedico.entity.AsistenteEntity;
+import com.imb2025.smedico.entity.Asistente;
 import com.imb2025.smedico.repository.AsistenteRepository;
-import com.imb2025.smedico.service.Iasistente;
+import com.imb2025.smedico.service.IAsistenteService;
 
 @Service
-public class AsistenteImpl implements Iasistente {
+public class AsistenteServiceImpl implements IAsistenteService {
 
     @Autowired
     private AsistenteRepository asistenteRepo;
 
     @Override
-    public List<AsistenteEntity> findAll() {
+    public List<Asistente> findAll() {
         return asistenteRepo.findAll();
     }
 
     @Override
-    public AsistenteEntity findById(Long id) {
-        Optional<AsistenteEntity> asistente = asistenteRepo.findById(id);
+    public Asistente findById(Long id) {
+        Optional<Asistente> asistente = asistenteRepo.findById(id);
         return asistente.orElse(null);
     }
 
-    public AsistenteEntity update(Long id, AsistenteEntity asistenteActualizado) {
-        AsistenteEntity existente = asistenteRepo.findById(id)
+    public Asistente update(Long id, Asistente asistenteActualizado) {
+        Asistente existente = asistenteRepo.findById(id)
             .orElseThrow(() -> new RuntimeException("Asistente no encontrado"));
 
         existente.setNombre(asistenteActualizado.getNombre());
@@ -39,7 +39,7 @@ public class AsistenteImpl implements Iasistente {
     }
     
     @Override
-    public AsistenteEntity save(AsistenteEntity asistenteEntity) {
+    public Asistente save(Asistente asistenteEntity) {
         return asistenteRepo.save(asistenteEntity);
     }
 
