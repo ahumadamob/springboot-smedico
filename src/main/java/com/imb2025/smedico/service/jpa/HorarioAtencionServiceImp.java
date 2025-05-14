@@ -7,10 +7,10 @@ import java.util.Optional;
 
 import com.imb2025.smedico.entity.HorarioAtencion;
 import com.imb2025.smedico.repository.HorarioAtencionRepository;
-import com.imb2025.smedico.service.HorarioAtencionService;
+import com.imb2025.smedico.service.IHorarioAtencionService;
 
 @Service
-public class IHorarioAtencionServiceImp implements HorarioAtencionService {
+public class HorarioAtencionServiceImp implements IHorarioAtencionService {
 
 	@Autowired
 	private HorarioAtencionRepository repo;
@@ -32,17 +32,8 @@ public class IHorarioAtencionServiceImp implements HorarioAtencionService {
 	}
 
 	@Override
-	public HorarioAtencion createHorarioAtencion(HorarioAtencion horarioAtencionEntity) {
+	public HorarioAtencion save(HorarioAtencion horarioAtencionEntity) {
 		return repo.save(horarioAtencionEntity);
-	}
-
-	@Override
-	public HorarioAtencion updateHorarioAtencion(Long id, HorarioAtencion horarioAtencionEntity) {
-		if (repo.existsById(id)) {
-			horarioAtencionEntity.setId(id);
-			return repo.save(horarioAtencionEntity);
-		}
-		throw new IllegalArgumentException("Afiliación no encontrada");
 	}
 
 	@Override

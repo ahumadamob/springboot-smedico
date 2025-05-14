@@ -4,15 +4,13 @@ import java.util.List;
 
 import com.imb2025.smedico.entity.HorarioAtencion;
 
-public interface HorarioAtencionService {
+public interface IHorarioAtencionService {
 
 	    public List<HorarioAtencion> getAllHorarioAtencion() ;
 	    
 	    public HorarioAtencion getHorarioAtencionById(Long id);
 	    
-	    public HorarioAtencion createHorarioAtencion( HorarioAtencion horarioAtencionEntity);
-	    
-	    public HorarioAtencion updateHorarioAtencion(Long id, HorarioAtencion horarioAtencionEntity);
+	    public HorarioAtencion save( HorarioAtencion horarioAtencionEntity);
 	    
 	    public void deleteHorarioAtencion(Long id);	
 }

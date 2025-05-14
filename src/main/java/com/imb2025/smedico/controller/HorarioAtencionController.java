@@ -6,14 +6,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import com.imb2025.smedico.entity.HorarioAtencion;
-import com.imb2025.smedico.service.HorarioAtencionService;
+import com.imb2025.smedico.service.IHorarioAtencionService;
 
 @RestController
 @RequestMapping("/horarioAtencion")
 public class HorarioAtencionController {
 
     @Autowired
-    private HorarioAtencionService horarioAtencionService;
+    private IHorarioAtencionService horarioAtencionService;
 
     @GetMapping
     public List<HorarioAtencion> getAllHorarioAtencion() {
@@ -27,12 +27,12 @@ public class HorarioAtencionController {
 
     @PostMapping
     public HorarioAtencion createHorarioAtencion(@RequestBody HorarioAtencion horarioAtencionEntity) {
-        return horarioAtencionService.createHorarioAtencion(horarioAtencionEntity);
+        return horarioAtencionService.save(horarioAtencionEntity);
     }
 
     @PutMapping("/{id}")
     public HorarioAtencion updateHorarioAtencion(@PathVariable Long id, @RequestBody HorarioAtencion horarioAtencionEntity) {
-        return horarioAtencionService.updateHorarioAtencion(id, horarioAtencionEntity);
+        return horarioAtencionService.save(horarioAtencionEntity);
     }
     
     @DeleteMapping("/{id}")
