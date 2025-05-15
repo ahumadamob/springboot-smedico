@@ -3,7 +3,7 @@ package com.imb2025.smedico.service;
 import java.util.List;
 import com.imb2025.smedico.entity.Afiliacion;
 
-public interface  AfiliacionService {
+public interface  IAfiliacionService {
 	
 	public List<Afiliacion> findAll();
 	public Afiliacion findById(Long id);

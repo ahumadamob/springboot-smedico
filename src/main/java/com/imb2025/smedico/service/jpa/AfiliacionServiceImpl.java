@@ -1,15 +1,15 @@
-package com.imb2025.smedico.service.Impl;
+package com.imb2025.smedico.service.jpa;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.imb2025.smedico.entity.Afiliacion;
 import com.imb2025.smedico.repository.AfiliacionRepository;
-import com.imb2025.smedico.service.AfiliacionService;
+import com.imb2025.smedico.service.IAfiliacionService;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AfiliacionServiceImpl implements AfiliacionService {
+public class AfiliacionServiceImpl implements IAfiliacionService {
 
 	@Autowired
 	private AfiliacionRepository afili;

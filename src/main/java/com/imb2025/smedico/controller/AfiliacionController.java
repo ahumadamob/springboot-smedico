@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.imb2025.smedico.entity.Afiliacion;
-import com.imb2025.smedico.service.AfiliacionService;
+import com.imb2025.smedico.service.IAfiliacionService;
 
 @RestController
 @RequestMapping("/Afiliacion")
 public class AfiliacionController {
 
 	@Autowired
-	private AfiliacionService servi;
+	private IAfiliacionService servi;
 
 	@GetMapping
 	public List<Afiliacion> findAllAfiliacion() {

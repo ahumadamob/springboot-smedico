@@ -2,12 +2,14 @@
 
 
 
-package com.imb2025.smedico.service;
+package com.imb2025.smedico.service.jpa;
 
 import java.util.List;
 
 import com.imb2025.smedico.entity.DetalleFactura;
-import com.imb2025.smedico.repositories.DetalleFacturaRepositories;
+import com.imb2025.smedico.repository.DetalleFacturaRepositories;
+import com.imb2025.smedico.service.IDetalleFacturaService;
+
 import org.springframework.stereotype.Service;
 
 
