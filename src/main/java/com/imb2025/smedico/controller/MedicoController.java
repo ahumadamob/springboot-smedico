@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.service.IMedicoService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController

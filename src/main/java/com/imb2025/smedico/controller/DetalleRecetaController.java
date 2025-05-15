@@ -3,7 +3,6 @@ package com.imb2025.smedico.controller;
 import com.imb2025.smedico.entity.DetalleReceta;
 import com.imb2025.smedico.service.IDetalleRecetaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
