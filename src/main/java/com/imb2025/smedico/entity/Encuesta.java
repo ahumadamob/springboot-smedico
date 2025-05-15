@@ -6,13 +6,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class encuestaEntity {
+public class Encuesta {
        
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
-	//Creamos el Objeto
-	
 	private Long id;
 	private Long pacienteId;
 	private Long consultaId;
