@@ -3,10 +3,8 @@ package com.imb2025.smedico.entity;
 import java.time.LocalDate;
 
 import jakarta.persistence.*;
-import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "pacientes")
 public class Paciente {
 
 	  @Id
