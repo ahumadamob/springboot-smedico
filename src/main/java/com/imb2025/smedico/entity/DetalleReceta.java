@@ -15,17 +15,6 @@ public class DetalleReceta {
     private String dosis;
     private String frecuencia;
 
-    // Constructores
-    public DetalleReceta() {
-    }
-
-    public DetalleReceta(Long recetaId, Long medicamentoId, String dosis, String frecuencia) {
-        this.recetaId = recetaId;
-        this.medicamentoId = medicamentoId;
-        this.dosis = dosis;
-        this.frecuencia = frecuencia;
-    }
-
     // Getters y Setters
     public Long getId() {
         return id;
