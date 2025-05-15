@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/diagnostico")
@@ -21,7 +20,7 @@ public class DiagnosticoController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Diagnostico> getById(@PathVariable Long id) {
+    public Diagnostico getById(@PathVariable Long id) {
         return service.findById(id);
     }
 
@@ -32,7 +31,7 @@ public class DiagnosticoController {
 
     @PutMapping("/{id}")
     public Diagnostico update(@PathVariable Long id, @RequestBody Diagnostico diagnostico) {
-        return service.update(id, diagnostico);
+        return service.save(diagnostico);
     }
 
     @DeleteMapping("/{id}")

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DiagnosticoServiceImpl implements IDiagnosticoService {
@@ -22,19 +21,13 @@ public class DiagnosticoServiceImpl implements IDiagnosticoService {
     }
 
     @Override
-    public Optional<Diagnostico> findById(Long id) {
-        return repo.findById(id);
+    public Diagnostico findById(Long id) {
+        return repo.findById(id).orElse(null);
     }
 
     @Override
     public Diagnostico save(Diagnostico diagnostico) {
         return repo.save(diagnostico);
-    }
-
-    @Override
-    public Diagnostico update(Long id, Diagnostico diagnostico) {
-        diagnostico.setId(id); // Asegurarse que el ID sea el correcto
-        return repo.save(diagnostico); // En JPA, save actúa como update si el ID ya existe
     }
 
     @Override
