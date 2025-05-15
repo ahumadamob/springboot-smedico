@@ -1,4 +1,4 @@
-package com.imb2025.smedico.service.impl;
+package com.imb2025.smedico.service.jpa;
 import java.util.List;
 import java.util.Optional;
 
