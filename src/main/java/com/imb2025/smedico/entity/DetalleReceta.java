@@ -3,7 +3,6 @@ package com.imb2025.smedico.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "detalle_receta")
 public class DetalleReceta {
 
     @Id

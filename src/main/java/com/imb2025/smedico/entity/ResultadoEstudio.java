@@ -12,7 +12,7 @@ import jakarta.persistence.Id;
 public class ResultadoEstudio {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
 	private long ordenEstudioID;
