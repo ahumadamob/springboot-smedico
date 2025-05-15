@@ -1,4 +1,4 @@
-package com.imb2025.smedico.service.impl;
+package com.imb2025.smedico.service.jpa;
 
 import com.imb2025.smedico.entity.ObraSocial;
 import com.imb2025.smedico.repository.ObraSocialRepository;
