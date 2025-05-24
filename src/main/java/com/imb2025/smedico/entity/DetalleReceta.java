@@ -3,18 +3,28 @@ package com.imb2025.smedico.entity;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "detalle_receta")
 public class DetalleReceta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long recetaId;
-    private Long medicamentoId;
+    // Relación con Receta (muchos detalles pueden pertenecer a una receta)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receta_id", nullable = false)
+    private Receta receta;
+
+    // Relación con Medicamento (muchos detalles pueden referir a un medicamento)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "medicamento_id", nullable = false)
+    private Medicamento medicamento;
+
     private String dosis;
     private String frecuencia;
 
     // Getters y Setters
+
     public Long getId() {
         return id;
     }
@@ -23,20 +33,20 @@ public class DetalleReceta {
         this.id = id;
     }
 
-    public Long getRecetaId() {
-        return recetaId;
+    public Receta getReceta() {
+        return receta;
     }
 
-    public void setRecetaId(Long recetaId) {
-        this.recetaId = recetaId;
+    public void setReceta(Receta receta) {
+        this.receta = receta;
     }
 
-    public Long getMedicamentoId() {
-        return medicamentoId;
+    public Medicamento getMedicamento() {
+        return medicamento;
     }
 
-    public void setMedicamentoId(Long medicamentoId) {
-        this.medicamentoId = medicamentoId;
+    public void setMedicamento(Medicamento medicamento) {
+        this.medicamento = medicamento;
     }
 
     public String getDosis() {
