@@ -1,5 +1,6 @@
 package com.imb2025.smedico.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,20 +11,31 @@ public class DetalleReceta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Relación con Receta (muchos detalles pueden pertenecer a una receta)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receta_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Receta receta;
 
-    // Relación con Medicamento (muchos detalles pueden referir a un medicamento)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medicamento_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Medicamento medicamento;
 
+    @Column(nullable = false)
     private String dosis;
+
+    @Column(nullable = false)
     private String frecuencia;
 
-    // Getters y Setters
+    public DetalleReceta() {
+    }
+
+    public DetalleReceta(Receta receta, Medicamento medicamento, String dosis, String frecuencia) {
+        this.receta = receta;
+        this.medicamento = medicamento;
+        this.dosis = dosis;
+        this.frecuencia = frecuencia;
+    }
 
     public Long getId() {
         return id;
