@@ -7,16 +7,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-@Table(name = "horarioatencion")
+@Table(name = "horarioatencion") master
 @Entity
 public class HorarioAtencion{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-    private String diaSemana;
+
+    private Long medicoId;
+   private String diaSemana;
     private String horaInicio;
     private String horaFin;
     
+
     @ManyToOne
     private Medico medico;
     @ManyToOne
@@ -43,13 +46,23 @@ public class HorarioAtencion{
 		this.asistente = asistente;
 	}
 
+
 	public long getId() {
 		return id;
 	}
 	public void setId(long id) {
 		this.id = id;
 	}
+
 	
+
+	public long getMedicoId() {
+		return medicoId;
+	}
+	public void setMedicoId(long medicoId) {
+		this.medicoId = medicoId;
+	}
+
 	public String getDiaSemana() {
 		return diaSemana;
 	}
@@ -68,6 +81,7 @@ public class HorarioAtencion{
 	public void setHoraFin(String horaFin) {
 		this.horaFin = horaFin;
 	}
+
 	public Medico getMedico() {
 		return medico;
 	}
@@ -92,6 +106,7 @@ public class HorarioAtencion{
 	public void setAsistente(Asistente asistente) {
 		this.asistente = asistente;
 	}
+
 	
 	
 

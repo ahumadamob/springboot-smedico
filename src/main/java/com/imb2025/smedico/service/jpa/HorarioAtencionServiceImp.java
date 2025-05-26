@@ -15,6 +15,10 @@ import com.imb2025.smedicoDtoRequest.HorarioAtencionRequestDTO;
 import com.imb2025.smedico.repository.AsistenteRepository;
 
 
+import com.imb2025.smedico.repository.HorarioAtencionRepository;
+import com.imb2025.smedico.service.IHorarioAtencionService;
+
+
 @Service
 public class HorarioAtencionServiceImp implements IHorarioAtencionService {
 
@@ -36,6 +40,7 @@ public class HorarioAtencionServiceImp implements IHorarioAtencionService {
 
 
 	
+
 	@Override
 	public HorarioAtencion getHorarioAtencionById(Long id) {
 		Optional<HorarioAtencion> opt;
@@ -48,6 +53,7 @@ public class HorarioAtencionServiceImp implements IHorarioAtencionService {
 	}
 
 	@Override
+
 	public HorarioAtencion create ( HorarioAtencionRequestDTO dto) throws Exception {
 
 		HorarioAtencion hora = dtoHorarioAtencion(dto);
@@ -80,6 +86,10 @@ public class HorarioAtencionServiceImp implements IHorarioAtencionService {
         }
     }
 
+	public HorarioAtencion save(HorarioAtencion horarioAtencionEntity) {
+		return repo.save(horarioAtencionEntity);
+	}
+
 	@Override
 	public void deleteHorarioAtencion(Long id) {
 		repo.deleteById(id);
@@ -102,5 +112,6 @@ public class HorarioAtencionServiceImp implements IHorarioAtencionService {
 		        throw new RuntimeException("Hubo un error: " + e.getMessage(), e);
 		    }
 	}
+
 
 }
