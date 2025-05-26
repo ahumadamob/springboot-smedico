@@ -1,10 +1,11 @@
 package com.imb2025.smedico.controller;
 
 import java.util.List;
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import com.imb2025.smedico.dto.TurnoRequestDTO;
 import com.imb2025.smedico.entity.Turno;
 import com.imb2025.smedico.service.ITurnoService;
 
@@ -28,13 +29,27 @@ public class TurnoController {
 
     // POST - Crear nuevo turno
     @PostMapping("/turno")
-    public Turno createTurno(@RequestBody Turno turno) {
-        return service.save(turno);
+    public Turno createTurno(@RequestBody TurnoRequestDTO turnoRequestDTOurno) {
+    	   try {
+    	        return service.save(service.fromDto(turnoRequestDTOurno));
+    	    } catch (Exception e) {
+    	        throw new RuntimeException("Error al crear turno: " + e.getMessage());
+    	    }
     }
 
-    @PutMapping("/turno")
-    public Turno updateTurno(@RequestBody Turno turno) {
-        return service.save(turno);
+    @PutMapping("/turno/{idturno}")
+    public Turno updateTurno(@PathVariable("idturno") Long idturno, @RequestBody TurnoRequestDTO dto) {
+        Turno turnoExistente = service.findById(idturno);
+
+        if (turnoExistente == null) {
+            throw new RuntimeException("Turno no encontrado con ID: " + idturno);
+        }
+
+        try {
+            return service.updateFromDto(turnoExistente, dto);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al actualizar turno: " + e.getMessage());
+        }
     }
 
 
