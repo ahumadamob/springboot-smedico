@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.imb2025.smedico.service.IRecetaService;
+import com.imb2025.smedico.dto.RecetaRequestDTO;
 import com.imb2025.smedico.entity.Receta;
 
 @RestController
@@ -30,12 +31,22 @@ public class RecetaController {
 		return service.findById(id);
 		}
 	@PostMapping ("/receta")
-	public Receta saveReceta(@RequestBody Receta receta) {
-		return service.save(receta);
-	}
-	@PutMapping ("/receta")
-	public Receta updateReceta(@RequestBody Receta receta) {
-		return service.save(receta);
+	public Receta create(@RequestBody RecetaRequestDTO recetaRequestDTO) {
+		 try {
+	            return service.create(recetaRequestDTO);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            return null;
+	        }
+	    }
+	@PutMapping("/receta/{idreceta}")
+	public Receta update(@PathVariable("idreceta") Long id, @RequestBody RecetaRequestDTO dto) {
+		try {
+            return service.update(id, dto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
 	}
 	@DeleteMapping ("/receta/{idreceta}")
 	public String deleteReceta (@PathVariable("idreceta") Long id) {
