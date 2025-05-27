@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.imb2025.smedico.entity.Especialidad;
 import com.imb2025.smedico.service.IEspecialidadService;
 
+import dto.EspecialidadRequestDTO;
+
 @RestController
 public class EspecialidadController {
 	
@@ -32,18 +34,29 @@ public class EspecialidadController {
 	}
 	
 	@PostMapping("/especialidad")
-	public Especialidad createEspecialidad(@RequestBody Especialidad especialidad) {
-		return service.save(especialidad);
+	public Especialidad create(@RequestBody EspecialidadRequestDTO dto) {
+		try {
+		return service.create(dto);
+		}catch(Exception e){
+			e.printStackTrace();
+            return null;
+		}
 	}
 	 
-	@PutMapping("/especialidad")
-	public Especialidad updateEspecialidad(@RequestBody Especialidad especialidad) {
-		return service.save(especialidad);
+	@PutMapping("/especialidad/{idespecialidad}")
+	public Especialidad update(@RequestBody EspecialidadRequestDTO dto, @PathVariable("idespecialidad") Long id) {
+		try {
+		return service.update(id, dto);
+		}catch (Exception e){
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 	
 	@DeleteMapping("/especialidad/{idespecialidad}")
 	public String deleteEspecialidad(@PathVariable("idespecialidad") Long id) {
 		service.deleteById(id);
-		return "Especialidad " +id.toString() + "eliminada correctamente. ";
+		return "Especialidad " +id.toString() + " Eliminada correctamente. ";
 	}
 }
