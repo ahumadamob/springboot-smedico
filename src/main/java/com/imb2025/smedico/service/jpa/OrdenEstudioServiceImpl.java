@@ -55,7 +55,7 @@ public class OrdenEstudioServiceImpl implements IOrdenEstudioService{
 	@Override
 	public OrdenEstudio create(OrdenEstudio ordenestudio)  {
 		
-	    System.out.println("💾 Guardando orden: " + ordenestudio);
+	    System.out.println("Guardando orden: " + ordenestudio);
 
     	 return repo.save(ordenestudio);
 	}
