@@ -1,41 +1,23 @@
-package com.imb2025.smedico.entity;
-
-import jakarta.persistence.*;
+package com.imb2025.smedico.dto;
 
 import java.time.LocalDate;
 
-@Entity
-public class Factura {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class FacturaRequestDTO {
 
     private LocalDate fecha;
 
-    @ManyToOne
-    private Paciente paciente;
+    private Long pacienteId;
 
     private Double monto;
 
     private Long medioPagoId;
 
-    public Factura() {
-    }
-
-    public Factura(LocalDate fecha, Paciente paciente, Double monto, Long medioPagoId) {
+    public FacturaRequestDTO(LocalDate fecha, Long pacienteId, Double monto, Long medioPagoId) {
+        super();
         this.fecha = fecha;
-        this.paciente = paciente;
+        this.pacienteId = pacienteId;
         this.monto = monto;
         this.medioPagoId = medioPagoId;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public LocalDate getFecha() {
@@ -46,12 +28,12 @@ public class Factura {
         this.fecha = fecha;
     }
 
-    public Paciente getPaciente() {
-        return paciente;
+    public Long getPacienteId() {
+        return pacienteId;
     }
 
-    public void setPaciente(Paciente paciente) {
-        this.paciente = paciente;
+    public void setPacienteId(Long pacienteId) {
+        this.pacienteId = pacienteId;
     }
 
     public Double getMonto() {
