@@ -2,7 +2,6 @@ package com.imb2025.smedico.service.jpa;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.imb2025.smedico.DTO.AfiliacionRequestDTO;
 import com.imb2025.smedico.entity.Afiliacion;
 import com.imb2025.smedico.repository.AfiliacionRepository;
@@ -31,6 +30,7 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
 	public Afiliacion findById(Long id) {
 		Optional<Afiliacion> opt;
 		opt = repo.findById(id);
+
 		if (opt.isPresent()) {
 			return opt.get();
 		} else {
@@ -75,5 +75,4 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
 		    	throw new RuntimeException("Hubo un error: " + e.getMessage(), e);
 				}
 			}
-
 }
