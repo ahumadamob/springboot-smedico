@@ -1,5 +1,5 @@
 package com.imb2025.smedico.dto;
-
+//Request
 public class AsistenteRequestDTO {
 	
 	 private String nombre;
