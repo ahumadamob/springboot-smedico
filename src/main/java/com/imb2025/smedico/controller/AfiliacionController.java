@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.imb2025.smedico.DTO.AfiliacionRequestDTO;
 import com.imb2025.smedico.entity.Afiliacion;
 import com.imb2025.smedico.service.IAfiliacionService;
@@ -41,6 +40,14 @@ public class AfiliacionController {
 	@PutMapping("/{id}")
 	public Afiliacion updateAfiliacion(@PathVariable Long id, @RequestBody AfiliacionRequestDTO dto) throws Exception {
 		return servi.update(id, dto);
+    
+	public Afiliacion createAfiliacion(@RequestBody Afiliacion afiliacion) {
+		return servi.save(afiliacion);
+	}
+
+	@PutMapping("/{id}")
+	public Afiliacion updateAfiliacion(@PathVariable Long id, @RequestBody Afiliacion afiliacion) {
+		return servi.update(id, afiliacion);
 	}
 
 	@DeleteMapping("/{id}")

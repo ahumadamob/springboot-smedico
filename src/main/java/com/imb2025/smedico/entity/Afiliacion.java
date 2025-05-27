@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 
+
 @Entity
 public class Afiliacion {
 
@@ -34,6 +35,11 @@ public class Afiliacion {
 		this.paciente = paciente;
 		this.obra = obra;
 	}
+	private Long pacienteId;	
+	private String obraSocialId ;
+	private Long numeroAfiliado ;
+	private LocalDate fechaVigenciaDesde ;
+	private LocalDate fechaHasta ;
 	
 	public Long getId() {
 		return id;
@@ -41,6 +47,20 @@ public class Afiliacion {
 	public void setId(Long id) {
 		this.id = id;
 	}
+  
+	public Long getPacienteId() {
+		return pacienteId;
+	}
+	public void setPacienteId(Long pacienteId) {
+		this.pacienteId = pacienteId;
+	}
+	public String getObraSocialId() {
+		return obraSocialId;
+	}
+	public void setObraSocialId(String obraSocialId) {
+		this.obraSocialId = obraSocialId;
+	}
+  
 	public Long getNumeroAfiliado() {
 		return numeroAfiliado;
 	}
@@ -59,6 +79,7 @@ public class Afiliacion {
 	public void setFechaHasta(LocalDate fechaHasta) {
 		this.fechaHasta = fechaHasta;
 	}
+  
 	public Paciente getPaciente() {
 		return paciente;
 	}
@@ -72,5 +93,4 @@ public class Afiliacion {
 		this.obra = obra;
 	}
 
-	
 }
