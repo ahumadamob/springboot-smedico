@@ -47,6 +47,11 @@ public class Receta {
 	public void setObservaciones(String observaciones) {
 		this.observaciones = observaciones;
 	}
+
+	public void setId(Long recetaId) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 }
