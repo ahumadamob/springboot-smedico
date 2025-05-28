@@ -1,6 +1,6 @@
 package com.imb2025.smedico.controller;
 
-
+import com.imb2025.smedico.dto.ConsultaRequestDTO;
 import com.imb2025.smedico.entity.Consulta;
 import com.imb2025.smedico.service.IConsultaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +26,13 @@ public class ConsultaController {
     }
 
     @PostMapping
-    public Consulta create(@RequestBody Consulta consulta) {
-        return consultaService.save(consulta);
+    public Consulta create(@RequestBody ConsultaRequestDTO dto) {
+        return consultaService.save(dto);
     }
 
     @PutMapping("/{id}")
-    public Consulta update(@PathVariable Long id, @RequestBody Consulta consulta) {
-        consulta.setId(id);
-        return consultaService.update(consulta);
+    public Consulta update(@PathVariable Long id, @RequestBody ConsultaRequestDTO dto) {
+        return consultaService.update(id, dto);
     }
 
     @DeleteMapping("/{id}")
@@ -41,4 +40,3 @@ public class ConsultaController {
         consultaService.deleteById(id);
     }
 }
-
