@@ -6,8 +6,11 @@ package com.imb2025.smedico.service.jpa;
 
 import java.util.List;
 
+import com.imb2025.smedico.dto.DetalleFacturaRequestDTO;
 import com.imb2025.smedico.entity.DetalleFactura;
+import com.imb2025.smedico.entity.Factura;
 import com.imb2025.smedico.repository.DetalleFacturaRepositories;
+import com.imb2025.smedico.repository.FacturaRepository;
 import com.imb2025.smedico.service.IDetalleFacturaService;
 
 import org.springframework.stereotype.Service;
@@ -18,10 +21,14 @@ import org.springframework.stereotype.Service;
 public class DetalleFacturaServiceimpl implements IDetalleFacturaService {
 
     private final DetalleFacturaRepositories detalleFacturaRepositories;
-
-    public DetalleFacturaServiceimpl(DetalleFacturaRepositories detalleFacturaRepositories) {
-        this.detalleFacturaRepositories = detalleFacturaRepositories;
-    }
+    private final FacturaRepository facturaRepository;
+    public DetalleFacturaServiceimpl(
+    DetalleFacturaRepositories detalleFacturaRepositories,
+    FacturaRepository facturaRepository
+) {
+    this.detalleFacturaRepositories = detalleFacturaRepositories;
+    this.facturaRepository = facturaRepository;
+}
 
     @Override
     public List<DetalleFactura> findAll() {
@@ -47,5 +54,29 @@ public class DetalleFacturaServiceimpl implements IDetalleFacturaService {
         
         detalleFacturaRepositories.deleteById(id);
     }
+    
+    @Override
+public DetalleFactura fromDto(DetalleFacturaRequestDTO dto) throws Exception {
+    return fromDto(dto, null);
+}
+
+@Override
+public DetalleFactura fromDto(DetalleFacturaRequestDTO dto, Long id) throws Exception {
+    try {
+        Factura factura = facturaRepository.findById(dto.getFacturaId())
+            .orElseThrow(() -> new Exception("Factura con ID " + dto.getFacturaId() + " no encontrada."));
+
+        DetalleFactura detalleFactura = new DetalleFactura();
+        if (id != null) detalleFactura.setId(id);
+        detalleFactura.setDescripcion(dto.getDescripcion());
+        detalleFactura.setImporte(dto.getImporte());
+        detalleFactura.setFactura(factura);
+
+        return detalleFactura;
+    } catch (Exception e) {
+        throw new Exception("Error al procesar DetalleFactura: " + e.getMessage());
+    }
+}
+
     
 }

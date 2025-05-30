@@ -3,6 +3,7 @@ package com.imb2025.smedico.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class Factura {
@@ -15,6 +16,9 @@ public class Factura {
 
     private Double monto;
 
+    @OneToMany(mappedBy = "factura")
+    private List<DetalleFactura> detalles;
+    
     @ManyToOne
     @JoinColumn(name = "medio_pago_id")
     private MedioPago medioPago; // Cambiado: Usamos la entidad en lugar del Id
