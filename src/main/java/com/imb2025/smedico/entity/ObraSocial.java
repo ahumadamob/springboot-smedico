@@ -1,9 +1,11 @@
 package com.imb2025.smedico.entity;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "obrasocial")
+
 public class ObraSocial {
 
     @Id
@@ -14,9 +16,12 @@ public class ObraSocial {
     private String telefono;
     private String direccion;
     private String cobertura;
-
+     
+  
     // Getters y Setters
-
+    
+    
+    // fin getters
     public Long getId() {
         return id;
     }
