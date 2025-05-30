@@ -10,6 +10,8 @@ import com.imb2025.smedico.entity.Especialidad;
 import com.imb2025.smedico.repository.EspecialidadRepository;
 import com.imb2025.smedico.service.IEspecialidadService;
 
+import dto.EspecialidadRequestDTO;
+
 @Service
 public class EspecialidadServiceImpl implements IEspecialidadService{
 
@@ -32,16 +34,55 @@ public class EspecialidadServiceImpl implements IEspecialidadService{
 		}
 		
 		
-	};
-
+	}
+		
 	@Override
-	public Especialidad save(Especialidad especialidad) {
+	public Especialidad create(EspecialidadRequestDTO dto) {
+		Especialidad especialidad = fromDto(dto);
 		return repo.save(especialidad);
 	}
+	
+		@Override
+	public Especialidad update(Long id, EspecialidadRequestDTO dto) throws Exception {
+		Optional<Especialidad> opt = repo.findById(id);
+			
+			if (opt.isPresent()){
+			Especialidad especialidad = opt.get();
+			
+			especialidad.setNombre(dto.getNombre());
+			
+			especialidad.setDescripcion(dto.getDescripcion());
+			
+			return repo.save(especialidad);
+			
+		    }else {
+			throw new Exception("No existe esa Especialidad");
+		    }
+		}
+		
 
-	@Override
-	public void deleteById(Long id) {
-		repo.deleteById(id);
+		
+		private Especialidad fromDto(EspecialidadRequestDTO dto) {
+		
+			Especialidad especialidad = new Especialidad();
+			especialidad.setNombre(dto.getNombre());
+			especialidad.setDescripcion(dto.getDescripcion());
+			
+			return especialidad;
+		
+		
+		}
+
+		@Override
+		public void deleteById(Long id) {
+			
+			repo.deleteById(id);
+
+		}
+
+	
 	}
+	
 
-}
+
+
