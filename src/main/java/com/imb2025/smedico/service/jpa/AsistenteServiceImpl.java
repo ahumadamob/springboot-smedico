@@ -30,16 +30,13 @@ public class AsistenteServiceImpl implements IAsistenteService {
     @Override
     public Asistente create(AsistenteRequestDTO dto) {
         try {
-            Asistente nuevo = new Asistente();
-            nuevo.setNombre(dto.getNombre());
-            nuevo.setEmail(dto.getEmail());
-            nuevo.setTelefono(dto.getTelefono());
-            nuevo.setDni(dto.getDni());
+            Asistente nuevo = Asistente.fromDto(dto);
             return asistenteRepo.save(nuevo);
         } catch (Exception e) {
             throw new RuntimeException("Error al crear el asistente: " + e.getMessage());
         }
     }
+
 
     @Override
     public Asistente update(Long id, AsistenteRequestDTO dto) {

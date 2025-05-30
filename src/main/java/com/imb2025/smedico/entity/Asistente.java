@@ -1,4 +1,6 @@
 package com.imb2025.smedico.entity;
+import com.imb2025.smedico.dto.AsistenteRequestDTO;
+
 //Entidad
 import jakarta.persistence.*;
 
@@ -45,4 +47,13 @@ public class Asistente {
 		this.email = email;
 	}
 	
+	public static Asistente fromDto(AsistenteRequestDTO dto) {
+	    Asistente asistente = new Asistente();
+	    asistente.setTelefono(dto.getTelefono());
+	    asistente.setNombre(dto.getNombre());
+	    asistente.setDni(dto.getDni());
+	    asistente.setEmail(dto.getEmail());
+	    return asistente;
+	}
+
 }
