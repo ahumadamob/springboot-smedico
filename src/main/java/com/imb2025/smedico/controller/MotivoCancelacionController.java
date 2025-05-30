@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.imb2025.smedico.service.IMotivoCancelacionService;
+import com.imb2025.smedico.dto.MotivoCancelacionRequestDTO;
 import com.imb2025.smedico.entity.MotivoCancelacion;
 
 @RestController
@@ -31,13 +32,23 @@ public class MotivoCancelacionController {
 	}
 	
 	@PostMapping("/motivocancelacion")
-	public MotivoCancelacion saveMotivoCancelacion(@RequestBody MotivoCancelacion motivocancelacion) {
-		return service.save(motivocancelacion);
-	}
-	
-	@PutMapping("/motivocancelacion")
-	public MotivoCancelacion updateMotivoCancelacion(@RequestBody MotivoCancelacion motivocancelacion) {
-		return service.save(motivocancelacion);
+	public MotivoCancelacion create(@RequestBody MotivoCancelacionRequestDTO dto) {
+        try {
+            return service.create(dto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+		
+	@PutMapping("/motivocancelacion/{idmotivocancelacion}")
+	public MotivoCancelacion update(@PathVariable("idmotivocancelacion") Long id, @RequestBody MotivoCancelacionRequestDTO dto) {
+	    try {
+	        return service.update(id, dto);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return null;
+	    }
 	}
 	
 	@DeleteMapping("/motivocancelacion/{idmotivocancelacion}")
