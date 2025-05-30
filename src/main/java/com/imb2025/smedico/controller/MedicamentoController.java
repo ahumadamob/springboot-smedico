@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.imb2025.smedico.dto.MedicamentoRequestDTO;
 import com.imb2025.smedico.entity.Medicamento;
 import com.imb2025.smedico.service.IMedicamentoService;
 
@@ -31,13 +32,23 @@ public class MedicamentoController {
 	}
 	
 	@PostMapping("/medicamento")
-	public Medicamento createMedicamento(@RequestBody Medicamento medicamento) {
-		return service.save(medicamento);
+	public Medicamento createMedicamento(@RequestBody MedicamentoRequestDTO dto) {
+		try {
+			return service.create(dto);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
-	@PutMapping("/medicamento")
-	public Medicamento updateMedicamento(@RequestBody Medicamento medicamento) {
-		return service.save(medicamento);
+	@PutMapping("/medicamento/{id}")
+	public Medicamento updateMedicamento(@PathVariable Long id, @RequestBody MedicamentoRequestDTO dto) {
+		try {
+			return service.update(id, dto);
+		}catch(Exception e) {	
+			e.printStackTrace();
+			return null;
+		}	
 	}
 	
 	@DeleteMapping("/medicamento/{idmedicamento}")
