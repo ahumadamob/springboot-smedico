@@ -30,7 +30,7 @@ public class AsistenteServiceImpl implements IAsistenteService {
     @Override
     public Asistente create(AsistenteRequestDTO dto) {
         try {
-            Asistente nuevo = Asistente.fromDto(dto);
+            Asistente nuevo = fromDto(dto);
             return asistenteRepo.save(nuevo);
         } catch (Exception e) {
             throw new RuntimeException("Error al crear el asistente: " + e.getMessage());
@@ -62,4 +62,13 @@ public class AsistenteServiceImpl implements IAsistenteService {
         }
         asistenteRepo.deleteById(id);
     }
+
+	public static Asistente fromDto(AsistenteRequestDTO dto) {
+	    Asistente asistente = new Asistente();
+	    asistente.setTelefono(dto.getTelefono());
+	    asistente.setNombre(dto.getNombre());
+	    asistente.setDni(dto.getDni());
+	    asistente.setEmail(dto.getEmail());
+	    return asistente;
+	}
 }

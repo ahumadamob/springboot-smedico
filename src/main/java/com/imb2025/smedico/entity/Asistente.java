@@ -46,14 +46,5 @@ public class Asistente {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	public static Asistente fromDto(AsistenteRequestDTO dto) {
-	    Asistente asistente = new Asistente();
-	    asistente.setTelefono(dto.getTelefono());
-	    asistente.setNombre(dto.getNombre());
-	    asistente.setDni(dto.getDni());
-	    asistente.setEmail(dto.getEmail());
-	    return asistente;
-	}
 
 }
