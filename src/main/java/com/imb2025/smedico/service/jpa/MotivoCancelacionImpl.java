@@ -39,27 +39,32 @@ public class MotivoCancelacionImpl implements IMotivoCancelacionService{
 	}
 
 	@Override
-    public MotivoCancelacion create(MotivoCancelacionRequestDTO dto) {
-        MotivoCancelacion motivoCancelacion = fromDto(dto);
-        return repo.save(motivoCancelacion);
-    }
+	public MotivoCancelacion create(MotivoCancelacion motivoCancelacion) {
+	    return repo.save(motivoCancelacion);
+	}
 
 	@Override
-	public MotivoCancelacion update(Long id, MotivoCancelacionRequestDTO dto) throws Exception {
-	    Optional<MotivoCancelacion> opt = repo.findById(id);
-	    if (opt.isPresent()) {
-	        MotivoCancelacion motivoCancelacion = opt.get();
-	        motivoCancelacion.setNombre(dto.getNombre());
-	        motivoCancelacion.setDescripcion(dto.getDescripcion());
+	public MotivoCancelacion update(Long id, MotivoCancelacion motivoCancelacion) throws Exception {
+	    if (repo.existsById(id)) {
+	        motivoCancelacion.setId(id);
 	        return repo.save(motivoCancelacion);
 	    } else {
 	        throw new Exception("MotivoCancelacion con ID " + id + " no existe.");
 	    }
 	}
-    private MotivoCancelacion fromDto(MotivoCancelacionRequestDTO dto) {
-        MotivoCancelacion motivoCancelacion = new MotivoCancelacion();
-        motivoCancelacion.setNombre(dto.getNombre());
-        motivoCancelacion.setDescripcion(dto.getDescripcion());
-        return motivoCancelacion;
-    }
+
+	@Override
+	public MotivoCancelacion fromDto(MotivoCancelacionRequestDTO dto) {
+	    if (dto.getNombre() == null || dto.getNombre().isBlank()) {
+	        throw new IllegalArgumentException("El nombre no puede estar nulo o vacío");
+	    }
+	    if (dto.getDescripcion() == null || dto.getDescripcion().isBlank()) {
+	        throw new IllegalArgumentException("La descripción no puede estar nula o vacía");
+	    }
+	    MotivoCancelacion motivoCancelacion = new MotivoCancelacion();
+	    motivoCancelacion.setNombre(dto.getNombre());
+	    motivoCancelacion.setDescripcion(dto.getDescripcion());
+	    return motivoCancelacion;
+	}
+
 }

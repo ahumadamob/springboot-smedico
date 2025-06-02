@@ -32,9 +32,10 @@ public class MotivoCancelacionController {
 	}
 	
 	@PostMapping("/motivocancelacion")
-	public MotivoCancelacion create(@RequestBody MotivoCancelacionRequestDTO dto) {
+    public MotivoCancelacion create(@RequestBody MotivoCancelacionRequestDTO dto) {
         try {
-            return service.create(dto);
+            MotivoCancelacion entity = service.fromDto(dto);
+            return service.create(entity);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -42,18 +43,20 @@ public class MotivoCancelacionController {
     }
 		
 	@PutMapping("/motivocancelacion/{idmotivocancelacion}")
-	public MotivoCancelacion update(@PathVariable("idmotivocancelacion") Long id, @RequestBody MotivoCancelacionRequestDTO dto) {
-	    try {
-	        return service.update(id, dto);
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return null;
-	    }
-	}
+    public MotivoCancelacion update(@PathVariable("idmotivocancelacion") Long id,
+                                    @RequestBody MotivoCancelacionRequestDTO dto) {
+        try {
+            MotivoCancelacion entity = service.fromDto(dto);
+            return service.update(id, entity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 	
 	@DeleteMapping("/motivocancelacion/{idmotivocancelacion}")
-	public String deleteMotivoCancelacion(@PathVariable("idmotivocancelacion") Long id) {
-		service.deleteById(id);
-		return "Motivo de Cancelacion "+id.toString()+ " Eliminado Correctamente";
-	}
+    public String deleteMotivoCancelacion(@PathVariable("idmotivocancelacion") Long id) {
+        service.deleteById(id);
+        return "Motivo de Cancelacion " + id + " Eliminado Correctamente";
+    }
 }
