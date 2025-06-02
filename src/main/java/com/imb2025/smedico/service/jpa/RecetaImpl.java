@@ -43,43 +43,52 @@ public class RecetaImpl implements IRecetaService{
 	}
 
 	@Override
-	public Receta create(RecetaRequestDTO dto) {
+	public Receta create(Receta receta) {
 	    try {
-	        Receta receta = fromDto(dto);
+	    
 	        return repo.save(receta);
 	    } catch (Exception e) {
-	        throw new RuntimeException("Error al crear la receta: " + e.getMessage(), e);
+	        throw new RuntimeException("Error al crear la receta: " + e.getMessage());
 	    }
 	}
-
 	@Override
 	public void deleteById(Long id) {
 		repo.deleteById(id);
 	}
 
 	@Override
-	public Receta update(Long id, RecetaRequestDTO dto) throws Exception {
-	    Receta recetaExistente = repo.findById(id)
-	        .orElseThrow(() -> new Exception("Receta con ID " + id + " no encontrada"));
-	    Medico medico = medicoRepository.findById(dto.getMedicoId())
-	        .orElseThrow(() -> new Exception("Medico con ID " + dto.getMedicoId() + " no encontrado"));
-	    Paciente paciente = pacienteRepository.findById(dto.getPacienteId())
-	        .orElseThrow(() -> new Exception("Paciente con ID " + dto.getPacienteId() + " no encontrado"));
-	    recetaExistente.setFecha(dto.getFecha());
-	    recetaExistente.setObservaciones(dto.getObservaciones());
-	    recetaExistente.setMedico(medico);
-	    recetaExistente.setPaciente(paciente);
-
-	    return repo.save(recetaExistente);
+	public Receta update(Long id, Receta receta) throws Exception {
+	    if (repo.existsById(id)) {
+	        receta.setId(id);
+	        try {
+	            return repo.save(receta);
+	        } catch (Exception e) {
+	            throw new RuntimeException("Error al actualizar la receta: " + e.getMessage());
+	        }
+	    } else {
+	        throw new Exception("Receta con ID " + id + " no encontrada");
+	    }
 	}
-	 
-    public Receta fromDto(RecetaRequestDTO dto)throws Exception {
-    	Medico medico = medicoRepository.findById(dto.getMedicoId()).orElseThrow(() -> new Exception("Medico no encontrado"));
-    	Paciente paciente = pacienteRepository.findById(dto.getPacienteId()).orElseThrow(() -> new Exception("Paciente no encontrado"));
-    	Receta receta = new Receta (dto.getFecha(), dto.getObservaciones(), medico, paciente);
-    	return receta;
-    	
-}
+
+	
+
+	public Receta fromDto(RecetaRequestDTO dto) throws Exception {
+	    if (dto.getMedicoId() == null) {
+	        throw new IllegalArgumentException("El ID del médico no puede ser nulo");
+	    }
+	    if (dto.getPacienteId() == null) {
+	        throw new IllegalArgumentException("El ID del paciente no puede ser nulo");
+	    }
+
+	    Medico medico = medicoRepository.findById(dto.getMedicoId())
+	        .orElseThrow(() -> new Exception("Médico no encontrado con ID: " + dto.getMedicoId()));
+
+	    Paciente paciente = pacienteRepository.findById(dto.getPacienteId())
+	        .orElseThrow(() -> new Exception("Paciente no encontrado con ID: " + dto.getPacienteId()));
+
+	    return new Receta(dto.getFecha(), dto.getObservaciones(), medico, paciente);
+	}
+
 	
 	
 

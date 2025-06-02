@@ -30,24 +30,25 @@ public class RecetaController {
     public Receta findRecetaByid(@PathVariable("idreceta") Long id) {
 		return service.findById(id);
 		}
-	@PostMapping ("/receta")
-	public Receta create(@RequestBody RecetaRequestDTO recetaRequestDTO) {
-		 try {
-	            return service.create(recetaRequestDTO);
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            return null;
-	        }
-	    }
-	@PutMapping("/receta/{idreceta}")
-	public Receta update(@PathVariable("idreceta") Long id, @RequestBody RecetaRequestDTO dto) {
-		try {
-            return service.update(id, dto);
+	@PostMapping("/receta")
+    public Receta create(@RequestBody RecetaRequestDTO recetaRequestDTO) {
+        try {
+            return service.create(service.fromDto(recetaRequestDTO));
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-	}
+    }
+	@PutMapping("/receta/{idreceta}")
+	   public Receta update(@PathVariable("idreceta") Long id,
+               @RequestBody RecetaRequestDTO recetaRequestDTO) {
+		try {
+			return service.update(id, service.fromDto(recetaRequestDTO));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+}
 	@DeleteMapping ("/receta/{idreceta}")
 	public String deleteReceta (@PathVariable("idreceta") Long id) {
 		service.deleteById(id);

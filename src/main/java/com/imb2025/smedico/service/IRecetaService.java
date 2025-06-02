@@ -11,8 +11,8 @@ import imb.progra2025.p3ro2da.entity.Alumno;
 public interface IRecetaService {
 	public List <Receta> findAll();
 	public Receta findById(Long id);
-	public Receta create(RecetaRequestDTO dto);
-    public Receta update(Long id,RecetaRequestDTO dto) throws Exception;
+	public Receta create(Receta receta);
+    public Receta update(Long id,Receta receta) throws Exception;
 	public void deleteById (Long id);
 	public Receta fromDto(RecetaRequestDTO requestDto) throws Exception;
 }

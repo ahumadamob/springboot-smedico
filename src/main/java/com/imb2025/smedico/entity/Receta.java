@@ -67,6 +67,10 @@ public class Receta {
 	    this.paciente = paciente;
 	}
 
+	public void setId(Long id) {
+		this.id= id;		
+	}
+
 	
 
 }
