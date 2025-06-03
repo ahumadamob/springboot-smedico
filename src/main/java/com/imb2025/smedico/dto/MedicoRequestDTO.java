@@ -9,19 +9,7 @@ public class MedicoRequestDTO {
     private String email;
     private String telefono;
     
-     
-    
-	public MedicoRequestDTO(String nombre, String apellido, String matricula, String especialidad, String email,
-			String telefono) {
-		super();
-		this.nombre = nombre;
-		this.apellido = apellido;
-		this.matricula = matricula;
-		this.especialidad = especialidad;
-		this.email = email;
-		this.telefono = telefono;
-	}
-	
+
 	public String getNombre() {
 		return nombre;
 	}
@@ -58,6 +46,4 @@ public class MedicoRequestDTO {
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
 	}
-    
-    
 }

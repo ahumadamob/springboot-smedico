@@ -16,6 +16,7 @@ public class MedicoServiceImpl implements IMedicoService {
 
     @Autowired
     private MedicoRepository repo;
+    
 
     @Override
     public List<Medico> findAll() {
@@ -32,7 +33,7 @@ public class MedicoServiceImpl implements IMedicoService {
 			return null;
 		}
     }
-
+    
 
     @Override
     public void deleteById(Long id) {
@@ -40,45 +41,63 @@ public class MedicoServiceImpl implements IMedicoService {
     }
 
 
-	@Override
-	public Medico create(MedicoRequestDTO dto) {
-		Medico medico = fromDto(dto);
+
+    @Override
+    public Medico create(Medico medico) {
         return repo.save(medico);
-	}
+    }
 
-	@Override
-	public Medico update(Long id, MedicoRequestDTO dto) throws Exception {
-		 Optional<Medico> opt = repo.findById(id);
-		    if (opt.isPresent()) {
-		        Medico medico = opt.get();
-		        medico.setApellido(dto.getApellido());
-			    medico.setNombre(dto.getNombre());
-			    medico.setEmail(dto.getEmail());
-			    medico.setEspecialidad(dto.getEspecialidad());
-			    medico.setMatricula(dto.getMatricula());
-			    medico.setTelefono(dto.getTelefono());
-		        return repo.save(medico);
-		    } else {
-		        throw new Exception("Medico con ID " + id + " no existe.");
-	}
-	}
+    @Override
+    public Medico update(Long id, Medico medico) throws Exception {
+        if (repo.existsById(id)) {
+            medico.setId(id);
+            return repo.save(medico);
+        } else {
+            throw new Exception("No existe el médico con ID: " + id);
+        }
+    }
+    
+    @Override
+    public Medico fromDto(MedicoRequestDTO dto) throws Exception {
+        if (dto.getNombre() == null || dto.getNombre().isBlank()) {
+            throw new IllegalArgumentException("Nombre no pueden ser nulo");
+        }
+        
+        if (dto.getApellido() == null || dto.getApellido().isBlank()) {
+            throw new IllegalArgumentException("Apellido no pueden ser nulo");
+        }
+            
+        if (dto.getEspecialidad() == null || dto.getEspecialidad().isBlank()) {
+        	throw new IllegalArgumentException("Especialidad no pueden ser nula");
+        }
+        
+        if (dto.getMatricula() == null || dto.getMatricula().isBlank()) {
+            throw new IllegalArgumentException("La Matricula no pueden ser nula");
+        }
+        
+        if (dto.getEmail() == null || dto.getEmail().isBlank()) {
+            throw new IllegalArgumentException("El Email no pueden ser nulo");
+        }
+        
+        if (dto.getTelefono() == null || dto.getTelefono().isBlank()) {
+            throw new IllegalArgumentException("El telefono no pueden ser nulo");
+        }
+        
+        Medico medico = new Medico();
+        medico.setNombre(dto.getNombre());
+        medico.setApellido(dto.getApellido());
+        medico.setEmail(dto.getEmail());
+        medico.setMatricula(dto.getMatricula());
+        medico.setEspecialidad(dto.getEspecialidad());
+        medico.setTelefono(dto.getTelefono());
+        
+
+        return  medico;
+    }
+
 	
-	
-	
-	private Medico fromDto(MedicoRequestDTO dto) {
-	    Medico medico = new Medico();
-	    medico.setApellido(dto.getApellido());
-	    medico.setNombre(dto.getNombre());
-	    medico.setEmail(dto.getEmail());
-	    medico.setEspecialidad(dto.getEspecialidad());
-	    medico.setMatricula(dto.getMatricula());
-	    medico.setTelefono(dto.getTelefono());
-
-	    return medico;
-	}
-
-	
 
 
-}
+    }
+
 

@@ -19,7 +19,7 @@ public class Medico {
     private String email;
     private String telefono;
     
-    
+   
 	public String getApellido() {
 		return apellido;
 	}
