@@ -1,6 +1,8 @@
 package com.imb2025.smedico.service.jpa;
 
+
 import com.imb2025.smedico.dto.PacienteRequestDTO;
+
 import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.repository.PacienteRepository;
 import com.imb2025.smedico.service.IPacienteService;
@@ -27,6 +29,7 @@ public class PacienteServiceImpl implements IPacienteService {
         return pacienteRepository.findById(id).orElse(null);
     }
 
+
     // Guardar nuevo paciente con manejo de excepciones
     @Override
     public Paciente save(Paciente paciente) {
@@ -45,12 +48,18 @@ public class PacienteServiceImpl implements IPacienteService {
         } else {
             throw new Exception("Paciente no encontrado con id: " + id);
         }
+
+    @Override
+    public Paciente save(Paciente paciente) {
+        return pacienteRepository.save(paciente);
+
     }
 
     @Override
     public void deleteById(Long id) {
         pacienteRepository.deleteById(id);
     }
+
 
     // Convertir un DTO a una entidad Paciente
     public Paciente fromDto(PacienteRequestDTO requestDTO) {
@@ -70,3 +79,6 @@ public class PacienteServiceImpl implements IPacienteService {
 		return null;
 	}
 }
+
+}
+

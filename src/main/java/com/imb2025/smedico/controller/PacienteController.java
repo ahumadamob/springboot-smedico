@@ -1,12 +1,15 @@
 package com.imb2025.smedico.controller;
 
+
 import com.imb2025.smedico.dto.PacienteRequestDTO;
+
 import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.service.IPacienteService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,6 +53,10 @@ public class PacienteController {
         existente.setTelefono(dto.getTelefono());
 
         return ResponseEntity.ok(pacienteService.save(existente));
+
+    public Paciente updatePaciente(@PathVariable Long id, @RequestBody Paciente paciente) {
+    	return pacienteService.save(paciente);
+
     }
 
     @DeleteMapping("/{id}")

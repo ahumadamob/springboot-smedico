@@ -1,6 +1,8 @@
 package com.imb2025.smedico.service;
 
+
 import com.imb2025.smedico.dto.PacienteRequestDTO;
+
 import com.imb2025.smedico.entity.Paciente;
 
 import java.util.List;
@@ -8,6 +10,7 @@ import java.util.List;
 public interface IPacienteService {
 
     List<Paciente> findAll();
+
 
     Paciente findById(Long id);
 
@@ -21,3 +24,9 @@ public interface IPacienteService {
 
     Paciente fromDto(PacienteRequestDTO requestDTO) throws Exception;
 }
+
+    Paciente findById(Long id);
+    Paciente save(Paciente paciente);
+    void deleteById(Long id);
+}
+
