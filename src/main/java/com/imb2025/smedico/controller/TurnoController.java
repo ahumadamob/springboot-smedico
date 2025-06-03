@@ -29,9 +29,9 @@ public class TurnoController {
 
     // POST - Crear nuevo turno
     @PostMapping("/turno")
-    public Turno createTurno(@RequestBody TurnoRequestDTO turnoRequestDTOurno) {
+    public Turno create(@RequestBody TurnoRequestDTO turnoRequestDTOurno) {
     	   try {
-    	        return service.save(service.fromDto(turnoRequestDTOurno));
+    	        return service.create(turnoRequestDTOurno);
     	    } catch (Exception e) {
     	        throw new RuntimeException("Error al crear turno: " + e.getMessage());
     	    }
@@ -39,16 +39,11 @@ public class TurnoController {
 
     @PutMapping("/turno/{idturno}")
     public Turno updateTurno(@PathVariable("idturno") Long idturno, @RequestBody TurnoRequestDTO dto) {
-        Turno turnoExistente = service.findById(idturno);
-
-        if (turnoExistente == null) {
-            throw new RuntimeException("Turno no encontrado con ID: " + idturno);
-        }
-
-        try {
-            return service.updateFromDto(turnoExistente, dto);
+    	try {
+            return service.update(idturno, dto);
         } catch (Exception e) {
-            throw new RuntimeException("Error al actualizar turno: " + e.getMessage());
+            e.printStackTrace();
+            return null;
         }
     }
 
