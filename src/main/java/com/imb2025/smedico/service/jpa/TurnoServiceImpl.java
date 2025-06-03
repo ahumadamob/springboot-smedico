@@ -50,14 +50,6 @@ public class TurnoServiceImpl implements ITurnoService {
 		}
     }
 
-    public Turno create(TurnoRequestDTO dto) {
-	    try {
-	    	Turno turno = fromDto(dto);
-	        return repo.save(turno);
-	    } catch (Exception e) {
-	        throw new RuntimeException("Error al crear el Turno: " + e.getMessage(), e);
-	    }
-    }
 
     @Override
     public void deleteById(Long id) {
@@ -65,43 +57,23 @@ public class TurnoServiceImpl implements ITurnoService {
     }
     
     @Override
-    public Turno fromDto(TurnoRequestDTO dto) throws Exception{
-	    Paciente paciente= pacienteRepository.findById(dto.getPacienteId())
-		        .orElseThrow(() -> new Exception("Paciente no encontrado"));
-	    
-	    Medico medico = medicoRepository.findById(dto.getMedicoId())
-		        .orElseThrow(() -> new Exception("Medico no encontrado"));
-	    
-	    EstadoTurno estadoTurno = estadoTurnoRepository.findById(dto.getEstadoTurnoId())
-		        .orElseThrow(() -> new Exception("Estado Turno no encontrado"));
-	    
-	    Turno turno = new Turno(dto.getFecha(), dto.getHora(), paciente, medico, estadoTurno);
-		return turno;
-
-	    
+    public Turno create(Turno turno) {
+        return repo.save(turno);
     }
 
+    @Override
+    public Turno update(Long id, Turno turno) throws Exception {
+        Turno turnoExistente = repo.findById(id)
+            .orElseThrow(() -> new Exception("Turno con ID " + id + " no encontrado"));
+        
+        turnoExistente.setFecha(turno.getFecha());
+        turnoExistente.setHora(turno.getHora());
+        turnoExistente.setPaciente(turno.getPaciente());
+        turnoExistente.setMedico(turno.getMedico());
+        turnoExistente.setEstadoTurno(turno.getEstadoTurno());
 
-
-	@Override
-	public Turno update(Long id, TurnoRequestDTO dto) throws Exception {
-		 Turno turnoExistente = repo.findById(id)
-	        .orElseThrow(() -> new Exception("Turno con ID " + id + " no encontrada"));
-	    Medico medico = medicoRepository.findById(dto.getMedicoId())
-	        .orElseThrow(() -> new Exception("Medico con ID " + dto.getMedicoId() + " no encontrado"));
-	    Paciente paciente = pacienteRepository.findById(dto.getPacienteId())
-	        .orElseThrow(() -> new Exception("Paciente con ID " + dto.getPacienteId() + " no encontrado"));
-	    EstadoTurno estadoTurno = estadoTurnoRepository.findById(dto.getEstadoTurnoId())
-		        .orElseThrow(() -> new Exception("Estado Turno no encontrado"));
-	    turnoExistente . setFecha ( dto . getFecha ());
-        turnoExistente . setHora ( dto . getHora ());
-        turnoExistente . setPaciente ( paciente );
-        turnoExistente . setMedico ( medico );
-        turnoExistente . setEstadoTurno ( estadoTurno );
-
-        return  repo . save ( turnoExistente );
-	}
-
+        return repo.save(turnoExistente);
+    }
 
     
   
