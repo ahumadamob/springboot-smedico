@@ -45,41 +45,30 @@ public class DiagnosticoServiceImpl implements IDiagnosticoService {
         return repo.existsById(id);
     }
 
- 
-    
-    @Override
     public Diagnostico fromDto(DiagnosticoRequestDTO dto) {
-        try {
-            Consulta consulta = consultaRepository.findById(dto.getConsultaId())
-                .orElseThrow(() -> new RuntimeException("Consulta no encontrada con ID: " + dto.getConsultaId()));
-
-            Diagnostico diagnostico = new Diagnostico();
-            diagnostico.setConsulta(consulta);
-            diagnostico.setDescripcion(dto.getDescripcion());
-            diagnostico.setFechaDiagnostico(dto.getFechaDiagnostico());
-
-            return diagnostico;
-
-        } catch (RuntimeException e) {
-            System.out.println("❌ Error al crear diagnóstico: " + e.getMessage());
-            return null;
-        }
-    }
-
-    @Override
-    public Diagnostico actualizar(Long id, DiagnosticoRequestDTO dto) {
-        Diagnostico diagnostico = repo.findById(id)
-            .orElseThrow(() -> new RuntimeException("Diagnóstico no encontrado"));
-
+        Diagnostico diagnostico = new Diagnostico();
         diagnostico.setDescripcion(dto.getDescripcion());
         diagnostico.setFechaDiagnostico(dto.getFechaDiagnostico());
 
-        // Si necesitás asociar consultaId:
         Consulta consulta = consultaRepository.findById(dto.getConsultaId())
             .orElseThrow(() -> new RuntimeException("Consulta no encontrada"));
+
         diagnostico.setConsulta(consulta);
 
-        return repo.save(diagnostico);
+        return diagnostico;
+    }
+
+
+    @Override
+    public Diagnostico actualizar(Long id, Diagnostico diagnostico) {
+        Diagnostico existente = repo.findById(id)
+            .orElseThrow(() -> new RuntimeException("Diagnóstico no encontrado"));
+
+        existente.setDescripcion(diagnostico.getDescripcion());
+        existente.setFechaDiagnostico(diagnostico.getFechaDiagnostico());
+        existente.setConsulta(diagnostico.getConsulta());
+
+        return repo.save(existente);
     }
 
 

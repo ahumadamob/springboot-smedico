@@ -2,12 +2,12 @@ package com.imb2025.smedico.controller;
 
 import com.imb2025.smedico.entity.Diagnostico;
 import com.imb2025.smedico.service.IDiagnosticoService;
+import com.imb2025.smedico.dto.DiagnosticoRequestDTO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.imb2025.smedico.dto.DiagnosticoRequestDTO;
 import org.springframework.http.HttpStatus;
-
 
 import java.util.List;
 
@@ -39,11 +39,16 @@ public class DiagnosticoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(nuevo));
     }
 
-
     @PutMapping("/diagnosticos/{id}")
-    public ResponseEntity<Diagnostico> actualizarDiagnostico(@PathVariable Long id, @RequestBody DiagnosticoRequestDTO dto) {
-        Diagnostico actualizado = service.actualizar(id, dto);
-        return ResponseEntity.ok(actualizado);
+    public ResponseEntity<Diagnostico> actualizarDiagnostico(@PathVariable Long id,
+                                                             @RequestBody DiagnosticoRequestDTO dto) {
+        try {
+            Diagnostico diagnostico = service.fromDto(dto); // convertir el DTO a entidad
+            Diagnostico actualizado = service.actualizar(id, diagnostico); // pasar la entidad, no el DTO
+            return ResponseEntity.ok(actualizado);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
 

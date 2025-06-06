@@ -11,7 +11,7 @@ public interface IDiagnosticoService {
     Diagnostico save(Diagnostico diagnostico);
     void deleteById(Long id);
     boolean existsById(Long id);
-    Diagnostico actualizar(Long id, DiagnosticoRequestDTO dto);
+    Diagnostico actualizar(Long id, Diagnostico diagnostico);
     Diagnostico fromDto(DiagnosticoRequestDTO dto); // <-- ESTA ES LA NUEVA LÍNEA
 }
 
