@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
+
 @Entity
 public class Factura {
 
@@ -15,6 +16,7 @@ public class Factura {
 
     private Double monto;
 
+    
     @ManyToOne
     @JoinColumn(name = "medio_pago_id")
     private MedioPago medioPago; // Cambiado: Usamos la entidad en lugar del Id
