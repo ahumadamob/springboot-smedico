@@ -7,6 +7,8 @@ import java.util.List;
 public interface IDetalleRecetaService {
     List<DetalleReceta> findAll();
     DetalleReceta findById(Long id);
-    DetalleReceta save(DetalleReceta recetaMedicamento);
+    boolean existsById(Long id);
+    DetalleReceta create(DetalleReceta detalleReceta);
+    DetalleReceta update(Long id, DetalleReceta detalleReceta);
     void deleteById(Long id);
 }
