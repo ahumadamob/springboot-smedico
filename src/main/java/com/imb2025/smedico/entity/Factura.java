@@ -1,9 +1,6 @@
 package com.imb2025.smedico.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
@@ -16,11 +13,28 @@ public class Factura {
 
     private LocalDate fecha;
 
-    private Long pacienteId;
-
     private Double monto;
 
-    private Long medioPagoId;
+    @ManyToOne
+    @JoinColumn(name = "medio_pago_id")
+    private MedioPago medioPago; // Cambiado: Usamos la entidad en lugar del Id
+
+    public MedioPago getMedioPago() { //Agregado
+		return medioPago;
+	}
+
+	public void setMedioPago(MedioPago medioPago) { //Agregado
+		this.medioPago = medioPago;
+	}
+
+	public Factura() {
+    }
+
+    public Factura(LocalDate fecha, Double monto, MedioPago medioPago) {
+        this.fecha = fecha;
+        this.monto = monto;
+        this.medioPago = medioPago; //Modificado: dato tipo Entidad MedioPago
+    }
 
     public Long getId() {
         return id;
@@ -38,14 +52,6 @@ public class Factura {
         this.fecha = fecha;
     }
 
-    public Long getPacienteId() {
-        return pacienteId;
-    }
-
-    public void setPacienteId(Long pacienteId) {
-        this.pacienteId = pacienteId;
-    }
-
     public Double getMonto() {
         return monto;
     }
@@ -54,11 +60,5 @@ public class Factura {
         this.monto = monto;
     }
 
-    public Long getMedioPagoId() {
-        return medioPagoId;
-    }
-
-    public void setMedioPagoId(Long medioPagoId) {
-        this.medioPagoId = medioPagoId;
-    }
+    
 }
