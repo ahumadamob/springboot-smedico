@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.imb2025.smedico.dto.MedioPagoRequestDTO;
 import com.imb2025.smedico.entity.MedioPago;
 import com.imb2025.smedico.service.IMedioPagoService;
 
@@ -34,23 +33,27 @@ public class MedioPagoController {
 	
 	@GetMapping("/{idmediopago}")
 	public MedioPago findMedioPagoByid(@PathVariable("idmediopago") Long id) {
-		return service.findById(id); 
+		return service.findById(id); //ESTA MAL
 	}
 	
 	@PostMapping //("/")
-    public MedioPago createMedioPago(@RequestBody MedioPagoRequestDTO mediopagoDto) {
-		try {
-	        return service.createMedioPago(mediopagoDto);
-	    } catch (Exception e) {
-	        System.out.println("Error al crear MedioPago: " + e.getMessage());
-	        return null; 
-	    }
+    public MedioPago createMedioPago(@RequestBody MedioPago mediopago) {
+        return service.save(mediopago);
     }
 	
 	@PutMapping 
 	public MedioPago updateMedioPago(@RequestBody MedioPago mediopago) {
 		return service.save(mediopago);
 	}
+	
+	
+	/*
+	@DeleteMapping("/{idmediopago}")
+	public String deleteMedioPago(@PathVariable("idmediopago") Long id) {
+		service.deleteById(id);
+		return "Selección de medio de pago "+id.toString()+ " cancelada.";
+	}
+	**/
 	
 	
 }  
