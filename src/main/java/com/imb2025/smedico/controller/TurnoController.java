@@ -1,6 +1,8 @@
 package com.imb2025.smedico.controller;
 
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,53 +35,62 @@ public class TurnoController {
 
     // GET - Obtener todos los turnos
     @GetMapping("/turno")
-    public List<Turno> findAllTurnos() {
-        return service.findAll();
+    public ResponseEntity<List<Turno>> findAllTurnos() {
+        List<Turno> lista = service.findAll();
+        if (lista.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(lista);
     }
 
     // GET - Obtener turno por ID
     @GetMapping("/turno/{idturno}")
-    public Turno findTurnoById(@PathVariable("idturno") Long id) {
-        return service.findById(id);
+    public ResponseEntity<Turno> findTurnoById(@PathVariable("idturno") Long id) {
+        Turno turno = service.findById(id);
+        if (turno == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(turno);
     }
 
     @PostMapping("/turno")
-    public Turno create(@RequestBody TurnoRequestDTO dto) {
-        try {
-            Turno turno = convertirDtoAEntidad(dto);
-            return service.create(turno);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al crear turno: " + e.getMessage());
-        }
+    public ResponseEntity<Turno> create(@RequestBody TurnoRequestDTO dto) throws Exception {
+        Turno turno = convertirDtoAEntidad(dto);
+        return ResponseEntity.ok(service.create(turno));
+
     }
 
     @PutMapping("/turno/{idturno}")
-    public Turno update(@PathVariable("idturno") Long idturno, @RequestBody TurnoRequestDTO dto) {
-        try {
-            Turno turno = convertirDtoAEntidad(dto);
-            return service.update(idturno, turno);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al actualizar turno: " + e.getMessage());
-        }
+    public ResponseEntity<Turno> update(@PathVariable("idturno") Long idturno, @RequestBody TurnoRequestDTO dto) throws Exception {
+        Turno turno = convertirDtoAEntidad(dto);
+        return ResponseEntity.ok(service.update(idturno, turno));
     }
-
-    private Turno convertirDtoAEntidad(TurnoRequestDTO dto) throws Exception {
-        Paciente paciente = pacienteRepository.findById(dto.getPacienteId())
-            .orElseThrow(() -> new Exception("Paciente no encontrado"));
-        Medico medico = medicoRepository.findById(dto.getMedicoId())
-            .orElseThrow(() -> new Exception("Médico no encontrado"));
-        EstadoTurno estado = estadoTurnoRepository.findById(dto.getEstadoTurnoId())
-            .orElseThrow(() -> new Exception("Estado turno no encontrado"));
-        
-        return new Turno(dto.getFecha(), dto.getHora(), paciente, medico, estado);
-    }
-
-
 
     // DELETE - Eliminar turno
     @DeleteMapping("/turno/{idturno}")
-    public String deleteTurno(@PathVariable("idturno") Long id) {
+    public ResponseEntity<String> deleteTurno(@PathVariable("idturno") Long id) {
         service.deleteById(id);
-        return "Turno " + id + " eliminado correctamente.";
+        return ResponseEntity.ok("Turno " + id + " eliminado correctamente.");
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+
+    }
+
+    private Turno convertirDtoAEntidad(TurnoRequestDTO dto) {
+        Paciente paciente = pacienteRepository.findById(dto.getPacienteId())
+            .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
+        Medico medico = medicoRepository.findById(dto.getMedicoId())
+            .orElseThrow(() -> new RuntimeException("Médico no encontrado"));
+        EstadoTurno estado = estadoTurnoRepository.findById(dto.getEstadoTurnoId())
+            .orElseThrow(() -> new RuntimeException("Estado turno no encontrado"));
+
+        return new Turno(dto.getFecha(), dto.getHora(), paciente, medico, estado);
+    }
+    
+ 
+    
+    
 }

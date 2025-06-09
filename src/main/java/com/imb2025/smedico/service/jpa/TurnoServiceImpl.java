@@ -41,18 +41,16 @@ public class TurnoServiceImpl implements ITurnoService {
 
     @Override
     public Turno findById(Long id) {
-        Optional<Turno> opt;
-        opt = repo.findById(id);
-		if(opt.isPresent()) {
-			return opt.get();
-		}else {
-			return null;
-		}
+        return repo.findById(id)
+            .orElseThrow(() -> new RuntimeException("Turno con ID " + id + " no encontrado"));
     }
 
 
     @Override
     public void deleteById(Long id) {
+        if (!repo.existsById(id)) {
+            throw new RuntimeException("No existe un turno con ID " + id);
+        }
         repo.deleteById(id);
     }
     
