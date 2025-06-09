@@ -3,7 +3,9 @@ package com.imb2025.smedico.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,41 +24,42 @@ public class MotivoCancelacionController {
 	private IMotivoCancelacionService service;
 	
 	@GetMapping("/motivocancelacion")
-	public List<MotivoCancelacion>findAllMotivoCancelacion(){
-		return service.findAll();
+	public ResponseEntity<List<MotivoCancelacion>> findAllMotivoCancelacion() {
+        List<MotivoCancelacion> lista = service.findAll();
+        if (lista.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(lista);
 	}
 	
 	@GetMapping("/motivocancelacion/{idmotivocancelacion}")
-	public MotivoCancelacion findMotivoCancelacionByid(@PathVariable("idmotivocancelacion") Long id) {
-		return service.findById(id);
+	public ResponseEntity<MotivoCancelacion> findMotivoCancelacionById(@PathVariable("idmotivocancelacion") Long id) {
+        MotivoCancelacion motivoCancelacion = service.findById(id);
+        if (motivoCancelacion == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(motivoCancelacion);
 	}
 	
 	@PostMapping("/motivocancelacion")
-    public MotivoCancelacion create(@RequestBody MotivoCancelacionRequestDTO dto) {
-        try {
-            MotivoCancelacion entity = service.fromDto(dto);
-            return service.create(entity);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+	public ResponseEntity<MotivoCancelacion> create(@RequestBody MotivoCancelacionRequestDTO dto) throws Exception {
+        return ResponseEntity.ok(service.create(service.fromDto(dto)));
     }
 		
 	@PutMapping("/motivocancelacion/{idmotivocancelacion}")
-    public MotivoCancelacion update(@PathVariable("idmotivocancelacion") Long id,
-                                    @RequestBody MotivoCancelacionRequestDTO dto) {
-        try {
-            MotivoCancelacion entity = service.fromDto(dto);
-            return service.update(id, entity);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+    public ResponseEntity<MotivoCancelacion> update(@PathVariable("idmotivocancelacion") Long id,@RequestBody MotivoCancelacionRequestDTO dto) throws Exception {
+        MotivoCancelacion entity = service.fromDto(dto);
+        return ResponseEntity.ok(service.update(id, entity));
     }
 	
 	@DeleteMapping("/motivocancelacion/{idmotivocancelacion}")
-    public String deleteMotivoCancelacion(@PathVariable("idmotivocancelacion") Long id) {
+	public ResponseEntity<String> deleteMotivoCancelacion(@PathVariable("idmotivocancelacion") Long id) {
         service.deleteById(id);
-        return "Motivo de Cancelacion " + id + " Eliminado Correctamente";
+        return ResponseEntity.ok("Motivo de Cancelación " + id + " eliminado correctamente.");
     }
+	
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<String> handleGlobalExceptions(Exception ex){
+		return ResponseEntity.badRequest().body(ex.getMessage());
+	}
 }
