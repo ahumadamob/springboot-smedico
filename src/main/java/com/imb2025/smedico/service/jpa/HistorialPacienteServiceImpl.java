@@ -44,8 +44,12 @@ public class HistorialPacienteServiceImpl implements IHistorialPacienteService {
 
 	@Override
 	public void deleteById(Long id) {
-		repo.deleteById(id);		
+		if (!repo.existsById(id)) {
+			throw new RuntimeException("No existe el historial con ID " + id);
+		}
+		repo.deleteById(id);
 	}
+	
 	@Override
 	public HistorialPaciente create(HistorialPaciente historial) {
 	    System.out.println("Guardando historial: " + historial);
@@ -70,6 +74,10 @@ public class HistorialPacienteServiceImpl implements IHistorialPacienteService {
 	        .orElseThrow(() -> new Exception("Paciente no encontrado" + dto.getPacienteId()));
 
 	   return new HistorialPaciente(dto.getEvento(),dto.getFecha(),dto.getObservacion(),paciente);
+	}
+	
+	public boolean existsById(Long id) {
+		return repo.existsById(id);
 	}
 
 
