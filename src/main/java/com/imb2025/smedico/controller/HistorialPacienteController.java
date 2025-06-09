@@ -3,15 +3,10 @@ package com.imb2025.smedico.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import com.imb2025.smedico.dto.HistorialPacienteRequestDTO;
 import com.imb2025.smedico.entity.HistorialPaciente;
 import com.imb2025.smedico.service.IHistorialPacienteService;
 
@@ -22,33 +17,51 @@ public class HistorialPacienteController {
     @Autowired
     private IHistorialPacienteService service;
 
-    //GET: Obtener todos los historiales
-    @GetMapping("/")
+    // GET: Obtener todos los historiales
+    @GetMapping
     public List<HistorialPaciente> findAll() {
         return service.findAll();
     }
 
-    //GET: Obtener historial por ID
+    // GET: Obtener historial por ID
     @GetMapping("/{idhistorialpaciente}")
-    public HistorialPaciente findById(@PathVariable("idhistorialpaciente") Long id) {
-        return service.findById(id);
+    public ResponseEntity<HistorialPaciente> findById(@PathVariable Long idhistorialpaciente) {
+        HistorialPaciente historial = service.findById(idhistorialpaciente);
+        if (historial != null) {
+            return ResponseEntity.ok(historial);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    //POST: Crear nuevo historial
-    @PostMapping("/")
-    public HistorialPaciente create(@RequestBody HistorialPaciente historial) {
-        return service.save(historial);
+ // POST - Crear un nuevo historial de paciente usando DTO
+    @PostMapping
+    public HistorialPaciente createHistorialPaciente(@RequestBody HistorialPacienteRequestDTO historialPacienteDto) {
+        try {
+            return service.save(service.fromDto(historialPacienteDto));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-    
-    @PutMapping("/")
-    public HistorialPaciente update(@RequestBody HistorialPaciente historial) {
-        return service.save(historial);
-    }    
 
-    //DELETE: Eliminar historial por ID
+    // PUT - Actualizar historial de paciente existente usando DTO
+    @PutMapping("/{idhistorialpaciente}")
+    public HistorialPaciente updateHistorialPaciente(@RequestBody HistorialPacienteRequestDTO historialPacienteDto,
+                                                     @PathVariable("idhistorialpaciente") Long id) {
+        try {
+            return service.update(id, service.fromDto(historialPacienteDto));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    // DELETE: Eliminar historial por ID
     @DeleteMapping("/{idhistorialpaciente}")
-    public String delete(@PathVariable("idhistorialpaciente") Long id) {
-        service.deleteById(id);
-        return "Historial Paciente con ID " + id + " eliminado correctamente.";
+    public ResponseEntity<String> delete(@PathVariable Long idhistorialpaciente) {
+        service.deleteById(idhistorialpaciente);
+        return ResponseEntity.ok("Historial Paciente con ID " + idhistorialpaciente + " eliminado correctamente.");
     }
 }
