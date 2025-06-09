@@ -3,7 +3,9 @@ package com.imb2025.smedico.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,36 +23,49 @@ public class RecetaController {
 	@Autowired
 	private IRecetaService service;
 	
-	@GetMapping("/receta")
-	public List<Receta>findAllReceta(){
-		return service.findAll();
+    @GetMapping("/receta")
+    public ResponseEntity<List<Receta>> findAllReceta() {
+        List<Receta> lista = service.findAll();
+        if (lista.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(lista);
+        
+    }
+	
+	@GetMapping("/receta/existe/{id}")
+	public ResponseEntity<Void> existsById(@PathVariable("id") Long id) {
+	    if (service.existsById(id)) {
+	        return ResponseEntity.ok().build();       
+	    } else {
+	        return ResponseEntity.notFound().build();
+	    }
+	}
+	@PostMapping("/receta")
+	public ResponseEntity<Receta> create(@RequestBody RecetaRequestDTO recetaRequestDTO) throws Exception {
+        Receta nueva = service.create(service.fromDto(recetaRequestDTO));
+        return ResponseEntity.ok(nueva);
+    }
+	
+	@PutMapping("/receta/{idreceta}")
+	public ResponseEntity<Receta> update(@PathVariable("idreceta") Long id,
+	        @RequestBody RecetaRequestDTO recetaRequestDTO) throws Exception {
+	    Receta entity = service.fromDto(recetaRequestDTO);
+	    return ResponseEntity.ok(service.update(id, entity));
 	}
 	
-	@GetMapping("/receta/{idreceta}")
-    public Receta findRecetaByid(@PathVariable("idreceta") Long id) {
-		return service.findById(id);
-		}
-	@PostMapping("/receta")
-    public Receta create(@RequestBody RecetaRequestDTO recetaRequestDTO) {
-        try {
-            return service.create(service.fromDto(recetaRequestDTO));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-	@PutMapping("/receta/{idreceta}")
-	   public Receta update(@PathVariable("idreceta") Long id,
-               @RequestBody RecetaRequestDTO recetaRequestDTO) {
-		try {
-			return service.update(id, service.fromDto(recetaRequestDTO));
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-}
 	@DeleteMapping ("/receta/{idreceta}")
-	public String deleteReceta (@PathVariable("idreceta") Long id) {
-		service.deleteById(id);
-		return "Receta "+id.toString()+ " Eliminada Correctamente";	}
+	public ResponseEntity<String> deleteReceta(@PathVariable("idreceta") Long id) {
+        service.deleteById(id);
+        return ResponseEntity.ok("Receta " + id + " eliminada correctamente.");
+    }
+	
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<String> handleException(Exception ex) {
+	  return ResponseEntity.badRequest().body(ex.getMessage());
+	}
+	
 }
+
+
+

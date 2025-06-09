@@ -33,42 +33,37 @@ public class RecetaImpl implements IRecetaService{
 
 	@Override
 	public Receta findById(Long id) {
-		Optional<Receta> opt;
-        opt = repo.findById(id);
-        if(opt.isPresent()) {
-            return opt.get();
-        }else {
-            return null;
-        }
-	}
+        Optional<Receta> opt = repo.findById(id);
+        return opt.orElse(null); 
+    }
+
 
 	@Override
-	public Receta create(Receta receta) {
-	    try {
-	    
+	 public Receta create(Receta receta) {
+        return repo.save(receta);
+    }
+	
+	 @Override
+	    public Receta update(Long id, Receta receta) throws Exception {
+	        if (!repo.existsById(id)) {
+	            throw new Exception("Receta con ID " + id + " no existe");
+	        }
+	        receta.setId(id);
 	        return repo.save(receta);
-	    } catch (Exception e) {
-	        throw new RuntimeException("Error al crear la receta: " + e.getMessage());
 	    }
-	}
+	 
+	 public boolean existsById(Long id) {
+		    return repo.existsById(id);
+		}
+	
+	
 	@Override
 	public void deleteById(Long id) {
-		repo.deleteById(id);
-	}
-
-	@Override
-	public Receta update(Long id, Receta receta) throws Exception {
-	    if (repo.existsById(id)) {
-	        receta.setId(id);
-	        try {
-	            return repo.save(receta);
-	        } catch (Exception e) {
-	            throw new RuntimeException("Error al actualizar la receta: " + e.getMessage());
-	        }
-	    } else {
-	        throw new Exception("Receta con ID " + id + " no encontrada");
-	    }
-	}
+        if (!repo.existsById(id)) {
+            throw new IllegalArgumentException("La receta con ID " + id + " no existe");
+        }
+        repo.deleteById(id);
+    }
 
 	
 

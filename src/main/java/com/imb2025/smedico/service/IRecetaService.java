@@ -15,4 +15,6 @@ public interface IRecetaService {
     public Receta update(Long id,Receta receta) throws Exception;
 	public void deleteById (Long id);
 	public Receta fromDto(RecetaRequestDTO requestDto) throws Exception;
+	boolean existsById(Long id);
+
 }
