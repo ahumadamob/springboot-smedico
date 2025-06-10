@@ -36,7 +36,8 @@ public class EspecialidadController {
 	@PostMapping("/especialidad")
 	public Especialidad create(@RequestBody EspecialidadRequestDTO dto) {
 		try {
-		return service.create(dto);
+			Especialidad entity = service.fromDto(dto);
+	            return service.create(entity);
 		}catch(Exception e){
 			e.printStackTrace();
             return null;
@@ -46,7 +47,8 @@ public class EspecialidadController {
 	@PutMapping("/especialidad/{idespecialidad}")
 	public Especialidad update(@RequestBody EspecialidadRequestDTO dto, @PathVariable("idespecialidad") Long id) {
 		try {
-		return service.update(id, dto);
+			 Especialidad entity = service.fromDto(dto);
+			 return service.update(id, entity);
 		}catch (Exception e){
 			e.printStackTrace();
 			return null;

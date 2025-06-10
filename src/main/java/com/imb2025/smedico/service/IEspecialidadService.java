@@ -10,9 +10,10 @@ public interface IEspecialidadService {
 
 	public List<Especialidad> findall();
 	public Especialidad findById(Long id);
-	public Especialidad create(EspecialidadRequestDTO dto);
-	public Especialidad update(Long id, EspecialidadRequestDTO dto) throws Exception;
+	public Especialidad create(Especialidad especialidad);
+	public Especialidad update(Long id, Especialidad especialidad) throws Exception;
 	public void deleteById(Long id);
+	public Especialidad fromDto(EspecialidadRequestDTO dto) throws Exception;
 	
 	
 	

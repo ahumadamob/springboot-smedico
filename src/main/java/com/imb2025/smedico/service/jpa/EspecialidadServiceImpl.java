@@ -37,22 +37,16 @@ public class EspecialidadServiceImpl implements IEspecialidadService{
 	}
 		
 	@Override
-	public Especialidad create(EspecialidadRequestDTO dto) {
-		Especialidad especialidad = fromDto(dto);
+	public Especialidad create(Especialidad especialidad) {		
 		return repo.save(especialidad);
 	}
 	
 		@Override
-	public Especialidad update(Long id, EspecialidadRequestDTO dto) throws Exception {
+	public Especialidad update(Long id, Especialidad especialidad) throws Exception {
 		Optional<Especialidad> opt = repo.findById(id);
 			
-			if (opt.isPresent()){
-			Especialidad especialidad = opt.get();
-			
-			especialidad.setNombre(dto.getNombre());
-			
-			especialidad.setDescripcion(dto.getDescripcion());
-			
+		 if (repo.existsById(id)) {
+		        especialidad.setId(id);
 			return repo.save(especialidad);
 			
 		    }else {
@@ -62,15 +56,18 @@ public class EspecialidadServiceImpl implements IEspecialidadService{
 		
 
 		
-		private Especialidad fromDto(EspecialidadRequestDTO dto) {
+		public Especialidad fromDto(EspecialidadRequestDTO dto) {
 		
-			Especialidad especialidad = new Especialidad();
-			especialidad.setNombre(dto.getNombre());
-			especialidad.setDescripcion(dto.getDescripcion());
-			
-			return especialidad;
-		
-		
+			    if (dto.getNombre() == null || dto.getNombre().isBlank()) {
+			        throw new IllegalArgumentException("El nombre no puede estar vacío");
+			    }
+			    if (dto.getDescripcion() == null || dto.getDescripcion().isBlank()) {
+			        throw new IllegalArgumentException("La descripción no puede vacía");
+			    }
+			    Especialidad especialidad = new Especialidad();
+			    especialidad.setNombre(dto.getNombre());
+			    especialidad.setDescripcion(dto.getDescripcion());
+			    return especialidad;
 		}
 
 		@Override
