@@ -10,7 +10,7 @@ public class FacturaRequestDTO {
 
     private Double monto;
 
-    private Long medioPagoId; 
+    private Long medioPagoId;
 
     public FacturaRequestDTO(LocalDate fecha, Long pacienteId, Double monto, Long medioPagoId) {
         super();

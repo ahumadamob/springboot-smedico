@@ -35,18 +35,6 @@ public class FacturaController {
         }
     }
 
-    /*
-    @PostMapping
-    public Factura crearFactura(@RequestBody FacturaRequestDTO dto) {
-        try {
-            return facturaService.createFactura(dto); //Me susbraya en rojo en createFactura
-        } catch (Exception e) {
-            System.out.println("Error al crear Factura: " + e.getMessage());
-            return null;
-        }
-    }
-    */
-    
     @PutMapping("/{id}")
     public Factura updateFactura(@PathVariable Long id, @RequestBody FacturaRequestDTO requestDTO){
         try{
