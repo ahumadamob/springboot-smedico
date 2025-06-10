@@ -1,41 +1,21 @@
-package com.imb2025.smedico.entity;
-
-import jakarta.persistence.*;
+package com.imb2025.smedico.dto;
 
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "consulta")
-public class Consulta {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class ConsultaRequestDTO {
     private LocalDate fecha;
-
-    private String comentarios;
-
-    @Column(name = "duracion_min")
-    private Integer duracionMin;
-
-    @Column(name = "turno_id")
     private String turnoId;
+    private int duracionMin;
+    private String comentarios;
+    private Long pacienteId;
 
-   
-    @ManyToOne
-    @JoinColumn(name = "paciente_id")
-    private Paciente paciente;
-    // Getters y Setters
-
-    public Long getId() {
-        return id;
+    public void  setPacienteId(Long pacienteId) {
+    	this.pacienteId = pacienteId;
     }
-
-    public void setId(Long id) {
-        this.id = id;
+    public Long getPacienteId() {
+    	return pacienteId;
     }
-
+    
     public LocalDate getFecha() {
         return fecha;
     }
@@ -66,5 +46,15 @@ public class Consulta {
 
     public void setComentarios(String comentarios) {
         this.comentarios = comentarios;
+    }
+
+    @Override
+    public String toString() {
+        return "ConsultaRequestDTO{" +
+                "fecha=" + fecha +
+                ", turnoId='" + turnoId + '\'' +
+                ", duracionMin=" + duracionMin +
+                ", comentarios='" + comentarios + '\'' +
+                '}';
     }
 }
