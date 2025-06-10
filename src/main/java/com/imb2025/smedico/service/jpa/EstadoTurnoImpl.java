@@ -33,22 +33,20 @@ public class EstadoTurnoImpl implements IEstadoTurnoService { //indicamos que la
     }
 
     @Override
-    public EstadoTurno create(EstadoTurnoDTO dto) {
-        EstadoTurno estadoTurno = new EstadoTurno();
-        estadoTurno.setNombre(dto.getNombre());
+    public EstadoTurno create(EstadoTurno estadoTurno) {
         return estadoTurnoRepository.save(estadoTurno);
-        
     }
+
 //incorporamos en el metodo que verifique si el id que se busca en update existe o no
     @Override
-    public EstadoTurno update(Long id, EstadoTurnoDTO dto) {
+    public EstadoTurno update(Long id, EstadoTurno estadoTurno) {
         Optional<EstadoTurno> existente = estadoTurnoRepository.findById(id);
 
         if (existente.isPresent()) {
             EstadoTurno actualizado = existente.get();
             
             //  Asegurarse de que se actualiza el nombre antes de guardar
-            actualizado.setNombre(dto.getNombre());
+            actualizado.setNombre(estadoTurno.getNombre());
 
             return estadoTurnoRepository.save(actualizado);
         } else {
