@@ -1,6 +1,9 @@
 package com.imb2025.smedico.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 import java.time.LocalDate;
 
@@ -17,8 +20,14 @@ public class Factura {
     private Paciente paciente;
 
     private Double monto;
+    public MedioPago getMedioPago() { //Agregado
+		return medioPago;
+	}
 
     private Long medioPagoId;
+	public void setMedioPago(MedioPago medioPago) { //Agregado
+		this.medioPago = medioPago;
+	}
 
     public Factura() {
     }

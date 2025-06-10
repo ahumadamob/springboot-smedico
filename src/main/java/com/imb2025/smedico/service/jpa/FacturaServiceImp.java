@@ -1,10 +1,7 @@
 package com.imb2025.smedico.service.jpa;
 
-import com.imb2025.smedico.dto.FacturaRequestDTO;
 import com.imb2025.smedico.entity.Factura;
-import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.repository.FacturaRepository;
-import com.imb2025.smedico.repository.PacienteRepository;
 import com.imb2025.smedico.service.IFacturaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +16,7 @@ public class FacturaServiceImp implements IFacturaService {
     FacturaRepository facturaRepository;
     @Autowired
     PacienteRepository pacienteRepository;
+    MedioPagoRepository medioPagoRepository;
 
     @Override
     public List<Factura> findAll() {
