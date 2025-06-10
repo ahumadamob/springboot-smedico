@@ -5,34 +5,76 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.imb2025.smedico.dto.EncuestaRequestDTO;
+import com.imb2025.smedico.entity.Consulta;
 import com.imb2025.smedico.entity.Encuesta;
+import com.imb2025.smedico.repository.ConsultaRepository;
 import com.imb2025.smedico.repository.EncuestaRepository;
+import com.imb2025.smedico.repository.PacienteRepository;
 import com.imb2025.smedico.service.IEncuestaService;
+import com.imb2025.smedico.entity.Paciente;
 
-@Service
-public class EncuestaServiceImpl implements IEncuestaService {
-	
-	@Autowired
-	private EncuestaRepository repo;
+    @Service
+    public class EncuestaServiceImpl implements IEncuestaService {
 
-	@Override
-	public List<Encuesta> findAll() {
-		return repo.findAll();
-	}
+        @Autowired
+        private EncuestaRepository repo;
+        @Autowired
+        private PacienteRepository pacienteRepo;
+        @Autowired
+        private ConsultaRepository consultaRepo;
 
-	@Override
-	public Encuesta findById(Long id) {
-		return repo.findById(id).orElse(null);
-	}
+        @Override
+        public List<Encuesta> findAll() {
+            return repo.findAll();
+        }
 
-	@Override
-	public Encuesta save(Encuesta encuesta) {
-		return repo.save(encuesta);
-	}
+        @Override
+        public Encuesta findById(Long id) {
+            return repo.findById(id).orElse(null);
+        }
 
-	@Override
-	public void deleteById(Long id) {
-		repo.deleteById(id);
-	}
+        
+        @Override
+        public Encuesta update(Long id, Encuesta encuesta) throws Exception{
+            if(repo.existsById(id)){
+                encuesta.setId(id);
+                return repo.save(encuesta);
+            }else {
+                throw new Exception("Encuesta no encontrada");  
+            }
+            
+        }
 
-}
+        @Override
+        public void deleteById(Long id) {
+            repo.deleteById(id);
+        }
+        
+        @Override
+        public Encuesta fromDto(EncuestaRequestDTO dto) throws Exception{
+            Paciente paciente = pacienteRepo.findById(dto.getPacienteId())
+                    .orElseThrow(() -> new Exception("Paciente no encontrado"));
+            Consulta consulta = consultaRepo.findById(dto.getConsultaId())
+                    .orElseThrow(() -> new Exception("Consulta no encontrada"));
+            Encuesta encuesta = new Encuesta();
+            encuesta.setPaciente(paciente);
+            encuesta.setConsulta(consulta);
+            encuesta.setPuntaje(dto.getPuntaje());
+            encuesta.setComentario(dto.getComentario());
+            
+            return encuesta;
+        }
+
+		@Override
+		public Encuesta create(Encuesta encuesta) {
+			return repo.save(encuesta);
+		}
+
+		
+
+		
+
+		
+
+    }
