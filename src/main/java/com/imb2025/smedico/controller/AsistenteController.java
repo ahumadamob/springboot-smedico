@@ -1,53 +1,57 @@
 package com.imb2025.smedico.controller;
-//Controlador
-import java.util.HashMap;
+//Controller
+
 import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import com.imb2025.smedico.dto.AsistenteRequestDTO;
 import com.imb2025.smedico.entity.Asistente;
 import com.imb2025.smedico.service.IAsistenteService;
 
 @RestController
-@RequestMapping("/asistente")
+@RequestMapping("/asistentes")
 public class AsistenteController {
 
     @Autowired
     private IAsistenteService service;
 
+
     @GetMapping
-    public List<Asistente> findAll() {
-        return service.findAll();
+    public ResponseEntity<List<Asistente>> findAll() {
+        List<Asistente> lista = service.findAll();
+        return lista.isEmpty()
+                ? ResponseEntity.noContent().build()           
+                : ResponseEntity.ok(lista);                    
     }
 
     @GetMapping("/{id}")
-    public Asistente findById(@PathVariable("id") Long id) {
-        return service.findById(id);
+    public ResponseEntity<Asistente> findById(@PathVariable Long id) {
+        Asistente asistente = service.findById(id);            
+        return ResponseEntity.ok(asistente);                   
     }
 
     @PostMapping
-    public Asistente save(@RequestBody AsistenteRequestDTO dto) {
-        return service.create(dto);
+    public ResponseEntity<Asistente> create(@RequestBody AsistenteRequestDTO dto) {
+        Asistente creado = service.create(dto);
+        return ResponseEntity.ok(creado);                     
     }
 
     @PutMapping("/{id}")
-    public Asistente update(@PathVariable("id") Long id, @RequestBody AsistenteRequestDTO dto) {
-        return service.update(id, dto);
+    public ResponseEntity<Asistente> update(@PathVariable Long id,
+                                            @RequestBody AsistenteRequestDTO dto) {
+        Asistente actualizado = service.update(id, dto);      
+        return ResponseEntity.ok(actualizado);                 
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") Long id) {
-        service.deleteById(id);
-        return "Asistente con ID " + id + " eliminado correctamente";
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.deleteById(id);                                
+        return ResponseEntity.ok().build();                  
     }
-    
-    @ExceptionHandler(RuntimeException.class)
-    public Map<String, Object> handleRuntimeException(RuntimeException ex) {
-        Map<String, Object> errorMap = new HashMap<>();
-        errorMap.put("message", ex.getMessage());
-        return errorMap;
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());  // 400
     }
 }
