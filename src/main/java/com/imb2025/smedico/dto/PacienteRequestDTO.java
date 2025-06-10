@@ -15,6 +15,11 @@ public class PacienteRequestDTO {
     }
 
 
+
+    public PacienteRequestDTO() {
+    }
+    
+
     public PacienteRequestDTO(String nombre, String apellido, String dni, String email, LocalDate fechaNacimiento, String telefono) {
         this.nombre = nombre;
         this.apellido = apellido;
@@ -72,4 +77,8 @@ public class PacienteRequestDTO {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
+
 }
+
+}
+
