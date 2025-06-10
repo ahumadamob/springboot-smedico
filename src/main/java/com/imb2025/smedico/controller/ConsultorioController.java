@@ -3,7 +3,9 @@ package com.imb2025.smedico.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,46 +25,50 @@ public class ConsultorioController {
 	
 	//Crear Consultorio - POST
 	@PostMapping("/consultorio")
-	public Consultorio create(@RequestBody ConsultorioRequestDTO consultorioRequestDto){
-		try {
-			return servicio.create(servicio.fromDto(consultorioRequestDto));
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+	public ResponseEntity<Consultorio> create(@RequestBody ConsultorioRequestDTO consultorioRequestDto) throws Exception{
+		return ResponseEntity.ok(servicio.create(servicio.fromDto(consultorioRequestDto)));
 	}
-	
+		
 	//Buscar por ID - GET (por ID)
     @GetMapping("/consultorio/{id}")
-    public Consultorio findConsultorioById(@PathVariable("id") Long id) {
-        return servicio.findById(id);
+    public ResponseEntity<Consultorio> findConsultorioById(@PathVariable("id") Long id) {
+    	Consultorio consultorio = new Consultorio();
+    	consultorio = servicio.findById(id);
+    	if(consultorio == null) {
+    		return ResponseEntity.noContent().build();
+    	}else {
+    		return ResponseEntity.ok(consultorio);
+    	}
     }
     
     //Listar Consultorios - GET
     @GetMapping("/consultorio")
-    public List<Consultorio> findAllConsultorios(){
-    	return servicio.findAll();
+    public ResponseEntity<List<Consultorio>> findAllConsultorios(){
+    	List<Consultorio> listaConsultorio = servicio.findAll();
+    	if (listaConsultorio.isEmpty()) {
+    		return ResponseEntity.noContent().build();
+    	}else {
+    		return ResponseEntity.ok(listaConsultorio);
+    	}
     }
     
     //Eliminar por ID - DELETE
     @DeleteMapping("/consultorio/{id}")
-    public String delete(@PathVariable("id") Long id) {
-		servicio.deleteById(id);
-		return "Consultorio " + id.toString() + " eliminado correctamente. ";
+    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
+    	return ResponseEntity.ok("Consultorio " + id.toString() + " eliminado correctamente. ");
 	}
        
     //Actualizar consultorio - PUT
     @PutMapping("/consultorio/{id}")
-    public Consultorio update(@RequestBody ConsultorioRequestDTO dto,@PathVariable("id") Long id) {
-    	
-
-        try {
-            return servicio.update(id,servicio.fromDto(dto));
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.printf("message", "El consultorio " + id + " no existe");
-            return null;
-        }
+    public ResponseEntity<Consultorio> update(@RequestBody ConsultorioRequestDTO dto,@PathVariable("id") Long id) throws Exception{
+    	Consultorio consultorio = new Consultorio();
+    	consultorio = servicio.fromDto(dto);
+    	return ResponseEntity.ok(servicio.update(id, consultorio));
        
+    }
+    
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleGlobalExceptions(Exception e){
+    	return ResponseEntity.badRequest().body(e.getMessage());
     }
 }
