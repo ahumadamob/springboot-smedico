@@ -39,17 +39,16 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
 	}
 
 	@Override
-	public Afiliacion create(AfiliacionRequestDTO dto) throws Exception {
-		Afiliacion afiliacion = dtoAfiliacion(dto);
+	public Afiliacion create(Afiliacion afiliacion) throws Exception {
 		return repo.save(afiliacion);
 	}
 
 	@Override
-	public Afiliacion update(Long id, AfiliacionRequestDTO dto) throws Exception {
-		Afiliacion afiliacion = dtoAfiliacion(dto);
+	public Afiliacion update(Long id, Afiliacion afiliacion) throws Exception {
+		Afiliacion afi = afiliacion;
 		if (repo.existsById(id)) {
-			afiliacion.setId(id);
-			return repo.save(afiliacion);
+			afi.setId(id);
+			return repo.save(afi);
 		}
 		throw new Exception("Afiliación no encontrada");
 	}
