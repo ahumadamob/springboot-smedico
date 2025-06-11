@@ -8,8 +8,8 @@ public interface  IAfiliacionService {
 	
 	public List<Afiliacion> findAll();
 	public Afiliacion findById(Long id);
-	public Afiliacion create(AfiliacionRequestDTO dto) throws Exception ;
-	public Afiliacion update(Long id, AfiliacionRequestDTO dto) throws Exception ;
+	public Afiliacion create(Afiliacion afiliacion) throws Exception ;
+	public Afiliacion update(Long id, Afiliacion afiliacion) throws Exception ;
 	public void deleteById(Long id);
 	public Afiliacion dtoAfiliacion(AfiliacionRequestDTO dto) ;
 
