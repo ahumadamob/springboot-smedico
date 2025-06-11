@@ -1,8 +1,7 @@
 package com.imb2025.smedico.service;
 
 import com.imb2025.smedico.entity.ObraSocial;
-
-import obrasocialrequestdto.ObraSocialRequestDTO;
+import com.imb2025.smedico.dto.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +13,7 @@ public interface IObraSocialService {
     ObraSocial update(Long id, ObraSocial obraSocial) throws Exception;
     void deleteById(Long id);
     
-    ObraSocial fromDto(ObraSocialRequestDTO dto);
+    ObraSocial fromDto(com.imb2025.smedico.dto.ObraSocialRequestDTO dto) throws Exception;
 
     
 	static Optional<ObraSocial> buscarPorId(Long id) {

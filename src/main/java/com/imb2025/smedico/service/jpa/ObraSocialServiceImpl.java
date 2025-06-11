@@ -3,9 +3,7 @@ package com.imb2025.smedico.service.jpa;
 import com.imb2025.smedico.entity.ObraSocial;
 import com.imb2025.smedico.repository.ObraSocialRepository;
 import com.imb2025.smedico.service.IObraSocialService;
-
-import obrasocialrequestdto.ObraSocialRequestDTO;
-
+import com.imb2025.smedico.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,20 +51,24 @@ public class ObraSocialServiceImpl implements IObraSocialService {
 		return null;
 	}
 
+
+
 	@Override
 	public ObraSocial fromDto(ObraSocialRequestDTO dto) {
-	    ObraSocial obra = new ObraSocial();
-	    obra.setNombre(dto.getNombre());
-	    obra.setTelefono(dto.getTelefono());
-	    obra.setDireccion(dto.getDireccion());
-	    obra.setCobertura(dto.getCobertura());
-	    return obra;
+	    ObraSocial obraSocial = new ObraSocial();
+	    obraSocial.setNombre(dto.getNombre());
+	    obraSocial.setTelefono(dto.getTelefono());
+	    obraSocial.setDireccion(dto.getDireccion());
+	    obraSocial.setCobertura(dto.getCobertura());
+	    return obraSocial;
 	}
 
 	@Override
 	public ObraSocial save(ObraSocial obraSocial) {
-		return null;
+	    return repository.save(obraSocial);
 	}
+
+
 
 }
 
