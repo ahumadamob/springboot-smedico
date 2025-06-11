@@ -18,42 +18,51 @@ public class DiagnosticoController {
     @Autowired
     private IDiagnosticoService service;
 
+    // Lista todos
     @GetMapping
-    public List<Diagnostico> getAll() {
-        return service.findAll();
+    public ResponseEntity<List<Diagnostico>> getAll() {
+        List<Diagnostico> diagnosticos = service.findAll();
+        return ResponseEntity.ok(diagnosticos); // 200 OK
     }
 
+    // Busca por ID
     @GetMapping("/{id}")
-    public Diagnostico getById(@PathVariable Long id) {
-        return service.findById(id);
+    public ResponseEntity<Diagnostico> getById(@PathVariable Long id) {
+        Diagnostico diagnostico = service.findById(id);
+        if (diagnostico == null) {
+            return ResponseEntity.notFound().build(); // 404 NOT FOUND
+        }
+        return ResponseEntity.ok(diagnostico); // 200 OK
     }
 
+    // Crea nuevo
     @PostMapping("/diagnosticos")
     public ResponseEntity<?> crearDiagnostico(@RequestBody DiagnosticoRequestDTO dto) {
         Diagnostico nuevo = service.fromDto(dto);
-
-        if (nuevo == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Consulta no encontrada");
-        }
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(nuevo));
+        Diagnostico guardado = service.save(nuevo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(guardado); // 201 CREATED
     }
 
+    // Actualiza el existente
     @PutMapping("/diagnosticos/{id}")
     public ResponseEntity<Diagnostico> actualizarDiagnostico(@PathVariable Long id,
                                                              @RequestBody DiagnosticoRequestDTO dto) {
-        try {
-            Diagnostico diagnostico = service.fromDto(dto); // convertir el DTO a entidad
-            Diagnostico actualizado = service.actualizar(id, diagnostico); // pasar la entidad, no el DTO
-            return ResponseEntity.ok(actualizado);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        Diagnostico diagnostico = service.fromDto(dto);
+        Diagnostico actualizado = service.actualizar(id, diagnostico);
+        return ResponseEntity.ok(actualizado); // 200 OK
     }
 
-
+    // Elimina por ID
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.deleteById(id);
+        return ResponseEntity.noContent().build(); // 204 NO CONTENT
+    }
+
+    // Manejador de excepciones centralizado
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage()); // 400 BAD REQUEST
     }
 }
+
