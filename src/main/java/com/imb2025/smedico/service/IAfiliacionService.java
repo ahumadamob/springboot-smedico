@@ -11,6 +11,6 @@ public interface  IAfiliacionService {
 	public Afiliacion create(Afiliacion afiliacion) throws Exception ;
 	public Afiliacion update(Long id, Afiliacion afiliacion) throws Exception ;
 	public void deleteById(Long id);
-	public Afiliacion dtoAfiliacion(AfiliacionRequestDTO dto) ;
+	public Afiliacion fromDto(AfiliacionRequestDTO dto) ;
 
 }
