@@ -34,7 +34,7 @@ public class MedicamentoController {
 	@PostMapping("/medicamento")
 	public Medicamento createMedicamento(@RequestBody MedicamentoRequestDTO dto) {
 		try {
-			return service.create(dto);
+			return service.create(service.fromDto(dto));
 		}catch(Exception e) {
 			e.printStackTrace();
 			return null;
@@ -44,7 +44,7 @@ public class MedicamentoController {
 	@PutMapping("/medicamento/{id}")
 	public Medicamento updateMedicamento(@PathVariable Long id, @RequestBody MedicamentoRequestDTO dto) {
 		try {
-			return service.update(id, dto);
+			return service.update(id, service.fromDto(dto));
 		}catch(Exception e) {	
 			e.printStackTrace();
 			return null;

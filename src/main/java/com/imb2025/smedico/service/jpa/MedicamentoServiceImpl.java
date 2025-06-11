@@ -34,20 +34,19 @@ public class MedicamentoServiceImpl implements IMedicamentoService{
 	}
 	
 	@Override
-	public Medicamento create(MedicamentoRequestDTO dto) throws Exception{
-		Medicamento medicamento = fromDto(dto);
-		return repoMedic.save(medicamento);
+	public Medicamento create(Medicamento medicamento) throws Exception{
+		return repoMedic.save(medicamento);	
 	}
 	
 	
 	@Override
-	public Medicamento update(Long id, MedicamentoRequestDTO dto) throws Exception{
+	public Medicamento update(Long id, Medicamento medicamento) throws Exception{
 		 Optional<Medicamento> opt = repoMedic.findById(id);
 		    if (opt.isPresent()) {
-		        Medicamento medicamento = opt.get();
-		        medicamento.setNombre(dto.getNombre());
-		        medicamento.setDosisSugerida(dto.getDosisSugerida());
-		        medicamento.setPresentacion(dto.getPresentacion());
+		    	
+		        medicamento.setNombre(medicamento.getNombre());
+		        medicamento.setDosisSugerida(medicamento.getDosisSugerida());
+		        medicamento.setPresentacion(medicamento.getPresentacion());
 		        return repoMedic.save(medicamento);
 		    } else {
 		    	throw new Exception("El medicamento con ID " + id + " no existe.");

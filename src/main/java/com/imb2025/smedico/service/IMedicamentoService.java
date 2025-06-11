@@ -9,8 +9,8 @@ public interface IMedicamentoService {
 	
 	public List<Medicamento> findAll();
 	public Medicamento findById(Long id);
-	public Medicamento create(MedicamentoRequestDTO dto) throws Exception;
-	public Medicamento update(Long id, MedicamentoRequestDTO dto) throws Exception;
+	public Medicamento create(Medicamento medicamento) throws Exception;
+	public Medicamento update(Long id, Medicamento medicamento) throws Exception;
 	public void deleteById(Long id);
 	public Medicamento fromDto(MedicamentoRequestDTO dto) throws Exception;
 	
