@@ -16,11 +16,28 @@ public class Factura {
 
     private LocalDate fecha;
 
-    private Long pacienteId;
+    @ManyToOne
+    private Paciente paciente;
 
     private Double monto;
+    public MedioPago getMedioPago() { //Agregado
+		return medioPago;
+	}
 
     private Long medioPagoId;
+	public void setMedioPago(MedioPago medioPago) { //Agregado
+		this.medioPago = medioPago;
+	}
+
+    public Factura() {
+    }
+
+    public Factura(LocalDate fecha, Paciente paciente, Double monto, Long medioPagoId) {
+        this.fecha = fecha;
+        this.paciente = paciente;
+        this.monto = monto;
+        this.medioPagoId = medioPagoId;
+    }
 
     public Long getId() {
         return id;
@@ -38,12 +55,12 @@ public class Factura {
         this.fecha = fecha;
     }
 
-    public Long getPacienteId() {
-        return pacienteId;
+    public Paciente getPaciente() {
+        return paciente;
     }
 
-    public void setPacienteId(Long pacienteId) {
-        this.pacienteId = pacienteId;
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
     }
 
     public Double getMonto() {

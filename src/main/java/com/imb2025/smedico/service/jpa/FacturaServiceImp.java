@@ -14,6 +14,9 @@ public class FacturaServiceImp implements IFacturaService {
 
     @Autowired
     FacturaRepository facturaRepository;
+    @Autowired
+    PacienteRepository pacienteRepository;
+    MedioPagoRepository medioPagoRepository;
 
     @Override
     public List<Factura> findAll() {
@@ -27,12 +30,29 @@ public class FacturaServiceImp implements IFacturaService {
     }
 
     @Override
-    public Factura save(Factura factura) {
+    public Factura create(Factura factura) {
         return facturaRepository.save(factura);
+    }
+
+    @Override
+    public Factura update(Long id, Factura factura) throws Exception{
+        if(facturaRepository.existsById(id)){
+            factura.setId(id);
+            return facturaRepository.save(factura);
+        } else {
+            throw new Exception("Factura no encontrada");
+        }
     }
 
     @Override
     public void deleteById(Long id) {
         facturaRepository.deleteById(id);
+    }
+
+    @Override
+    public Factura fromDto(FacturaRequestDTO requestDTO) throws Exception{
+        Paciente paciente = pacienteRepository.findById(requestDTO.getPacienteId())
+                .orElseThrow(() -> new Exception("No se encontró ningún paciente con el id: " + requestDTO.getPacienteId()));
+        return new Factura(requestDTO.getFecha(), paciente, requestDTO.getMonto(), requestDTO.getMedioPagoId());
     }
 }

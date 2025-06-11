@@ -10,12 +10,14 @@ public class Diagnostico {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long consultaId;
-
     private String descripcion;
 
     private LocalDate fechaDiagnostico;
 
+    @ManyToOne
+    @JoinColumn(name = "consulta_id")
+    private Consulta consulta;
+    
     // Getters y Setters
 
     public Long getId() {
@@ -26,12 +28,12 @@ public class Diagnostico {
         this.id = id;
     }
 
-    public Long getConsultaId() {
-        return consultaId;
+    public Consulta getConsulta() {
+        return consulta;
     }
 
-    public void setConsultaId(Long consultaId) {
-        this.consultaId = consultaId;
+    public void setConsulta(Consulta consulta) {
+        this.consulta = consulta;
     }
 
     public String getDescripcion() {
@@ -49,4 +51,6 @@ public class Diagnostico {
     public void setFechaDiagnostico(LocalDate fechaDiagnostico) {
         this.fechaDiagnostico = fechaDiagnostico;
     }
+    
+    
 }

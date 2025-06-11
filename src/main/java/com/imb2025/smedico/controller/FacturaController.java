@@ -1,5 +1,6 @@
 package com.imb2025.smedico.controller;
 
+import com.imb2025.smedico.dto.FacturaRequestDTO;
 import com.imb2025.smedico.entity.Factura;
 import com.imb2025.smedico.service.IFacturaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +26,23 @@ public class FacturaController {
     }
 
     @PostMapping
-    public Factura createFactura(@RequestBody Factura factura){
-        return facturaService.save(factura);
+    public Factura createFactura(@RequestBody FacturaRequestDTO requestDTO){
+        try {
+            return facturaService.create(facturaService.fromDto(requestDTO));
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    @PutMapping
-    public Factura updateFactura(@RequestBody Factura factura){
-        return facturaService.save(factura);
+    @PutMapping("/{id}")
+    public Factura updateFactura(@PathVariable Long id, @RequestBody FacturaRequestDTO requestDTO){
+        try{
+            return facturaService.update(id, facturaService.fromDto(requestDTO));
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @DeleteMapping("/{id}")
