@@ -3,6 +3,7 @@ package com.imb2025.smedico.service.jpa;
 import com.imb2025.smedico.entity.ObraSocial;
 import com.imb2025.smedico.repository.ObraSocialRepository;
 import com.imb2025.smedico.service.IObraSocialService;
+import com.imb2025.smedico.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,17 +27,17 @@ public class ObraSocialServiceImpl implements IObraSocialService {
     }
 
     @Override
-    public ObraSocial save(ObraSocial obraSocial) {
+    public ObraSocial create(ObraSocial obraSocial) {
         return repository.save(obraSocial);
     }
 
     @Override
-    public ObraSocial update(Long id, ObraSocial obraSocial) {
+    public ObraSocial update(Long id, ObraSocial obraSocial) throws Exception {
         if (repository.existsById(id)) {
             obraSocial.setId(id);
             return repository.save(obraSocial);
         } else {
-            return null;
+            throw new Exception("NO EXISTE LA OBRA SOCIAL SOLICITADA");
         }
     }
 
@@ -44,5 +45,31 @@ public class ObraSocialServiceImpl implements IObraSocialService {
     public void deleteById(Long id) {
         repository.deleteById(id);
     }
+
+	@Override
+	public ObraSocial guardar(ObraSocialRequestDTO dto) {
+		return null;
+	}
+
+
+
+	@Override
+	public ObraSocial fromDto(ObraSocialRequestDTO dto) {
+	    ObraSocial obraSocial = new ObraSocial();
+	    obraSocial.setNombre(dto.getNombre());
+	    obraSocial.setTelefono(dto.getTelefono());
+	    obraSocial.setDireccion(dto.getDireccion());
+	    obraSocial.setCobertura(dto.getCobertura());
+	    return obraSocial;
+	}
+
+	@Override
+	public ObraSocial save(ObraSocial obraSocial) {
+	    return repository.save(obraSocial);
+	}
+
+
+
 }
+
 
