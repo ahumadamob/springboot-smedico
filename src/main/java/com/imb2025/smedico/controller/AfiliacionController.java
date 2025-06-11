@@ -36,12 +36,12 @@ public class AfiliacionController {
 
 	@PostMapping
 	public Afiliacion createAfiliacion(@RequestBody AfiliacionRequestDTO dto) throws Exception {
-		return servi.create(dto);
+		return servi.create(servi.dtoAfiliacion(dto));
 	}
 
 	@PutMapping("/{id}")
 	public Afiliacion updateAfiliacion(@PathVariable Long id, @RequestBody AfiliacionRequestDTO dto) throws Exception {
-		return servi.update(id, dto);
+		return servi.update(id, servi.dtoAfiliacion(dto));
 
 	}
 
