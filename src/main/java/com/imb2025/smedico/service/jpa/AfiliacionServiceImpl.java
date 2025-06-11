@@ -58,7 +58,7 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
 		repo.deleteById(id);
 	}
 
-	public Afiliacion dtoAfiliacion(AfiliacionRequestDTO dto) {
+	public Afiliacion  fromDto(AfiliacionRequestDTO dto) {
 		 try {
 			 Afiliacion fili = new Afiliacion(
 					dto.getNumeroAfiliado(),
