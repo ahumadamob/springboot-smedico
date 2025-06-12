@@ -36,10 +36,13 @@ public class DiagnosticoServiceImpl implements IDiagnosticoService {
 
     @Override
     public void deleteById(Long id) {
+        if (!repo.existsById(id)) {
+            throw new RuntimeException("Diagnóstico con ID " + id + " no encontrado.");
+        }
         repo.deleteById(id);
     }
 
-    // ✅ Método para verificar existencia (para el controller)
+    // Método para verificar existencia (para el controller)
     @Override
     public boolean existsById(Long id) {
         return repo.existsById(id);
