@@ -1,11 +1,11 @@
 package dto;
 
 public class ConsultorioRequestDTO {
-	
+
 	private String nombre;
 	private String ubicacion;
 	private int piso;
-	
+
 	public ConsultorioRequestDTO(String nombre, String ubicacion, int piso) {
 		super();
 		this.nombre=nombre;
@@ -36,9 +36,9 @@ public class ConsultorioRequestDTO {
 	public void setPiso(int piso) {
 		this.piso = piso;
 	}
-	
-	
-	
-	
+
+
+
+
 
 }
