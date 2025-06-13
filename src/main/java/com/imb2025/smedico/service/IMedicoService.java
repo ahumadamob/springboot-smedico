@@ -8,8 +8,8 @@ import com.imb2025.smedico.entity.Medico;
 public interface IMedicoService {
     List<Medico> findAll();
     Medico findById(Long id);
+    boolean existsById(Long id); 
     void deleteById(Long id);
-
     Medico fromDto(MedicoRequestDTO dto) throws Exception;
     Medico create(Medico medico);
     Medico update(Long id, Medico medico) throws Exception;
