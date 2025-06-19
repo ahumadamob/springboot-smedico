@@ -48,11 +48,6 @@ public class PacienteServiceImpl implements IPacienteService {
         } else {
             throw new Exception("Paciente no encontrado con id: " + id);
         }
-
-    @Override
-    public Paciente save(Paciente paciente) {
-        return pacienteRepository.save(paciente);
-
     }
 
     @Override
@@ -78,7 +73,5 @@ public class PacienteServiceImpl implements IPacienteService {
 		// TODO Auto-generated method stub
 		return null;
 	}
-}
-
 }
 
