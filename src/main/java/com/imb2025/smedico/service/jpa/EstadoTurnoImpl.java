@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.imb2025.smedico.dto.EstadoTurnoDTO;
 import com.imb2025.smedico.entity.EstadoTurno;
 import com.imb2025.smedico.repository.EstadoTurnoRepository;
 import com.imb2025.smedico.service.IEstadoTurnoService;
@@ -32,23 +33,26 @@ public class EstadoTurnoImpl implements IEstadoTurnoService { //indicamos que la
     }
 
     @Override
-    public EstadoTurno save(EstadoTurno estadoTurno) { //guarda el objeto recbido, lo cual si tiene id lo actualizay si no lo crea
+    public EstadoTurno create(EstadoTurnoDTO dto) {
+        EstadoTurno estadoTurno = new EstadoTurno();
+        estadoTurno.setNombre(dto.getNombre());
         return estadoTurnoRepository.save(estadoTurno);
+        
     }
-
+//incorporamos en el metodo que verifique si el id que se busca en update existe o no
     @Override
-    public EstadoTurno update(Long id, EstadoTurno estadoTurno) {
+    public EstadoTurno update(Long id, EstadoTurnoDTO dto) {
         Optional<EstadoTurno> existente = estadoTurnoRepository.findById(id);
 
         if (existente.isPresent()) {
             EstadoTurno actualizado = existente.get();
             
-            // 🔄 Asegurarse de que se actualiza el nombre antes de guardar
-            actualizado.setNombre(estadoTurno.getNombre());
+            //  Asegurarse de que se actualiza el nombre antes de guardar
+            actualizado.setNombre(dto.getNombre());
 
             return estadoTurnoRepository.save(actualizado);
         } else {
-            throw new RuntimeException("EstadoTurno con id " + id + " no encontrado");
+            throw new RuntimeException("EstadoTurno con id " + id + " no existe");
         }
     }
 
