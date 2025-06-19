@@ -15,8 +15,19 @@ public class ObraSocial {
     private String direccion;
     private String cobertura;
 
-    // Getters y Setters
+    // ✅ Constructor por defecto requerido por JPA
+    public ObraSocial() {
+    }
 
+    // Constructor opcional con parámetros
+    public ObraSocial(String nombre, String telefono, String direccion, String cobertura) {
+        this.nombre = nombre;
+        this.telefono = telefono;
+        this.direccion = direccion;
+        this.cobertura = cobertura;
+    }
+
+    // Getters y Setters
     public Long getId() {
         return id;
     }
