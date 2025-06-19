@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
-
 @Entity
 public class Factura {
 
@@ -16,7 +15,6 @@ public class Factura {
 
     private Double monto;
 
-    
     @ManyToOne
     @JoinColumn(name = "medio_pago_id")
     private MedioPago medioPago; // Cambiado: Usamos la entidad en lugar del Id
@@ -29,7 +27,7 @@ public class Factura {
 		this.medioPago = medioPago;
 	}
 
-	public Factura() {
+    public Factura() {
     }
 
     public Factura(LocalDate fecha, Double monto, MedioPago medioPago) {
@@ -52,6 +50,14 @@ public class Factura {
 
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
+    }
+
+    public Paciente getPaciente() {
+        return paciente;
+    }
+
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
     }
 
     public Double getMonto() {
