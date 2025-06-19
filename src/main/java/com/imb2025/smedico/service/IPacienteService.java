@@ -10,23 +10,12 @@ import java.util.List;
 public interface IPacienteService {
 
     List<Paciente> findAll();
-
-
     Paciente findById(Long id);
-
     Paciente save(Paciente paciente);
-
     Paciente create(Paciente paciente);
-
     Paciente update(Long id, Paciente paciente) throws Exception;
-
     void deleteById(Long id);
-
     Paciente fromDto(PacienteRequestDTO requestDTO) throws Exception;
-}
 
-    Paciente findById(Long id);
-    Paciente save(Paciente paciente);
-    void deleteById(Long id);
 }
 
