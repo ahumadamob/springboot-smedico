@@ -6,8 +6,8 @@ import java.util.List;
 public interface IConsultaService {
     List<Consulta> findAll();
     Consulta findById(Long id);
-    Consulta save(Consulta consulta);
-    Consulta update(Consulta consulta);
+    Consulta save(ConsultaRequestDTO dto);
+    Consulta update(Long id, ConsultaRequestDTO dto);
     void deleteById(Long id);
 }
 

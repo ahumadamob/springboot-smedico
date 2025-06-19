@@ -26,15 +26,15 @@ public class ConsultaController {
     }
 
     @PostMapping
-    public Consulta create(@RequestBody Consulta consulta) {
-        return consultaService.save(consulta);
+    public Consulta create(@RequestBody ConsultaRequestDTO dto) {
+        return consultaService.save(dto);
     }
 
     @PutMapping("/{id}")
-    public Consulta update(@PathVariable Long id, @RequestBody Consulta consulta) {
-        consulta.setId(id);
-        return consultaService.update(consulta);
+    public Consulta update(@PathVariable Long id, @RequestBody ConsultaRequestDTO dto) {
+        return consultaService.update(id, dto);
     }
+
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
