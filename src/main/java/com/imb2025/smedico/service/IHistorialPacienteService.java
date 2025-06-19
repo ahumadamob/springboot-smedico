@@ -16,5 +16,5 @@ public interface IHistorialPacienteService {
 	public HistorialPaciente fromDto(HistorialPacienteRequestDTO requestDto) throws Exception;
 	HistorialPaciente create(HistorialPaciente historial);
 	HistorialPaciente update(Long id, HistorialPaciente historial) throws Exception;
-
+	boolean existsById(Long id);
 }
