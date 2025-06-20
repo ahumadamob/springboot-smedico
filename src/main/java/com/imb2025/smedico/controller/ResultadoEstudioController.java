@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.imb2025.smedico.dto.ResultadoEstudioRequestDTO;
 import com.imb2025.smedico.entity.ResultadoEstudio;
 import com.imb2025.smedico.service.IResultadoEstudioService;
 
@@ -31,15 +32,29 @@ public class ResultadoEstudioController {
 	}
 	
 	@PostMapping("/ResultadoEstudio")
-	public ResultadoEstudio createResultadoEstudio(@RequestBody ResultadoEstudio resultadoEstudio) {
-		return service.save(resultadoEstudio);
+	public ResultadoEstudio createResultadoEstudio(@RequestBody ResultadoEstudioRequestDTO requestDto) {
+		try {
+			
+			return service.create(service.fromDto(requestDto));
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			return null;
+		}
 		
 	}
 	
 	
-	@PutMapping ("/ResultadoEstudio")
-	public ResultadoEstudio  updateResultadoEstudio(@RequestBody ResultadoEstudio resultadoEstudio) {
-		return service.save(resultadoEstudio);
+	@PutMapping ("/ResultadoEstudio/{id}")
+	public ResultadoEstudio  updateResultadoEstudio(@PathVariable Long id,@RequestBody ResultadoEstudioRequestDTO requestDto) {
+		try {
+			
+			return service.update(id, service.fromDto(requestDto));
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+			
+		}
 	}
 	
 	@DeleteMapping ("/ResultadoEstudio/{idResultadoEstudio}")
