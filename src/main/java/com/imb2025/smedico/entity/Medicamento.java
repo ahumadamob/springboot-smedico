@@ -15,6 +15,18 @@ public class Medicamento {
 	private String presentacion;
 	private String dosisSugerida;
 	
+
+	//Constructor vacio
+	public Medicamento() {}
+	
+	//Contructor con los campos
+	public Medicamento(String nombre, String presentacion, String dosisSugerida) {
+		super();
+		this.nombre = nombre;
+		this.presentacion = presentacion;
+		this.dosisSugerida = dosisSugerida;
+	}
+	
 	public Long getId() {
 		return id;
 	}

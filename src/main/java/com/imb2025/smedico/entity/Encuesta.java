@@ -1,22 +1,46 @@
 package com.imb2025.smedico.entity;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+
+
+
 
 @Entity
 public class Encuesta {
-       
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private Long pacienteId;
-	private Long consultaId;
-	private int puntaje;
+
 	private String comentario;
-	
-	
+	private int puntaje;
+
+	//Relaciones paciente-consulta
+	@ManyToOne
+	private Paciente paciente;
+
+	@ManyToOne
+	private Consulta consulta;
+
+
+
+    //Constructores
+	public Encuesta() {
+
+	}
+
+	public Encuesta(Long id, Paciente paciente, Consulta consulta, int puntaje, String comentario) {
+		super();
+		this.id = id;
+		this.paciente = paciente;
+		this.consulta = consulta;
+		this.puntaje = puntaje;
+		this.comentario = comentario;
+	}
+
 	//GET - SET
 	public Long getId() {
 		return id;
@@ -24,17 +48,17 @@ public class Encuesta {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Long getPacienteId() {
-		return pacienteId;
+	public Paciente getPaciente() {
+		return paciente;
 	}
-	public void setPacienteId(Long pacienteId) {
-		this.pacienteId = pacienteId;
+	public void setPaciente(Paciente paciente) {
+		this.paciente = paciente;
 	}
-	public Long getConsultaId() {
-		return consultaId;
+	public Consulta getConsulta() {
+		return consulta;
 	}
-	public void setConsultaId(Long consultaId) {
-		this.consultaId = consultaId;
+	public void setConsulta(Consulta consulta) {
+		this.consulta = consulta;
 	}
 	public int getPuntaje() {
 		return puntaje;
@@ -48,7 +72,7 @@ public class Encuesta {
 	public void setComentario(String comentario) {
 		this.comentario = comentario;
 	}
-	
-	
-	
+
+
+
 }
