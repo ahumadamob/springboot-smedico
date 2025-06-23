@@ -9,6 +9,8 @@ import com.imb2025.smedico.entity.Consultorio;
 import com.imb2025.smedico.repository.ConsultorioRepository;
 import com.imb2025.smedico.service.IConsultorioService;
 
+import dto.ConsultorioRequestDTO;
+
 @Service
 public class ConsultorioServiceImpl implements IConsultorioService {
 
@@ -17,13 +19,13 @@ public class ConsultorioServiceImpl implements IConsultorioService {
 	
 	//Crear y guardar nuevo repositorio
 	@Override
-	public Consultorio guardarConsultorio(Consultorio consultorio) {
+	public Consultorio create(Consultorio consultorio) {
 		return repository.save(consultorio);
 	}
 	
 	//Buscar por id
 	 @Override
-	 public Consultorio buscarPorId(Long id) {
+	 public Consultorio findById(Long id) {
 		 Optional<Consultorio> opt;
 			opt = repository.findById(id);
 			if(opt.isPresent()) {
@@ -32,29 +34,56 @@ public class ConsultorioServiceImpl implements IConsultorioService {
 				return null;
 		 }
 	 }
-	
-	//Buscar por nombre
-	@Override
-    public List<Consultorio> buscarPorNombre(String nombre) {
-        return repository.findByNombre(nombre);
-    }
-	
+	 
 	//Listar todos
 	@Override
-    public List<Consultorio> listarTodos() {
+    public List<Consultorio> findAll() {
 	    return repository.findAll();
 	}
 	
 	// Eliminar por ID
     @Override
-    public void eliminarPorId(Long id) {
+    public void deleteById(Long id) {
+    	if(!repository.existsById(id)) {
+    		throw new IllegalArgumentException("El consultorio que desea eliminar no existe");
+    	}
         repository.deleteById(id);
     }
     
-    //Eliminar por nombre
+    //Actualizar 
     @Override
-    public void eliminarPorNombre(String nombre) {
-        repository.deleteByNombre(nombre);
-    }
+    public Consultorio update(Long id, Consultorio consultorio) throws Exception {
+    	if(repository.existsById(id)) {
+    		consultorio.setId(id);
+    		return repository.save(consultorio);
+    		
+    	}else {
+    		throw new RuntimeException("El Consultorio " + id + " no existe");
+    	}
+	}
+    
+    @Override
+	public Consultorio fromDto(ConsultorioRequestDTO dto) throws Exception {
+    	if(dto.getNombre() == null || dto.getNombre().isBlank()) {
+    		throw new IllegalArgumentException("El nombre no puede estar vacío");
+    	}
+    	if(dto.getUbicacion() == null || dto.getUbicacion().isBlank()) {
+    		throw new IllegalArgumentException("La ubicación no puede estar vacía");
+    	}
+    	if(dto.getPiso() == 0) {
+    		throw new IllegalArgumentException("El piso no puede ser nulo");
+    	}
+    	Consultorio consultorio = new Consultorio();
+    	
+    	consultorio.setNombre(dto.getNombre());
+    	consultorio.setUbicacion(dto.getUbicacion());
+    	consultorio.setPiso(dto.getPiso());
+    	
+    	return consultorio;
+	}
+
+	
+
+	
 	
 }
