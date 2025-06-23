@@ -1,6 +1,4 @@
 package com.imb2025.smedico.entity;
-import com.imb2025.smedico.entity.Consulta;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,28 +10,28 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Encuesta {
-       
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private String comentario;
 	private int puntaje;
-	
-	//Relaciones paciente
-	@ManyToOne	
+
+	//Relaciones paciente-consulta
+	@ManyToOne
 	private Paciente paciente;
-	
-	@ManyToOne	
+
+	@ManyToOne
 	private Consulta consulta;
-	
-	
-	
+
+
+
     //Constructores
 	public Encuesta() {
-		
+
 	}
-	
+
 	public Encuesta(Long id, Paciente paciente, Consulta consulta, int puntaje, String comentario) {
 		super();
 		this.id = id;
@@ -42,7 +40,7 @@ public class Encuesta {
 		this.puntaje = puntaje;
 		this.comentario = comentario;
 	}
-	
+
 	//GET - SET
 	public Long getId() {
 		return id;
@@ -74,7 +72,7 @@ public class Encuesta {
 	public void setComentario(String comentario) {
 		this.comentario = comentario;
 	}
-	
-	
-	
+
+
+
 }
