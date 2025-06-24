@@ -36,7 +36,12 @@ public class AfiliacionController {
 
 	@PostMapping
 	public Afiliacion createAfiliacion(@RequestBody AfiliacionRequestDTO dto) throws Exception {
-		return servi.create(servi.fromDto(dto));
+		try {
+			return ResponseEntity.ok(servi.create(servi.dtoAfiliacion(dto)));
+		} catch (Exception e) {
+			System.err.println("Error al crear la afiliacion: " + e.getMessage());
+			throw new RuntimeException("Hubo un error: " + e.getMessage(), e);
+		}
 	}
 
 	@PutMapping("/{id}")
