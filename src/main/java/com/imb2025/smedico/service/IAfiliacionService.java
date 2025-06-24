@@ -1,7 +1,7 @@
 package com.imb2025.smedico.service;
 
 import java.util.List;
-import com.imb2025.smedico.DTO.AfiliacionRequestDTO;
+import com.imb2025.smedico.dto.AfiliacionRequestDTO;
 import com.imb2025.smedico.entity.Afiliacion;
 
 public interface  IAfiliacionService {
