@@ -12,5 +12,6 @@ public interface ITurnoService {
 	    Turno create(Turno turno) throws Exception;
 	    Turno update(Long id, Turno turno) throws Exception; 
 	    void deleteById(Long id);
+	    Turno fromDto(TurnoRequestDTO dto);
 
 }

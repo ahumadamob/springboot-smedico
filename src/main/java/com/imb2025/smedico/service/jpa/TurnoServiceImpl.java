@@ -72,7 +72,20 @@ public class TurnoServiceImpl implements ITurnoService {
 
         return repo.save(turnoExistente);
     }
+    
+    @Override
+    public Turno fromDto(TurnoRequestDTO dto) {
+        Paciente paciente = pacienteRepository.findById(dto.getPacienteId())
+            .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
+        Medico medico = medicoRepository.findById(dto.getMedicoId())
+            .orElseThrow(() -> new RuntimeException("Médico no encontrado"));
+        EstadoTurno estado = estadoTurnoRepository.findById(dto.getEstadoTurnoId())
+            .orElseThrow(() -> new RuntimeException("Estado turno no encontrado"));
 
+        return new Turno(dto.getFecha(), dto.getHora(), paciente, medico, estado);
+    }
+    
+    
     
   
 }

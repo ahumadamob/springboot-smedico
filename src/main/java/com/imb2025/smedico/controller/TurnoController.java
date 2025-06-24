@@ -23,14 +23,6 @@ public class TurnoController {
     @Autowired
     private ITurnoService service;
     
-    @Autowired
-    private PacienteRepository pacienteRepository;
-
-    @Autowired
-    private MedicoRepository medicoRepository;
-
-    @Autowired
-    private EstadoTurnoRepository estadoTurnoRepository;
 
 
     // GET - Obtener todos los turnos
@@ -55,14 +47,13 @@ public class TurnoController {
 
     @PostMapping("/turno")
     public ResponseEntity<Turno> create(@RequestBody TurnoRequestDTO dto) throws Exception {
-        Turno turno = convertirDtoAEntidad(dto);
+        Turno turno = service.fromDto(dto);
         return ResponseEntity.ok(service.create(turno));
-
     }
 
     @PutMapping("/turno/{idturno}")
     public ResponseEntity<Turno> update(@PathVariable("idturno") Long idturno, @RequestBody TurnoRequestDTO dto) throws Exception {
-        Turno turno = convertirDtoAEntidad(dto);
+        Turno turno = service.fromDto(dto);
         return ResponseEntity.ok(service.update(idturno, turno));
     }
 
@@ -79,17 +70,6 @@ public class TurnoController {
 
     }
 
-    private Turno convertirDtoAEntidad(TurnoRequestDTO dto) {
-        Paciente paciente = pacienteRepository.findById(dto.getPacienteId())
-            .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
-        Medico medico = medicoRepository.findById(dto.getMedicoId())
-            .orElseThrow(() -> new RuntimeException("Médico no encontrado"));
-        EstadoTurno estado = estadoTurnoRepository.findById(dto.getEstadoTurnoId())
-            .orElseThrow(() -> new RuntimeException("Estado turno no encontrado"));
-
-        return new Turno(dto.getFecha(), dto.getHora(), paciente, medico, estado);
-    }
-    
  
     
     
