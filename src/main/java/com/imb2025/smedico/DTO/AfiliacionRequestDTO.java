@@ -1,4 +1,4 @@
-package com.imb2025.smedico.DTO;
+package com.imb2025.smedico.dto;
 
 import java.time.LocalDate;
 
