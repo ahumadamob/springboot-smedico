@@ -19,7 +19,7 @@ public class Factura {
 
     private Double monto;
 
-    @OneToOne
+    @ManyToOne
     private MedioPago medioPago;
 
     public Factura() {
