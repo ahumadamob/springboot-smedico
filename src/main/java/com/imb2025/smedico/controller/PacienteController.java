@@ -1,28 +1,17 @@
 package com.imb2025.smedico.controller;
 
 import com.imb2025.smedico.dto.PacienteRequestDTO;
-
-
-import com.imb2025.smedico.dto.PacienteRequestDTO;
-
-
 import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.service.IPacienteService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.http.ResponseEntity;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/pacientes")
+@RequestMapping("/pacientes")
 public class PacienteController {
 
     @Autowired
@@ -32,69 +21,47 @@ public class PacienteController {
     public ResponseEntity<List<Paciente>> getAllPacientes() {
         List<Paciente> pacientes = pacienteService.findAll();
         if (pacientes.isEmpty()) {
-            return ResponseEntity.noContent().build(); // 204
+            return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(pacientes); // 200
+        return ResponseEntity.ok(pacientes);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Paciente> getPacienteById(@PathVariable Long id) {
         Paciente paciente = pacienteService.findById(id);
         if (paciente == null) {
-            return ResponseEntity.noContent().build(); // 204
+            return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(paciente); // 200
+        return ResponseEntity.ok(paciente);
     }
 
     @PostMapping
     public ResponseEntity<Paciente> createPaciente(@RequestBody Paciente paciente) {
         Paciente nuevo = pacienteService.save(paciente);
-        return ResponseEntity.ok(nuevo); // 200
+        return ResponseEntity.ok(nuevo);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updatePaciente(@PathVariable Long id, @RequestBody PacienteRequestDTO dto) {
-        Paciente existente = pacienteService.findById(id);
-        if (existente == null) {
-
-            return ResponseEntity.badRequest().body("Paciente no encontrado con ID: " + id); // 400
+        try {
+            Paciente actualizado = pacienteService.updatePaciente(id, dto);
+            return ResponseEntity.ok(actualizado);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-
-
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Paciente no encontrado con ID: " + id);
-        }
-
-        // Actualizar los campos
-
-        existente.setNombre(dto.getNombre());
-        existente.setApellido(dto.getApellido());
-        existente.setDni(dto.getDni());
-        existente.setEmail(dto.getEmail());
-        existente.setFechaNacimiento(dto.getFechaNacimiento());
-        existente.setTelefono(dto.getTelefono());
-
-
-        return ResponseEntity.ok(pacienteService.save(existente)); // 200
-
-        return ResponseEntity.ok(pacienteService.save(existente));
-
-    public Paciente updatePaciente(@PathVariable Long id, @RequestBody Paciente paciente) {
-    	return pacienteService.save(paciente);
-
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePaciente(@PathVariable Long id) {
         if (!pacienteService.existsById(id)) {
-            return ResponseEntity.badRequest().body("No se puede eliminar: Paciente no encontrado con ID: " + id); // 400
+            return ResponseEntity.badRequest().body("No se puede eliminar: Paciente no encontrado con ID: " + id);
         }
         pacienteService.deleteById(id);
-        return ResponseEntity.ok().build(); // 200
+        return ResponseEntity.ok().build();
     }
 
-    
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleException(Exception ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage()); // 400
+        return ResponseEntity.badRequest().body(ex.getMessage());
     }
 }
