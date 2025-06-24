@@ -2,7 +2,7 @@ package com.imb2025.smedico.service.jpa;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.imb2025.smedico.DTO.AfiliacionRequestDTO;
+import com.imb2025.smedico.dto.AfiliacionRequestDTO;
 import com.imb2025.smedico.entity.Afiliacion;
 import com.imb2025.smedico.repository.AfiliacionRepository;
 import com.imb2025.smedico.repository.ObraSocialRepository;
