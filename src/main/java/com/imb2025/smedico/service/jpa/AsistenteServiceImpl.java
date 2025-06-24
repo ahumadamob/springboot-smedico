@@ -33,20 +33,21 @@ public class AsistenteServiceImpl implements IAsistenteService {
     }
 
     @Override
-    public Asistente create(AsistenteRequestDTO dto) {
-        return repo.save(fromDto(dto));
+    public Asistente create(Asistente asistente) {
+        return repo.save(asistente);
     }
 
     @Override
-    public Asistente update(Long id, AsistenteRequestDTO dto) {
-        if (!repo.existsById(id)) { 
+    public Asistente update(Long id, Asistente asistente) {
+        if (!repo.existsById(id)) {
             throw new RuntimeException("Asistente con ID " + id + " no existe.");
         }
-        Asistente existente = findById(id);     
-        existente.setNombre(dto.getNombre());
-        existente.setEmail(dto.getEmail());
-        existente.setTelefono(dto.getTelefono());
-        existente.setDni(dto.getDni());
+
+        Asistente existente = findById(id);
+        existente.setNombre(asistente.getNombre());
+        existente.setEmail(asistente.getEmail());
+        existente.setTelefono(asistente.getTelefono());
+        existente.setDni(asistente.getDni());
         return repo.save(existente);
     }
 
@@ -59,7 +60,8 @@ public class AsistenteServiceImpl implements IAsistenteService {
     }
 
     /* ---------- Conversión DTO -> Entidad ---------- */
-    private static Asistente fromDto(AsistenteRequestDTO dto) {
+    @Override
+    public Asistente fromDto(AsistenteRequestDTO dto) {
         Asistente a = new Asistente();
         a.setNombre(dto.getNombre());
         a.setEmail(dto.getEmail());

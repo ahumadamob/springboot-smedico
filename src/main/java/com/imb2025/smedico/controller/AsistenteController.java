@@ -33,16 +33,19 @@ public class AsistenteController {
 
     @PostMapping
     public ResponseEntity<Asistente> create(@RequestBody AsistenteRequestDTO dto) {
-        Asistente creado = service.create(dto);
-        return ResponseEntity.ok(creado);                     
+        Asistente asistente = service.fromDto(dto);           // conversión DTO → entidad
+        Asistente creado = service.create(asistente);         
+        return ResponseEntity.ok(creado);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Asistente> update(@PathVariable Long id,
                                             @RequestBody AsistenteRequestDTO dto) {
-        Asistente actualizado = service.update(id, dto);      
-        return ResponseEntity.ok(actualizado);                 
+        Asistente asistente = service.fromDto(dto);           // conversión DTO → entidad
+        Asistente actualizado = service.update(id, asistente);
+        return ResponseEntity.ok(actualizado);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
