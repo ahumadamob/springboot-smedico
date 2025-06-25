@@ -1,32 +1,36 @@
 package com.imb2025.smedico.entity;
 
-import jakarta.persistence.*;
 
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "consulta")
 public class Consulta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private LocalDate fecha;
-
+    private int duracionMin;
     private String comentarios;
 
-    @Column(name = "duracion_min")
-    private Integer duracionMin;
-
-    @Column(name = "turno_id")
-    private String turnoId;
-
-   
     @ManyToOne
-    @JoinColumn(name = "paciente_id")
     private Paciente paciente;
-    // Getters y Setters
+    @ManyToOne
+    @JoinColumn(name = "turno_id")
+    private Turno turno;
+
+      
+    
+ // Getters y Setters
+    public Paciente getPaciente() {
+        return paciente;
+    }
+
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
+    }
+    
 
     public Long getId() {
         return id;
@@ -44,13 +48,7 @@ public class Consulta {
         this.fecha = fecha;
     }
 
-    public String getTurnoId() {
-        return turnoId;
-    }
-
-    public void setTurnoId(String turnoId) {
-        this.turnoId = turnoId;
-    }
+   
 
     public int getDuracionMin() {
         return duracionMin;
@@ -67,4 +65,10 @@ public class Consulta {
     public void setComentarios(String comentarios) {
         this.comentarios = comentarios;
     }
+
+	public Long getPacienteId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
+
