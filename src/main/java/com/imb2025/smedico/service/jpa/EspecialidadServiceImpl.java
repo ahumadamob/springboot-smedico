@@ -1,4 +1,4 @@
-package com.imb2025.smedico.service.jpa;
+ package com.imb2025.smedico.service.jpa;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,14 +25,8 @@ public class EspecialidadServiceImpl implements IEspecialidadService{
 
 	@Override
 	public Especialidad findById(Long id) {
-		Optional<Especialidad> opt;
-		opt = repo.findById(id);
-		if(opt.isPresent()) {
-			return opt.get();			
-		}else {
-			return null;
-		}
-		
+		Optional<Especialidad> opt = repo.findById(id);
+			return opt.orElse(null);			
 		
 	}
 		
@@ -42,9 +36,7 @@ public class EspecialidadServiceImpl implements IEspecialidadService{
 	}
 	
 		@Override
-	public Especialidad update(Long id, Especialidad especialidad) throws Exception {
-		Optional<Especialidad> opt = repo.findById(id);
-			
+	public Especialidad update(Long id, Especialidad especialidad) throws Exception {	
 		 if (repo.existsById(id)) {
 		        especialidad.setId(id);
 			return repo.save(especialidad);
@@ -62,7 +54,7 @@ public class EspecialidadServiceImpl implements IEspecialidadService{
 			        throw new IllegalArgumentException("El nombre no puede estar vacío");
 			    }
 			    if (dto.getDescripcion() == null || dto.getDescripcion().isBlank()) {
-			        throw new IllegalArgumentException("La descripción no puede vacía");
+			        throw new IllegalArgumentException("La descripción no puede estar vacía");
 			    }
 			    Especialidad especialidad = new Especialidad();
 			    especialidad.setNombre(dto.getNombre());
@@ -72,7 +64,9 @@ public class EspecialidadServiceImpl implements IEspecialidadService{
 
 		@Override
 		public void deleteById(Long id) {
-			
+			if(!repo.existsById(id)) {
+				throw new IllegalArgumentException("La especialidad con id " + id + " no existe");
+			}
 			repo.deleteById(id);
 
 		}
