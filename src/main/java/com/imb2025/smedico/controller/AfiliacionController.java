@@ -43,21 +43,7 @@ public class AfiliacionController {
 	}
 
 	@PostMapping
-	public Afiliacion createAfiliacion(@RequestBody AfiliacionRequestDTO dto) {
-		Paciente paciente = pacienteRepository.findById(dto.getPacienteId())
-				.orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
-
-		ObraSocial obraSocial = obraSocialRepository.findById(dto.getObraSocialId())
-				.orElseThrow(() -> new RuntimeException("Obra Social no encontrada"));
-
-		Afiliacion afiliacion = new Afiliacion();
-		afiliacion.setPaciente(paciente);
-		afiliacion.setObraSocial(obraSocial);
-		afiliacion.setNumeroAfiliado(dto.getNumeroAfiliado());
-		afiliacion.setFechaVigenciaDesde(dto.getFechaVigenciaDesde());
-
-		return servi.save(afiliacion);
-	}
+	
 
 	@PutMapping("/{id}")
 	public Afiliacion updateAfiliacion(@PathVariable Long id, @RequestBody AfiliacionRequestDTO dto) {
@@ -67,12 +53,7 @@ public class AfiliacionController {
 		ObraSocial obraSocial = obraSocialRepository.findById(dto.getObraSocialId())
 		.orElseThrow(() -> new RuntimeException("Obra Social no encontrada"));
 
-		Afiliacion afiliacion = new Afiliacion();
-		afiliacion.setPaciente(paciente);
-		afiliacion.setObraSocial(obraSocial);
-		afiliacion.setNumeroAfiliado(dto.getNumeroAfiliado());
-		afiliacion.setFechaVigenciaDesde(dto.getFechaVigenciaDesde());
-
+		Afiliacion afiliacion = AfiliacionRequestDTO.fromDTO(dto, paciente, obraSocial);
 		return servi.update(id, afiliacion);
 	}
 

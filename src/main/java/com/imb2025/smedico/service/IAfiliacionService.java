@@ -5,10 +5,11 @@ import com.imb2025.smedico.entity.Afiliacion;
 
 public interface  IAfiliacionService {
 	
-	public List<Afiliacion> findAll();
-	public Afiliacion findById(Long id);
-	public Afiliacion save(Afiliacion afiliacion);
-	public Afiliacion update(Long id, Afiliacion afiliacion);
-	public void deleteById(Long id);
+	List<Afiliacion> findAll();
+    Afiliacion findById(Long id);
+    Afiliacion save(Afiliacion afiliacion);
+    Afiliacion update(Long id, Afiliacion afiliacion);
+    void deleteById(Long id);
+    boolean existsById(Long id);
 	
 }
