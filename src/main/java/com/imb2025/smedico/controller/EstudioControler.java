@@ -39,18 +39,35 @@ public class EstudioControler {
 	}
 	
 	@PostMapping("/estudioid")
-	public Estudio saveEstudio(@RequestBody  EstudioRequestDTO dto) throws Exception {
-		return service.create(dto);
+	public Estudio saveEstudio(@RequestBody EstudioRequestDTO dto) throws Exception {
+		try {
+		Estudio estudio = service.fromDto(dto);
+	    return service.create(estudio);
+		} catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
 	}
-	
+
 	@PutMapping("/estudio/{idestudio}")
 	public Estudio updateEstudio(@PathVariable("idestudio") Long id, @RequestBody EstudioRequestDTO dto) throws Exception {
-		return service.update(dto, id);
+		try {
+		Estudio estudio = service.fromDto(dto);
+	    return service.update(estudio, id);
+		} catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
 	}
 	
 	@DeleteMapping("/estudio/{idestudio}")
-	public String deleteEstudio(@PathVariable("idestudio") Long id) {
+	public String deleteEstudio(@PathVariable("idestudio") Long id, @RequestBody EstudioRequestDTO dto) {
+		try {
 		service.deleteById(id);
 		return "Estudio "+id.toString()+ " Eliminado Correctamente";
+		} catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
 	}
 }

@@ -10,8 +10,9 @@ import com.imb2025.smedico.entity.Estudio;
 public interface IEstudioService {
 	public List<Estudio> findAll();
 	public Estudio findById(Long id);
-	public Estudio create(EstudioRequestDTO dto) throws Exception;
+	public Estudio create(Estudio estudio) throws Exception;
+	public Estudio update(Estudio estudio, Long id) throws Exception;
 	public void deleteById(Long id);
-	public Estudio update(EstudioRequestDTO dto, Long id) throws Exception;
+	public Estudio fromDto(EstudioRequestDTO dto) throws Exception;
 	
 }
