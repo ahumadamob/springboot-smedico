@@ -13,6 +13,7 @@ import com.imb2025.smedico.entity.Encuesta;
         public Encuesta update(Long id, Encuesta encuesta) throws Exception;
         public Encuesta fromDto(EncuestaRequestDTO dto) throws Exception;
         public void deleteById(Long id);
+		public boolean existsById(Long id);
 
 
 

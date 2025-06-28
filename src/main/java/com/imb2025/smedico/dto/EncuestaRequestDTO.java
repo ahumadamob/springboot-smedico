@@ -1,14 +1,14 @@
 package com.imb2025.smedico.dto;
 
 public class EncuestaRequestDTO {
-     
+
 	private Long pacienteId;
 	private Long consultaId;
 	private int puntaje;
 	private String comentario;
-	
+
 	public EncuestaRequestDTO() {
-		
+
 	}
 	public EncuestaRequestDTO(Long pacienteId, Long consultaId, int puntaje, String comentario) {
 		super();
@@ -49,7 +49,7 @@ public class EncuestaRequestDTO {
 	public void setComentario(String comentario) {
 		this.comentario = comentario;
 	}
-	
-	
-	
+
+
+
 }
