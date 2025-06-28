@@ -15,7 +15,7 @@ import com.imb2025.smedico.entity.OrdenEstudio;
 import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.repository.EstudioRepository;
 import com.imb2025.smedico.repository.MedicoRepository;
-import com.imb2025.smedico.repository.OrdenEstudioRepository;
+import com.imb2025a.smedico.repository.OrdenEstudioRepository;
 import com.imb2025.smedico.repository.PacienteRepository;
 import com.imb2025.smedico.service.IOrdenEstudioService;
 
