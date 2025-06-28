@@ -33,4 +33,10 @@ public class MotivoCancelacion {
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
 }

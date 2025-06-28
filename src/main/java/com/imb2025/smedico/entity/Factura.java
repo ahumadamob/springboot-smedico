@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 import java.time.LocalDate;
 
@@ -16,11 +17,33 @@ public class Factura {
 
     private LocalDate fecha;
 
-    private Long pacienteId;
+    @ManyToOne
+    private Paciente paciente;
+    
+    @ManyToOne
+    private MedioPago medioPago;
 
     private Double monto;
+    
+    
+    
+    public MedioPago getMedioPago() { //Agregado
+		return medioPago;
+	}
 
-    private Long medioPagoId;
+	public void setMedioPago(MedioPago medioPago) { //Agregado
+		this.medioPago = medioPago;
+	}
+
+    public Factura() {
+    }
+
+    public Factura(LocalDate fecha, Paciente paciente, Double monto, MedioPago medioPago) {
+        this.fecha = fecha;
+        this.paciente = paciente;
+        this.monto = monto;
+        this.medioPago = medioPago;
+    }
 
     public Long getId() {
         return id;
@@ -38,12 +61,12 @@ public class Factura {
         this.fecha = fecha;
     }
 
-    public Long getPacienteId() {
-        return pacienteId;
+    public Paciente getPaciente() {
+        return paciente;
     }
 
-    public void setPacienteId(Long pacienteId) {
-        this.pacienteId = pacienteId;
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
     }
 
     public Double getMonto() {
@@ -54,11 +77,4 @@ public class Factura {
         this.monto = monto;
     }
 
-    public Long getMedioPagoId() {
-        return medioPagoId;
-    }
-
-    public void setMedioPagoId(Long medioPagoId) {
-        this.medioPagoId = medioPagoId;
-    }
 }
