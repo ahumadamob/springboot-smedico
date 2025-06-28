@@ -1,4 +1,4 @@
-package com.imb2025.smedico.service.jpa;
+ package com.imb2025.smedico.service.jpa;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.imb2025.smedico.entity.Especialidad;
 import com.imb2025.smedico.repository.EspecialidadRepository;
 import com.imb2025.smedico.service.IEspecialidadService;
+
+import dto.EspecialidadRequestDTO;
 
 @Service
 public class EspecialidadServiceImpl implements IEspecialidadService{
@@ -23,25 +25,55 @@ public class EspecialidadServiceImpl implements IEspecialidadService{
 
 	@Override
 	public Especialidad findById(Long id) {
-		Optional<Especialidad> opt;
-		opt = repo.findById(id);
-		if(opt.isPresent()) {
-			return opt.get();			
-		}else {
-			return null;
-		}
+		Optional<Especialidad> opt = repo.findById(id);
+			return opt.orElse(null);			
 		
+	}
 		
-	};
-
 	@Override
-	public Especialidad save(Especialidad especialidad) {
+	public Especialidad create(Especialidad especialidad) {		
 		return repo.save(especialidad);
 	}
+	
+		@Override
+	public Especialidad update(Long id, Especialidad especialidad) throws Exception {	
+		 if (repo.existsById(id)) {
+		        especialidad.setId(id);
+			return repo.save(especialidad);
+			
+		    }else {
+			throw new Exception("No existe esa Especialidad");
+		    }
+		}
+		
 
-	@Override
-	public void deleteById(Long id) {
-		repo.deleteById(id);
+		
+		public Especialidad fromDto(EspecialidadRequestDTO dto) {
+		
+			    if (dto.getNombre() == null || dto.getNombre().isBlank()) {
+			        throw new IllegalArgumentException("El nombre no puede estar vacío");
+			    }
+			    if (dto.getDescripcion() == null || dto.getDescripcion().isBlank()) {
+			        throw new IllegalArgumentException("La descripción no puede estar vacía");
+			    }
+			    Especialidad especialidad = new Especialidad();
+			    especialidad.setNombre(dto.getNombre());
+			    especialidad.setDescripcion(dto.getDescripcion());
+			    return especialidad;
+		}
+
+		@Override
+		public void deleteById(Long id) {
+			if(!repo.existsById(id)) {
+				throw new IllegalArgumentException("La especialidad con id " + id + " no existe");
+			}
+			repo.deleteById(id);
+
+		}
+
+	
 	}
+	
 
-}
+
+

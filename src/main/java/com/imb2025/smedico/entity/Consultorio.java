@@ -15,6 +15,17 @@ public class Consultorio {
 	private String ubicacion;
 	private int piso;
 	
+	public Consultorio() {
+		
+	}
+	
+	public Consultorio(String nombre, String ubicacion, int piso) {
+		super();
+		this.nombre=nombre;
+		this.ubicacion=ubicacion;
+		this.piso=piso;
+	}
+	
 	public Long getId() {
 		return id;
 	}
