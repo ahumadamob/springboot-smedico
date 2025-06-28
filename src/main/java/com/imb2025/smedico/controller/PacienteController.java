@@ -53,6 +53,7 @@ public class PacienteController {
         existente.setTelefono(dto.getTelefono());
 
         return ResponseEntity.ok(pacienteService.save(existente));
+    }
 
     public Paciente updatePaciente(@PathVariable Long id, @RequestBody Paciente paciente) {
     	return pacienteService.save(paciente);
