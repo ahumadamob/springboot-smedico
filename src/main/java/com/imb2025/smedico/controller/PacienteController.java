@@ -5,6 +5,7 @@ import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.service.IPacienteService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,8 +44,16 @@ public class PacienteController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updatePaciente(@PathVariable Long id, @RequestBody PacienteRequestDTO dto) {
+        if (!pacienteService.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Paciente no encontrado con ID: " + id);
+        }
+
         try {
-            Paciente actualizado = pacienteService.updatePaciente(id, dto);
+            
+            Paciente entidad = pacienteService.fromDto(dto);
+            entidad.setId(id);  
+            Paciente actualizado = pacienteService.updatePaciente(entidad);
             return ResponseEntity.ok(actualizado);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

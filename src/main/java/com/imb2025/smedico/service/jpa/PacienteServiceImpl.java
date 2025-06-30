@@ -47,13 +47,10 @@ public class PacienteServiceImpl implements IPacienteService {
     }
 
     @Override
-    public Paciente updatePaciente(Long id, PacienteRequestDTO dto) {
-        if (!existsById(id)) {
-            throw new IllegalArgumentException("Paciente no encontrado con id: " + id);
+    public Paciente updatePaciente(Paciente paciente) {
+        if (!existsById(paciente.getId())) {
+            throw new IllegalArgumentException("Paciente no encontrado con id: " + paciente.getId());
         }
-
-        Paciente paciente = fromDto(dto);
-        paciente.setId(id);
         return pacienteRepository.save(paciente);
     }
 

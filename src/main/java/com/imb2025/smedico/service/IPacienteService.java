@@ -11,7 +11,7 @@ public interface IPacienteService {
     boolean existsById(Long id);
     Paciente save(Paciente paciente);
     Paciente create(Paciente paciente);
-    Paciente updatePaciente(Long id, PacienteRequestDTO dto);
+    Paciente updatePaciente(Paciente paciente);
     void deleteById(Long id);
 
     Paciente fromDto(PacienteRequestDTO dto);
