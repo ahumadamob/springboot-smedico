@@ -1,10 +1,10 @@
 package com.imb2025.smedico.service.jpa;
+//Implementacion
 
-import java.util.*;
-
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.imb2025.smedico.dto.AsistenteRequestDTO;
 import com.imb2025.smedico.entity.Asistente;
 import com.imb2025.smedico.repository.AsistenteRepository;
 import com.imb2025.smedico.service.IAsistenteService;
@@ -13,38 +13,60 @@ import com.imb2025.smedico.service.IAsistenteService;
 public class AsistenteServiceImpl implements IAsistenteService {
 
     @Autowired
-    private AsistenteRepository asistenteRepo;
+    private AsistenteRepository repo;
 
     @Override
     public List<Asistente> findAll() {
-        return asistenteRepo.findAll();
+        return repo.findAll();
     }
 
     @Override
     public Asistente findById(Long id) {
-        Optional<Asistente> asistente = asistenteRepo.findById(id);
-        return asistente.orElse(null);
+        return repo.findById(id)
+                .orElseThrow(() ->
+                    new RuntimeException("Asistente con ID " + id + " no encontrado."));
     }
 
-    public Asistente update(Long id, Asistente asistenteActualizado) {
-        Asistente existente = asistenteRepo.findById(id)
-            .orElseThrow(() -> new RuntimeException("Asistente no encontrado"));
-
-        existente.setNombre(asistenteActualizado.getNombre());
-        existente.setEmail(asistenteActualizado.getEmail());
-        existente.setTelefono(asistenteActualizado.getTelefono());
-        existente.setDni(asistenteActualizado.getDni());
-
-        return asistenteRepo.save(existente);
-    }
-    
     @Override
-    public Asistente save(Asistente asistenteEntity) {
-        return asistenteRepo.save(asistenteEntity);
+    public boolean existsById(Long id) {         
+        return repo.existsById(id);
+    }
+
+    @Override
+    public Asistente create(Asistente asistente) {
+        return repo.save(asistente);
+    }
+
+    @Override
+    public Asistente update(Long id, Asistente asistente) {
+        if (!repo.existsById(id)) {
+            throw new RuntimeException("Asistente con ID " + id + " no existe.");
+        }
+
+        Asistente existente = findById(id);
+        existente.setNombre(asistente.getNombre());
+        existente.setEmail(asistente.getEmail());
+        existente.setTelefono(asistente.getTelefono());
+        existente.setDni(asistente.getDni());
+        return repo.save(existente);
     }
 
     @Override
     public void deleteById(Long id) {
-        asistenteRepo.deleteById(id);
+        if (!repo.existsById(id)) {
+            throw new RuntimeException("Asistente con ID " + id + " no existe.");
+        }
+        repo.deleteById(id);
+    }
+
+    /* ---------- Conversión DTO -> Entidad ---------- */
+    @Override
+    public Asistente fromDto(AsistenteRequestDTO dto) {
+        Asistente a = new Asistente();
+        a.setNombre(dto.getNombre());
+        a.setEmail(dto.getEmail());
+        a.setTelefono(dto.getTelefono());
+        a.setDni(dto.getDni());
+        return a;
     }
 }

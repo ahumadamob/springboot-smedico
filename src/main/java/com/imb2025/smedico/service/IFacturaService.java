@@ -11,9 +11,7 @@ public interface IFacturaService {
     Factura findById(Long id);
     Factura create(Factura factura);
     Factura update(Long id, Factura factura) throws Exception;
-    void deleteById(Long id);
+    void deleteById(Long id) throws Exception;
     Factura fromDto(FacturaRequestDTO requestDTO) throws Exception;
-    
-    // Agregado: Declaración de createFactura()
-    Factura createFactura(FacturaRequestDTO dto) throws Exception;
+    boolean existsById(Long id);
 }

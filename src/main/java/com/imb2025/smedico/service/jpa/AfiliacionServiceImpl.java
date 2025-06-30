@@ -2,8 +2,7 @@ package com.imb2025.smedico.service.jpa;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.imb2025.smedico.DTO.AfiliacionRequestDTO;
+import com.imb2025.smedico.dto.AfiliacionRequestDTO;
 import com.imb2025.smedico.entity.Afiliacion;
 import com.imb2025.smedico.repository.AfiliacionRepository;
 import com.imb2025.smedico.repository.ObraSocialRepository;
@@ -31,6 +30,7 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
 	public Afiliacion findById(Long id) {
 		Optional<Afiliacion> opt;
 		opt = repo.findById(id);
+
 		if (opt.isPresent()) {
 			return opt.get();
 		} else {
@@ -39,17 +39,16 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
 	}
 
 	@Override
-	public Afiliacion create(AfiliacionRequestDTO dto) throws Exception {
-		Afiliacion afiliacion = dtoAfiliacion(dto);
+	public Afiliacion create(Afiliacion afiliacion) throws Exception {
 		return repo.save(afiliacion);
 	}
 
 	@Override
-	public Afiliacion update(Long id, AfiliacionRequestDTO dto) throws Exception {
-		Afiliacion afiliacion = dtoAfiliacion(dto);
+	public Afiliacion update(Long id, Afiliacion afiliacion) throws Exception {
+		Afiliacion afi = afiliacion;
 		if (repo.existsById(id)) {
-			afiliacion.setId(id);
-			return repo.save(afiliacion);
+			afi.setId(id);
+			return repo.save(afi);
 		}
 		throw new Exception("Afiliación no encontrada");
 	}
@@ -59,7 +58,7 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
 		repo.deleteById(id);
 	}
 
-	public Afiliacion dtoAfiliacion(AfiliacionRequestDTO dto) {
+	public Afiliacion  fromDto(AfiliacionRequestDTO dto) {
 		 try {
 			 Afiliacion fili = new Afiliacion(
 					dto.getNumeroAfiliado(),
@@ -75,5 +74,4 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
 		    	throw new RuntimeException("Hubo un error: " + e.getMessage(), e);
 				}
 			}
-
 }

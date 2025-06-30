@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 
+
 @Entity
 public class Afiliacion {
 
@@ -71,6 +72,4 @@ public class Afiliacion {
 	public void setObra(ObraSocial obra) {
 		this.obra = obra;
 	}
-
-	
 }
