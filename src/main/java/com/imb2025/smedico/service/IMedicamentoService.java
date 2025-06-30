@@ -13,5 +13,6 @@ public interface IMedicamentoService {
 	public Medicamento update(Long id, Medicamento medicamento) throws Exception;
 	public void deleteById(Long id);
 	public Medicamento fromDto(MedicamentoRequestDTO dto) throws Exception;
+	public boolean existsById(Long id);
 	
 }
