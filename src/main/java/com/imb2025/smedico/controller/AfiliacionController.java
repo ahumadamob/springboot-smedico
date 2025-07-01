@@ -30,13 +30,13 @@ public class AfiliacionController {
 	public ResponseEntity<List<Afiliacion>> findAllAfiliacion() throws Exception {
 		List<Afiliacion> lista = servi.findAll();
 		if (lista.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(lista);
+			return ResponseEntity.noContent().build();
+		}
+		return ResponseEntity.ok(lista);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Afiliacion> findAfiliacionById(@PathVariable("id") Long idAfiliacion) throws Exception  {
+	public ResponseEntity<Afiliacion> findAfiliacionById(@PathVariable("id") Long idAfiliacion) throws Exception {
 		Afiliacion afiliacion = new Afiliacion();
 		afiliacion = servi.findById(idAfiliacion);
 		if (afiliacion == null) {
@@ -48,12 +48,7 @@ public class AfiliacionController {
 
 	@PostMapping
 	public ResponseEntity<Afiliacion> createAfiliacion(@RequestBody AfiliacionRequestDTO dto) throws Exception {
-		try {
-			return ResponseEntity.ok(servi.create(servi.fromDto(dto)));
-		} catch (Exception e) {
-			System.err.println("Error al crear la afiliacion: " + e.getMessage());
-			throw new RuntimeException("Hubo un error: " + e.getMessage(), e);
-		}
+		return ResponseEntity.ok(servi.create(servi.fromDto(dto)));
 	}
 
 	@PutMapping("/{id}")
@@ -67,9 +62,9 @@ public class AfiliacionController {
 		servi.deleteById(id);
 		return ResponseEntity.ok("Afiliacion " + id.toString() + " eliminada correctamente.");
 	}
-	
-	@ExceptionHandler (Exception.class)
-	public ResponseEntity<String> handleGlobalException (Exception ex){
+
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<String> handleGlobalException(Exception ex) {
 		ex.printStackTrace();
 		return ResponseEntity.badRequest().body(ex.getMessage());
 	}

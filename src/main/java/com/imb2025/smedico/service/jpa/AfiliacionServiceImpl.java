@@ -22,9 +22,8 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
 	private ObraSocialRepository repoobra;
 
 	@Override
-	public List<Afiliacion> findAll() throws Exception {
-		List<Afiliacion> lista = repo.findAll();
-		return lista;
+	public List<Afiliacion> findAll() throws Exception {		
+		return repo.findAll();
 	}
 
 	@Override
@@ -65,17 +64,12 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
 
 	}
 
-	public Afiliacion fromDto(AfiliacionRequestDTO dto) {
-		try {
-			Afiliacion fili = new Afiliacion(dto.getNumeroAfiliado(), dto.getFechaVigenciaDesde(), dto.getFechaHasta(),
-					repopaciente.findById(dto.getIdpaciente())
-							.orElseThrow(() -> new Exception("Paciente no encontrado")),
-					repoobra.findById(dto.getIdobra()).orElseThrow(() -> new Exception("Obra social no encontrada")));
+	public Afiliacion fromDto(AfiliacionRequestDTO dto) throws Exception {
+		Afiliacion fili = new Afiliacion(dto.getNumeroAfiliado(), dto.getFechaVigenciaDesde(), dto.getFechaHasta(),
+				repopaciente.findById(dto.getIdpaciente()).orElseThrow(() -> new Exception("Paciente no encontrado")),
+				repoobra.findById(dto.getIdobra()).orElseThrow(() -> new Exception("Obra social no encontrada")));
 
-			return fili;
-		} catch (Exception e) {
-			System.err.println("Error al convertir el DTO a Afiliacion: " + e.getMessage());
-			throw new RuntimeException("Hubo un error: " + e.getMessage(), e);
-		}
+		return fili;
+
 	}
 }
