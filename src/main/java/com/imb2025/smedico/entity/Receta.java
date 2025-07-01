@@ -1,57 +1,50 @@
 package com.imb2025.smedico.entity;
-
 import java.time.LocalDate;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Receta {
-	
-	@Id
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	private LocalDate fecha;
-	private Long medicoId;
-	private Long pacienteId;
-	private String observaciones;
-	
-	
-	public Long getId() {
-		return id;
-	}
+    private Long id;
 
-	public LocalDate getFecha() {
-		return fecha;
-	}
-	public void setFecha(LocalDate fecha) {
-		this.fecha = fecha;
-	}
-	public Long getMedicoId() {
-		return medicoId;
-	}
-	public void setMedicoId(Long medicoId) {
-		this.medicoId = medicoId;
-	}
-	public Long getPacienteId() {
-		return pacienteId;
-	}
-	public void setPacienteId(Long pacienteId) {
-		this.pacienteId = pacienteId;
-	}
-	public String getObservaciones() {
-		return observaciones;
-	}
-	public void setObservaciones(String observaciones) {
-		this.observaciones = observaciones;
-	}
+    private LocalDate fecha;
 
-	public void setId(Long recetaId) {
-		// TODO Auto-generated method stub
-		
-	}
-	
+    private String observaciones;
 
+    @ManyToOne
+    @JoinColumn(name = "medico_id")
+    private Medico medico;
+
+    @ManyToOne
+    @JoinColumn(name = "paciente_id")
+    private Paciente paciente;
+
+    public Receta() {}
+
+    public Receta(LocalDate fecha, String observaciones, Medico medico, Paciente paciente) {
+        this.fecha = fecha;
+        this.observaciones = observaciones;
+        this.medico = medico;
+        this.paciente = paciente;
+    }
+
+    // Getters y setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public LocalDate getFecha() { return fecha; }
+    public void setFecha(LocalDate fecha) { this.fecha = fecha; }
+
+    public String getObservaciones() { return observaciones; }
+    public void setObservaciones(String observaciones) { this.observaciones = observaciones; }
+
+    public Medico getMedico() { return medico; }
+    public void setMedico(Medico medico) { this.medico = medico; }
+
+    public Paciente getPaciente() { return paciente; }
+    public void setPaciente(Paciente paciente) { this.paciente = paciente; }
 }
+
