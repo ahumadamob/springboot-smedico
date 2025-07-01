@@ -22,19 +22,20 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
 	private ObraSocialRepository repoobra;
 
 	@Override
-	public List<Afiliacion> findAll() {
-		return repo.findAll();
+	public List<Afiliacion> findAll() throws Exception {
+		List<Afiliacion> lista = repo.findAll();
+		return lista;
 	}
 
 	@Override
-	public Afiliacion findById(Long id) {
+	public Afiliacion findById(Long id) throws Exception {
 		Optional<Afiliacion> opt;
 		opt = repo.findById(id);
 
 		if (opt.isPresent()) {
 			return opt.get();
 		} else {
-			return null;
+			throw new Exception("Afiliación no encontrada");
 		}
 	}
 
@@ -54,24 +55,27 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
 	}
 
 	@Override
-	public void deleteById(Long id) {
-		repo.deleteById(id);
+	public void deleteById(Long id) throws Exception {
+		if (repo.existsById(id)) {
+
+			repo.deleteById(id);
+		} else {
+			throw new Exception("Afiliación no encontrada");
+		}
+
 	}
 
-	public Afiliacion  fromDto(AfiliacionRequestDTO dto) {
-		 try {
-			 Afiliacion fili = new Afiliacion(
-					dto.getNumeroAfiliado(),
-					dto.getFechaVigenciaDesde(),
-					dto.getFechaHasta(),		            
-					repopaciente.findById(dto.getIdpaciente()).orElseThrow(() -> new Exception("Paciente no encontrado")),
-					repoobra.findById(dto.getIdobra()).orElseThrow(() -> new Exception("Obra social no encontrada"))					
-		        );
+	public Afiliacion fromDto(AfiliacionRequestDTO dto) {
+		try {
+			Afiliacion fili = new Afiliacion(dto.getNumeroAfiliado(), dto.getFechaVigenciaDesde(), dto.getFechaHasta(),
+					repopaciente.findById(dto.getIdpaciente())
+							.orElseThrow(() -> new Exception("Paciente no encontrado")),
+					repoobra.findById(dto.getIdobra()).orElseThrow(() -> new Exception("Obra social no encontrada")));
 
-			 return fili;
-		    } catch (Exception e) {
-		    	System.err.println("Error al convertir el DTO a Afiliacion: " + e.getMessage());
-		    	throw new RuntimeException("Hubo un error: " + e.getMessage(), e);
-				}
-			}
+			return fili;
+		} catch (Exception e) {
+			System.err.println("Error al convertir el DTO a Afiliacion: " + e.getMessage());
+			throw new RuntimeException("Hubo un error: " + e.getMessage(), e);
+		}
+	}
 }
