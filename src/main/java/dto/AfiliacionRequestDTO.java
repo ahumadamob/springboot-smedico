@@ -6,10 +6,7 @@ import com.imb2025.smedico.entity.ObraSocial;
 import com.imb2025.smedico.entity.Paciente;
 import java.time.LocalDate;
 
-/**
- *
- * @author maxim
- */
+
 public class AfiliacionRequestDTO {
     
     private Long pacienteId;
@@ -60,7 +57,7 @@ public class AfiliacionRequestDTO {
        public static Afiliacion fromDTO(AfiliacionRequestDTO dto, Paciente paciente, ObraSocial obraSocial) {
         Afiliacion afiliacion = new Afiliacion();
         afiliacion.setPaciente(paciente);
-        afiliacion.setObraSocial(obraSocial);
+        afiliacion.setObra(obraSocial);
         afiliacion.setNumeroAfiliado(dto.getNumeroAfiliado());
         afiliacion.setFechaVigenciaDesde(dto.getFechaVigenciaDesde());
         return afiliacion;
