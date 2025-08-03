@@ -2,7 +2,11 @@ package com.imb2025.smedico.controller;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import com.imb2025.smedico.dto.EstadoTurnoDTO;
 import com.imb2025.smedico.entity.EstadoTurno;
 import com.imb2025.smedico.service.IEstadoTurnoService;
 
@@ -16,7 +20,7 @@ public class EstadoTurnoController {
         this.estadoTurnoService = estadoTurnoService;
     }
 
-    // GET de EstadoTurnoE (Obtener todos los registros)
+    // GET de EstadoTurnoE (Obtener todos los registros por lista)
     @GetMapping
     public List<EstadoTurno> getAll() {
         return estadoTurnoService.findAll();
@@ -30,19 +34,50 @@ public class EstadoTurnoController {
 
     // POST de EstadoTurnoE (Crear un nuevo registro)
     @PostMapping
-    public EstadoTurno create(@RequestBody EstadoTurno estadoTurno) {
-        return estadoTurnoService.save(estadoTurno);
+    public EstadoTurno create(@RequestBody EstadoTurnoDTO dto) {
+        return estadoTurnoService.create(dto);
+    }
+    /*Con ExceptionHandler interceptamos la excepcion, se crea el map que es una estructura_
+    tipo diccionario, es decir una coleccion de pares "clave, valor"
+    en este caso seria "mensaje"(clave): "El id colocado no existe"(valor), de esta manera
+    podemos mandaar mensajes personalizados por json a postman"*/
+    @ExceptionHandler(RuntimeException.class)
+    public Map<String, String> manejarExcepcion(RuntimeException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("mensaje", ex.getMessage());
+        return error;
     }
 
-    // PUT de EstadoTurnoE{id} (Actualizar un registro existente)
-    @PutMapping
-    public EstadoTurno update(@RequestBody EstadoTurno estadoTurno) {
-        return estadoTurnoService.save(estadoTurno);
+
+    
+    @PutMapping("/{id}")
+    public EstadoTurno update(@PathVariable Long id, @RequestBody EstadoTurnoDTO dto) {
+        return estadoTurnoService.update(id, dto); // lanza RuntimeException si no lo encuentra
     }
 
-    // DELETE de EstadoTurnoE{id} (Eliminar un registro)
+
+    
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        estadoTurnoService.deleteById(id);
+ /*Entrás al try.
+Verificás si el ID existe.
+Si no existe, lanza la excepción manualmente con throw new Exception(...).
+Esa excepción es capturada por el catch.
+El catch arma una respuesta clara: por ejemplo, un mensaje tipo
+ "Error: No se encontró el ID" (texto o JSON)*/
+    
+    public String delete(@PathVariable Long id) {
+        try {
+            // Forzar una excepción si no existe el ID
+            if (estadoTurnoService.findById(id) == null) {
+                throw new Exception("No se encontró el EstadoTurno con ID: " + id);
+            }
+
+            estadoTurnoService.deleteById(id);
+            return "Eliminado correctamente";
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
     }
+
 }
+
