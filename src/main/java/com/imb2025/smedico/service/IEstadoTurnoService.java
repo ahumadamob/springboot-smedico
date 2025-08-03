@@ -18,6 +18,8 @@ public interface IEstadoTurnoService {
 
     public  void deleteById(Long id); // elimina un registro poe id
 
+    public boolean existsById(Long id);
+
     static EstadoTurno fromDto(EstadoTurnoRequestDTO dto) {
         EstadoTurno estadoTurno = new EstadoTurno();
         estadoTurno.setNombre(dto.getNombre());
