@@ -60,6 +60,10 @@ public class EstadoTurnoController {
     
     @PutMapping("/{id}")
     public ResponseEntity<EstadoTurno> update(@PathVariable Long id, @RequestBody EstadoTurnoRequestDTO dto) {
+        if (!estadoTurnoService.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
         EstadoTurno estadoTurno = IEstadoTurnoService.fromDto(dto);
         EstadoTurno actualizado = estadoTurnoService.update(id, estadoTurno);
 
