@@ -1,5 +1,7 @@
 package com.imb2025.smedico.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -7,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.imb2025.smedico.dto.EstadoTurnoDTO;
+import com.imb2025.smedico.dto.EstadoTurnoRequestDTO;
 import com.imb2025.smedico.entity.EstadoTurno;
 import com.imb2025.smedico.service.IEstadoTurnoService;
 
@@ -35,25 +38,32 @@ public class EstadoTurnoController {
     // POST de EstadoTurnoE (Crear un nuevo registro)
     @PostMapping
     public EstadoTurno create(@RequestBody EstadoTurnoDTO dto) {
-        return estadoTurnoService.create(dto);
+        EstadoTurno entidad = EstadoTurnoDTO.fromDto(dto);
+        return estadoTurnoService.create(entidad);
     }
+
     /*Con ExceptionHandler interceptamos la excepcion, se crea el map que es una estructura_
     tipo diccionario, es decir una coleccion de pares "clave, valor"
     en este caso seria "mensaje"(clave): "El id colocado no existe"(valor), de esta manera
     podemos mandaar mensajes personalizados por json a postman"*/
+   
     @ExceptionHandler(RuntimeException.class)
-    public Map<String, String> manejarExcepcion(RuntimeException ex) {
+    public ResponseEntity<Map<String, String>> manejarExcepcion(RuntimeException ex) {
         Map<String, String> error = new HashMap<>();
         error.put("mensaje", ex.getMessage());
-        return error;
-    }
 
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
 
     
     @PutMapping("/{id}")
-    public EstadoTurno update(@PathVariable Long id, @RequestBody EstadoTurnoDTO dto) {
-        return estadoTurnoService.update(id, dto); // lanza RuntimeException si no lo encuentra
+    public ResponseEntity<EstadoTurno> update(@PathVariable Long id, @RequestBody EstadoTurnoRequestDTO dto) {
+        EstadoTurno estadoTurno = EstadoTurnoRequestDTO.fromDto(dto);
+        EstadoTurno actualizado = estadoTurnoService.update(id, estadoTurno);
+        
+        return ResponseEntity.ok(actualizado);
     }
+
 
 
     
