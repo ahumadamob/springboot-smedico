@@ -31,11 +31,13 @@ public class EstadoTurnoController {
     }
 
     // GET de EstadoTurnoE {id} (Obtener un registro por ID)
+    // Devuelve 204 (No Content) si el ID solicitado no existe
     @GetMapping("/{id}")
     public ResponseEntity<EstadoTurno> getById(@PathVariable Long id) {
         EstadoTurno estadoTurno = estadoTurnoService.findById(id); // Devuelve el objeto o null si no existe
         if (estadoTurno == null) {
-            return ResponseEntity.notFound().build();
+            // Se devuelve 204 en lugar de 404 para indicar ausencia de contenido
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(estadoTurno);
     }
