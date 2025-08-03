@@ -4,9 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.imb2025.smedico.dto.EstadoTurnoRequestDTO;
 import com.imb2025.smedico.entity.EstadoTurno;
@@ -50,17 +48,11 @@ public class EstadoTurnoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
-    /*Con ExceptionHandler interceptamos la excepcion, se crea el map que es una estructura_
-    tipo diccionario, es decir una coleccion de pares "clave, valor"
-    en este caso seria "mensaje"(clave): "El id colocado no existe"(valor), de esta manera
-    podemos mandaar mensajes personalizados por json a postman"*/
+    /*Con ExceptionHandler interceptamos la excepcion y retornamos el mensaje*/
    
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Map<String, String>> manejarExcepcion(RuntimeException ex) {
-        Map<String, String> error = new HashMap<>();
-        error.put("mensaje", ex.getMessage());
-
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> manejarExcepcion(Exception ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
     }
 
     
