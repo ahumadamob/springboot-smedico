@@ -47,7 +47,7 @@ public class EstadoTurnoController {
     public ResponseEntity<EstadoTurno> create(@RequestBody EstadoTurnoRequestDTO dto) {
         EstadoTurno entidad = IEstadoTurnoService.fromDto(dto);
         EstadoTurno creado = estadoTurnoService.create(entidad);
-        return ResponseEntity.status(HttpStatus.CREATED).body(creado);
+        return ResponseEntity.ok(creado);
     }
 
     /*Con ExceptionHandler interceptamos la excepcion y retornamos el mensaje*/
