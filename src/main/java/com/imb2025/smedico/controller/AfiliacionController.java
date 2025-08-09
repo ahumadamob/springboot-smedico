@@ -3,69 +3,76 @@ package com.imb2025.smedico.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.imb2025.smedico.dto.AfiliacionRequestDTO;
 
 import com.imb2025.smedico.entity.Afiliacion;
+import com.imb2025.smedico.entity.ObraSocial;
+import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.service.IAfiliacionService;
+import com.imb2025.smedico.dto.AfiliacionRequestDTO;
+import com.imb2025.smedico.repository.ObraSocialRepository;
+import com.imb2025.smedico.repository.PacienteRepository;
 
 @RestController
 @RequestMapping("/Afiliacion")
 public class AfiliacionController {
 
-	@Autowired
-	private IAfiliacionService servi;
+    @Autowired
+    private IAfiliacionService servi;
 
-	@GetMapping
-	public ResponseEntity<List<Afiliacion>> findAllAfiliacion() throws Exception {
-		List<Afiliacion> lista = servi.findAll();
-		if (lista.isEmpty()) {
-			return ResponseEntity.noContent().build();
-		}
-		return ResponseEntity.ok(lista);
-	}
+    @Autowired
+    private PacienteRepository pacienteRepository;
 
-	@GetMapping("/{id}")
-	public ResponseEntity<Afiliacion> findAfiliacionById(@PathVariable("id") Long idAfiliacion) throws Exception {
-		Afiliacion afiliacion = new Afiliacion();
-		afiliacion = servi.findById(idAfiliacion);
-		if (afiliacion == null) {
-			return ResponseEntity.noContent().build();
-		} else {
-			return ResponseEntity.ok(afiliacion);
-		}
-	}
+    @Autowired
+    private ObraSocialRepository obraSocialRepository;
 
-	@PostMapping
-	public ResponseEntity<Afiliacion> createAfiliacion(@RequestBody AfiliacionRequestDTO dto) throws Exception {
-		return ResponseEntity.ok(servi.create(servi.fromDto(dto)));
-	}
+    @GetMapping
+    public ResponseEntity<List<Afiliacion>> findAllAfiliacion() {
+        List<Afiliacion> afiliaciones = servi.findAll();
+        return ResponseEntity.ok(afiliaciones);
+    }
 
-	@PutMapping("/{id}")
-	public Afiliacion updateAfiliacion(@PathVariable Long id, @RequestBody AfiliacionRequestDTO dto) throws Exception {
-		return servi.update(id, servi.fromDto(dto));
+    @GetMapping("/{id}")
+    public ResponseEntity<Afiliacion> findAfiliacionById(@PathVariable("id") Long idAfiliacion) {
+        Afiliacion afiliacion = servi.findById(idAfiliacion);
+        return ResponseEntity.ok(afiliacion);
+    }
 
-	}
+    @PostMapping
+    public ResponseEntity<Afiliacion> createAfiliacion(@RequestBody AfiliacionRequestDTO dto) {
+        Paciente paciente = pacienteRepository.findById(dto.getPacienteId())
+                .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteAfiliacion(@PathVariable Long id) throws Exception {
-		servi.deleteById(id);
-		return ResponseEntity.ok("Afiliacion " + id.toString() + " eliminada correctamente.");
-	}
+        ObraSocial obraSocial = obraSocialRepository.findById(dto.getObraSocialId())
+                .orElseThrow(() -> new RuntimeException("Obra Social no encontrada"));
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<String> handleGlobalException(Exception ex) {
-		ex.printStackTrace();
-		return ResponseEntity.badRequest().body(ex.getMessage());
-	}
+        Afiliacion afiliacion = AfiliacionRequestDTO.fromDTO(dto, paciente, obraSocial);
+        Afiliacion created = servi.save(afiliacion);
+        return ResponseEntity.status(201).body(created);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Afiliacion> updateAfiliacion(@PathVariable Long id, @RequestBody AfiliacionRequestDTO dto) {
+        Paciente paciente = pacienteRepository.findById(dto.getPacienteId())
+                .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
+
+        ObraSocial obraSocial = obraSocialRepository.findById(dto.getObraSocialId())
+                .orElseThrow(() -> new RuntimeException("Obra Social no encontrada"));
+
+        Afiliacion afiliacion = AfiliacionRequestDTO.fromDTO(dto, paciente, obraSocial);
+        Afiliacion updated = servi.update(id, afiliacion);
+        return ResponseEntity.ok(updated);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAfiliacion(@PathVariable Long id) {
+        servi.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
 }

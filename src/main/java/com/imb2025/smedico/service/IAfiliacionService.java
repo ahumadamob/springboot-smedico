@@ -1,16 +1,15 @@
 package com.imb2025.smedico.service;
 
 import java.util.List;
-import com.imb2025.smedico.dto.AfiliacionRequestDTO;
 import com.imb2025.smedico.entity.Afiliacion;
 
-public interface  IAfiliacionService {
-	
-	public List<Afiliacion> findAll() throws Exception;
-	public Afiliacion findById(Long id) throws Exception;
-	public Afiliacion create(Afiliacion afiliacion) throws Exception ;
-	public Afiliacion update(Long id, Afiliacion afiliacion) throws Exception ;
-	public void deleteById(Long id) throws Exception;
-	public Afiliacion fromDto(AfiliacionRequestDTO dto) throws Exception;
+
+public interface IAfiliacionService {
+    List<Afiliacion> findAll();
+    Afiliacion findById(Long id);
+    boolean existsById(Long id); 
+    Afiliacion save(Afiliacion afiliacion);
+    Afiliacion update(Long id, Afiliacion afiliacion);
+    void deleteById(Long id);
 
 }
