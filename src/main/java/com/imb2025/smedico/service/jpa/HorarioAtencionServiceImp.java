@@ -14,6 +14,7 @@ public class HorarioAtencionServiceImp implements IHorarioAtencionService {
 
 	@Autowired
 	private HorarioAtencionRepository repo;
+	
 
 	@Override
 	public List<HorarioAtencion> getAllHorarioAtencion() {
