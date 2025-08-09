@@ -23,13 +23,13 @@ public class OrdenEstudio {
 
     @ManyToOne
     @JoinColumn(name = "estudioId")
-    private EstudioEntity estudio;
+    private Estudio estudio;
     
     // Constructor 
     public OrdenEstudio() {}
     
     
-    public OrdenEstudio(LocalDate fecha, Medico medico,Paciente paciente, EstudioEntity estudio) {
+    public OrdenEstudio(LocalDate fecha, Medico medico,Paciente paciente) {
     	this.fecha=fecha;
     	this.paciente=paciente;
     	this.medico=medico;
@@ -66,11 +66,12 @@ public class OrdenEstudio {
 		this.paciente = paciente;
 	}
 
-	public EstudioEntity getEstudio() {
+	
+	public Estudio getEstudio() {
 		return estudio;
 	}
 
-	public void setEstudio(EstudioEntity estudio) {
+	public void setEstudio(Estudio estudio) {
 		this.estudio = estudio;
 	}
 
