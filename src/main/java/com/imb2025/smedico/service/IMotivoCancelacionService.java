@@ -1,16 +1,14 @@
 package com.imb2025.smedico.service;
 
-import java.util.List;
-
 import com.imb2025.smedico.dto.MotivoCancelacionRequestDto;
 import com.imb2025.smedico.entity.MotivoCancelacion;
+import java.util.List;
 
 public interface IMotivoCancelacionService {
-	
-	public List<MotivoCancelacion> findAll();
-    public MotivoCancelacion findById(Long id);
+    public List<MotivoCancelacion> findAll();
     public MotivoCancelacion create(MotivoCancelacion motivoCancelacion);
     public MotivoCancelacion update(Long id, MotivoCancelacion motivoCancelacion) throws Exception;
+    public MotivoCancelacion findById(Long id);
     public void deleteById(Long id);
-    MotivoCancelacion fromDto(MotivoCancelacionRequestDto dto) throws Exception;
+    public MotivoCancelacion fromDto(MotivoCancelacionRequestDto motivoCancelacionRequestDto) throws Exception;
 }

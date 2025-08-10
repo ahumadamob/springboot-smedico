@@ -5,12 +5,10 @@ import com.imb2025.smedico.entity.DireccionPaciente;
 import java.util.List;
 
 public interface IDireccionPacienteService {
-
-    List<DireccionPaciente> findAll();
-    DireccionPaciente findById(Long id);
-    DireccionPaciente create(DireccionPaciente direccionPaciente) throws Exception;
-    DireccionPaciente update(Long id, DireccionPaciente direccionPaciente) throws Exception;
-    void deleteById(Long id);
-    DireccionPaciente fromDto(DireccionPacienteRequestDto dto) throws Exception;
-    boolean existsById(Long id);
+    public List<DireccionPaciente> findAll();
+    public DireccionPaciente create(DireccionPaciente direccionPaciente) throws Exception;
+    public DireccionPaciente update(Long id, DireccionPaciente direccionPaciente) throws Exception;
+    public DireccionPaciente findById(Long id);
+    public void deleteById(Long id);
+    public DireccionPaciente fromDto(DireccionPacienteRequestDto direccionPacienteRequestDto) throws Exception;
 }

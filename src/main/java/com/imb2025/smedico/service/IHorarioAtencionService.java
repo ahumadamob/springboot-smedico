@@ -5,12 +5,10 @@ import com.imb2025.smedico.entity.HorarioAtencion;
 import java.util.List;
 
 public interface IHorarioAtencionService {
-
-    List<HorarioAtencion> findAll();
-    HorarioAtencion findById(Long id);
-    HorarioAtencion create(HorarioAtencion horarioAtencion) throws Exception;
-    HorarioAtencion update(Long id, HorarioAtencion horarioAtencion) throws Exception;
-    void deleteById(Long id);
-    HorarioAtencion fromDto(HorarioAtencionRequestDto dto) throws Exception;
-    boolean existsById(Long id);
+    public List<HorarioAtencion> findAll();
+    public HorarioAtencion create(HorarioAtencion horarioAtencion) throws Exception;
+    public HorarioAtencion update(Long id, HorarioAtencion horarioAtencion) throws Exception;
+    public HorarioAtencion findById(Long id);
+    public void deleteById(Long id);
+    public HorarioAtencion fromDto(HorarioAtencionRequestDto horarioAtencionRequestDto) throws Exception;
 }
