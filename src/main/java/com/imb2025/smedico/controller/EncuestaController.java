@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.imb2025.smedico.dto.EncuestaRequestDTO;
-import com.imb2025.smedico.entity.Encuesta;
+import com.imb2025.smedico.entity.EncuestaSatisfaccion;
 import com.imb2025.smedico.service.IEncuestaService;
 
 
@@ -28,8 +28,8 @@ import com.imb2025.smedico.service.IEncuestaService;
         private IEncuestaService service;
 
         @GetMapping
-        public ResponseEntity<List<Encuesta>> getAllEncuesta() {
-            List <Encuesta> encuesta = service.findAll();
+        public ResponseEntity<List<EncuestaSatisfaccion>> getAllEncuesta() {
+            List <EncuestaSatisfaccion> encuesta = service.findAll();
         	
         	return encuesta.isEmpty()
         			? ResponseEntity.noContent().build()
@@ -37,7 +37,7 @@ import com.imb2025.smedico.service.IEncuestaService;
         }
 
         @GetMapping("/{id}")
-        public ResponseEntity<Encuesta> getEncuestaById(@PathVariable Long id) {
+        public ResponseEntity<EncuestaSatisfaccion> getEncuestaById(@PathVariable Long id) {
            
         	return service.existsById(id)
             		
@@ -47,17 +47,17 @@ import com.imb2025.smedico.service.IEncuestaService;
 
         //Nuevo método POST
         @PostMapping
-        public ResponseEntity<Encuesta> createEncuesta(@RequestBody EncuestaRequestDTO dto) throws Exception {
-        	Encuesta encuesta = service.fromDto(dto);
+        public ResponseEntity<EncuestaSatisfaccion> createEncuesta(@RequestBody EncuestaRequestDTO dto) throws Exception {
+                EncuestaSatisfaccion encuesta = service.fromDto(dto);
                 return ResponseEntity.ok(service.create(encuesta));
             
         }
 
         //Nuevo método PUT
         @PutMapping("/{id}")
-        public ResponseEntity<Encuesta> update(@PathVariable Long id, @RequestBody EncuestaRequestDTO dto) throws Exception {
-               
-        	    Encuesta encuesta = service.fromDto(dto);
+        public ResponseEntity<EncuestaSatisfaccion> update(@PathVariable Long id, @RequestBody EncuestaRequestDTO dto) throws Exception {
+
+                    EncuestaSatisfaccion encuesta = service.fromDto(dto);
                 return ResponseEntity.ok(service.update(id, encuesta));
             
                 

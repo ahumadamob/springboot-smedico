@@ -9,7 +9,7 @@ import jakarta.persistence.ManyToOne;
 
 
 @Entity
-public class Encuesta {
+public class EncuestaSatisfaccion {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,11 +28,11 @@ public class Encuesta {
 
 
     //Constructores
-	public Encuesta() {
+        public EncuestaSatisfaccion() {
 
 	}
 
-	public Encuesta(Long id, Paciente paciente, Consulta consulta, int puntaje, String comentario) {
+        public EncuestaSatisfaccion(Long id, Paciente paciente, Consulta consulta, int puntaje, String comentario) {
 		super();
 		this.id = id;
 		this.paciente = paciente;
