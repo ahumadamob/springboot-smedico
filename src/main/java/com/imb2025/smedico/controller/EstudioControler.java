@@ -55,7 +55,7 @@ public class EstudioControler {
     @PutMapping("/{id}")
     public ResponseEntity<Estudio> update(@PathVariable("id") Long id, @RequestBody EstudioRequestDto dto) throws Exception {
         Estudio estudio = service.fromDto(dto);
-        Estudio actualizado = service.update(estudio, id);
+        Estudio actualizado = service.update(id, estudio);
         return ResponseEntity.ok(actualizado);
     }
 

@@ -1,13 +1,16 @@
 package com.imb2025.smedico.service;
 
+import com.imb2025.smedico.dto.HorarioAtencionRequestDto;
+import com.imb2025.smedico.entity.HorarioAtencion;
 import java.util.List;
 
-import com.imb2025.smedico.entity.HorarioAtencion;
-
 public interface IHorarioAtencionService {
-	    List<HorarioAtencion> getAllHorarioAtencion();
-	    HorarioAtencion getHorarioAtencionById(Long id);
-	    HorarioAtencion save(HorarioAtencion horarioAtencionEntity);
-	    void deleteHorarioAtencion(Long id);
-	    boolean existsById(Long id);
+
+    List<HorarioAtencion> findAll();
+    HorarioAtencion findById(Long id);
+    HorarioAtencion create(HorarioAtencion horarioAtencion) throws Exception;
+    HorarioAtencion update(Long id, HorarioAtencion horarioAtencion) throws Exception;
+    void deleteById(Long id);
+    HorarioAtencion fromDto(HorarioAtencionRequestDto dto) throws Exception;
+    boolean existsById(Long id);
 }

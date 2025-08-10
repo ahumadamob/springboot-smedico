@@ -49,7 +49,7 @@ public class EstudioServiceImpl implements IEstudioService {
     }
 
     @Override
-    public Estudio update(Estudio estudio, Long id) throws Exception {
+    public Estudio update(Long id, Estudio estudio) throws Exception {
         if (!repo.existsById(id)) {
             throw new Exception("No existe el estudio con ID: " + id);
         }

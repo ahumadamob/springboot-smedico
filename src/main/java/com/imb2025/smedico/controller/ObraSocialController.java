@@ -31,8 +31,10 @@ public class ObraSocialController {
     
     @GetMapping("/{id}")
     public ResponseEntity<ObraSocial> getById(@PathVariable Long id) {
-        ObraSocial obraSocial = service.findById(id)
-                .orElseThrow(() -> new RuntimeException("No existe obra social para el ID: " + id));
+        ObraSocial obraSocial = service.findById(id);
+        if (obraSocial == null) {
+            throw new RuntimeException("No existe obra social para el ID: " + id);
+        }
         return ResponseEntity.ok(obraSocial);
     }
 
@@ -52,8 +54,10 @@ public class ObraSocialController {
    
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizarObraSocial(@PathVariable Long id, @RequestBody ObraSocialRequestDto dto) throws Exception {
-        ObraSocial obraSocial = service.findById(id)
-                .orElseThrow(() -> new RuntimeException("No se encontró una obra social con el ID: " + id));
+        ObraSocial obraSocial = service.findById(id);
+        if (obraSocial == null) {
+            throw new RuntimeException("No se encontró una obra social con el ID: " + id);
+        }
 
         obraSocial.setNombre(dto.getNombre());
         obraSocial.setTelefono(dto.getTelefono());
@@ -72,8 +76,9 @@ public class ObraSocialController {
     
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.findById(id)
-                .orElseThrow(() -> new RuntimeException("No se encontró una obra social con el ID: " + id));
+        if (service.findById(id) == null) {
+            throw new RuntimeException("No se encontró una obra social con el ID: " + id);
+        }
 
         service.deleteById(id);
         return ResponseEntity.noContent().build();
