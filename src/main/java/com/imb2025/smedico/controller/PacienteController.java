@@ -1,6 +1,6 @@
 package com.imb2025.smedico.controller;
 
-import com.imb2025.smedico.dto.PacienteRequestDTO;
+import com.imb2025.smedico.dto.PacienteRequestDto;
 import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.service.IPacienteService;
 
@@ -43,7 +43,7 @@ public class PacienteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePaciente(@PathVariable Long id, @RequestBody PacienteRequestDTO dto) {
+    public ResponseEntity<?> updatePaciente(@PathVariable Long id, @RequestBody PacienteRequestDto dto) {
         if (!pacienteService.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Paciente no encontrado con ID: " + id);

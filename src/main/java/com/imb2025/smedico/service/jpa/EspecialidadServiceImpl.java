@@ -10,7 +10,7 @@ import com.imb2025.smedico.entity.Especialidad;
 import com.imb2025.smedico.repository.EspecialidadRepository;
 import com.imb2025.smedico.service.IEspecialidadService;
 
-import dto.EspecialidadRequestDTO;
+import com.imb2025.smedico.dto.EspecialidadRequestDto;
 
 @Service
 public class EspecialidadServiceImpl implements IEspecialidadService{
@@ -48,7 +48,7 @@ public class EspecialidadServiceImpl implements IEspecialidadService{
 		
 
 		
-		public Especialidad fromDto(EspecialidadRequestDTO dto) {
+		public Especialidad fromDto(EspecialidadRequestDto dto) {
 		
 			    if (dto.getNombre() == null || dto.getNombre().isBlank()) {
 			        throw new IllegalArgumentException("El nombre no puede estar vacío");

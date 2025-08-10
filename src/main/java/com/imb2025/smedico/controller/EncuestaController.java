@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.imb2025.smedico.dto.EncuestaRequestDTO;
+import com.imb2025.smedico.dto.EncuestaRequestDto;
 import com.imb2025.smedico.entity.Encuesta;
 import com.imb2025.smedico.service.IEncuestaService;
 
@@ -47,7 +47,7 @@ import com.imb2025.smedico.service.IEncuestaService;
 
         //Nuevo método POST
         @PostMapping
-        public ResponseEntity<Encuesta> createEncuesta(@RequestBody EncuestaRequestDTO dto) throws Exception {
+        public ResponseEntity<Encuesta> createEncuesta(@RequestBody EncuestaRequestDto dto) throws Exception {
         	Encuesta encuesta = service.fromDto(dto);
                 return ResponseEntity.ok(service.create(encuesta));
             
@@ -55,7 +55,7 @@ import com.imb2025.smedico.service.IEncuestaService;
 
         //Nuevo método PUT
         @PutMapping("/{id}")
-        public ResponseEntity<Encuesta> update(@PathVariable Long id, @RequestBody EncuestaRequestDTO dto) throws Exception {
+        public ResponseEntity<Encuesta> update(@PathVariable Long id, @RequestBody EncuestaRequestDto dto) throws Exception {
                
         	    Encuesta encuesta = service.fromDto(dto);
                 return ResponseEntity.ok(service.update(id, encuesta));

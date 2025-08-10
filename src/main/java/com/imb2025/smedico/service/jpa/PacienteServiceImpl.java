@@ -1,6 +1,6 @@
 package com.imb2025.smedico.service.jpa;
 
-import com.imb2025.smedico.dto.PacienteRequestDTO;
+import com.imb2025.smedico.dto.PacienteRequestDto;
 import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.repository.PacienteRepository;
 import com.imb2025.smedico.service.IPacienteService;
@@ -63,7 +63,7 @@ public class PacienteServiceImpl implements IPacienteService {
     }
 
     @Override
-    public Paciente fromDto(PacienteRequestDTO dto) {
+    public Paciente fromDto(PacienteRequestDto dto) {
         Paciente paciente = new Paciente();
         paciente.setNombre(dto.getNombre());
         paciente.setApellido(dto.getApellido());

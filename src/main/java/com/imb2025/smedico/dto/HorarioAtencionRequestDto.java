@@ -1,10 +1,10 @@
-package com.imb2025.smedico.dto; 
+package com.imb2025.smedico.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
-public class HorarioAtencionRequestDTO {
+public class HorarioAtencionRequestDto {
 
     @NotNull(message = "El ID del médico no puede ser nulo")
     private Long medicoId;
@@ -20,7 +20,15 @@ public class HorarioAtencionRequestDTO {
     @Pattern(regexp = "^([01]\\d|2[0-3]):([0-5]\\d)$", message = "El formato de la hora de fin debe ser HH:mm")
     private String horaFin;
 
-    // Getters y Setters
+    public HorarioAtencionRequestDto() {}
+
+    public HorarioAtencionRequestDto(Long medicoId, String diaSemana, String horaInicio, String horaFin) {
+        this.medicoId = medicoId;
+        this.diaSemana = diaSemana;
+        this.horaInicio = horaInicio;
+        this.horaFin = horaFin;
+    }
+
     public Long getMedicoId() {
         return medicoId;
     }

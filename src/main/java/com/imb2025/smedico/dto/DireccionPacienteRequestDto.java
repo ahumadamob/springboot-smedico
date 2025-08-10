@@ -1,6 +1,6 @@
 package com.imb2025.smedico.dto;
 
-public class DireccionPacienteRequestDTO {
+public class DireccionPacienteRequestDto {
 
     private String calle;
     private Long numero;
@@ -8,18 +8,16 @@ public class DireccionPacienteRequestDTO {
     private String provincia;
     private String ccpp;
 
-    public DireccionPacienteRequestDTO() {
-    }
+    public DireccionPacienteRequestDto() {}
 
-    public DireccionPacienteRequestDTO(String calle, Long numero, String localidad, String provincia, String ccpp) {
+    public DireccionPacienteRequestDto(
+            String calle, Long numero, String localidad, String provincia, String ccpp) {
         this.calle = calle;
         this.numero = numero;
         this.localidad = localidad;
         this.provincia = provincia;
         this.ccpp = ccpp;
     }
-
-    // Getters y Setters
 
     public String getCalle() {
         return calle;
@@ -61,4 +59,5 @@ public class DireccionPacienteRequestDTO {
         this.ccpp = ccpp;
     }
 }
+
 

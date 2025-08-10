@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.imb2025.smedico.dto.HorarioAtencionRequestDTO;
+import com.imb2025.smedico.dto.HorarioAtencionRequestDto;
 import com.imb2025.smedico.dto.HorarioAtencionResponseDTO; // Importación correcta del DTO de respuesta
 import com.imb2025.smedico.entity.HorarioAtencion;
 import com.imb2025.smedico.entity.Medico;
@@ -34,7 +34,7 @@ public class HorarioAtencionController {
     @Autowired
     private IMedicoService medicoService;
 
-    private HorarioAtencion convertToEntity(HorarioAtencionRequestDTO requestDTO) {
+    private HorarioAtencion convertToEntity(HorarioAtencionRequestDto requestDTO) {
         HorarioAtencion horarioEntity = new HorarioAtencion();
 
         if (requestDTO.getMedicoId() != null) {
@@ -92,7 +92,7 @@ public class HorarioAtencionController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> createHorarioAtencion(@RequestBody HorarioAtencionRequestDTO requestDTO) {
+    public ResponseEntity<Object> createHorarioAtencion(@RequestBody HorarioAtencionRequestDto requestDTO) {
         HorarioAtencion horarioEntity = convertToEntity(requestDTO);
         horarioEntity.setId(null);
         HorarioAtencion savedHorario = horarioAtencionService.save(horarioEntity);
@@ -100,7 +100,7 @@ public class HorarioAtencionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateHorarioAtencion(@PathVariable Long id, @RequestBody HorarioAtencionRequestDTO requestDTO) {
+    public ResponseEntity<Object> updateHorarioAtencion(@PathVariable Long id, @RequestBody HorarioAtencionRequestDto requestDTO) {
         if (!horarioAtencionService.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Horario no encontrado con ID: " + id);
         }

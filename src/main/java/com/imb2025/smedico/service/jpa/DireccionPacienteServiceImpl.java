@@ -1,6 +1,6 @@
 package com.imb2025.smedico.service.jpa;
 
-//import com.imb2025.smedico.dto.DireccionPacienteRequestDTO;
+//import com.imb2025.smedico.dto.DireccionPacienteRequestDto;
 import com.imb2025.smedico.entity.DireccionPaciente;
 import com.imb2025.smedico.repository.DireccionPacienteRepository;
 import com.imb2025.smedico.service.DireccionPacienteService;
@@ -55,14 +55,14 @@ public class DireccionPacienteServiceImpl implements DireccionPacienteService {
 
 
    // @Override
-   // public DireccionPaciente fromDto(DireccionPacienteRequestDTO dto) {
+   // public DireccionPaciente fromDto(DireccionPacienteRequestDto dto) {
    //     DireccionPaciente direccion = new DireccionPaciente();
    //     mapearDTO(direccion, dto);
    //     return direccion;
    // }
 
     //* Mapea los campos del DTO a la entidad
-   // private void mapearDTO(DireccionPaciente direccion, DireccionPacienteRequestDTO dto) {
+   // private void mapearDTO(DireccionPaciente direccion, DireccionPacienteRequestDto dto) {
    //     direccion.setCalle(dto.getCalle());
    //     direccion.setNumero(dto.getNumero());
    //     direccion.setLocalidad(dto.getLocalidad());

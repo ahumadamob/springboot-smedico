@@ -2,26 +2,23 @@ package com.imb2025.smedico.dto;
 
 import java.time.LocalTime;
 
-public class ResultadoEstudioRequestDTO {
+public class ResultadoEstudioRequestDto {
 
 	
 	private long ordenEstudioId;
 	private long resultado;
 	private LocalTime fechaCarga;
-	private String observaciones;
+        private String observaciones;
 
+        public ResultadoEstudioRequestDto() {}
 
-	
-	
-	
-
-	public ResultadoEstudioRequestDTO(long ordenEstudioId, long resultado, LocalTime fechaCarga, String observaciones) {
-		super();
-		this.ordenEstudioId = ordenEstudioId;
-		this.resultado = resultado;
-		this.fechaCarga = fechaCarga;
-		this.observaciones = observaciones;
-	}
+        public ResultadoEstudioRequestDto(
+                long ordenEstudioId, long resultado, LocalTime fechaCarga, String observaciones) {
+                this.ordenEstudioId = ordenEstudioId;
+                this.resultado = resultado;
+                this.fechaCarga = fechaCarga;
+                this.observaciones = observaciones;
+        }
 
 	public long getOrdenEstudioId() {
 		return ordenEstudioId;

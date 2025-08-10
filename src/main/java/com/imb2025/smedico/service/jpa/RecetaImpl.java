@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.imb2025.smedico.dto.RecetaRequestDTO;
+import com.imb2025.smedico.dto.RecetaRequestDto;
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.entity.Receta;
@@ -67,7 +67,7 @@ public class RecetaImpl implements IRecetaService{
 
 	
 
-	public Receta fromDto(RecetaRequestDTO dto) throws Exception {
+	public Receta fromDto(RecetaRequestDto dto) throws Exception {
 	    if (dto.getMedicoId() == null) {
 	        throw new IllegalArgumentException("El ID del médico no puede ser nulo");
 	    }

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.imb2025.smedico.dto.OrdenEstudioRequestDTO;
+import com.imb2025.smedico.dto.OrdenEstudioRequestDto;
 import com.imb2025.smedico.entity.OrdenEstudio;
 import com.imb2025.smedico.service.IOrdenEstudioService;
 
@@ -41,14 +41,14 @@ public class OrdenEstudioController {
 
     // POST - Crear una nueva orden de estudio
     @PostMapping
-    public ResponseEntity<OrdenEstudio> createOrdenEstudio(@RequestBody OrdenEstudioRequestDTO dto) throws Exception {
+    public ResponseEntity<OrdenEstudio> createOrdenEstudio(@RequestBody OrdenEstudioRequestDto dto) throws Exception {
         OrdenEstudio entity = service.fromDto(dto);
         return ResponseEntity.ok(service.create(entity)); 
     }
 
     // PUT - Actualizar una orden de estudio
     @PutMapping("/{id}")
-    public ResponseEntity<OrdenEstudio> updateOrdenEstudio(@PathVariable("id") Long id, @RequestBody OrdenEstudioRequestDTO dto) throws Exception {
+    public ResponseEntity<OrdenEstudio> updateOrdenEstudio(@PathVariable("id") Long id, @RequestBody OrdenEstudioRequestDto dto) throws Exception {
         OrdenEstudio entity = service.fromDto(dto);
         return ResponseEntity.ok(service.update(id, entity)); 
     }

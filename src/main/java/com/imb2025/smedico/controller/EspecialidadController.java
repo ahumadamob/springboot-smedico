@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.imb2025.smedico.entity.Especialidad;
 import com.imb2025.smedico.service.IEspecialidadService;
 
-import dto.EspecialidadRequestDTO;
+import com.imb2025.smedico.dto.EspecialidadRequestDto;
 
 @RestController
 public class EspecialidadController {
@@ -42,13 +42,13 @@ public class EspecialidadController {
 	}
 	
 	@PostMapping("/especialidad")
-	public ResponseEntity<Especialidad> create(@RequestBody EspecialidadRequestDTO dto) throws Exception {
+	public ResponseEntity<Especialidad> create(@RequestBody EspecialidadRequestDto dto) throws Exception {
 		return ResponseEntity.ok(service.create(service.fromDto(dto)));
 		
 	}
 	 
 	@PutMapping("/especialidad/{idespecialidad}")
-	public ResponseEntity<Especialidad> update(@RequestBody EspecialidadRequestDTO dto, @PathVariable("idespecialidad") Long id) throws Exception {
+	public ResponseEntity<Especialidad> update(@RequestBody EspecialidadRequestDto dto, @PathVariable("idespecialidad") Long id) throws Exception {
 			 Especialidad entity = service.fromDto(dto);
 			 return ResponseEntity.ok(service.update(id, entity));
 	}

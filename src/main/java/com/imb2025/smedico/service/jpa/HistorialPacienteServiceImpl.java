@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.imb2025.smedico.dto.HistorialPacienteRequestDTO;
+import com.imb2025.smedico.dto.HistorialPacienteRequestDto;
 import com.imb2025.smedico.entity.HistorialPaciente;
 import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.repository.HistorialPacienteRepository;
@@ -66,7 +66,7 @@ public class HistorialPacienteServiceImpl implements IHistorialPacienteService {
 	    }
 	}
 	@Override
-	public HistorialPaciente fromDto(HistorialPacienteRequestDTO dto) throws Exception {
+	public HistorialPaciente fromDto(HistorialPacienteRequestDto dto) throws Exception {
 		if (dto.getPacienteId() == null) {
 		    throw new IllegalArgumentException("El ID del paciente no puede ser nulo");
 		}

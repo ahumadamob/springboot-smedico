@@ -1,6 +1,6 @@
 package com.imb2025.smedico.service;
 
-import com.imb2025.smedico.dto.PacienteRequestDTO;
+import com.imb2025.smedico.dto.PacienteRequestDto;
 import com.imb2025.smedico.entity.Paciente;
 
 import java.util.List;
@@ -14,5 +14,5 @@ public interface IPacienteService {
     Paciente updatePaciente(Paciente paciente);
     void deleteById(Long id);
 
-    Paciente fromDto(PacienteRequestDTO dto);
+    Paciente fromDto(PacienteRequestDto dto);
 }

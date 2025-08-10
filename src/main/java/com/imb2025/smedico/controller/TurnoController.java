@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.imb2025.smedico.dto.TurnoRequestDTO;
+import com.imb2025.smedico.dto.TurnoRequestDto;
 import com.imb2025.smedico.entity.EstadoTurno;
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.entity.Paciente;
@@ -46,13 +46,13 @@ public class TurnoController {
     }
 
     @PostMapping("/turno")
-    public ResponseEntity<Turno> create(@RequestBody TurnoRequestDTO dto) throws Exception {
+    public ResponseEntity<Turno> create(@RequestBody TurnoRequestDto dto) throws Exception {
         Turno turno = service.fromDto(dto);
         return ResponseEntity.ok(service.create(turno));
     }
 
     @PutMapping("/turno/{idturno}")
-    public ResponseEntity<Turno> update(@PathVariable("idturno") Long idturno, @RequestBody TurnoRequestDTO dto) throws Exception {
+    public ResponseEntity<Turno> update(@PathVariable("idturno") Long idturno, @RequestBody TurnoRequestDto dto) throws Exception {
         Turno turno = service.fromDto(dto);
         return ResponseEntity.ok(service.update(idturno, turno));
     }

@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.imb2025.smedico.dto.MedicamentoRequestDTO;
+import com.imb2025.smedico.dto.MedicamentoRequestDto;
 import com.imb2025.smedico.entity.Medicamento;
 import com.imb2025.smedico.repository.MedicamentoRepository;
 import com.imb2025.smedico.service.IMedicamentoService;
@@ -85,7 +85,7 @@ public class MedicamentoServiceImpl implements IMedicamentoService{
 	}
 	
 	@Override
-	public Medicamento fromDto(MedicamentoRequestDTO dto) throws Exception {
+	public Medicamento fromDto(MedicamentoRequestDto dto) throws Exception {
 		if (dto.getNombre() == null || dto.getNombre().isBlank()) {
             throw new IllegalArgumentException("El nombre no puede estar nulo o vacío");
         }

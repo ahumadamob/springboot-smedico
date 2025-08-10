@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.imb2025.smedico.dto.MedioPagoRequestDTO;
+import com.imb2025.smedico.dto.MedioPagoRequestDto;
 import com.imb2025.smedico.entity.MedioPago;
 import com.imb2025.smedico.service.IMedioPagoService;
 
@@ -38,7 +38,7 @@ public class MedioPagoController {
 	}
 	
 	@PostMapping //("/")
-    public MedioPago createMedioPago(@RequestBody MedioPagoRequestDTO mediopagoDto) {
+    public MedioPago createMedioPago(@RequestBody MedioPagoRequestDto mediopagoDto) {
 		try {
 	        return service.createMedioPago(mediopagoDto);
 	    } catch (Exception e) {

@@ -2,7 +2,7 @@ package com.imb2025.smedico.dto;
 
 import java.time.LocalDate;
 
-public class FacturaRequestDTO {
+public class FacturaRequestDto {
 
     private LocalDate fecha;
 
@@ -12,8 +12,9 @@ public class FacturaRequestDTO {
 
     private Long medioPagoId;
 
-    public FacturaRequestDTO(LocalDate fecha, Long pacienteId, Double monto, Long medioPagoId) {
-        super();
+    public FacturaRequestDto() {}
+
+    public FacturaRequestDto(LocalDate fecha, Long pacienteId, Double monto, Long medioPagoId) {
         this.fecha = fecha;
         this.pacienteId = pacienteId;
         this.monto = monto;

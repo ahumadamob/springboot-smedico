@@ -4,7 +4,7 @@ import com.imb2025.smedico.service.jpa.DiagnosticoServiceImpl;
 import com.imb2025.smedico.repository.ConsultaRepository;
 import com.imb2025.smedico.entity.Consulta;
 import com.imb2025.smedico.entity.Diagnostico;
-import com.imb2025.smedico.dto.DiagnosticoRequestDTO;
+import com.imb2025.smedico.dto.DiagnosticoRequestDto;
 import com.imb2025.smedico.repository.DiagnosticoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,7 +48,7 @@ public class DiagnosticoServiceImpl implements IDiagnosticoService {
         return repo.existsById(id);
     }
 
-    public Diagnostico fromDto(DiagnosticoRequestDTO dto) {
+    public Diagnostico fromDto(DiagnosticoRequestDto dto) {
         Diagnostico diagnostico = new Diagnostico();
         diagnostico.setDescripcion(dto.getDescripcion());
         diagnostico.setFechaDiagnostico(dto.getFechaDiagnostico());

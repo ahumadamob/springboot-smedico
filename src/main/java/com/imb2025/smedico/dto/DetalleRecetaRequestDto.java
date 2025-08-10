@@ -1,19 +1,20 @@
 package com.imb2025.smedico.dto;
 
-import com.imb2025.smedico.entity.DetalleReceta;
-import com.imb2025.smedico.entity.Receta;
-import com.imb2025.smedico.entity.Medicamento;
-
-public class DetalleRecetaRequestDTO {
+public class DetalleRecetaRequestDto {
 
     private Long recetaId;
     private Long medicamentoId;
     private String dosis;
     private String frecuencia;
 
-    public DetalleRecetaRequestDTO() {}
+    public DetalleRecetaRequestDto() {}
 
-    // Getters y setters
+    public DetalleRecetaRequestDto(Long recetaId, Long medicamentoId, String dosis, String frecuencia) {
+        this.recetaId = recetaId;
+        this.medicamentoId = medicamentoId;
+        this.dosis = dosis;
+        this.frecuencia = frecuencia;
+    }
 
     public Long getRecetaId() {
         return recetaId;
@@ -46,23 +47,6 @@ public class DetalleRecetaRequestDTO {
     public void setFrecuencia(String frecuencia) {
         this.frecuencia = frecuencia;
     }
-
-    // Método para convertir DTO a entidad DetalleReceta
-    public DetalleReceta toEntity() {
-        DetalleReceta detalle = new DetalleReceta();
-
-        Receta receta = new Receta();
-        receta.setId(this.recetaId);
-
-        Medicamento medicamento = new Medicamento();
-        medicamento.setId(this.medicamentoId);
-
-        detalle.setReceta(receta);
-        detalle.setMedicamento(medicamento);
-        detalle.setDosis(this.dosis);
-        detalle.setFrecuencia(this.frecuencia);
-
-        return detalle;
-    }
 }
+
 

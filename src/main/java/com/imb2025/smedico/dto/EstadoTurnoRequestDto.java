@@ -1,12 +1,12 @@
 package com.imb2025.smedico.dto;
 
-public class EstadoTurnoRequestDTO {
+public class EstadoTurnoRequestDto {
     private String nombre;
 
-    public EstadoTurnoRequestDTO() {
+    public EstadoTurnoRequestDto() {
     }
 
-    public EstadoTurnoRequestDTO(String nombre) {
+    public EstadoTurnoRequestDto(String nombre) {
         this.nombre = nombre;
     }
 

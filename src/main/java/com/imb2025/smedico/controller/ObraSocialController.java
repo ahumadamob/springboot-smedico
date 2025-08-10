@@ -2,7 +2,7 @@ package com.imb2025.smedico.controller;
 
 import com.imb2025.smedico.entity.ObraSocial;
 import com.imb2025.smedico.service.IObraSocialService;
-import com.imb2025.smedico.dto.ObraSocialRequestDTO;
+import com.imb2025.smedico.dto.ObraSocialRequestDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,7 +38,7 @@ public class ObraSocialController {
 
     
     @PostMapping
-    public ResponseEntity<Map<String, Object>> createObraSocial(@RequestBody ObraSocialRequestDTO dto) throws Exception {
+    public ResponseEntity<Map<String, Object>> createObraSocial(@RequestBody ObraSocialRequestDto dto) throws Exception {
         ObraSocial obra = service.create(service.fromDto(dto));
         
         Map<String, Object> response = new HashMap<>();
@@ -51,7 +51,7 @@ public class ObraSocialController {
 
    
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizarObraSocial(@PathVariable Long id, @RequestBody ObraSocialRequestDTO dto) throws Exception {
+    public ResponseEntity<?> actualizarObraSocial(@PathVariable Long id, @RequestBody ObraSocialRequestDto dto) throws Exception {
         ObraSocial obraSocial = service.findById(id)
                 .orElseThrow(() -> new RuntimeException("No se encontró una obra social con el ID: " + id));
 

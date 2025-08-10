@@ -9,7 +9,7 @@ import com.imb2025.smedico.entity.Consultorio;
 import com.imb2025.smedico.repository.ConsultorioRepository;
 import com.imb2025.smedico.service.IConsultorioService;
 
-import dto.ConsultorioRequestDTO;
+import com.imb2025.smedico.dto.ConsultorioRequestDto;
 
 @Service
 public class ConsultorioServiceImpl implements IConsultorioService {
@@ -63,7 +63,7 @@ public class ConsultorioServiceImpl implements IConsultorioService {
 	}
     
     @Override
-	public Consultorio fromDto(ConsultorioRequestDTO dto) throws Exception {
+	public Consultorio fromDto(ConsultorioRequestDto dto) throws Exception {
     	if(dto.getNombre() == null || dto.getNombre().isBlank()) {
     		throw new IllegalArgumentException("El nombre no puede estar vacío");
     	}

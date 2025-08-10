@@ -2,7 +2,7 @@ package com.imb2025.smedico.dto;
 
 import java.time.LocalDate;
 
-public class PacienteRequestDTO {
+public class PacienteRequestDto {
     private String nombre;
     private String apellido;
     private String dni;
@@ -10,7 +10,15 @@ public class PacienteRequestDTO {
     private LocalDate fechaNacimiento;
     private String telefono;
 
-    public PacienteRequestDTO(String nombre, String apellido, String dni, String email, LocalDate fechaNacimiento, String telefono) {
+    public PacienteRequestDto() {}
+
+    public PacienteRequestDto(
+            String nombre,
+            String apellido,
+            String dni,
+            String email,
+            LocalDate fechaNacimiento,
+            String telefono) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
@@ -19,7 +27,6 @@ public class PacienteRequestDTO {
         this.telefono = telefono;
     }
 
-    // Getters y setters
     public String getNombre() {
         return nombre;
     }
@@ -67,8 +74,8 @@ public class PacienteRequestDTO {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
-
 }
+
 
 
 

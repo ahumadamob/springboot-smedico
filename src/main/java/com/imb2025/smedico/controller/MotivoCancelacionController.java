@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.imb2025.smedico.service.IMotivoCancelacionService;
-import com.imb2025.smedico.dto.MotivoCancelacionRequestDTO;
+import com.imb2025.smedico.dto.MotivoCancelacionRequestDto;
 import com.imb2025.smedico.entity.MotivoCancelacion;
 
 @RestController
@@ -42,12 +42,12 @@ public class MotivoCancelacionController {
 	}
 	
 	@PostMapping("/motivocancelacion")
-	public ResponseEntity<MotivoCancelacion> create(@RequestBody MotivoCancelacionRequestDTO dto) throws Exception {
+	public ResponseEntity<MotivoCancelacion> create(@RequestBody MotivoCancelacionRequestDto dto) throws Exception {
         return ResponseEntity.ok(service.create(service.fromDto(dto)));
     }
 		
 	@PutMapping("/motivocancelacion/{idmotivocancelacion}")
-    public ResponseEntity<MotivoCancelacion> update(@PathVariable("idmotivocancelacion") Long id,@RequestBody MotivoCancelacionRequestDTO dto) throws Exception {
+    public ResponseEntity<MotivoCancelacion> update(@PathVariable("idmotivocancelacion") Long id,@RequestBody MotivoCancelacionRequestDto dto) throws Exception {
         MotivoCancelacion entity = service.fromDto(dto);
         return ResponseEntity.ok(service.update(id, entity));
     }
