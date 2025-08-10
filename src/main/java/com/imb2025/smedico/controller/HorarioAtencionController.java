@@ -6,18 +6,10 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.imb2025.smedico.dto.HorarioAtencionRequestDto;
-import com.imb2025.smedico.dto.HorarioAtencionResponseDTO; // Importación correcta del DTO de respuesta
+import com.imb2025.smedico.dto.HorarioAtencionResponseDTO;
 import com.imb2025.smedico.entity.HorarioAtencion;
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.exception.RecursoNoEncontradoException;
@@ -71,7 +63,7 @@ public class HorarioAtencionController {
 
     @GetMapping
     public ResponseEntity<List<HorarioAtencionResponseDTO>> getAllHorarioAtencion() {
-        List<HorarioAtencionResponseDTO> horarios = horarioAtencionService.getAllHorarioAtencion().stream()
+        List<HorarioAtencionResponseDTO> horarios = horarioAtencionService.findAll().stream()
                 .map(this::convertToResponseDTO)
                 .collect(Collectors.toList());
 
@@ -83,7 +75,7 @@ public class HorarioAtencionController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getHorarioAtencionById(@PathVariable Long id) {
-        HorarioAtencion horario = horarioAtencionService.getHorarioAtencionById(id);
+        HorarioAtencion horario = horarioAtencionService.findById(id);
         if (horario == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Horario de atención no encontrado con ID: " + id);
         } else {
@@ -92,29 +84,28 @@ public class HorarioAtencionController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> createHorarioAtencion(@RequestBody HorarioAtencionRequestDto requestDTO) {
+    public ResponseEntity<Object> createHorarioAtencion(@RequestBody HorarioAtencionRequestDto requestDTO) throws Exception {
         HorarioAtencion horarioEntity = convertToEntity(requestDTO);
         horarioEntity.setId(null);
-        HorarioAtencion savedHorario = horarioAtencionService.save(horarioEntity);
+        HorarioAtencion savedHorario = horarioAtencionService.create(horarioEntity);
         return ResponseEntity.status(HttpStatus.CREATED).body(convertToResponseDTO(savedHorario));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateHorarioAtencion(@PathVariable Long id, @RequestBody HorarioAtencionRequestDto requestDTO) {
+    public ResponseEntity<Object> updateHorarioAtencion(@PathVariable Long id, @RequestBody HorarioAtencionRequestDto requestDTO) throws Exception {
         if (!horarioAtencionService.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Horario no encontrado con ID: " + id);
         }
 
         HorarioAtencion horarioEntity = convertToEntity(requestDTO);
-        horarioEntity.setId(id);
-        HorarioAtencion updatedHorario = horarioAtencionService.save(horarioEntity);
+        HorarioAtencion updatedHorario = horarioAtencionService.update(id, horarioEntity);
         return ResponseEntity.ok(convertToResponseDTO(updatedHorario));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteHorarioAtencion(@PathVariable Long id) {
         try {
-            horarioAtencionService.deleteHorarioAtencion(id);
+            horarioAtencionService.deleteById(id);
             return ResponseEntity.ok("Horario de atención " + id + " eliminado correctamente.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

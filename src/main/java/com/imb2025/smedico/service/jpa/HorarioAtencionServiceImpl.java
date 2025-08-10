@@ -1,8 +1,11 @@
-package com.imb2025.smedico.service;
+package com.imb2025.smedico.service.jpa;
 
+import com.imb2025.smedico.dto.HorarioAtencionRequestDto;
 import com.imb2025.smedico.entity.HorarioAtencion;
+import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.exception.RecursoNoEncontradoException;
 import com.imb2025.smedico.repository.HorarioAtencionRepository;
+import com.imb2025.smedico.service.IHorarioAtencionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +18,7 @@ public class HorarioAtencionServiceImpl implements IHorarioAtencionService {
     private HorarioAtencionRepository repository;
 
     @Override
-    public List<HorarioAtencion> getAllHorarioAtencion() {
+    public List<HorarioAtencion> findAll() {
         try {
             return repository.findAll();
         } catch (Exception e) {
@@ -24,26 +27,40 @@ public class HorarioAtencionServiceImpl implements IHorarioAtencionService {
     }
 
     @Override
-    public HorarioAtencion getHorarioAtencionById(Long id) {
+    public HorarioAtencion findById(Long id) {
         try {
-            return repository.findById(id)
-                    .orElse(null);
+            return repository.findById(id).orElse(null);
         } catch (Exception e) {
             throw new RuntimeException("Error al buscar el horario: " + e.getMessage());
         }
     }
 
     @Override
-    public HorarioAtencion save(HorarioAtencion horarioAtencionEntity) {
+    public HorarioAtencion create(HorarioAtencion horarioAtencion) throws Exception {
         try {
-            return repository.save(horarioAtencionEntity);
+            return repository.save(horarioAtencion);
         } catch (Exception e) {
             throw new RuntimeException("Error al guardar el horario: " + e.getMessage());
         }
     }
 
     @Override
-    public void deleteHorarioAtencion(Long id) {
+    public HorarioAtencion update(Long id, HorarioAtencion horarioAtencion) throws Exception {
+        try {
+            if (!repository.existsById(id)) {
+                throw new RecursoNoEncontradoException("No existe un horario con ID: " + id);
+            }
+            horarioAtencion.setId(id);
+            return repository.save(horarioAtencion);
+        } catch (RecursoNoEncontradoException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Error al actualizar el horario: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void deleteById(Long id) {
         try {
             if (!repository.existsById(id)) {
                 throw new RecursoNoEncontradoException("No existe un horario con ID: " + id);
@@ -54,6 +71,18 @@ public class HorarioAtencionServiceImpl implements IHorarioAtencionService {
         } catch (Exception e) {
             throw new RuntimeException("Error al eliminar el horario: " + e.getMessage());
         }
+    }
+
+    @Override
+    public HorarioAtencion fromDto(HorarioAtencionRequestDto dto) throws Exception {
+        HorarioAtencion horario = new HorarioAtencion();
+        Medico medico = new Medico();
+        medico.setId(dto.getMedicoId());
+        horario.setMedico(medico);
+        horario.setDiaSemana(dto.getDiaSemana());
+        horario.setHoraInicio(dto.getHoraInicio());
+        horario.setHoraFin(dto.getHoraFin());
+        return horario;
     }
 
     @Override

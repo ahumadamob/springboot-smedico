@@ -1,8 +1,7 @@
 package com.imb2025.smedico.controller;
 
-//import com.imb2025.smedico.dto.DireccionPacienteRequestDto;
 import com.imb2025.smedico.entity.DireccionPaciente;
-import com.imb2025.smedico.service.DireccionPacienteService;
+import com.imb2025.smedico.service.IDireccionPacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,56 +13,44 @@ import java.util.List;
 public class DireccionPacienteController {
 
     @Autowired
-    private DireccionPacienteService direccionPacienteService;
-
-    // GET todos
+    private IDireccionPacienteService direccionPacienteService;
 
     @GetMapping
     public ResponseEntity<List<DireccionPaciente>> getAll() {
         List<DireccionPaciente> lista = direccionPacienteService.findAll();
         if (lista.isEmpty()) {
-            return ResponseEntity.noContent().build(); // 204
+            return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(lista); // 200
+        return ResponseEntity.ok(lista);
     }
 
-    // GET por ID
     @GetMapping("/{id}")
     public ResponseEntity<DireccionPaciente> getById(@PathVariable Long id) {
-        return direccionPacienteService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        DireccionPaciente direccion = direccionPacienteService.findById(id);
+        return direccion != null ? ResponseEntity.ok(direccion) : ResponseEntity.notFound().build();
     }
 
-    // POST crear nueva dirección
     @PostMapping
-    public ResponseEntity<DireccionPaciente> create(@RequestBody DireccionPaciente direccion) {
-        DireccionPaciente saved = direccionPacienteService.save(direccion);
-        return ResponseEntity.ok(saved); // 200
+    public ResponseEntity<DireccionPaciente> create(@RequestBody DireccionPaciente direccion) throws Exception {
+        DireccionPaciente saved = direccionPacienteService.create(direccion);
+        return ResponseEntity.ok(saved);
     }
 
-    // PUT actualizar dirección existente
     @PutMapping("/{id}")
     public ResponseEntity<DireccionPaciente> update(@PathVariable Long id,
-                                                    @RequestBody DireccionPaciente direccionPaciente) {
+                                                    @RequestBody DireccionPaciente direccionPaciente) throws Exception {
         DireccionPaciente updated = direccionPacienteService.update(id, direccionPaciente);
-        return ResponseEntity.ok(updated); // 200 OK
+        return ResponseEntity.ok(updated);
     }
 
-    // DELETE eliminar por ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         direccionPacienteService.deleteById(id);
-        return ResponseEntity.noContent().build(); // 204
+        return ResponseEntity.noContent().build();
     }
 
-    // Manejo de errores
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleException(Exception ex) {
-        return ResponseEntity.badRequest().body("Error: " + ex.getMessage()); // 400
-      }
-    
+        return ResponseEntity.badRequest().body("Error: " + ex.getMessage());
     }
-
-
-
+}
