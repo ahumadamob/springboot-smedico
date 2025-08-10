@@ -1,27 +1,19 @@
-package com.imb2025.smedico.entity;
+package com.imb2025.smedico.dto;
 
-import jakarta.persistence.*;
+public class HorarioAtencionResponseDTO {
 
-@Entity
-@Table(name = "horario_atencion")
-public class HorarioAtencion {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "medico_id", referencedColumnName = "id")
-    private Medico medico;
-
+    private Long medicoId;
     private String diaSemana;
     private String horaInicio;
     private String horaFin;
 
-    public HorarioAtencion() {
+    public HorarioAtencionResponseDTO() {
     }
 
-    public HorarioAtencion(Medico medico, String diaSemana, String horaInicio, String horaFin) {
-        this.medico = medico;
+    public HorarioAtencionResponseDTO(Long id, Long medicoId, String diaSemana, String horaInicio, String horaFin) {
+        this.id = id;
+        this.medicoId = medicoId;
         this.diaSemana = diaSemana;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
@@ -31,12 +23,16 @@ public class HorarioAtencion {
         return id;
     }
 
-    public Medico getMedico() {
-        return medico;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setMedico(Medico medico) {
-        this.medico = medico;
+    public Long getMedicoId() {
+        return medicoId;
+    }
+
+    public void setMedicoId(Long medicoId) {
+        this.medicoId = medicoId;
     }
 
     public String getDiaSemana() {
@@ -62,9 +58,4 @@ public class HorarioAtencion {
     public void setHoraFin(String horaFin) {
         this.horaFin = horaFin;
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }
-
