@@ -4,8 +4,8 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.imb2025.smedico.dto.EstadoTurnoDTO;
 import com.imb2025.smedico.entity.EstadoTurno;
-import com.imb2025.smedico.exception.EstadoTurnoNotFoundException;
 import com.imb2025.smedico.repository.EstadoTurnoRepository;
 import com.imb2025.smedico.service.IEstadoTurnoService;
 
@@ -34,47 +34,29 @@ public class EstadoTurnoImpl implements IEstadoTurnoService { //indicamos que la
 
     @Override
     public EstadoTurno create(EstadoTurno estadoTurno) {
-        try {
-            return estadoTurnoRepository.save(estadoTurno);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al crear el EstadoTurno", e);
-        }
+        return estadoTurnoRepository.save(estadoTurno);
     }
 
 //incorporamos en el metodo que verifique si el id que se busca en update existe o no
     @Override
     public EstadoTurno update(Long id, EstadoTurno estadoTurno) {
-        try {
-            Optional<EstadoTurno> existente = estadoTurnoRepository.findById(id);
+        Optional<EstadoTurno> existente = estadoTurnoRepository.findById(id);
 
-            if (existente.isPresent()) {
-                EstadoTurno actualizado = existente.get();
+        if (existente.isPresent()) {
+            EstadoTurno actualizado = existente.get();
+            
+            //  Asegurarse de que se actualiza el nombre antes de guardar
+            actualizado.setNombre(estadoTurno.getNombre());
 
-                //  Asegurarse de que se actualiza el nombre antes de guardar
-                actualizado.setNombre(estadoTurno.getNombre());
-
-                return estadoTurnoRepository.save(actualizado);
-            } else {
-                throw new EstadoTurnoNotFoundException("EstadoTurno con id " + id + " no existe");
-            }
-        } catch (EstadoTurnoNotFoundException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException("Error al actualizar el EstadoTurno con id " + id, e);
+            return estadoTurnoRepository.save(actualizado);
+        } else {
+            throw new RuntimeException("EstadoTurno con id " + id + " no existe");
         }
     }
 
     @Override
     public void deleteById(Long id) { //eliminamos un registro segun su ID
-        if (!estadoTurnoRepository.existsById(id)) {
-            throw new EstadoTurnoNotFoundException("EstadoTurno con id " + id + " no existe");
-        }
         estadoTurnoRepository.deleteById(id);
-    }
-
-    @Override
-    public boolean existsById(Long id) {
-        return estadoTurnoRepository.existsById(id);
     }
 }
 
