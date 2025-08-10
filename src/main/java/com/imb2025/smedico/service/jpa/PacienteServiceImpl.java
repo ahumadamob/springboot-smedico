@@ -1,8 +1,6 @@
 package com.imb2025.smedico.service.jpa;
 
-
 import com.imb2025.smedico.dto.PacienteRequestDTO;
-
 import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.repository.PacienteRepository;
 import com.imb2025.smedico.service.IPacienteService;
@@ -29,8 +27,11 @@ public class PacienteServiceImpl implements IPacienteService {
         return pacienteRepository.findById(id).orElse(null);
     }
 
+    @Override
+    public boolean existsById(Long id) {
+        return pacienteRepository.existsById(id);
+    }
 
-    // Guardar nuevo paciente con manejo de excepciones
     @Override
     public Paciente save(Paciente paciente) {
         try {
@@ -40,38 +41,36 @@ public class PacienteServiceImpl implements IPacienteService {
         }
     }
 
-    // Actualizar paciente si existe
-    public Paciente update(Long id, Paciente paciente) throws Exception {
-        if (pacienteRepository.existsById(id)) {
-            paciente.setId(id); // aseguramos que el ID no se pierda
-            return pacienteRepository.save(paciente);
-        } else {
-            throw new Exception("Paciente no encontrado con id: " + id);
+    @Override
+    public Paciente create(Paciente paciente) {
+        return save(paciente);
+    }
+
+    @Override
+    public Paciente updatePaciente(Paciente paciente) {
+        if (!existsById(paciente.getId())) {
+            throw new IllegalArgumentException("Paciente no encontrado con id: " + paciente.getId());
         }
+        return pacienteRepository.save(paciente);
     }
 
     @Override
     public void deleteById(Long id) {
+        if (!existsById(id)) {
+            throw new IllegalArgumentException("No se puede eliminar: Paciente no encontrado con ID: " + id);
+        }
         pacienteRepository.deleteById(id);
     }
 
-
-    // Convertir un DTO a una entidad Paciente
-    public Paciente fromDto(PacienteRequestDTO requestDTO) {
+    @Override
+    public Paciente fromDto(PacienteRequestDTO dto) {
         Paciente paciente = new Paciente();
-        paciente.setNombre(requestDTO.getNombre());
-        paciente.setApellido(requestDTO.getApellido());
-        paciente.setDni(requestDTO.getDni());
-        paciente.setEmail(requestDTO.getEmail());
-        paciente.setTelefono(requestDTO.getTelefono());
-        paciente.setFechaNacimiento(requestDTO.getFechaNacimiento());
+        paciente.setNombre(dto.getNombre());
+        paciente.setApellido(dto.getApellido());
+        paciente.setDni(dto.getDni());
+        paciente.setEmail(dto.getEmail());
+        paciente.setFechaNacimiento(dto.getFechaNacimiento());
+        paciente.setTelefono(dto.getTelefono());
         return paciente;
     }
-
-	@Override
-	public Paciente create(Paciente paciente) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
-
