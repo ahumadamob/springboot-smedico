@@ -16,7 +16,7 @@ public class DetalleFactura {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-        private String descripcion;
+    private String descripcion;
     private Double importe;
 
     @ManyToOne

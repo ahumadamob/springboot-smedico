@@ -22,7 +22,7 @@ public class ResultadoEstudio {
 	@JoinColumn(name = "ordenEstudioID")
 	private OrdenEstudio ordenEstudio;
 	
-	private long resultado;
+	private Estudio estudio;
 	private LocalTime fechaCarga;
 	private String observaciones;
 
@@ -31,9 +31,9 @@ public class ResultadoEstudio {
 		super();
 	}
 
-	public ResultadoEstudio(OrdenEstudio ordenEstudio, long resultado, LocalTime fechaCarga, String observaciones) {
+	public ResultadoEstudio(OrdenEstudio ordenEstudio, Estudio estudio, LocalTime fechaCarga, String observaciones) {
 	    this.ordenEstudio = ordenEstudio;
-	    this.resultado = resultado;
+	    this.estudio = estudio;
 	    this.fechaCarga = fechaCarga;
 	    this.observaciones = observaciones;
 	}
@@ -60,12 +60,12 @@ public class ResultadoEstudio {
 	}
 
 	
-	public long getResultado() {
-		return resultado;
+	public Estudio getEstudio() {
+		return estudio;
 	}
 	
-	public void setResultado(long resultado) {
-		this.resultado = resultado;
+	public void setEstudio(Estudio estudio) {
+		this.estudio = estudio;
 	}
 	
 	public LocalTime getFechaCarga() {

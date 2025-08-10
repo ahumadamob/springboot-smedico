@@ -15,7 +15,7 @@ public class Medico {
     private String nombre;
     private String apellido;
     private String matricula;
-    private String especialidad;
+    private Especialidad especialidad;
     private String email;
     private String telefono;
 
@@ -24,7 +24,7 @@ public class Medico {
     }
 
     
-    public Medico(String nombre, String apellido, String matricula, String especialidad, String email, String telefono) {
+    public Medico(String nombre, String apellido, String matricula, Especialidad especialidad, String email, String telefono) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.matricula = matricula;
@@ -67,11 +67,11 @@ public class Medico {
         this.matricula = matricula;
     }
 
-    public String getEspecialidad() {
+    public Especialidad getEspecialidad() {
         return especialidad;
     }
 
-    public void setEspecialidad(String especialidad) {
+    public void setEspecialidad(Especialidad especialidad) {
         this.especialidad = especialidad;
     }
 
