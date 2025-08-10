@@ -44,6 +44,9 @@ public class ConsultorioServiceImpl implements IConsultorioService {
 	// Eliminar por ID
     @Override
     public void deleteById(Long id) {
+    	if(!repository.existsById(id)) {
+    		throw new IllegalArgumentException("El consultorio que desea eliminar no existe");
+    	}
         repository.deleteById(id);
     }
     
@@ -61,8 +64,22 @@ public class ConsultorioServiceImpl implements IConsultorioService {
     
     @Override
 	public Consultorio fromDto(ConsultorioRequestDTO dto) throws Exception {
-	    
-	    return new Consultorio(dto.getNombre(), dto.getUbicacion(), dto.getPiso());
+    	if(dto.getNombre() == null || dto.getNombre().isBlank()) {
+    		throw new IllegalArgumentException("El nombre no puede estar vacío");
+    	}
+    	if(dto.getUbicacion() == null || dto.getUbicacion().isBlank()) {
+    		throw new IllegalArgumentException("La ubicación no puede estar vacía");
+    	}
+    	if(dto.getPiso() == 0) {
+    		throw new IllegalArgumentException("El piso no puede ser nulo");
+    	}
+    	Consultorio consultorio = new Consultorio();
+    	
+    	consultorio.setNombre(dto.getNombre());
+    	consultorio.setUbicacion(dto.getUbicacion());
+    	consultorio.setPiso(dto.getPiso());
+    	
+    	return consultorio;
 	}
 
 	

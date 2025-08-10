@@ -1,76 +1,50 @@
 package com.imb2025.smedico.entity;
-
 import java.time.LocalDate;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class Receta {
-	
-	@Id
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	private LocalDate fecha;
-	private String observaciones;
-	@ManyToOne
-	private Medico medico;
-	@ManyToOne
-	private Paciente paciente;
-	
-	public Receta() {
-	}
-	
-	public Receta(LocalDate fecha, String observaciones, Medico medico, Paciente paciente) {
-	    this.fecha = fecha;
-	    this.observaciones = observaciones;
-	    this.medico = medico;
-	    this.paciente = paciente;
-	}
-	
+    private Long id;
 
+    private LocalDate fecha;
 
-	public Long getId() {
-		return id;
-	}
-	
-	
+    private String observaciones;
 
-	public LocalDate getFecha() {
-		return fecha;
-	}
-	public void setFecha(LocalDate fecha) {
-		this.fecha = fecha;
-	}
-	public String getObservaciones() {
-		return observaciones;
-	}
-	public void setObservaciones(String observaciones) {
-		this.observaciones = observaciones;
-	}
-	public Medico getMedico() {
-	    return medico;
-	}
+    @ManyToOne
+    @JoinColumn(name = "medico_id")
+    private Medico medico;
 
-	public void setMedico(Medico medico) {
-	    this.medico = medico;
-	}
+    @ManyToOne
+    @JoinColumn(name = "paciente_id")
+    private Paciente paciente;
 
-	public Paciente getPaciente() {
-	    return paciente;
-	}
+    public Receta() {}
 
-	public void setPaciente(Paciente paciente) {
-	    this.paciente = paciente;
-	}
+    public Receta(LocalDate fecha, String observaciones, Medico medico, Paciente paciente) {
+        this.fecha = fecha;
+        this.observaciones = observaciones;
+        this.medico = medico;
+        this.paciente = paciente;
+    }
 
-	public void setId(Long id) {
-		this.id= id;		
-	}
+    // Getters y setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-	
+    public LocalDate getFecha() { return fecha; }
+    public void setFecha(LocalDate fecha) { this.fecha = fecha; }
 
+    public String getObservaciones() { return observaciones; }
+    public void setObservaciones(String observaciones) { this.observaciones = observaciones; }
+
+    public Medico getMedico() { return medico; }
+    public void setMedico(Medico medico) { this.medico = medico; }
+
+    public Paciente getPaciente() { return paciente; }
+    public void setPaciente(Paciente paciente) { this.paciente = paciente; }
 }
+

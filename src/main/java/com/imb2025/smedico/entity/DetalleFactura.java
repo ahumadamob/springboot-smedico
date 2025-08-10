@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 
 
@@ -14,9 +16,12 @@ public class DetalleFactura {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long facturaId;
-    private String descripcion;
+        private String descripcion;
     private Double importe;
+
+    @ManyToOne
+    @JoinColumn(name = "factura_id", nullable = false) // Aseguramos que la relación no sea nula
+    private Factura factura;
 
     // Getters y setters
     public Long getId() {
@@ -24,13 +29,6 @@ public class DetalleFactura {
     }
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getFacturaId() {
-        return facturaId;
-    }
-    public void setFacturaId(Long facturaId) {
-        this.facturaId = facturaId;
     }
 
     public String getDescripcion() {
@@ -45,5 +43,12 @@ public class DetalleFactura {
     }
     public void setImporte(Double importe) {
         this.importe = importe;
+    }
+
+    public Factura getFactura() {
+        return factura;
+    }
+    public void setFactura(Factura factura) {
+        this.factura = factura;
     }
 }
