@@ -1,6 +1,12 @@
 package com.imb2025.smedico.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "horario_atencion")
@@ -17,10 +23,10 @@ public class HorarioAtencion {
     private String horaInicio;
     private String horaFin;
 
-    public HorarioAtencion() {
-    }
+    public HorarioAtencion() {}
 
-    public HorarioAtencion(Medico medico, String diaSemana, String horaInicio, String horaFin) {
+    public HorarioAtencion(Long id, Medico medico, String diaSemana, String horaInicio, String horaFin) {
+        this.id = id;
         this.medico = medico;
         this.diaSemana = diaSemana;
         this.horaInicio = horaInicio;
@@ -67,4 +73,3 @@ public class HorarioAtencion {
         this.id = id;
     }
 }
-

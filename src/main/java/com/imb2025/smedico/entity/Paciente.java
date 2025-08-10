@@ -1,79 +1,90 @@
 package com.imb2025.smedico.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import java.time.LocalDate;
-
-import jakarta.persistence.*;
 
 @Entity
 public class Paciente {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	  @Id
-	    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	    private Long id;
+    private String nombre;
+    private String apellido;
+    private String dni;
+    private String email;
+    private LocalDate fechaNacimiento;
+    private String telefono;
 
-	    private String nombre;
-	    private String apellido;
-	    private String dni;
-	    private String email;
-	    private LocalDate fechaNacimiento;
-	    private String telefono;
+    public Paciente() {}
 
-	    // Getters y Setters
-	    public Long getId() {
-	        return id;
-	    }
+    public Paciente(Long id, String nombre, String apellido, String dni, String email,
+                    LocalDate fechaNacimiento, String telefono) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.dni = dni;
+        this.email = email;
+        this.fechaNacimiento = fechaNacimiento;
+        this.telefono = telefono;
+    }
 
-	    public void setId(Long id) {
-	        this.id = id;
-	    }
+    public Long getId() {
+        return id;
+    }
 
-	    public String getNombre() {
-	        return nombre;
-	    }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	    public void setNombre(String nombre) {
-	        this.nombre = nombre;
-	    }
+    public String getNombre() {
+        return nombre;
+    }
 
-	    public String getApellido() {
-	        return apellido;
-	    }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-	    public void setApellido(String apellido) {
-	        this.apellido = apellido;
-	    }
+    public String getApellido() {
+        return apellido;
+    }
 
-	    public String getDni() {
-	        return dni;
-	    }
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
 
-	    public void setDni(String dni) {
-	        this.dni = dni;
-	    }
+    public String getDni() {
+        return dni;
+    }
 
-	    public String getEmail() {
-	        return email;
-	    }
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
 
-	    public void setEmail(String email) {
-	        this.email = email;
-	    }
+    public String getEmail() {
+        return email;
+    }
 
-	    public LocalDate getFechaNacimiento() {
-	        return fechaNacimiento;
-	    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	    public void setFechaNacimiento(LocalDate fechaNacimiento) {
-	        this.fechaNacimiento = fechaNacimiento;
-	    }
+    public LocalDate getFechaNacimiento() {
+        return fechaNacimiento;
+    }
 
-	    public String getTelefono() {
-	        return telefono;
-	    }
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
 
-	    public void setTelefono(String telefono) {
-	        this.telefono = telefono;
-	    }
-	}	
-	
+    public String getTelefono() {
+        return telefono;
+    }
 
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+}

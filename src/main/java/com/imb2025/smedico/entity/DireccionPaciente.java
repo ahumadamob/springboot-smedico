@@ -1,11 +1,14 @@
 package com.imb2025.smedico.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "direccion_paciente")
 public class DireccionPaciente {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,7 +19,16 @@ public class DireccionPaciente {
     private String provincia;
     private String ccpp;
 
-    // Getters y setters...
+    public DireccionPaciente() {}
+
+    public DireccionPaciente(Long id, String calle, Long numero, String localidad, String provincia, String ccpp) {
+        this.id = id;
+        this.calle = calle;
+        this.numero = numero;
+        this.localidad = localidad;
+        this.provincia = provincia;
+        this.ccpp = ccpp;
+    }
 
     public Long getId() {
         return id;
@@ -66,4 +78,3 @@ public class DireccionPaciente {
         this.ccpp = ccpp;
     }
 }
-
