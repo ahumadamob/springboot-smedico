@@ -4,7 +4,7 @@ package com.imb2025.smedico.service.jpa;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.imb2025.smedico.dto.AsistenteRequestDTO;
+import com.imb2025.smedico.dto.AsistenteRequestDto;
 import com.imb2025.smedico.entity.Asistente;
 import com.imb2025.smedico.repository.AsistenteRepository;
 import com.imb2025.smedico.service.IAsistenteService;
@@ -61,7 +61,7 @@ public class AsistenteServiceImpl implements IAsistenteService {
 
     /* ---------- Conversión DTO -> Entidad ---------- */
     @Override
-    public Asistente fromDto(AsistenteRequestDTO dto) {
+    public Asistente fromDto(AsistenteRequestDto dto) {
         Asistente a = new Asistente();
         a.setNombre(dto.getNombre());
         a.setEmail(dto.getEmail());

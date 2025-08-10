@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.imb2025.smedico.dto.TurnoRequestDTO;
+import com.imb2025.smedico.dto.TurnoRequestDto;
 import com.imb2025.smedico.entity.EstadoTurno;
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.entity.Paciente;
@@ -74,7 +74,7 @@ public class TurnoServiceImpl implements ITurnoService {
     }
     
     @Override
-    public Turno fromDto(TurnoRequestDTO dto) {
+    public Turno fromDto(TurnoRequestDto dto) {
         Paciente paciente = pacienteRepository.findById(dto.getPacienteId())
             .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
         Medico medico = medicoRepository.findById(dto.getMedicoId())

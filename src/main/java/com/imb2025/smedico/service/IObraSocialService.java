@@ -13,7 +13,7 @@ public interface IObraSocialService {
     ObraSocial update(Long id, ObraSocial obraSocial) throws Exception;
     void deleteById(Long id);
     
-    ObraSocial fromDto(com.imb2025.smedico.dto.ObraSocialRequestDTO dto) throws Exception;
+    ObraSocial fromDto(com.imb2025.smedico.dto.ObraSocialRequestDto dto) throws Exception;
 
     
 	static Optional<ObraSocial> buscarPorId(Long id) {
@@ -23,7 +23,7 @@ public interface IObraSocialService {
 		
 		
 	}
-	ObraSocial guardar(ObraSocialRequestDTO dto);
+	ObraSocial guardar(ObraSocialRequestDto dto);
 	ObraSocial save(ObraSocial obraSocial);
 
 }

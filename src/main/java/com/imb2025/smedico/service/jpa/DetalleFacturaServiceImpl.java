@@ -6,7 +6,7 @@ package com.imb2025.smedico.service.jpa;
 
 import java.util.List;
 
-import com.imb2025.smedico.dto.DetalleFacturaRequestDTO;
+import com.imb2025.smedico.dto.DetalleFacturaRequestDto;
 import com.imb2025.smedico.entity.DetalleFactura;
 
 import com.imb2025.smedico.repository.DetalleFacturaRepositories;
@@ -67,12 +67,12 @@ public class DetalleFacturaServiceImpl implements IDetalleFacturaService {
     }
     
     @Override
-public DetalleFactura fromDto(DetalleFacturaRequestDTO dto) throws Exception {
+public DetalleFactura fromDto(DetalleFacturaRequestDto dto) throws Exception {
     return fromDto(dto, null);
 }
 
 @Override
-public DetalleFactura fromDto(DetalleFacturaRequestDTO dto, Long id) throws Exception {
+public DetalleFactura fromDto(DetalleFacturaRequestDto dto, Long id) throws Exception {
     
     try {
         DetalleFactura detalleFactura = new DetalleFactura();

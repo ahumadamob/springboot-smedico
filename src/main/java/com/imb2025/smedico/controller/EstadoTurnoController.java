@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.imb2025.smedico.dto.EstadoTurnoDTO;
-import com.imb2025.smedico.dto.EstadoTurnoRequestDTO;
+import com.imb2025.smedico.dto.EstadoTurnoRequestDto;
 import com.imb2025.smedico.entity.EstadoTurno;
 import com.imb2025.smedico.service.IEstadoTurnoService;
 
@@ -57,8 +57,8 @@ public class EstadoTurnoController {
 
     
     @PutMapping("/{id}")
-    public ResponseEntity<EstadoTurno> update(@PathVariable Long id, @RequestBody EstadoTurnoRequestDTO dto) {
-        EstadoTurno estadoTurno = EstadoTurnoRequestDTO.fromDto(dto);
+    public ResponseEntity<EstadoTurno> update(@PathVariable Long id, @RequestBody EstadoTurnoRequestDto dto) {
+        EstadoTurno estadoTurno = EstadoTurnoRequestDto.fromDto(dto);
         EstadoTurno actualizado = estadoTurnoService.update(id, estadoTurno);
         
         return ResponseEntity.ok(actualizado);

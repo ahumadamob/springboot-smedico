@@ -2,17 +2,21 @@ package com.imb2025.smedico.dto;
 
 import java.time.LocalDate;
 
-public class RecetaRequestDTO {
+public class OrdenEstudioRequestDto {
+
     private LocalDate fecha;
-    private String observaciones;
     private Long medicoId;
     private Long pacienteId;
+    private Long estudioId;
 
-    public RecetaRequestDTO(LocalDate fecha, String observaciones, Long medicoId, Long pacienteId) {
+    public OrdenEstudioRequestDto() {}
+
+    public OrdenEstudioRequestDto(
+            LocalDate fecha, Long medicoId, Long pacienteId, Long estudioId) {
         this.fecha = fecha;
-        this.observaciones = observaciones;
         this.medicoId = medicoId;
         this.pacienteId = pacienteId;
+        this.estudioId = estudioId;
     }
 
     public LocalDate getFecha() {
@@ -21,14 +25,6 @@ public class RecetaRequestDTO {
 
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
-    }
-
-    public String getObservaciones() {
-        return observaciones;
-    }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
     }
 
     public Long getMedicoId() {
@@ -46,4 +42,13 @@ public class RecetaRequestDTO {
     public void setPacienteId(Long pacienteId) {
         this.pacienteId = pacienteId;
     }
+
+    public Long getEstudioId() {
+        return estudioId;
+    }
+
+    public void setEstudioId(Long estudioId) {
+        this.estudioId = estudioId;
+    }
 }
+

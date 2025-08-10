@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.imb2025.smedico.service.IRecetaService;
-import com.imb2025.smedico.dto.RecetaRequestDTO;
+import com.imb2025.smedico.dto.RecetaRequestDto;
 import com.imb2025.smedico.entity.Receta;
 
 @RestController
@@ -42,15 +42,15 @@ public class RecetaController {
 	    }
 	}
 	@PostMapping("/receta")
-	public ResponseEntity<Receta> create(@RequestBody RecetaRequestDTO recetaRequestDTO) throws Exception {
-        Receta nueva = service.create(service.fromDto(recetaRequestDTO));
+	public ResponseEntity<Receta> create(@RequestBody RecetaRequestDto recetaRequestDto) throws Exception {
+        Receta nueva = service.create(service.fromDto(recetaRequestDto));
         return ResponseEntity.ok(nueva);
     }
 	
 	@PutMapping("/receta/{idreceta}")
 	public ResponseEntity<Receta> update(@PathVariable("idreceta") Long id,
-	        @RequestBody RecetaRequestDTO recetaRequestDTO) throws Exception {
-	    Receta entity = service.fromDto(recetaRequestDTO);
+	        @RequestBody RecetaRequestDto recetaRequestDto) throws Exception {
+	    Receta entity = service.fromDto(recetaRequestDto);
 	    return ResponseEntity.ok(service.update(id, entity));
 	}
 	

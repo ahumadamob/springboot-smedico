@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.imb2025.smedico.entity.Especialidad;
 
-import dto.EspecialidadRequestDTO;
+import com.imb2025.smedico.dto.EspecialidadRequestDto;
 
 public interface IEspecialidadService {
 
@@ -13,7 +13,7 @@ public interface IEspecialidadService {
 	public Especialidad create(Especialidad especialidad);
 	public Especialidad update(Long id, Especialidad especialidad) throws Exception;
 	public void deleteById(Long id);
-	public Especialidad fromDto(EspecialidadRequestDTO dto) throws Exception;
+	public Especialidad fromDto(EspecialidadRequestDto dto) throws Exception;
 	
 	
 	

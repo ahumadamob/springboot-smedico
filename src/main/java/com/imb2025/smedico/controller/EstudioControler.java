@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.imb2025.smedico.dto.EstudioRequestDTO;
+import com.imb2025.smedico.dto.EstudioRequestDto;
 import com.imb2025.smedico.dto.EstudioResponseDTO;
 import com.imb2025.smedico.entity.Estudio;
 import com.imb2025.smedico.service.IEstudioService;
@@ -46,14 +46,14 @@ public class EstudioControler {
     }
 
     @PostMapping
-    public ResponseEntity<Estudio> create(@RequestBody EstudioRequestDTO dto) throws Exception {
+    public ResponseEntity<Estudio> create(@RequestBody EstudioRequestDto dto) throws Exception {
         Estudio estudio = service.fromDto(dto);
         Estudio creado = service.create(estudio);
         return ResponseEntity.ok(creado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Estudio> update(@PathVariable("id") Long id, @RequestBody EstudioRequestDTO dto) throws Exception {
+    public ResponseEntity<Estudio> update(@PathVariable("id") Long id, @RequestBody EstudioRequestDto dto) throws Exception {
         Estudio estudio = service.fromDto(dto);
         Estudio actualizado = service.update(estudio, id);
         return ResponseEntity.ok(actualizado);

@@ -1,6 +1,6 @@
 package com.imb2025.smedico.service.jpa;
 
-import com.imb2025.smedico.dto.FacturaRequestDTO;
+import com.imb2025.smedico.dto.FacturaRequestDto;
 import com.imb2025.smedico.entity.Factura;
 import com.imb2025.smedico.entity.MedioPago;
 import com.imb2025.smedico.entity.Paciente;
@@ -60,7 +60,7 @@ public class FacturaServiceImp implements IFacturaService {
     }
 
     @Override
-    public Factura fromDto(FacturaRequestDTO requestDTO) throws Exception{
+    public Factura fromDto(FacturaRequestDto requestDTO) throws Exception{
         Paciente paciente = pacienteRepository.findById(requestDTO.getPacienteId())
                 .orElseThrow(() -> new Exception("No se encontró ningún paciente con el id: " + requestDTO.getPacienteId()));
         MedioPago medioPago = medioPagoRepository.findById(requestDTO.getMedioPagoId())

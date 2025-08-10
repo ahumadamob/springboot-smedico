@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.imb2025.smedico.dto.ResultadoEstudioRequestDTO;
+import com.imb2025.smedico.dto.ResultadoEstudioRequestDto;
 import com.imb2025.smedico.entity.OrdenEstudio;
 import com.imb2025.smedico.entity.ResultadoEstudio;
 import com.imb2025.smedico.repository.OrdenEstudioRepository;
@@ -70,7 +70,7 @@ public  class ResultadoEstudioServiceImpl implements IResultadoEstudioService{
 	}
 
 	@Override
-	public ResultadoEstudio fromDto(ResultadoEstudioRequestDTO requestDto) throws Exception {
+	public ResultadoEstudio fromDto(ResultadoEstudioRequestDto requestDto) throws Exception {
 	    OrdenEstudio ordenEstudio = ordenEstudioRepository.findById(requestDto.getOrdenEstudioId())
 	        .orElseThrow(() -> new Exception("Orden de Estudio NO encontrado con ID " + requestDto.getOrdenEstudioId()));
 

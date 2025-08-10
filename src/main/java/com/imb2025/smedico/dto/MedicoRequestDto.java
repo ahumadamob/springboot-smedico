@@ -1,6 +1,6 @@
 package com.imb2025.smedico.dto;
 
-public class MedicoRequestDTO {
+public class MedicoRequestDto {
 	
 	private String nombre;
 	private String apellido;

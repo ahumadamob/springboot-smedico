@@ -6,7 +6,7 @@
 	import org.springframework.beans.factory.annotation.Autowired;
 	import org.springframework.stereotype.Service;
 	
-	import com.imb2025.smedico.dto.MedicoRequestDTO;
+	import com.imb2025.smedico.dto.MedicoRequestDto;
 	import com.imb2025.smedico.entity.Medico;
 	import com.imb2025.smedico.repository.MedicoRepository;
 	import com.imb2025.smedico.service.IMedicoService;
@@ -59,7 +59,7 @@
 	    }
 	
 	    @Override
-	    public Medico fromDto(MedicoRequestDTO dto) {
+	    public Medico fromDto(MedicoRequestDto dto) {
 	        if (dto.getNombre() == null || dto.getNombre().isBlank()) {
 	            throw new IllegalArgumentException("El nombre no puede estar nulo o vacío");
 	        }

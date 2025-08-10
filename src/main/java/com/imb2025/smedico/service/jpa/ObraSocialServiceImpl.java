@@ -47,14 +47,14 @@ public class ObraSocialServiceImpl implements IObraSocialService {
     }
 
 	@Override
-	public ObraSocial guardar(ObraSocialRequestDTO dto) {
+	public ObraSocial guardar(ObraSocialRequestDto dto) {
 		return null;
 	}
 
 
 
 	@Override
-	public ObraSocial fromDto(ObraSocialRequestDTO dto) {
+	public ObraSocial fromDto(ObraSocialRequestDto dto) {
 	    ObraSocial obraSocial = new ObraSocial();
 	    obraSocial.setNombre(dto.getNombre());
 	    obraSocial.setTelefono(dto.getTelefono());

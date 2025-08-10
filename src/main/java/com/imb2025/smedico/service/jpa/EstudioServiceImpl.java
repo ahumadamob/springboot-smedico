@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.imb2025.smedico.dto.EstudioRequestDTO;
+import com.imb2025.smedico.dto.EstudioRequestDto;
 import com.imb2025.smedico.entity.Estudio;
 import com.imb2025.smedico.repository.*;
 import com.imb2025.smedico.service.IEstudioService;
@@ -66,7 +66,7 @@ public class EstudioServiceImpl implements IEstudioService {
     }
 
     @Override
-    public Estudio fromDto(EstudioRequestDTO dto) throws Exception {
+    public Estudio fromDto(EstudioRequestDto dto) throws Exception {
         return new Estudio(
             dto.getNombre(),
             dto.getDescripcion(),

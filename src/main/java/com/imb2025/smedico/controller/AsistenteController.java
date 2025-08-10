@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.imb2025.smedico.dto.AsistenteRequestDTO;
+import com.imb2025.smedico.dto.AsistenteRequestDto;
 import com.imb2025.smedico.entity.Asistente;
 import com.imb2025.smedico.service.IAsistenteService;
 
@@ -32,7 +32,7 @@ public class AsistenteController {
     }
 
     @PostMapping
-    public ResponseEntity<Asistente> create(@RequestBody AsistenteRequestDTO dto) {
+    public ResponseEntity<Asistente> create(@RequestBody AsistenteRequestDto dto) {
         Asistente asistente = service.fromDto(dto);           // conversión DTO → entidad
         Asistente creado = service.create(asistente);         
         return ResponseEntity.ok(creado);
@@ -40,7 +40,7 @@ public class AsistenteController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Asistente> update(@PathVariable Long id,
-                                            @RequestBody AsistenteRequestDTO dto) {
+                                            @RequestBody AsistenteRequestDto dto) {
         Asistente asistente = service.fromDto(dto);           // conversión DTO → entidad
         Asistente actualizado = service.update(id, asistente);
         return ResponseEntity.ok(actualizado);

@@ -1,6 +1,6 @@
 package com.imb2025.smedico.service.jpa;
 
-import com.imb2025.smedico.dto.DetalleRecetaRequestDTO;
+import com.imb2025.smedico.dto.DetalleRecetaRequestDto;
 import com.imb2025.smedico.entity.DetalleReceta;
 import com.imb2025.smedico.entity.Medicamento;
 import com.imb2025.smedico.entity.Receta;
@@ -49,7 +49,7 @@ public class DetalleRecetaServicelmpl implements IDetalleRecetaService {
     }
 
     @Override
-    public DetalleReceta saveFromDTO(DetalleRecetaRequestDTO dto) {
+    public DetalleReceta saveFromDTO(DetalleRecetaRequestDto dto) {
         // Validar y obtener entidades relacionadas
         Receta receta = recetaRepository.findById(dto.getRecetaId())
                 .orElseThrow(() -> new IllegalArgumentException("Receta no encontrada con ID: " + dto.getRecetaId()));
@@ -68,7 +68,7 @@ public class DetalleRecetaServicelmpl implements IDetalleRecetaService {
     }
 
     @Override
-    public DetalleReceta updateFromDTO(Long id, DetalleRecetaRequestDTO dto) {
+    public DetalleReceta updateFromDTO(Long id, DetalleRecetaRequestDto dto) {
         DetalleReceta existente = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("DetalleReceta no encontrado con ID: " + id));
 

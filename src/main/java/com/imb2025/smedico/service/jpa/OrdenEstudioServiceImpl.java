@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.imb2025.smedico.dto.OrdenEstudioRequestDTO;
+import com.imb2025.smedico.dto.OrdenEstudioRequestDto;
 import com.imb2025.smedico.entity.Estudio;
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.entity.OrdenEstudio;
@@ -70,7 +70,7 @@ public class OrdenEstudioServiceImpl implements IOrdenEstudioService{
 		}
 	}
 	@Override
-	public OrdenEstudio fromDto(OrdenEstudioRequestDTO dto) throws Exception {
+	public OrdenEstudio fromDto(OrdenEstudioRequestDto dto) throws Exception {
 	    Medico medico = medicoRepository.findById(dto.getMedicoId())
 	        .orElseThrow(() -> new Exception("Médico no encontrado con ID " + dto.getMedicoId()));
 

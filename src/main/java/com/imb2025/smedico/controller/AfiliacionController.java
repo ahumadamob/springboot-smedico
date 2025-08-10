@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.imb2025.smedico.dto.AfiliacionRequestDTO;
+import com.imb2025.smedico.dto.AfiliacionRequestDto;
 import com.imb2025.smedico.entity.Afiliacion;
 import com.imb2025.smedico.service.IAfiliacionService;
 
@@ -36,14 +36,14 @@ public class AfiliacionController {
     }
 
     @PostMapping
-    public ResponseEntity<Afiliacion> createAfiliacion(@RequestBody AfiliacionRequestDTO dto) throws Exception {
+    public ResponseEntity<Afiliacion> createAfiliacion(@RequestBody AfiliacionRequestDto dto) throws Exception {
         Afiliacion afiliacion = servi.fromDto(dto);
         Afiliacion creada = servi.create(afiliacion);
         return ResponseEntity.ok(creada);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Afiliacion> updateAfiliacion(@PathVariable Long id, @RequestBody AfiliacionRequestDTO dto) throws Exception {
+    public ResponseEntity<Afiliacion> updateAfiliacion(@PathVariable Long id, @RequestBody AfiliacionRequestDto dto) throws Exception {
         Afiliacion afiliacion = servi.fromDto(dto);
         Afiliacion actualizada = servi.update(id, afiliacion);
         return ResponseEntity.ok(actualizada);

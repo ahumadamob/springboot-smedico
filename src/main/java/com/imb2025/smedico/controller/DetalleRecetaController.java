@@ -1,6 +1,6 @@
 package com.imb2025.smedico.controller;
 
-import com.imb2025.smedico.dto.DetalleRecetaRequestDTO;
+import com.imb2025.smedico.dto.DetalleRecetaRequestDto;
 import com.imb2025.smedico.entity.DetalleReceta;
 import com.imb2025.smedico.service.IDetalleRecetaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class DetalleRecetaController {
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody DetalleRecetaRequestDTO dto) {
+    public ResponseEntity<?> save(@RequestBody DetalleRecetaRequestDto dto) {
         try {
             DetalleReceta nueva = service.saveFromDTO(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body(nueva);
@@ -46,7 +46,7 @@ public class DetalleRecetaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody DetalleRecetaRequestDTO dto) {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody DetalleRecetaRequestDto dto) {
         try {
             DetalleReceta actualizada = service.updateFromDTO(id, dto);
             return ResponseEntity.ok(actualizada);

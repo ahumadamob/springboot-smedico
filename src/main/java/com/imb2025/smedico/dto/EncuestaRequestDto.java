@@ -1,22 +1,21 @@
 package com.imb2025.smedico.dto;
 
-public class EncuestaRequestDTO {
+public class EncuestaRequestDto {
 
 	private Long pacienteId;
 	private Long consultaId;
 	private int puntaje;
 	private String comentario;
 
-	public EncuestaRequestDTO() {
+        public EncuestaRequestDto() {}
 
-	}
-	public EncuestaRequestDTO(Long pacienteId, Long consultaId, int puntaje, String comentario) {
-		super();
-		this.pacienteId = pacienteId;
-		this.consultaId = consultaId;
-		this.puntaje = puntaje;
-		this.comentario = comentario;
-	}
+        public EncuestaRequestDto(
+                Long pacienteId, Long consultaId, int puntaje, String comentario) {
+                this.pacienteId = pacienteId;
+                this.consultaId = consultaId;
+                this.puntaje = puntaje;
+                this.comentario = comentario;
+        }
 
 	public Long getPacienteId() {
 		return pacienteId;

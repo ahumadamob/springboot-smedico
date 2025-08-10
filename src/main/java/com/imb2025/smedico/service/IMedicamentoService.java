@@ -2,7 +2,7 @@ package com.imb2025.smedico.service;
 
 import java.util.List;
 
-import com.imb2025.smedico.dto.MedicamentoRequestDTO;
+import com.imb2025.smedico.dto.MedicamentoRequestDto;
 import com.imb2025.smedico.entity.Medicamento;
 
 public interface IMedicamentoService {
@@ -12,7 +12,7 @@ public interface IMedicamentoService {
 	public Medicamento create(Medicamento medicamento) throws Exception;
 	public Medicamento update(Long id, Medicamento medicamento) throws Exception;
 	public void deleteById(Long id);
-	public Medicamento fromDto(MedicamentoRequestDTO dto) throws Exception;
+	public Medicamento fromDto(MedicamentoRequestDto dto) throws Exception;
 	public boolean existsById(Long id);
 	
 }

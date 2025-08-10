@@ -1,12 +1,9 @@
 package com.imb2025.smedico.dto;
 
-public class DetalleFacturaRequestDTO {
+public class DetalleFacturaRequestDto {
     private String descripcion;
     private Double importe;
     private Long facturaId;
-
-    // Getters y setters
-
     public String getDescripcion() {
         return descripcion;
     }

@@ -1,6 +1,6 @@
 package com.imb2025.smedico.controller;
 
-//import com.imb2025.smedico.dto.DireccionPacienteRequestDTO;
+//import com.imb2025.smedico.dto.DireccionPacienteRequestDto;
 import com.imb2025.smedico.entity.DireccionPaciente;
 import com.imb2025.smedico.service.DireccionPacienteService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.imb2025.smedico.dto.MotivoCancelacionRequestDTO;
+import com.imb2025.smedico.dto.MotivoCancelacionRequestDto;
 import com.imb2025.smedico.entity.MotivoCancelacion;
 import com.imb2025.smedico.repository.MotivoCancelacionRepository;
 import com.imb2025.smedico.service.IMotivoCancelacionService;
@@ -52,7 +52,7 @@ public class MotivoCancelacionImpl implements IMotivoCancelacionService{
     }
 
     @Override
-    public MotivoCancelacion fromDto(MotivoCancelacionRequestDTO dto) {
+    public MotivoCancelacion fromDto(MotivoCancelacionRequestDto dto) {
         if (dto.getNombre() == null || dto.getNombre().isBlank()) {
             throw new IllegalArgumentException("El nombre no puede estar nulo o vacío");
         }

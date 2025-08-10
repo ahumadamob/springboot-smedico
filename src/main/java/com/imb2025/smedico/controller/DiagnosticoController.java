@@ -2,7 +2,7 @@ package com.imb2025.smedico.controller;
 
 import com.imb2025.smedico.entity.Diagnostico;
 import com.imb2025.smedico.service.IDiagnosticoService;
-import com.imb2025.smedico.dto.DiagnosticoRequestDTO;
+import com.imb2025.smedico.dto.DiagnosticoRequestDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +37,7 @@ public class DiagnosticoController {
 
     // Crea nuevo
     @PostMapping("/diagnosticos")
-    public ResponseEntity<?> crearDiagnostico(@RequestBody DiagnosticoRequestDTO dto) {
+    public ResponseEntity<?> crearDiagnostico(@RequestBody DiagnosticoRequestDto dto) {
         Diagnostico nuevo = service.fromDto(dto);
         Diagnostico guardado = service.save(nuevo);
         return ResponseEntity.status(HttpStatus.CREATED).body(guardado); // 201 CREATED
@@ -46,7 +46,7 @@ public class DiagnosticoController {
     // Actualiza el existente
     @PutMapping("/diagnosticos/{id}")
     public ResponseEntity<Diagnostico> actualizarDiagnostico(@PathVariable Long id,
-                                                             @RequestBody DiagnosticoRequestDTO dto) {
+                                                             @RequestBody DiagnosticoRequestDto dto) {
         Diagnostico diagnostico = service.fromDto(dto);
         Diagnostico actualizado = service.actualizar(id, diagnostico);
         return ResponseEntity.ok(actualizado); // 200 OK

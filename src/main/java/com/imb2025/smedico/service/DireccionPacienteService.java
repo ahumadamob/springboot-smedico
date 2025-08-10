@@ -1,6 +1,6 @@
 package com.imb2025.smedico.service;
 
-//import com.imb2025.smedico.dto.DireccionPacienteRequestDTO;
+//import com.imb2025.smedico.dto.DireccionPacienteRequestDto;
 import com.imb2025.smedico.entity.DireccionPaciente;
 
 import java.util.List;
@@ -15,8 +15,8 @@ public interface DireccionPacienteService {
     boolean existePorId(Long id);
 
     // Convierte el DTO a entidad
-    //DireccionPaciente fromDto(DireccionPacienteRequestDTO dto);
-    //DireccionPaciente update(Long id, DireccionPacienteRequestDTO dto);
+    //DireccionPaciente fromDto(DireccionPacienteRequestDto dto);
+    //DireccionPaciente update(Long id, DireccionPacienteRequestDto dto);
 
     DireccionPaciente save(DireccionPaciente direccionPaciente);
 

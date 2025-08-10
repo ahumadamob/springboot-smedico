@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.imb2025.smedico.repository.FacturaRepository;
 import com.imb2025.smedico.repository.MedioPagoRepository;
-import com.imb2025.smedico.dto.MedioPagoRequestDTO;
+import com.imb2025.smedico.dto.MedioPagoRequestDto;
 import com.imb2025.smedico.entity.MedioPago;
 import com.imb2025.smedico.service.IMedioPagoService;
 
@@ -56,7 +56,7 @@ public class MedioPagoServiceImpl implements IMedioPagoService {
 	
 	//Capturar excepciones sin afectar el flujo de ejecuciones
 	@Override
-	public MedioPago createMedioPago (MedioPagoRequestDTO dto) { 		
+	public MedioPago createMedioPago (MedioPagoRequestDto dto) { 		
 		try {
             MedioPago medioPago = new MedioPago();
             medioPago.setNombre(dto.getNombre());

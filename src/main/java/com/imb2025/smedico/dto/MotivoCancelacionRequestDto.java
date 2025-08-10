@@ -1,6 +1,6 @@
 package com.imb2025.smedico.dto;
 
-public class MotivoCancelacionRequestDTO {
+public class MotivoCancelacionRequestDto {
 	
 	private String nombre;
 	private String descripcion;

@@ -3,7 +3,7 @@ package com.imb2025.smedico.service;
 import java.util.List;
 import com.imb2025.smedico.entity.Consultorio;
 
-import dto.ConsultorioRequestDTO;
+import com.imb2025.smedico.dto.ConsultorioRequestDto;
 
 public interface IConsultorioService {
 	
@@ -17,7 +17,7 @@ public interface IConsultorioService {
 	public Consultorio findById(Long id);
 	//Actualizar
 	public Consultorio update(Long id, Consultorio fromDto) throws Exception;
-	public Consultorio fromDto(ConsultorioRequestDTO consultorioRequestDto) throws Exception;
+	public Consultorio fromDto(ConsultorioRequestDto consultorioRequestDto) throws Exception;
 	
 	
 }

@@ -2,7 +2,7 @@ package com.imb2025.smedico.dto;
 
 import com.imb2025.smedico.entity.MedioPago.TipoPago;
 
-public class MedioPagoRequestDTO {
+public class MedioPagoRequestDto {
 	
 	private String nombre;
     private TipoPago tipo;
