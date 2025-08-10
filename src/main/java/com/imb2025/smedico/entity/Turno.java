@@ -5,13 +5,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
 public class Turno {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,24 +17,26 @@ public class Turno {
     private LocalTime hora;
 
     @ManyToOne
-	private Paciente paciente;
+    private Paciente paciente;
+
     @ManyToOne
-	private Medico medico;
+    private Medico medico;
+
     @ManyToOne
-	private EstadoTurno estadoTurno;
+    private EstadoTurno estadoTurno;
 
     public Turno() {}
-    
-    public Turno(LocalDate fecha, LocalTime hora, Paciente paciente, Medico medico, EstadoTurno estadoTurno) {
-    	  super();
-	    	this.fecha = fecha;
-	        this.hora = hora;
-	        this.paciente = paciente;
-	        this.medico = medico;
-	        this.estadoTurno = estadoTurno;
+
+    public Turno(Long id, LocalDate fecha, LocalTime hora, Paciente paciente, Medico medico,
+                 EstadoTurno estadoTurno) {
+        this.id = id;
+        this.fecha = fecha;
+        this.hora = hora;
+        this.paciente = paciente;
+        this.medico = medico;
+        this.estadoTurno = estadoTurno;
     }
-    
-    // Getters y Setters
+
     public Long getId() {
         return id;
     }
@@ -61,28 +61,27 @@ public class Turno {
         this.hora = hora;
     }
 
-    public Paciente getPaciente(){
-    	return paciente;
+    public Paciente getPaciente() {
+        return paciente;
     }
-    
+
     public void setPaciente(Paciente paciente) {
-    this.paciente = paciente;	
+        this.paciente = paciente;
     }
-    
-    public Medico getMedico(){
-    	return medico;
+
+    public Medico getMedico() {
+        return medico;
     }
-    
+
     public void setMedico(Medico medico) {
-    this.medico = medico;	
+        this.medico = medico;
     }
-    
-    public EstadoTurno getEstadoTurno(){
-    	return  estadoTurno;
+
+    public EstadoTurno getEstadoTurno() {
+        return estadoTurno;
     }
-    
+
     public void setEstadoTurno(EstadoTurno estadoTurno) {
-    this.estadoTurno = estadoTurno;	
+        this.estadoTurno = estadoTurno;
     }
-    
 }

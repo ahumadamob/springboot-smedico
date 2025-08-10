@@ -1,12 +1,19 @@
 package com.imb2025.smedico.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "detalle_receta")
 public class DetalleReceta {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,10 +34,10 @@ public class DetalleReceta {
     @Column(nullable = false)
     private String frecuencia;
 
-    public DetalleReceta() {
-    }
+    public DetalleReceta() {}
 
-    public DetalleReceta(Receta receta, Medicamento medicamento, String dosis, String frecuencia) {
+    public DetalleReceta(Long id, Receta receta, Medicamento medicamento, String dosis, String frecuencia) {
+        this.id = id;
         this.receta = receta;
         this.medicamento = medicamento;
         this.dosis = dosis;

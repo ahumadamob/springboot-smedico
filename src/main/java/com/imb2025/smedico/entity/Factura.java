@@ -1,13 +1,14 @@
 package com.imb2025.smedico.entity;
 
-import jakarta.persistence.*;
-
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 public class Factura {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,10 +23,10 @@ public class Factura {
     @ManyToOne
     private MedioPago medioPago;
 
-    public Factura() {
-    }
+    public Factura() {}
 
-    public Factura(LocalDate fecha, Paciente paciente, Double monto, MedioPago medioPago) {
+    public Factura(Long id, LocalDate fecha, Paciente paciente, Double monto, MedioPago medioPago) {
+        this.id = id;
         this.fecha = fecha;
         this.paciente = paciente;
         this.monto = monto;
