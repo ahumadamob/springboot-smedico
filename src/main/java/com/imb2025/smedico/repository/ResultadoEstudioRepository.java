@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.imb2025.smedico.entity.ResultadoEstudio;
 
-public interface ResultadoEstudioRepository extends JpaRepository<ResultadoEstudio, Long>{
-
+public interface ResultadoEstudioRepository extends JpaRepository<ResultadoEstudio, Long> {
 
 }
