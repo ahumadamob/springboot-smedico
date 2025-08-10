@@ -4,6 +4,14 @@ public class DetalleFacturaRequestDto {
     private String descripcion;
     private Double importe;
     private Long facturaId;
+
+    public DetalleFacturaRequestDto() {}
+
+    public DetalleFacturaRequestDto(String descripcion, Double importe, Long facturaId) {
+        this.descripcion = descripcion;
+        this.importe = importe;
+        this.facturaId = facturaId;
+    }
     public String getDescripcion() {
         return descripcion;
     }

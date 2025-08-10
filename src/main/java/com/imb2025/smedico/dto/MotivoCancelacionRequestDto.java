@@ -1,9 +1,16 @@
 package com.imb2025.smedico.dto;
 
 public class MotivoCancelacionRequestDto {
-	
-	private String nombre;
-	private String descripcion;
+
+        private String nombre;
+        private String descripcion;
+
+        public MotivoCancelacionRequestDto() {}
+
+        public MotivoCancelacionRequestDto(String nombre, String descripcion) {
+                this.nombre = nombre;
+                this.descripcion = descripcion;
+        }
 	
 	public String getNombre() {
 		return nombre;

@@ -20,6 +20,15 @@ public class HorarioAtencionRequestDto {
     @Pattern(regexp = "^([01]\\d|2[0-3]):([0-5]\\d)$", message = "El formato de la hora de fin debe ser HH:mm")
     private String horaFin;
 
+    public HorarioAtencionRequestDto() {}
+
+    public HorarioAtencionRequestDto(Long medicoId, String diaSemana, String horaInicio, String horaFin) {
+        this.medicoId = medicoId;
+        this.diaSemana = diaSemana;
+        this.horaInicio = horaInicio;
+        this.horaFin = horaFin;
+    }
+
     public Long getMedicoId() {
         return medicoId;
     }

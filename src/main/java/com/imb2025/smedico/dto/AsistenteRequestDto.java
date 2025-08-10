@@ -7,6 +7,15 @@ public class AsistenteRequestDto {
     private Long telefono;
     private String dni;
 
+    public AsistenteRequestDto() {}
+
+    public AsistenteRequestDto(String nombre, String email, Long telefono, String dni) {
+        this.nombre = nombre;
+        this.email = email;
+        this.telefono = telefono;
+        this.dni = dni;
+    }
+
     public String getNombre() {
         return nombre;
     }

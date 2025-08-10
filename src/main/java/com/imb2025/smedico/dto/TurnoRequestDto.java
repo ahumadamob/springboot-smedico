@@ -2,8 +2,6 @@ package com.imb2025.smedico.dto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import jakarta.validation.constraints.NotNull;
-
 public class TurnoRequestDto {
     private LocalDate fecha;
     private LocalTime hora;
@@ -14,7 +12,7 @@ public class TurnoRequestDto {
     public TurnoRequestDto() {}
 
     public TurnoRequestDto(
-            LocalDate fecha, Long pacienteId, Long medicoId, Long estadoTurnoId, LocalTime hora) {
+            LocalDate fecha, LocalTime hora, Long pacienteId, Long medicoId, Long estadoTurnoId) {
         this.fecha = fecha;
         this.hora = hora;
         this.pacienteId = pacienteId;

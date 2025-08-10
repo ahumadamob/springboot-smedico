@@ -1,13 +1,30 @@
 package com.imb2025.smedico.dto;
 
 public class MedicoRequestDto {
-	
-	private String nombre;
-	private String apellido;
-	private String matricula;
+
+        private String nombre;
+        private String apellido;
+        private String matricula;
     private String especialidad;
     private String email;
     private String telefono;
+
+        public MedicoRequestDto() {}
+
+        public MedicoRequestDto(
+                String nombre,
+                String apellido,
+                String matricula,
+                String especialidad,
+                String email,
+                String telefono) {
+                this.nombre = nombre;
+                this.apellido = apellido;
+                this.matricula = matricula;
+                this.especialidad = especialidad;
+                this.email = email;
+                this.telefono = telefono;
+        }
     
 
 	public String getNombre() {

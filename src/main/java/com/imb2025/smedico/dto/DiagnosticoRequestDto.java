@@ -7,6 +7,14 @@ public class DiagnosticoRequestDto {
     private String descripcion;
     private LocalDate fechaDiagnostico;
 
+    public DiagnosticoRequestDto() {}
+
+    public DiagnosticoRequestDto(Long consultaId, String descripcion, LocalDate fechaDiagnostico) {
+        this.consultaId = consultaId;
+        this.descripcion = descripcion;
+        this.fechaDiagnostico = fechaDiagnostico;
+    }
+
     public Long getConsultaId() {
         return consultaId;
     }
