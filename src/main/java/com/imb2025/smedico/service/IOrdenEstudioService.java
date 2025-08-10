@@ -12,5 +12,5 @@ public interface IOrdenEstudioService {
 	public OrdenEstudio update(Long id,OrdenEstudio ordenestudio) throws Exception;
 	public void deleteById(Long id);
     public OrdenEstudio fromDto(OrdenEstudioRequestDTO requestDto) throws Exception;
-	
+    boolean existsById(Long id);
 }
