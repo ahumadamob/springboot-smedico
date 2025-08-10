@@ -31,23 +31,22 @@ public  class ResultadoEstudioServiceImpl implements IResultadoEstudioService{
 
 	@Override
 	public ResultadoEstudio findById(long id) {
-		Optional<ResultadoEstudio> opt;
-		opt = repo.findById(id);
 		
-		if(opt.isPresent()) {
-			return opt.get();
-		}else {
-			return null;
-		}
+		Optional<ResultadoEstudio> opt = repo.findById(id);
+		return opt.orElse(null);
 		
 		
 	}
 
 	@Override
 	public void deleteById(long id) {
-		
+		if(!repo.existsById(id)) {
+			throw new IllegalArgumentException("No se puede eliminar. No existe un resultadoEstudio con ID: "+ id);
+		}
 		repo.deleteById(id);
+		
 	}
+	
 
 	@Override
 	public ResultadoEstudio create(ResultadoEstudio resultadoEstudio) {
@@ -64,7 +63,7 @@ public  class ResultadoEstudioServiceImpl implements IResultadoEstudioService{
 			
 		}else {
 			
-			throw new Exception("No existe el Resultado del Estudio");
+			throw new Exception("No existe el Resultado del Estudio con ID: "+id);
 			
 		}
 		
@@ -80,6 +79,8 @@ public  class ResultadoEstudioServiceImpl implements IResultadoEstudioService{
 	        requestDto.getResultado(),
 	        requestDto.getFechaCarga(),
 	        requestDto.getObservaciones()
+	        
+	        
 	    );
 	}
 
