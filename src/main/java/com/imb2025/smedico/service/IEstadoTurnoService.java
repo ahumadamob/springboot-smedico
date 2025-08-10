@@ -3,6 +3,7 @@ package com.imb2025.smedico.service;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
+import com.imb2025.smedico.dto.EstadoTurnoRequestDTO;
 import com.imb2025.smedico.entity.EstadoTurno;
 @Service
 
@@ -11,11 +12,19 @@ public interface IEstadoTurnoService {
 
     public EstadoTurno findById(Long id);// Optional se utiliza para devolver el "EstadoTurno" o en caso de estar vacio "Optional.empty()", eso es para evitar un NullException 
 
-    public EstadoTurno save(EstadoTurno estadoTurno); // guarda un nuevo estado de turno
+    public EstadoTurno create( EstadoTurno estadoTurno); // guarda un nuevo estado de turno
 
     public EstadoTurno update(Long id, EstadoTurno estadoTurno); // actualiza un estado segun su id
 
-   public  void deleteById(Long id); // elimina un registro
+    public  void deleteById(Long id); // elimina un registro poe id
+
+    public boolean existsById(Long id);
+
+    static EstadoTurno fromDto(EstadoTurnoRequestDTO dto) {
+        EstadoTurno estadoTurno = new EstadoTurno();
+        estadoTurno.setNombre(dto.getNombre());
+        return estadoTurno;
+    }
 	
 
 }

@@ -1,12 +1,9 @@
 package com.imb2025.smedico.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class Factura {
@@ -19,21 +16,11 @@ public class Factura {
 
     @ManyToOne
     private Paciente paciente;
-    
-    @ManyToOne
-    private MedioPago medioPago;
 
     private Double monto;
-    
-    
-    
-    public MedioPago getMedioPago() { //Agregado
-		return medioPago;
-	}
 
-	public void setMedioPago(MedioPago medioPago) { //Agregado
-		this.medioPago = medioPago;
-	}
+    @ManyToOne
+    private MedioPago medioPago;
 
     public Factura() {
     }
@@ -77,4 +64,11 @@ public class Factura {
         this.monto = monto;
     }
 
+    public MedioPago getMedioPago() {
+        return medioPago;
+    }
+
+    public void setMedioPago(MedioPago medioPago) {
+        this.medioPago = medioPago;
+    }
 }

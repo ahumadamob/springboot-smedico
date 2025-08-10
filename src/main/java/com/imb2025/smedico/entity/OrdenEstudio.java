@@ -21,10 +21,9 @@ public class OrdenEstudio {
     @JoinColumn(name = "pacienteId")
     private Paciente paciente;
 
-    //@ManyToOne
-    //@JoinColumn(name = "estudioId")
-    //private Estudio estudio;
-    //TODO: No se encuentra desarrollado la entidad Estudio
+    @ManyToOne
+    @JoinColumn(name = "estudioId")
+    private Estudio estudio;
     
     // Constructor 
     public OrdenEstudio() {}
@@ -34,7 +33,7 @@ public class OrdenEstudio {
     	this.fecha=fecha;
     	this.paciente=paciente;
     	this.medico=medico;
-    	//this.estudio=estudio;
+    	this.estudio=estudio;
     }
     
         
@@ -68,13 +67,13 @@ public class OrdenEstudio {
 	}
 
 	
-	/*public EstudioEntity getEstudio() {
+	public Estudio getEstudio() {
 		return estudio;
 	}
 
-	public void setEstudio(EstudioEntity estudio) {
+	public void setEstudio(Estudio estudio) {
 		this.estudio = estudio;
-	}*/
+	}
 
 	public void setFecha(LocalDate fecha) {
         this.fecha = fecha;

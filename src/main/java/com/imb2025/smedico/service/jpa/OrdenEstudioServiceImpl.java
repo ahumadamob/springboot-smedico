@@ -1,4 +1,3 @@
-
 package com.imb2025.smedico.service.jpa;
 
 import java.util.List;   
@@ -8,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.imb2025.smedico.dto.OrdenEstudioRequestDTO;
+import com.imb2025.smedico.entity.Estudio;
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.entity.OrdenEstudio;
 import com.imb2025.smedico.entity.Paciente;
+import com.imb2025.smedico.repository.EstudioRepository;
 import com.imb2025.smedico.repository.MedicoRepository;
 import com.imb2025.smedico.repository.OrdenEstudioRepository;
 import com.imb2025.smedico.repository.PacienteRepository;
@@ -28,9 +29,8 @@ public class OrdenEstudioServiceImpl implements IOrdenEstudioService{
 	@Autowired
 	private PacienteRepository pacienteRepository;
 	
-	//@Autowired
-	//private EstudioRepository estudioRepository;
-	//TODO: Falta desarrollar la entidad Estudio
+	@Autowired
+	private EstudioRepository estudioRepository;
 	
 	@Override
 	public List<OrdenEstudio> findAll() {
@@ -78,17 +78,13 @@ public class OrdenEstudioServiceImpl implements IOrdenEstudioService{
 	        .orElseThrow(() -> new Exception("Paciente no encontrado con ID " + dto.getPacienteId()));
 
 	    
-	    /*EstudioEntity estudio = estudioRepository.findById(dto.getEstudioId())
+	    Estudio estudio = estudioRepository.findById(dto.getEstudioId())
 	        .orElseThrow(() -> new Exception("Estudio no encontrado con ID " + dto.getEstudioId()));
-*/
+
 	    return new OrdenEstudio(dto.getFecha(), medico, paciente);
 	}
-
-		
-		
+	@Override
+	public boolean existsById(Long id) {
+	    return repo.existsById(id);
+	}	
 	}
-
-	
-	
-	
-
