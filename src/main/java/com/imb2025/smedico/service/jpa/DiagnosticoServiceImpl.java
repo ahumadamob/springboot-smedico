@@ -1,15 +1,14 @@
 package com.imb2025.smedico.service.jpa;
-import com.imb2025.smedico.service.IDiagnosticoService;
-import com.imb2025.smedico.service.jpa.DiagnosticoServiceImpl;
-import com.imb2025.smedico.repository.ConsultaRepository;
+
+import com.imb2025.smedico.dto.DiagnosticoRequestDto;
 import com.imb2025.smedico.entity.Consulta;
 import com.imb2025.smedico.entity.Diagnostico;
-import com.imb2025.smedico.dto.DiagnosticoRequestDto;
+import com.imb2025.smedico.repository.ConsultaRepository;
 import com.imb2025.smedico.repository.DiagnosticoRepository;
+import com.imb2025.smedico.service.IDiagnosticoService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 @Service
 public class DiagnosticoServiceImpl implements IDiagnosticoService {
 
@@ -30,7 +29,7 @@ public class DiagnosticoServiceImpl implements IDiagnosticoService {
     }
 
     @Override
-    public Diagnostico save(Diagnostico diagnostico) {
+    public Diagnostico create(Diagnostico diagnostico) {
         return repo.save(diagnostico);
     }
 
@@ -42,7 +41,6 @@ public class DiagnosticoServiceImpl implements IDiagnosticoService {
         repo.deleteById(id);
     }
 
-    // Método para verificar existencia (para el controller)
     @Override
     public boolean existsById(Long id) {
         return repo.existsById(id);
@@ -63,7 +61,7 @@ public class DiagnosticoServiceImpl implements IDiagnosticoService {
 
 
     @Override
-    public Diagnostico actualizar(Long id, Diagnostico diagnostico) {
+    public Diagnostico update(Diagnostico diagnostico, Long id) {
         Diagnostico existente = repo.findById(id)
             .orElseThrow(() -> new RuntimeException("Diagnóstico no encontrado"));
 
@@ -73,8 +71,4 @@ public class DiagnosticoServiceImpl implements IDiagnosticoService {
 
         return repo.save(existente);
     }
-
-
-
-
-    }
+}

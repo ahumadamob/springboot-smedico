@@ -43,7 +43,7 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
     }
 
     @Override
-    public Afiliacion update(Long id, Afiliacion afiliacion) throws Exception {
+    public Afiliacion update(Afiliacion afiliacion, Long id) throws Exception {
         if (!afili.existsById(id)) {
             throw new EntityNotFoundException("No se puede actualizar. Afiliación con ID " + id + " no existe.");
         }

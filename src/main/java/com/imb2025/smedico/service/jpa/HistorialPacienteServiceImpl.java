@@ -57,7 +57,7 @@ public class HistorialPacienteServiceImpl implements IHistorialPacienteService {
 	}
 
 	@Override
-	public HistorialPaciente update(Long id, HistorialPaciente historial) throws Exception {
+	public HistorialPaciente update(HistorialPaciente historial, Long id) throws Exception {
 	    if (repo.existsById(id)) {
 	        historial.setId(id);
 	        return repo.save(historial);

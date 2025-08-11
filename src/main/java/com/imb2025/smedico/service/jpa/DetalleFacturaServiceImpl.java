@@ -50,7 +50,7 @@ public class DetalleFacturaServiceImpl implements IDetalleFacturaService {
     }
 
     @Override
-    public DetalleFactura update(Long id, DetalleFactura detalleFactura) {
+    public DetalleFactura update(DetalleFactura detalleFactura, Long id) {
         if (!detalleFacturaRepositories.existsById(id)) {
             throw new RuntimeException("DetalleFactura con ID " + id + " no existe.");
         }

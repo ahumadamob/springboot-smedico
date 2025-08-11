@@ -49,7 +49,7 @@
 	    }
 	
 	    @Override
-	    public Medico update(Long id, Medico medico) throws Exception {
+	    public Medico update(Medico medico, Long id) throws Exception {
 	        if (repo.existsById(id)) {
 	            medico.setId(id);
 	            return repo.save(medico);

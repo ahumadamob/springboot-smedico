@@ -52,7 +52,7 @@ public class ConsultorioServiceImpl implements IConsultorioService {
     
     //Actualizar 
     @Override
-    public Consultorio update(Long id, Consultorio consultorio) throws Exception {
+    public Consultorio update(Consultorio consultorio, Long id) throws Exception {
     	if(repository.existsById(id)) {
     		consultorio.setId(id);
     		return repository.save(consultorio);

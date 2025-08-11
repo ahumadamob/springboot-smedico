@@ -38,7 +38,7 @@ public class AsistenteServiceImpl implements IAsistenteService {
     }
 
     @Override
-    public Asistente update(Long id, Asistente asistente) {
+    public Asistente update(Asistente asistente, Long id) {
         if (!repo.existsById(id)) {
             throw new RuntimeException("Asistente con ID " + id + " no existe.");
         }

@@ -12,15 +12,15 @@ import com.imb2025.smedico.repository.MotivoCancelacionRepository;
 import com.imb2025.smedico.service.IMotivoCancelacionService;
 
 @Service
-public class MotivoCancelacionImpl implements IMotivoCancelacionService{
+public class MotivoCancelacionServiceImpl implements IMotivoCancelacionService {
 
-	@Autowired
-	private MotivoCancelacionRepository repo;
+        @Autowired
+        private MotivoCancelacionRepository repo;
 
 	@Override
-	public List<MotivoCancelacion> findAll() {
-		return repo.findAll();
-	}
+        public List<MotivoCancelacion> findAll() {
+                return repo.findAll();
+        }
 
 	@Override
     public MotivoCancelacion findById(Long id) {
@@ -34,13 +34,12 @@ public class MotivoCancelacionImpl implements IMotivoCancelacionService{
     }
 
     @Override
-    public MotivoCancelacion update(Long id, MotivoCancelacion motivoCancelacion) throws Exception {
+    public MotivoCancelacion update(MotivoCancelacion motivoCancelacion, Long id) throws Exception {
         if (repo.existsById(id)) {
             motivoCancelacion.setId(id);
             return repo.save(motivoCancelacion);
-        } else {
-            throw new Exception("MotivoCancelacion con ID " + id + " no existe");
         }
+        throw new Exception("MotivoCancelacion con ID " + id + " no existe");
     }
 
     @Override

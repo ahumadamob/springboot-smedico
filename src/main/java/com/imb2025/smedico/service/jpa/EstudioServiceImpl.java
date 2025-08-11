@@ -7,7 +7,13 @@ import org.springframework.stereotype.Service;
 
 import com.imb2025.smedico.dto.EstudioRequestDto;
 import com.imb2025.smedico.entity.Estudio;
-import com.imb2025.smedico.repository.*;
+import com.imb2025.smedico.repository.EspecialidadRepository;
+import com.imb2025.smedico.repository.EstudioRepository;
+import com.imb2025.smedico.repository.MedicoRepository;
+import com.imb2025.smedico.repository.ObraSocialRepository;
+import com.imb2025.smedico.repository.OrdenEstudioRepository;
+import com.imb2025.smedico.repository.PacienteRepository;
+import com.imb2025.smedico.repository.ResultadoEstudioRepository;
 import com.imb2025.smedico.service.IEstudioService;
 
 @Service
@@ -49,7 +55,7 @@ public class EstudioServiceImpl implements IEstudioService {
     }
 
     @Override
-    public Estudio update(Long id, Estudio estudio) throws Exception {
+    public Estudio update(Estudio estudio, Long id) throws Exception {
         if (!repo.existsById(id)) {
             throw new Exception("No existe el estudio con ID: " + id);
         }

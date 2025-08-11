@@ -45,7 +45,7 @@ public class HorarioAtencionServiceImpl implements IHorarioAtencionService {
     }
 
     @Override
-    public HorarioAtencion update(Long id, HorarioAtencion horarioAtencion) throws Exception {
+    public HorarioAtencion update(HorarioAtencion horarioAtencion, Long id) throws Exception {
         try {
             if (!repository.existsById(id)) {
                 throw new RecursoNoEncontradoException("No existe un horario con ID: " + id);
