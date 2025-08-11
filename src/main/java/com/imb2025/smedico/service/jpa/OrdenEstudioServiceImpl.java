@@ -61,7 +61,7 @@ public class OrdenEstudioServiceImpl implements IOrdenEstudioService{
 	
 
 	@Override
-	public OrdenEstudio update(OrdenEstudio ordenestudio, Long id) throws Exception {
+	public OrdenEstudio update(Long id, OrdenEstudio ordenestudio) throws Exception {
 		if(repo.existsById(id)) {
 			ordenestudio.setId(id);
 		      return repo.save(ordenestudio);

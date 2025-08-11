@@ -60,7 +60,7 @@ public class TurnoServiceImpl implements ITurnoService {
     }
 
     @Override
-    public Turno update(Turno turno, Long id) throws Exception {
+    public Turno update(Long id, Turno turno) throws Exception {
         Turno turnoExistente = repo.findById(id)
             .orElseThrow(() -> new Exception("Turno con ID " + id + " no encontrado"));
         

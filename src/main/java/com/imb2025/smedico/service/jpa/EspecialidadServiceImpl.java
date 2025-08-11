@@ -36,7 +36,7 @@ public class EspecialidadServiceImpl implements IEspecialidadService{
 	}
 	
 		@Override
-	public Especialidad update(Especialidad especialidad, Long id) throws Exception {	
+	public Especialidad update(Long id, Especialidad especialidad) throws Exception {	
 		 if (repo.existsById(id)) {
 		        especialidad.setId(id);
 			return repo.save(especialidad);

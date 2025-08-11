@@ -44,7 +44,7 @@ public class DetalleRecetaServiceImpl implements IDetalleRecetaService {
     }
 
     @Override
-    public DetalleReceta update(DetalleReceta detalleReceta, Long id) {
+    public DetalleReceta update(Long id, DetalleReceta detalleReceta) {
         detalleReceta.setId(id);
         return repository.save(detalleReceta);
     }

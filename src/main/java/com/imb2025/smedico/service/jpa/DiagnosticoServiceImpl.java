@@ -61,7 +61,7 @@ public class DiagnosticoServiceImpl implements IDiagnosticoService {
 
 
     @Override
-    public Diagnostico update(Diagnostico diagnostico, Long id) {
+    public Diagnostico update(Long id, Diagnostico diagnostico) {
         Diagnostico existente = repo.findById(id)
             .orElseThrow(() -> new RuntimeException("Diagnóstico no encontrado"));
 

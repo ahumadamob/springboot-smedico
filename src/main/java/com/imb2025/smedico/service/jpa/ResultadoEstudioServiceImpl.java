@@ -28,22 +28,22 @@ public class ResultadoEstudioServiceImpl implements IResultadoEstudioService {
 	}
 
 	@Override
-	public ResultadoEstudio findById(long id) {
-		
-		Optional<ResultadoEstudio> opt = repo.findById(id);
-		return opt.orElse(null);
-		
-		
-	}
+        public ResultadoEstudio findById(Long id) {
 
-	@Override
-	public void deleteById(long id) {
-		if(!repo.existsById(id)) {
-			throw new IllegalArgumentException("No se puede eliminar. No existe un resultadoEstudio con ID: "+ id);
-		}
-		repo.deleteById(id);
-		
-	}
+                Optional<ResultadoEstudio> opt = repo.findById(id);
+                return opt.orElse(null);
+
+
+        }
+
+        @Override
+        public void deleteById(Long id) {
+                if(!repo.existsById(id)) {
+                        throw new IllegalArgumentException("No se puede eliminar. No existe un resultadoEstudio con ID: "+ id);
+                }
+                repo.deleteById(id);
+
+        }
 	
 
 	@Override
@@ -53,7 +53,7 @@ public class ResultadoEstudioServiceImpl implements IResultadoEstudioService {
 	}
 
 	@Override
-        public ResultadoEstudio update(ResultadoEstudio resultadoEstudio, long id) throws Exception {
+        public ResultadoEstudio update(Long id, ResultadoEstudio resultadoEstudio) throws Exception {
                 if (repo.existsById(id)) {
                         resultadoEstudio.setId(id);
                         return repo.save(resultadoEstudio);

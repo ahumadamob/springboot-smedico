@@ -33,7 +33,7 @@ public class EstadoTurnoServiceImpl implements IEstadoTurnoService {
     }
 
     @Override
-    public EstadoTurno update(EstadoTurno estadoTurno, Long id) {
+    public EstadoTurno update(Long id, EstadoTurno estadoTurno) {
         Optional<EstadoTurno> existente = estadoTurnoRepository.findById(id);
         if (existente.isPresent()) {
             EstadoTurno actualizado = existente.get();

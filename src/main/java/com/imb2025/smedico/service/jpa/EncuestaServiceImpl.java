@@ -40,7 +40,7 @@ import com.imb2025.smedico.service.IEncuestaService;
        
 
         @Override
-        public Encuesta update(Encuesta encuesta, Long id) throws Exception{
+        public Encuesta update(Long id, Encuesta encuesta) throws Exception{
             if(repo.existsById(id)){
                 encuesta.setId(id);
                 return repo.save(encuesta);

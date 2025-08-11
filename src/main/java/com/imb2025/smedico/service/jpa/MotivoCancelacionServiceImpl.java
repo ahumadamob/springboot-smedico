@@ -34,7 +34,7 @@ public class MotivoCancelacionServiceImpl implements IMotivoCancelacionService {
     }
 
     @Override
-    public MotivoCancelacion update(MotivoCancelacion motivoCancelacion, Long id) throws Exception {
+    public MotivoCancelacion update(Long id, MotivoCancelacion motivoCancelacion) throws Exception {
         if (repo.existsById(id)) {
             motivoCancelacion.setId(id);
             return repo.save(motivoCancelacion);

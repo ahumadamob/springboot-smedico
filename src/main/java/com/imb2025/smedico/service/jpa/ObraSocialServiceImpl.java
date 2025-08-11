@@ -31,7 +31,7 @@ public class ObraSocialServiceImpl implements IObraSocialService {
     }
 
     @Override
-    public ObraSocial update(ObraSocial obraSocial, Long id) throws Exception {
+    public ObraSocial update(Long id, ObraSocial obraSocial) throws Exception {
         if (repository.existsById(id)) {
             obraSocial.setId(id);
             return repository.save(obraSocial);

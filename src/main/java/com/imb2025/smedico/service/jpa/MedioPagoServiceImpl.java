@@ -37,7 +37,7 @@ public class MedioPagoServiceImpl implements IMedioPagoService {
         }
 	
 	@Override
-        public MedioPago update(MedioPago medioPago, Long id) {
+        public MedioPago update(Long id, MedioPago medioPago) {
                 if (repo.existsById(id)) {
                         medioPago.setId(id);
                         return repo.save(medioPago);

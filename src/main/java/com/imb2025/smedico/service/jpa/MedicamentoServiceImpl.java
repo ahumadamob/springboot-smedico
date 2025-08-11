@@ -33,7 +33,7 @@ public class MedicamentoServiceImpl implements IMedicamentoService {
 	
 	
 	@Override
-        public Medicamento update(Medicamento medicamento, Long id) throws Exception {
+        public Medicamento update(Long id, Medicamento medicamento) throws Exception {
             if (!repoMedic.existsById(id)) {
                 throw new Exception("El medicamento con ID " + id + " no existe.");
             }

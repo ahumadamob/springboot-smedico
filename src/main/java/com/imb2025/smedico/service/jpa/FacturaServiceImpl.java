@@ -42,7 +42,7 @@ public class FacturaServiceImpl implements IFacturaService {
     }
 
     @Override
-    public Factura update(Factura factura, Long id) throws Exception {
+    public Factura update(Long id, Factura factura) throws Exception {
         if (this.existsById(id)) {
             factura.setId(id);
             return facturaRepository.save(factura);

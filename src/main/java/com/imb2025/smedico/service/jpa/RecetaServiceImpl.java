@@ -42,7 +42,7 @@ public class RecetaServiceImpl implements IRecetaService {
     }
 
     @Override
-    public Receta update(Receta receta, Long id) throws Exception {
+    public Receta update(Long id, Receta receta) throws Exception {
         if (!repo.existsById(id)) {
             throw new Exception("Receta con ID " + id + " no existe");
         }

@@ -31,7 +31,7 @@ public class DireccionPacienteServiceImpl implements IDireccionPacienteService {
     }
 
     @Override
-    public DireccionPaciente update(DireccionPaciente direccionPaciente, Long id) throws Exception {
+    public DireccionPaciente update(Long id, DireccionPaciente direccionPaciente) throws Exception {
         if (!direccionPacienteRepository.existsById(id)) {
             throw new RuntimeException("No se encontró la dirección con ID: " + id);
         }
