@@ -9,6 +9,7 @@ public interface IMotivoCancelacionService {
     public MotivoCancelacion create(MotivoCancelacion motivoCancelacion);
     public MotivoCancelacion update(Long id, MotivoCancelacion motivoCancelacion) throws Exception;
     public MotivoCancelacion findById(Long id);
+    public boolean existsById(Long id);
     public void deleteById(Long id);
     public MotivoCancelacion fromDto(MotivoCancelacionRequestDto motivoCancelacionRequestDto) throws Exception;
 }

@@ -9,6 +9,7 @@ public interface IMedicoService {
     public Medico create(Medico medico);
     public Medico update(Long id, Medico medico) throws Exception;
     public Medico findById(Long id);
+    public boolean existsById(Long id);
     public void deleteById(Long id);
     public Medico fromDto(MedicoRequestDto medicoRequestDto) throws Exception;
 }

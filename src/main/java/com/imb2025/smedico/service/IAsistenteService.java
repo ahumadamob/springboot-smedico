@@ -9,6 +9,7 @@ public interface IAsistenteService {
     public Asistente create(Asistente asistente);
     public Asistente update(Long id, Asistente asistente);
     public Asistente findById(Long id);
+    public boolean existsById(Long id);
     public void deleteById(Long id);
     public Asistente fromDto(AsistenteRequestDto asistenteRequestDto);
 }

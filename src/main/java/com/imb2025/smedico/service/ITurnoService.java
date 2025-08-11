@@ -9,6 +9,7 @@ public interface ITurnoService {
     public Turno create(Turno turno) throws Exception;
     public Turno update(Long id, Turno turno) throws Exception;
     public Turno findById(Long id);
+    public boolean existsById(Long id);
     public void deleteById(Long id);
     public Turno fromDto(TurnoRequestDto turnoRequestDto);
 }

@@ -21,15 +21,20 @@ public class MedioPagoServiceImpl implements IMedioPagoService {
 	
 	
 	@Override
-	public MedioPago findById(Long id) {
-		Optional<MedioPago> opt;
-		opt = repo.findById(id);
-		if(opt.isPresent()) {
-			return opt.get();
-		}else {
-			return null;
-		}
-	}
+        public MedioPago findById(Long id) {
+                Optional<MedioPago> opt;
+                opt = repo.findById(id);
+                if(opt.isPresent()) {
+                        return opt.get();
+                }else {
+                        return null;
+                }
+        }
+
+        @Override
+        public boolean existsById(Long id) {
+                return repo.existsById(id);
+        }
 
 	@Override
         public MedioPago create(MedioPago medioPago) {

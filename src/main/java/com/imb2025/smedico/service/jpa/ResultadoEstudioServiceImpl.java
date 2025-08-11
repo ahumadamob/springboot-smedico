@@ -37,6 +37,11 @@ public class ResultadoEstudioServiceImpl implements IResultadoEstudioService {
         }
 
         @Override
+        public boolean existsById(Long id) {
+                return repo.existsById(id);
+        }
+
+        @Override
         public void deleteById(Long id) {
                 if(!repo.existsById(id)) {
                         throw new IllegalArgumentException("No se puede eliminar. No existe un resultadoEstudio con ID: "+ id);

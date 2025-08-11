@@ -9,6 +9,7 @@ public interface IEstadoTurnoService {
     public EstadoTurno create(EstadoTurno estadoTurno);
     public EstadoTurno update(Long id, EstadoTurno estadoTurno);
     public EstadoTurno findById(Long id);
+    public boolean existsById(Long id);
     public void deleteById(Long id);
     public EstadoTurno fromDto(EstadoTurnoRequestDto estadoTurnoRequestDto);
 }

@@ -29,6 +29,11 @@ public class MotivoCancelacionServiceImpl implements IMotivoCancelacionService {
     }
 
     @Override
+    public boolean existsById(Long id) {
+        return repo.existsById(id);
+    }
+
+    @Override
     public MotivoCancelacion create(MotivoCancelacion motivoCancelacion) {
         return repo.save(motivoCancelacion);
     }

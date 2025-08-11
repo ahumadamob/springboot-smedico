@@ -28,6 +28,11 @@ public class EstadoTurnoServiceImpl implements IEstadoTurnoService {
     }
 
     @Override
+    public boolean existsById(Long id) {
+        return estadoTurnoRepository.existsById(id);
+    }
+
+    @Override
     public EstadoTurno create(EstadoTurno estadoTurno) {
         return estadoTurnoRepository.save(estadoTurno);
     }

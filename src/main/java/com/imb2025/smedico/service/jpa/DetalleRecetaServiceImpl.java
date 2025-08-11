@@ -39,6 +39,11 @@ public class DetalleRecetaServiceImpl implements IDetalleRecetaService {
     }
 
     @Override
+    public boolean existsById(Long id) {
+        return repository.existsById(id);
+    }
+
+    @Override
     public DetalleReceta create(DetalleReceta detalleReceta) {
         return repository.save(detalleReceta);
     }

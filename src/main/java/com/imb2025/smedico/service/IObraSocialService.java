@@ -9,6 +9,7 @@ public interface IObraSocialService {
     public ObraSocial create(ObraSocial obraSocial) throws Exception;
     public ObraSocial update(Long id, ObraSocial obraSocial) throws Exception;
     public ObraSocial findById(Long id);
+    public boolean existsById(Long id);
     public void deleteById(Long id);
     public ObraSocial fromDto(ObraSocialRequestDto obraSocialRequestDto) throws Exception;
 }

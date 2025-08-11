@@ -9,6 +9,7 @@ public interface IConsultorioService {
     public Consultorio create(Consultorio consultorio);
     public Consultorio update(Long id, Consultorio consultorio) throws Exception;
     public Consultorio findById(Long id);
+    public boolean existsById(Long id);
     public void deleteById(Long id);
     public Consultorio fromDto(ConsultorioRequestDto consultorioRequestDto) throws Exception;
 }

@@ -9,6 +9,7 @@ public interface IEstudioService {
     public Estudio create(Estudio estudio) throws Exception;
     public Estudio update(Long id, Estudio estudio) throws Exception;
     public Estudio findById(Long id);
+    public boolean existsById(Long id);
     public void deleteById(Long id);
     public Estudio fromDto(EstudioRequestDto estudioRequestDto) throws Exception;
 }

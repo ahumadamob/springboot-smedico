@@ -9,6 +9,7 @@ public interface IDireccionPacienteService {
     public DireccionPaciente create(DireccionPaciente direccionPaciente) throws Exception;
     public DireccionPaciente update(Long id, DireccionPaciente direccionPaciente) throws Exception;
     public DireccionPaciente findById(Long id);
+    public boolean existsById(Long id);
     public void deleteById(Long id);
     public DireccionPaciente fromDto(DireccionPacienteRequestDto direccionPacienteRequestDto) throws Exception;
 }

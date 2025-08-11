@@ -9,6 +9,7 @@ public interface IMedicamentoService {
     public Medicamento create(Medicamento medicamento) throws Exception;
     public Medicamento update(Long id, Medicamento medicamento) throws Exception;
     public Medicamento findById(Long id);
+    public boolean existsById(Long id);
     public void deleteById(Long id);
     public Medicamento fromDto(MedicamentoRequestDto medicamentoRequestDto) throws Exception;
 }

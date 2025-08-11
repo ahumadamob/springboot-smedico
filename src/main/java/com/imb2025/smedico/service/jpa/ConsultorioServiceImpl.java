@@ -25,15 +25,20 @@ public class ConsultorioServiceImpl implements IConsultorioService {
 	
 	//Buscar por id
 	 @Override
-	 public Consultorio findById(Long id) {
-		 Optional<Consultorio> opt;
-			opt = repository.findById(id);
-			if(opt.isPresent()) {
-				return opt.get();
-			}else {
-				return null;
-		 }
-	 }
+        public Consultorio findById(Long id) {
+                Optional<Consultorio> opt;
+                       opt = repository.findById(id);
+                       if(opt.isPresent()) {
+                               return opt.get();
+                       }else {
+                               return null;
+                }
+        }
+
+        @Override
+        public boolean existsById(Long id) {
+                return repository.existsById(id);
+        }
 	 
 	//Listar todos
 	@Override

@@ -9,6 +9,7 @@ public interface IDiagnosticoService {
     public Diagnostico create(Diagnostico diagnostico);
     public Diagnostico update(Long id, Diagnostico diagnostico);
     public Diagnostico findById(Long id);
+    public boolean existsById(Long id);
     public void deleteById(Long id);
     public Diagnostico fromDto(DiagnosticoRequestDto diagnosticoRequestDto);
 }

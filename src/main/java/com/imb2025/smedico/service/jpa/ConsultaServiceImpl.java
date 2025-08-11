@@ -32,6 +32,11 @@ public class ConsultaServiceImpl implements IConsultaService {
     }
 
     @Override
+    public boolean existsById(Long id) {
+        return repository.existsById(id);
+    }
+
+    @Override
     public Consulta create(Consulta consulta) {
         return repository.save(consulta);
     }

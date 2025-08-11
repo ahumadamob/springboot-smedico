@@ -9,6 +9,7 @@ public interface IPacienteService {
     public Paciente create(Paciente paciente);
     public Paciente update(Long id, Paciente paciente);
     public Paciente findById(Long id);
+    public boolean existsById(Long id);
     public void deleteById(Long id);
     public Paciente fromDto(PacienteRequestDto pacienteRequestDto);
 }
