@@ -1,20 +1,18 @@
 package com.imb2025.smedico.service.jpa;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.imb2025.smedico.dto.ResultadoEstudioRequestDto;
 import com.imb2025.smedico.entity.OrdenEstudio;
 import com.imb2025.smedico.entity.ResultadoEstudio;
 import com.imb2025.smedico.repository.OrdenEstudioRepository;
 import com.imb2025.smedico.repository.ResultadoEstudioRepository;
 import com.imb2025.smedico.service.IResultadoEstudioService;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
-public  class ResultadoEstudioServiceImpl implements IResultadoEstudioService{
+public class ResultadoEstudioServiceImpl implements IResultadoEstudioService {
 
 	
 	@Autowired
@@ -30,22 +28,27 @@ public  class ResultadoEstudioServiceImpl implements IResultadoEstudioService{
 	}
 
 	@Override
-	public ResultadoEstudio findById(long id) {
-		
-		Optional<ResultadoEstudio> opt = repo.findById(id);
-		return opt.orElse(null);
-		
-		
-	}
+        public ResultadoEstudio findById(Long id) {
 
-	@Override
-	public void deleteById(long id) {
-		if(!repo.existsById(id)) {
-			throw new IllegalArgumentException("No se puede eliminar. No existe un resultadoEstudio con ID: "+ id);
-		}
-		repo.deleteById(id);
-		
-	}
+                Optional<ResultadoEstudio> opt = repo.findById(id);
+                return opt.orElse(null);
+
+
+        }
+
+        @Override
+        public boolean existsById(Long id) {
+                return repo.existsById(id);
+        }
+
+        @Override
+        public void deleteById(Long id) {
+                if(!repo.existsById(id)) {
+                        throw new IllegalArgumentException("No se puede eliminar. No existe un resultadoEstudio con ID: "+ id);
+                }
+                repo.deleteById(id);
+
+        }
 	
 
 	@Override
@@ -55,19 +58,13 @@ public  class ResultadoEstudioServiceImpl implements IResultadoEstudioService{
 	}
 
 	@Override
-	public ResultadoEstudio update(long id, ResultadoEstudio resultadoEstudio) throws Exception {
-		if(repo.existsById(id)) {
-			
-			resultadoEstudio.setId(id);
-			return repo.save(resultadoEstudio);
-			
-		}else {
-			
-			throw new Exception("No existe el Resultado del Estudio con ID: "+id);
-			
-		}
-		
-	}
+        public ResultadoEstudio update(Long id, ResultadoEstudio resultadoEstudio) throws Exception {
+                if (repo.existsById(id)) {
+                        resultadoEstudio.setId(id);
+                        return repo.save(resultadoEstudio);
+                }
+                throw new Exception("No existe el Resultado del Estudio con ID: " + id);
+        }
 
 	@Override
 	public ResultadoEstudio fromDto(ResultadoEstudioRequestDto requestDto) throws Exception {

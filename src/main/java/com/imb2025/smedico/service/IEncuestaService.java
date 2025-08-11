@@ -9,6 +9,7 @@ public interface IEncuestaService {
     public Encuesta create(Encuesta encuesta);
     public Encuesta update(Long id, Encuesta encuesta) throws Exception;
     public Encuesta findById(Long id);
+    public boolean existsById(Long id);
     public void deleteById(Long id);
     public Encuesta fromDto(EncuestaRequestDto encuestaRequestDto) throws Exception;
 }

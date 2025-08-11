@@ -9,6 +9,7 @@ public interface IOrdenEstudioService {
     public OrdenEstudio create(OrdenEstudio ordenEstudio);
     public OrdenEstudio update(Long id, OrdenEstudio ordenEstudio) throws Exception;
     public OrdenEstudio findById(Long id);
+    public boolean existsById(Long id);
     public void deleteById(Long id);
     public OrdenEstudio fromDto(OrdenEstudioRequestDto ordenEstudioRequestDto) throws Exception;
 }

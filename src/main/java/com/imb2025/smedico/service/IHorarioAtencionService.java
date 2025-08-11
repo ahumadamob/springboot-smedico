@@ -9,6 +9,7 @@ public interface IHorarioAtencionService {
     public HorarioAtencion create(HorarioAtencion horarioAtencion) throws Exception;
     public HorarioAtencion update(Long id, HorarioAtencion horarioAtencion) throws Exception;
     public HorarioAtencion findById(Long id);
+    public boolean existsById(Long id);
     public void deleteById(Long id);
     public HorarioAtencion fromDto(HorarioAtencionRequestDto horarioAtencionRequestDto) throws Exception;
 }

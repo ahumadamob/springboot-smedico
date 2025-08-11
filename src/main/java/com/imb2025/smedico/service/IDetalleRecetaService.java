@@ -9,6 +9,7 @@ public interface IDetalleRecetaService {
     public DetalleReceta create(DetalleReceta detalleReceta);
     public DetalleReceta update(Long id, DetalleReceta detalleReceta);
     public DetalleReceta findById(Long id);
+    public boolean existsById(Long id);
     public void deleteById(Long id);
     public DetalleReceta fromDto(DetalleRecetaRequestDto detalleRecetaRequestDto);
 }

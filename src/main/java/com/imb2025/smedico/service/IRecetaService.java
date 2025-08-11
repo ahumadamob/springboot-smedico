@@ -9,6 +9,7 @@ public interface IRecetaService {
     public Receta create(Receta receta);
     public Receta update(Long id, Receta receta) throws Exception;
     public Receta findById(Long id);
+    public boolean existsById(Long id);
     public void deleteById(Long id);
     public Receta fromDto(RecetaRequestDto recetaRequestDto) throws Exception;
 }

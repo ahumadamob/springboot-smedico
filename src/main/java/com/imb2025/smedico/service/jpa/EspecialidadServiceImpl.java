@@ -24,11 +24,16 @@ public class EspecialidadServiceImpl implements IEspecialidadService{
 	}
 
 	@Override
-	public Especialidad findById(Long id) {
-		Optional<Especialidad> opt = repo.findById(id);
-			return opt.orElse(null);			
-		
-	}
+        public Especialidad findById(Long id) {
+                Optional<Especialidad> opt = repo.findById(id);
+                        return opt.orElse(null);
+
+        }
+
+        @Override
+        public boolean existsById(Long id) {
+                return repo.existsById(id);
+        }
 		
 	@Override
 	public Especialidad create(Especialidad especialidad) {		

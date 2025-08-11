@@ -9,6 +9,7 @@ public interface IHistorialPacienteService {
     public HistorialPaciente create(HistorialPaciente historialPaciente);
     public HistorialPaciente update(Long id, HistorialPaciente historialPaciente) throws Exception;
     public HistorialPaciente findById(Long id);
+    public boolean existsById(Long id);
     public void deleteById(Long id);
     public HistorialPaciente fromDto(HistorialPacienteRequestDto historialPacienteRequestDto) throws Exception;
 }

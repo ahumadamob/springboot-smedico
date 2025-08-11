@@ -9,6 +9,7 @@ public interface IEspecialidadService {
     public Especialidad create(Especialidad especialidad);
     public Especialidad update(Long id, Especialidad especialidad) throws Exception;
     public Especialidad findById(Long id);
+    public boolean existsById(Long id);
     public void deleteById(Long id);
     public Especialidad fromDto(EspecialidadRequestDto especialidadRequestDto) throws Exception;
 }

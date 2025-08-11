@@ -31,7 +31,7 @@ public class ConsultaController {
     @PostMapping
     public ResponseEntity<Consulta> create(@RequestBody ConsultaRequestDto dto) {
         Consulta consulta = consultaService.fromDto(dto);
-        Consulta creada = consultaService.save(consulta);
+        Consulta creada = consultaService.create(consulta);
         return ResponseEntity.status(201).body(creada);
     }
 

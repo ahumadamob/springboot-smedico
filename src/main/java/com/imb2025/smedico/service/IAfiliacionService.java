@@ -9,6 +9,7 @@ public interface IAfiliacionService {
     public Afiliacion create(Afiliacion afiliacion) throws Exception;
     public Afiliacion update(Long id, Afiliacion afiliacion) throws Exception;
     public Afiliacion findById(Long id);
+    public boolean existsById(Long id);
     public void deleteById(Long id);
     public Afiliacion fromDto(AfiliacionRequestDto afiliacionRequestDto) throws Exception;
 }

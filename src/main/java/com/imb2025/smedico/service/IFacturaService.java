@@ -9,6 +9,7 @@ public interface IFacturaService {
     public Factura create(Factura factura);
     public Factura update(Long id, Factura factura) throws Exception;
     public Factura findById(Long id);
+    public boolean existsById(Long id);
     public void deleteById(Long id);
     public Factura fromDto(FacturaRequestDto facturaRequestDto) throws Exception;
 }

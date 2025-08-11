@@ -9,6 +9,7 @@ public interface IDetalleFacturaService {
     public DetalleFactura create(DetalleFactura detalleFactura);
     public DetalleFactura update(Long id, DetalleFactura detalleFactura);
     public DetalleFactura findById(Long id);
+    public boolean existsById(Long id);
     public void deleteById(Long id);
     public DetalleFactura fromDto(DetalleFacturaRequestDto detalleFacturaRequestDto) throws Exception;
 }

@@ -9,6 +9,7 @@ public interface IResultadoEstudioService {
     public ResultadoEstudio create(ResultadoEstudio resultadoEstudio);
     public ResultadoEstudio update(Long id, ResultadoEstudio resultadoEstudio) throws Exception;
     public ResultadoEstudio findById(Long id);
+    public boolean existsById(Long id);
     public void deleteById(Long id);
     public ResultadoEstudio fromDto(ResultadoEstudioRequestDto resultadoEstudioRequestDto) throws Exception;
 }
