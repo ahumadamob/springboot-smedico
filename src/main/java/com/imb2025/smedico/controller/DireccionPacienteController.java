@@ -1,5 +1,6 @@
 package com.imb2025.smedico.controller;
 
+import com.imb2025.smedico.dto.DireccionPacienteRequestDto;
 import com.imb2025.smedico.entity.DireccionPaciente;
 import com.imb2025.smedico.service.IDireccionPacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,15 +32,17 @@ public class DireccionPacienteController {
     }
 
     @PostMapping
-    public ResponseEntity<DireccionPaciente> create(@RequestBody DireccionPaciente direccion) throws Exception {
+    public ResponseEntity<DireccionPaciente> create(@RequestBody DireccionPacienteRequestDto direccionPacienteRequestDto) throws Exception {
+        DireccionPaciente direccion = direccionPacienteService.fromDto(direccionPacienteRequestDto);
         DireccionPaciente saved = direccionPacienteService.create(direccion);
         return ResponseEntity.ok(saved);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<DireccionPaciente> update(@PathVariable Long id,
-                                                    @RequestBody DireccionPaciente direccionPaciente) throws Exception {
-        DireccionPaciente updated = direccionPacienteService.update(id, direccionPaciente);
+                                                    @RequestBody DireccionPacienteRequestDto direccionPacienteRequestDto) throws Exception {
+        DireccionPaciente direccion = direccionPacienteService.fromDto(direccionPacienteRequestDto);
+        DireccionPaciente updated = direccionPacienteService.update(id, direccion);
         return ResponseEntity.ok(updated);
     }
 
