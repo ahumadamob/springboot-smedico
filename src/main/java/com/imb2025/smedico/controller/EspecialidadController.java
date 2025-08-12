@@ -25,21 +25,23 @@ public class EspecialidadController {
 	private IEspecialidadService service;
 	
 	
-	@GetMapping("/especialidad")
-	public List<Especialidad> findAllEspecialidad(){
-		return service.findall();
-	}
-	
-	@GetMapping("/especialidad/{idespecialidad}")
-	public ResponseEntity<Especialidad> findEspecialidadById(@PathVariable("idespecialidad") Long id) {	 
-		Especialidad especialidad = new Especialidad();
-		especialidad = service.findById(id);
-		 if(especialidad == null) {
-			 return ResponseEntity.badRequest().body(null);	 
-		 }else {
-			 return ResponseEntity.ok(especialidad);
-		 }
-	}
+        @GetMapping("/especialidad")
+        public ResponseEntity<List<Especialidad>> findAllEspecialidad(){
+                List<Especialidad> especialidades = service.findAll();
+                if (especialidades.isEmpty()) {
+                        return ResponseEntity.noContent().build();
+                }
+                return ResponseEntity.ok(especialidades);
+        }
+
+        @GetMapping("/especialidad/{idespecialidad}")
+        public ResponseEntity<Especialidad> findEspecialidadById(@PathVariable("idespecialidad") Long id) {
+                Especialidad especialidad = service.findById(id);
+                if (especialidad == null) {
+                        return ResponseEntity.notFound().build();
+                }
+                return ResponseEntity.ok(especialidad);
+        }
 	
 	@PostMapping("/especialidad")
 	public ResponseEntity<Especialidad> create(@RequestBody EspecialidadRequestDto dto) throws Exception {
