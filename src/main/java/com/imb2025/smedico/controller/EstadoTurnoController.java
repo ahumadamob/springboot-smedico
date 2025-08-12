@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.imb2025.smedico.dto.EstadoTurnoDto;
 import com.imb2025.smedico.dto.EstadoTurnoRequestDto;
 import com.imb2025.smedico.entity.EstadoTurno;
 import com.imb2025.smedico.service.IEstadoTurnoService;
@@ -42,8 +41,8 @@ public class EstadoTurnoController {
 
     // POST de EstadoTurnoE (Crear un nuevo registro)
     @PostMapping
-    public ResponseEntity<EstadoTurno> create(@RequestBody EstadoTurnoDto dto) {
-        EstadoTurno entidad = EstadoTurnoDto.fromDto(dto);
+    public ResponseEntity<EstadoTurno> create(@RequestBody EstadoTurnoRequestDto dto) {
+        EstadoTurno entidad = estadoTurnoService.fromDto(dto);
         EstadoTurno creado = estadoTurnoService.create(entidad);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
@@ -64,9 +63,9 @@ public class EstadoTurnoController {
     
     @PutMapping("/{id}")
     public ResponseEntity<EstadoTurno> update(@PathVariable Long id, @RequestBody EstadoTurnoRequestDto dto) {
-        EstadoTurno estadoTurno = EstadoTurnoRequestDto.fromDto(dto);
+        EstadoTurno estadoTurno = estadoTurnoService.fromDto(dto);
         EstadoTurno actualizado = estadoTurnoService.update(id, estadoTurno);
-        
+
         return ResponseEntity.ok(actualizado);
     }
 
