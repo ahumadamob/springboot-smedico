@@ -1,11 +1,8 @@
 package com.imb2025.smedico.service.jpa;
 
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.imb2025.smedico.dto.TurnoRequestDto;
 import com.imb2025.smedico.entity.EstadoTurno;
 import com.imb2025.smedico.entity.Medico;

@@ -1,13 +1,14 @@
 package com.imb2025.smedico.service.jpa;
 
-import com.imb2025.smedico.dto.EstadoTurnoDto;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
 import com.imb2025.smedico.dto.EstadoTurnoRequestDto;
 import com.imb2025.smedico.entity.EstadoTurno;
 import com.imb2025.smedico.repository.EstadoTurnoRepository;
 import com.imb2025.smedico.service.IEstadoTurnoService;
-import java.util.List;
-import java.util.Optional;
-import org.springframework.stereotype.Service;
 
 @Service
 public class EstadoTurnoServiceImpl implements IEstadoTurnoService {
