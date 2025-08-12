@@ -14,7 +14,7 @@ import com.imb2025.smedico.entity.EstadoTurno;
 import com.imb2025.smedico.service.IEstadoTurnoService;
 
 @RestController
-@RequestMapping("/EstadoTurnoE") //Los endpoints definidos comenzarán con "/EstadoTurnoE"
+@RequestMapping("/estado-turnos") //Los endpoints definidos comenzarán con "/estado-turnos"
 public class EstadoTurnoController {
 
     private final IEstadoTurnoService estadoTurnoService; // Instanciamos EstadoTurnoS, para la lógica
@@ -25,21 +25,27 @@ public class EstadoTurnoController {
 
     // GET de EstadoTurnoE (Obtener todos los registros por lista)
     @GetMapping
-    public List<EstadoTurno> getAll() {
-        return estadoTurnoService.findAll();
+    public ResponseEntity<List<EstadoTurno>> getAll() {
+        List<EstadoTurno> estados = estadoTurnoService.findAll();
+        return ResponseEntity.ok(estados);
     }
 
     // GET de EstadoTurnoE {id} (Obtener un registro por ID)
     @GetMapping("/{id}")
-    public EstadoTurno getById(@PathVariable Long id) {
-        return estadoTurnoService.findById(id); // Devuelve el objeto o null si no existe
+    public ResponseEntity<EstadoTurno> getById(@PathVariable Long id) {
+        EstadoTurno estadoTurno = estadoTurnoService.findById(id);
+        if (estadoTurno == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(estadoTurno); // Devuelve el objeto o null si no existe
     }
 
     // POST de EstadoTurnoE (Crear un nuevo registro)
     @PostMapping
-    public EstadoTurno create(@RequestBody EstadoTurnoDto dto) {
+    public ResponseEntity<EstadoTurno> create(@RequestBody EstadoTurnoDto dto) {
         EstadoTurno entidad = EstadoTurnoDto.fromDto(dto);
-        return estadoTurnoService.create(entidad);
+        EstadoTurno creado = estadoTurnoService.create(entidad);
+        return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     /*Con ExceptionHandler interceptamos la excepcion, se crea el map que es una estructura_
@@ -68,25 +74,14 @@ public class EstadoTurnoController {
 
     
     @DeleteMapping("/{id}")
- /*Entrás al try.
-Verificás si el ID existe.
-Si no existe, lanza la excepción manualmente con throw new Exception(...).
-Esa excepción es capturada por el catch.
-El catch arma una respuesta clara: por ejemplo, un mensaje tipo
- "Error: No se encontró el ID" (texto o JSON)*/
-    
-    public String delete(@PathVariable Long id) {
-        try {
-            // Forzar una excepción si no existe el ID
-            if (estadoTurnoService.findById(id) == null) {
-                throw new Exception("No se encontró el EstadoTurno con ID: " + id);
-            }
-
-            estadoTurnoService.deleteById(id);
-            return "Eliminado correctamente";
-        } catch (Exception e) {
-            return "Error: " + e.getMessage();
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        if (!estadoTurnoService.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Error: No se encontró el EstadoTurno con ID: " + id);
         }
+
+        estadoTurnoService.deleteById(id);
+        return ResponseEntity.ok("Eliminado correctamente");
     }
 
 }
