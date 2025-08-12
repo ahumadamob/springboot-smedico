@@ -44,9 +44,13 @@ public class MedicoController {
 
     @PutMapping("/{idmedico}")
     public ResponseEntity<Medico> update(@PathVariable("idmedico") Long id, @RequestBody MedicoRequestDto dto) throws Exception {
+        if (!service.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
         Medico medico = service.fromDto(dto);
+        medico.setId(id);
         Medico actualizado = service.update(id, medico);
-        return ResponseEntity.ok(actualizado); 
+        return ResponseEntity.ok(actualizado);
     }
 
     @DeleteMapping("/{idmedico}")
