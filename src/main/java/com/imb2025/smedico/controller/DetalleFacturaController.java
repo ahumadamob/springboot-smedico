@@ -60,8 +60,9 @@ public class DetalleFacturaController {
         if (!detalleFacturaService.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-        DetalleFactura actualizado = detalleFacturaService.fromDto(dto, id);
-        DetalleFactura saved = detalleFacturaService.update(id, actualizado);
+        DetalleFactura entidad = detalleFacturaService.fromDto(dto);
+        entidad.setId(id);
+        DetalleFactura saved = detalleFacturaService.update(id, entidad);
         return ResponseEntity.ok(saved);
     }
 
