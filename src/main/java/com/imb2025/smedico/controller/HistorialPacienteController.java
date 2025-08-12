@@ -35,14 +35,14 @@ public class HistorialPacienteController {
         if (historial != null) {
             return ResponseEntity.ok(historial);
         } else {
-            return ResponseEntity.noContent().build(); // 204
+            return ResponseEntity.notFound().build();
         }
     }
 
  // POST - Crear un nuevo historial de paciente usando DTO
     @PostMapping
     public ResponseEntity<HistorialPaciente> createHistorialPaciente(@RequestBody HistorialPacienteRequestDto historialPacienteDto) throws Exception {
-        HistorialPaciente nuevo = service.save(service.fromDto(historialPacienteDto));
+        HistorialPaciente nuevo = service.create(service.fromDto(historialPacienteDto));
         return ResponseEntity.ok(nuevo); // 200 OK
     }
 
