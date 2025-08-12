@@ -1,8 +1,10 @@
 package com.imb2025.smedico.service.jpa;
 
 import com.imb2025.smedico.dto.ResultadoEstudioRequestDto;
+import com.imb2025.smedico.entity.Estudio;
 import com.imb2025.smedico.entity.OrdenEstudio;
 import com.imb2025.smedico.entity.ResultadoEstudio;
+import com.imb2025.smedico.repository.EstudioRepository;
 import com.imb2025.smedico.repository.OrdenEstudioRepository;
 import com.imb2025.smedico.repository.ResultadoEstudioRepository;
 import com.imb2025.smedico.service.IResultadoEstudioService;
@@ -20,6 +22,9 @@ public class ResultadoEstudioServiceImpl implements IResultadoEstudioService {
 	
 	@Autowired
 	private OrdenEstudioRepository ordenEstudioRepository;
+	
+	@Autowired
+	private EstudioRepository estudioRepository;
 	
 	@Override
 	public List<ResultadoEstudio> findAll() {
@@ -70,15 +75,17 @@ public class ResultadoEstudioServiceImpl implements IResultadoEstudioService {
 	public ResultadoEstudio fromDto(ResultadoEstudioRequestDto requestDto) throws Exception {
 	    OrdenEstudio ordenEstudio = ordenEstudioRepository.findById(requestDto.getOrdenEstudioId())
 	        .orElseThrow(() -> new Exception("Orden de Estudio NO encontrado con ID " + requestDto.getOrdenEstudioId()));
+	    
+	    Estudio estudio = estudioRepository.findById(requestDto.getOrdenEstudioId())
+	    	.orElseThrow(() -> new Exception("Estudio NO encontrado con ID " + requestDto.getEstudioId()));
+	    
+	    ResultadoEstudio resultado = new ResultadoEstudio();
+	    resultado.setEstudio(estudio);
+	    resultado.setFechaCarga(null);
+	    resultado.setObservaciones(null);
+	    resultado.setOrdenEstudio(ordenEstudio);	    
+	    return resultado;
 
-	    return new ResultadoEstudio(
-	        ordenEstudio,
-	        requestDto.getResultado(),
-	        requestDto.getFechaCarga(),
-	        requestDto.getObservaciones()
-	        
-	        
-	    );
 	}
 
 

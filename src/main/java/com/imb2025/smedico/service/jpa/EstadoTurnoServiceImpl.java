@@ -1,6 +1,7 @@
 package com.imb2025.smedico.service.jpa;
 
-import com.imb2025.smedico.dto.EstadoTurnoDTO;
+import com.imb2025.smedico.dto.EstadoTurnoDto;
+import com.imb2025.smedico.dto.EstadoTurnoRequestDto;
 import com.imb2025.smedico.entity.EstadoTurno;
 import com.imb2025.smedico.repository.EstadoTurnoRepository;
 import com.imb2025.smedico.service.IEstadoTurnoService;
@@ -54,7 +55,7 @@ public class EstadoTurnoServiceImpl implements IEstadoTurnoService {
     }
 
     @Override
-    public EstadoTurno fromDto(EstadoTurnoDTO dto) {
+    public EstadoTurno fromDto(EstadoTurnoRequestDto dto) {
         EstadoTurno estadoTurno = new EstadoTurno();
         estadoTurno.setNombre(dto.getNombre());
         return estadoTurno;

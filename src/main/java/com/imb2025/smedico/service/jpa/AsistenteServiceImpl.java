@@ -59,14 +59,14 @@ public class AsistenteServiceImpl implements IAsistenteService {
         repo.deleteById(id);
     }
 
-    /* ---------- Conversión DTO -> Entidad ---------- */
     @Override
     public Asistente fromDto(AsistenteRequestDto dto) {
-        Asistente a = new Asistente();
-        a.setNombre(dto.getNombre());
-        a.setEmail(dto.getEmail());
-        a.setTelefono(dto.getTelefono());
-        a.setDni(dto.getDni());
-        return a;
+        Asistente asistente = new Asistente();
+        asistente.setApellido(dto.getDni());
+        asistente.setDni(dto.getDni());
+        asistente.setEmail(dto.getEmail());
+        asistente.setNombre(dto.getNombre());
+        asistente.setTelefono(dto.getTelefono());
+        return asistente;
     }
 }

@@ -81,7 +81,13 @@ public class OrdenEstudioServiceImpl implements IOrdenEstudioService{
 	    Estudio estudio = estudioRepository.findById(dto.getEstudioId())
 	        .orElseThrow(() -> new Exception("Estudio no encontrado con ID " + dto.getEstudioId()));
 
-	    return new OrdenEstudio(dto.getFecha(), medico, paciente);
+
+	    OrdenEstudio ordenEstudio = new OrdenEstudio();
+	    ordenEstudio.setEstudio(estudio);
+	    ordenEstudio.setFecha(dto.getFecha());
+	    ordenEstudio.setMedico(medico);
+	    ordenEstudio.setPaciente(paciente);
+	    return ordenEstudio;
 	}
 	@Override
 	public boolean existsById(Long id) {

@@ -2,12 +2,12 @@ package com.imb2025.smedico.dto;
 
 import com.imb2025.smedico.entity.EstadoTurno;
 
-public class EstadoTurnoDTO {
+public class EstadoTurnoDto {
     private String nombre;
 
-    public EstadoTurnoDTO() {}
+    public EstadoTurnoDto() {}
 
-    public EstadoTurnoDTO(String nombre) {
+    public EstadoTurnoDto(String nombre) {
         this.nombre = nombre;
     }
 
@@ -20,7 +20,7 @@ public class EstadoTurnoDTO {
     }
 
     //  Conversor de DTO a entidad
-    public static EstadoTurno fromDto(EstadoTurnoDTO dto) {
+    public static EstadoTurno fromDto(EstadoTurnoDto dto) {
         EstadoTurno estadoTurno = new EstadoTurno();
         estadoTurno.setNombre(dto.getNombre());
         return estadoTurno;

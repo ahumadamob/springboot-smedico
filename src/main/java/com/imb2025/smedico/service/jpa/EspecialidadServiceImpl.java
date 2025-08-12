@@ -19,65 +19,60 @@ public class EspecialidadServiceImpl implements IEspecialidadService{
 	private EspecialidadRepository repo;
 	
 	@Override
-	public List<Especialidad> findall() {
+	public List<Especialidad> findAll() {
 		return repo.findAll();		
 	}
 
 	@Override
-        public Especialidad findById(Long id) {
-                Optional<Especialidad> opt = repo.findById(id);
-                        return opt.orElse(null);
+    public Especialidad findById(Long id) {
+		Optional<Especialidad> opt = repo.findById(id);
+        return opt.orElse(null);
+    }
 
-        }
-
-        @Override
-        public boolean existsById(Long id) {
-                return repo.existsById(id);
-        }
+    @Override
+    public boolean existsById(Long id) {
+    	return repo.existsById(id);
+    }
 		
 	@Override
 	public Especialidad create(Especialidad especialidad) {		
 		return repo.save(especialidad);
 	}
 	
-		@Override
+	@Override
 	public Especialidad update(Long id, Especialidad especialidad) throws Exception {	
-		 if (repo.existsById(id)) {
-		        especialidad.setId(id);
-			return repo.save(especialidad);
-			
-		    }else {
-			throw new Exception("No existe esa Especialidad");
-		    }
-		}
+	 if (repo.existsById(id)) {
+	        especialidad.setId(id);
+		return repo.save(especialidad);
 		
-
-		
-		public Especialidad fromDto(EspecialidadRequestDto dto) {
-		
-			    if (dto.getNombre() == null || dto.getNombre().isBlank()) {
-			        throw new IllegalArgumentException("El nombre no puede estar vacío");
-			    }
-			    if (dto.getDescripcion() == null || dto.getDescripcion().isBlank()) {
-			        throw new IllegalArgumentException("La descripción no puede estar vacía");
-			    }
-			    Especialidad especialidad = new Especialidad();
-			    especialidad.setNombre(dto.getNombre());
-			    especialidad.setDescripcion(dto.getDescripcion());
-			    return especialidad;
-		}
-
-		@Override
-		public void deleteById(Long id) {
-			if(!repo.existsById(id)) {
-				throw new IllegalArgumentException("La especialidad con id " + id + " no existe");
-			}
-			repo.deleteById(id);
-
-		}
-
+	    }else {
+		throw new Exception("No existe esa Especialidad");
+	    }
+	}	
+	public Especialidad fromDto(EspecialidadRequestDto dto) {
 	
+		    if (dto.getNombre() == null || dto.getNombre().isBlank()) {
+		        throw new IllegalArgumentException("El nombre no puede estar vacío");
+		    }
+		    if (dto.getDescripcion() == null || dto.getDescripcion().isBlank()) {
+		        throw new IllegalArgumentException("La descripción no puede estar vacía");
+		    }
+		    Especialidad especialidad = new Especialidad();
+		    especialidad.setNombre(dto.getNombre());
+		    especialidad.setDescripcion(dto.getDescripcion());
+		    return especialidad;
 	}
+
+	@Override
+	public void deleteById(Long id) {
+		if(!repo.existsById(id)) {
+			throw new IllegalArgumentException("La especialidad con id " + id + " no existe");
+		}
+		repo.deleteById(id);
+
+	}
+	
+}
 	
 
 

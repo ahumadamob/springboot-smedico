@@ -11,5 +11,5 @@ public interface IEstadoTurnoService {
     public EstadoTurno findById(Long id);
     public boolean existsById(Long id);
     public void deleteById(Long id);
-    public EstadoTurno fromDto(EstadoTurnoRequestDto estadoTurnoRequestDto);
+    public EstadoTurno fromDto(EstadoTurnoRequestDto dto);
 }

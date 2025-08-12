@@ -17,11 +17,15 @@ import java.util.List;
 @Service
 public class DetalleRecetaServiceImpl implements IDetalleRecetaService {
 
-    private final DetalleRecetaRepository repository;
+    @Autowired
+	private final DetalleRecetaRepository repository;
+    
+    @Autowired
     private final RecetaRepository recetaRepository;
+    
+    @Autowired
     private final MedicamentoRepository medicamentoRepository;
 
-    @Autowired
     public DetalleRecetaServiceImpl(DetalleRecetaRepository repository, RecetaRepository recetaRepository, MedicamentoRepository medicamentoRepository) {
         this.repository = repository;
         this.recetaRepository = recetaRepository;

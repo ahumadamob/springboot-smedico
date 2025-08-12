@@ -6,6 +6,7 @@ public class ResultadoEstudioRequestDto {
 
 	
 	private long ordenEstudioId;
+	private long estudioId;
 	private long resultado;
 	private LocalTime fechaCarga;
         private String observaciones;
@@ -51,7 +52,14 @@ public class ResultadoEstudioRequestDto {
 	public void setObservaciones(String observaciones) {
 		this.observaciones = observaciones;
 	}
-	
+
+	public long getEstudioId() {
+		return estudioId;
+	}
+
+	public void setEstudioId(long estudioId) {
+		this.estudioId = estudioId;
+	}
 	
 }
 

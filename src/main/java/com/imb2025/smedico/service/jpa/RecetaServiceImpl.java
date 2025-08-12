@@ -76,7 +76,13 @@ public class RecetaServiceImpl implements IRecetaService {
 
         Paciente paciente = pacienteRepository.findById(dto.getPacienteId())
             .orElseThrow(() -> new Exception("Paciente no encontrado con ID: " + dto.getPacienteId()));
-
-        return new Receta(dto.getFecha(), dto.getObservaciones(), medico, paciente);
+        
+        Receta receta = new Receta();
+        receta.setFecha(dto.getFecha());
+        receta.setMedico(medico);
+        receta.setObservaciones(dto.getObservaciones());
+        receta.setPaciente(paciente);
+        
+        return receta;
     }
 }

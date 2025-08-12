@@ -6,7 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.imb2025.smedico.dto.EstudioRequestDto;
+import com.imb2025.smedico.entity.Especialidad;
 import com.imb2025.smedico.entity.Estudio;
+import com.imb2025.smedico.entity.Medico;
+import com.imb2025.smedico.entity.ObraSocial;
+import com.imb2025.smedico.entity.OrdenEstudio;
+import com.imb2025.smedico.entity.Paciente;
+import com.imb2025.smedico.entity.ResultadoEstudio;
 import com.imb2025.smedico.repository.EspecialidadRepository;
 import com.imb2025.smedico.repository.EstudioRepository;
 import com.imb2025.smedico.repository.MedicoRepository;
@@ -73,15 +79,27 @@ public class EstudioServiceImpl implements IEstudioService {
 
     @Override
     public Estudio fromDto(EstudioRequestDto dto) throws Exception {
-        return new Estudio(
-            dto.getNombre(),
-            dto.getDescripcion(),
-            repoPaciente.findById(dto.getPacientId()).orElseThrow(() -> new Exception("Paciente no encontrado")),
-            repoMedico.findById(dto.getMedicoId()).orElseThrow(() -> new Exception("Médico no encontrado")),
-            repoEspecialidad.findById(dto.getEspecialidadId()).orElseThrow(() -> new Exception("Especialidad no encontrada")),
-            repoObraSocial.findById(dto.getObraSocialId()).orElseThrow(() -> new Exception("Obra social no encontrada")),
-            repoOredenEstudio.findById(dto.getOredenEstudioId()).orElseThrow(() -> new Exception("Orden de estudio no encontrada")),
-            repoResultadoEstudio.findById(dto.getResultadoEstudioId()).orElseThrow(() -> new Exception("Resultado de estudio no encontrado"))
-        );
+    	Especialidad especialidad = repoEspecialidad.findById(dto.getEspecialidadId())
+    			.orElseThrow(() -> new Exception("Especialidad no encontrada"));
+    	Paciente paciente = repoPaciente.findById(dto.getPacientId())
+    			.orElseThrow(() -> new Exception("Paciente no encontrado"));
+        Medico medico = repoMedico.findById(dto.getMedicoId())
+        		.orElseThrow(() -> new Exception("Médico no encontrado"));
+        ObraSocial obraSocial = repoObraSocial.findById(dto.getObraSocialId())
+        		.orElseThrow(() -> new Exception("Obra social no encontrada"));
+        OrdenEstudio ordenEstudio = repoOredenEstudio.findById(dto.getOredenEstudioId())
+        		.orElseThrow(() -> new Exception("Orden de estudio no encontrada"));            
+    	ResultadoEstudio resultadoEstudio = repoResultadoEstudio.findById(dto.getResultadoEstudioId())
+    			.orElseThrow(() -> new Exception("Resultado de estudio no encontrado"));
+        		
+    	Estudio estudio = new Estudio();
+    	estudio.setDescripcion(dto.getDescripcion());
+    	estudio.setEspecialidad(especialidad);
+    	estudio.setMedico(medico);
+    	estudio.setObraSocial(obraSocial);
+    	estudio.setOredenEstudio(ordenEstudio);
+    	estudio.setPaciente(paciente);
+    	estudio.setResultadoEstudio(resultadoEstudio);
+    	return estudio;
     }
 }

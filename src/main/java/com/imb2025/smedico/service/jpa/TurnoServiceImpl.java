@@ -87,7 +87,13 @@ public class TurnoServiceImpl implements ITurnoService {
         EstadoTurno estado = estadoTurnoRepository.findById(dto.getEstadoTurnoId())
             .orElseThrow(() -> new RuntimeException("Estado turno no encontrado"));
 
-        return new Turno(dto.getFecha(), dto.getHora(), paciente, medico, estado);
+        Turno turno = new Turno();
+        turno.setEstadoTurno(estado);
+        turno.setFecha(dto.getFecha());
+        turno.setHora(dto.getHora());
+        turno.setMedico(medico);
+        turno.setPaciente(paciente);
+        return turno;
     }
     
     

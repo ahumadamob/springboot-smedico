@@ -65,7 +65,14 @@ public class FacturaServiceImpl implements IFacturaService {
             .orElseThrow(() -> new Exception("No se encontró ningún paciente con el id: " + requestDTO.getPacienteId()));
         MedioPago medioPago = medioPagoRepository.findById(requestDTO.getMedioPagoId())
             .orElseThrow(() -> new Exception("No se encontró ningún medio de pago con el id: " + requestDTO.getMedioPagoId()));
-        return new Factura(requestDTO.getFecha(), paciente, requestDTO.getMonto(), medioPago);
+        
+        Factura factura = new Factura();
+        factura.setFecha(requestDTO.getFecha());
+        factura.setMedioPago(medioPago);
+        factura.setMonto(requestDTO.getMonto());
+        factura.setPaciente(paciente);
+        
+        return factura;
     }
 
     @Override

@@ -2,10 +2,10 @@ package com.imb2025.smedico.dto;
 
 public class MedicoRequestDto {
 
-        private String nombre;
-        private String apellido;
-        private String matricula;
-    private String especialidad;
+    private String nombre;
+    private String apellido;
+    private String matricula;    
+    private Long especialidadId;
     private String email;
     private String telefono;
 
@@ -15,13 +15,13 @@ public class MedicoRequestDto {
                 String nombre,
                 String apellido,
                 String matricula,
-                String especialidad,
+                Long especialidadId,
                 String email,
                 String telefono) {
                 this.nombre = nombre;
                 this.apellido = apellido;
                 this.matricula = matricula;
-                this.especialidad = especialidad;
+                this.especialidadId = especialidadId;
                 this.email = email;
                 this.telefono = telefono;
         }
@@ -45,11 +45,11 @@ public class MedicoRequestDto {
 	public void setMatricula(String matricula) {
 		this.matricula = matricula;
 	}
-	public String getEspecialidad() {
-		return especialidad;
+	public Long getEspecialidadId() {
+		return especialidadId;
 	}
-	public void setEspecialidad(String especialidad) {
-		this.especialidad = especialidad;
+	public void setEspecialidadId(Long especialidadId) {
+		this.especialidadId = especialidadId;
 	}
 	public String getEmail() {
 		return email;

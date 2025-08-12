@@ -11,5 +11,5 @@ public interface IDetalleFacturaService {
     public DetalleFactura findById(Long id);
     public boolean existsById(Long id);
     public void deleteById(Long id);
-    public DetalleFactura fromDto(DetalleFacturaRequestDto detalleFacturaRequestDto) throws Exception;
+    public DetalleFactura fromDto(DetalleFacturaRequestDto dto) throws Exception;
 }
