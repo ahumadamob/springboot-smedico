@@ -31,14 +31,15 @@ public class PacienteController {
     public ResponseEntity<Paciente> getPacienteById(@PathVariable Long id) {
         Paciente paciente = pacienteService.findById(id);
         if (paciente == null) {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.ok(paciente);
     }
 
     @PostMapping
-    public ResponseEntity<Paciente> createPaciente(@RequestBody Paciente paciente) {
-        Paciente nuevo = pacienteService.save(paciente);
+    public ResponseEntity<Paciente> createPaciente(@RequestBody PacienteRequestDto dto) {
+        Paciente entidad = pacienteService.fromDto(dto);
+        Paciente nuevo = pacienteService.create(entidad);
         return ResponseEntity.ok(nuevo);
     }
 
@@ -50,10 +51,9 @@ public class PacienteController {
         }
 
         try {
-            
+
             Paciente entidad = pacienteService.fromDto(dto);
-            entidad.setId(id);  
-            Paciente actualizado = pacienteService.updatePaciente(entidad);
+            Paciente actualizado = pacienteService.update(id, entidad);
             return ResponseEntity.ok(actualizado);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
