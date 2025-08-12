@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.imb2025.smedico.dto.ResultadoEstudioRequestDTO;
+import com.imb2025.smedico.dto.ResultadoEstudioRequestDto;
 import com.imb2025.smedico.entity.ResultadoEstudio;
 import com.imb2025.smedico.service.IResultadoEstudioService;
 
@@ -47,7 +47,7 @@ public class ResultadoEstudioController {
 	}
 	
 	@PostMapping("/ResultadoEstudio")
-	public ResponseEntity<ResultadoEstudio> createResultadoEstudio(@RequestBody ResultadoEstudioRequestDTO requestDto) throws Exception {
+	public ResponseEntity<ResultadoEstudio> createResultadoEstudio(@RequestBody ResultadoEstudioRequestDto requestDto) throws Exception {
 		ResultadoEstudio resultadoEstudio = service.create(service.fromDto(requestDto));
 		return ResponseEntity.ok(resultadoEstudio);
 		
@@ -55,7 +55,7 @@ public class ResultadoEstudioController {
 	
 	
 	@PutMapping ("/ResultadoEstudio/{id}")
-	public ResponseEntity<ResultadoEstudio>  updateResultadoEstudio(@PathVariable Long id,@RequestBody ResultadoEstudioRequestDTO requestDto) throws Exception {
+	public ResponseEntity<ResultadoEstudio>  updateResultadoEstudio(@PathVariable Long id,@RequestBody ResultadoEstudioRequestDto requestDto) throws Exception {
 		return ResponseEntity.ok(service.update(id, service.fromDto(requestDto)));
 	}
 	

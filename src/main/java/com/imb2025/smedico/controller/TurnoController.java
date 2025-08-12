@@ -1,20 +1,20 @@
 package com.imb2025.smedico.controller;
 
 import java.util.List;
-import java.util.Map;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.imb2025.smedico.dto.TurnoRequestDTO;
-import com.imb2025.smedico.entity.EstadoTurno;
-import com.imb2025.smedico.entity.Medico;
-import com.imb2025.smedico.entity.Paciente;
+import com.imb2025.smedico.dto.TurnoRequestDto;
 import com.imb2025.smedico.entity.Turno;
-import com.imb2025.smedico.repository.EstadoTurnoRepository;
-import com.imb2025.smedico.repository.MedicoRepository;
-import com.imb2025.smedico.repository.PacienteRepository;
 import com.imb2025.smedico.service.ITurnoService;
 
 @RestController
@@ -46,13 +46,13 @@ public class TurnoController {
     }
 
     @PostMapping("/turno")
-    public ResponseEntity<Turno> create(@RequestBody TurnoRequestDTO dto) throws Exception {
+    public ResponseEntity<Turno> create(@RequestBody TurnoRequestDto dto) throws Exception {
         Turno turno = service.fromDto(dto);
         return ResponseEntity.ok(service.create(turno));
     }
 
     @PutMapping("/turno/{idturno}")
-    public ResponseEntity<Turno> update(@PathVariable("idturno") Long idturno, @RequestBody TurnoRequestDTO dto) throws Exception {
+    public ResponseEntity<Turno> update(@PathVariable("idturno") Long idturno, @RequestBody TurnoRequestDto dto) throws Exception {
         Turno turno = service.fromDto(dto);
         return ResponseEntity.ok(service.update(idturno, turno));
     }

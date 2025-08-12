@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.imb2025.smedico.dto.OrdenEstudioRequestDTO;
+import com.imb2025.smedico.dto.OrdenEstudioRequestDto;
 import com.imb2025.smedico.entity.Estudio;
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.entity.OrdenEstudio;
@@ -61,7 +61,7 @@ public class OrdenEstudioServiceImpl implements IOrdenEstudioService{
 	
 
 	@Override
-	public OrdenEstudio update(Long id,OrdenEstudio ordenestudio) throws Exception {
+	public OrdenEstudio update(Long id, OrdenEstudio ordenestudio) throws Exception {
 		if(repo.existsById(id)) {
 			ordenestudio.setId(id);
 		      return repo.save(ordenestudio);
@@ -70,7 +70,7 @@ public class OrdenEstudioServiceImpl implements IOrdenEstudioService{
 		}
 	}
 	@Override
-	public OrdenEstudio fromDto(OrdenEstudioRequestDTO dto) throws Exception {
+	public OrdenEstudio fromDto(OrdenEstudioRequestDto dto) throws Exception {
 	    Medico medico = medicoRepository.findById(dto.getMedicoId())
 	        .orElseThrow(() -> new Exception("Médico no encontrado con ID " + dto.getMedicoId()));
 
@@ -81,7 +81,13 @@ public class OrdenEstudioServiceImpl implements IOrdenEstudioService{
 	    Estudio estudio = estudioRepository.findById(dto.getEstudioId())
 	        .orElseThrow(() -> new Exception("Estudio no encontrado con ID " + dto.getEstudioId()));
 
-	    return new OrdenEstudio(dto.getFecha(), medico, paciente);
+
+	    OrdenEstudio ordenEstudio = new OrdenEstudio();
+	    ordenEstudio.setEstudio(estudio);
+	    ordenEstudio.setFecha(dto.getFecha());
+	    ordenEstudio.setMedico(medico);
+	    ordenEstudio.setPaciente(paciente);
+	    return ordenEstudio;
 	}
 	@Override
 	public boolean existsById(Long id) {

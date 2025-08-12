@@ -1,11 +1,16 @@
 package com.imb2025.smedico.dto;
 
-import com.imb2025.smedico.entity.MedioPago.TipoPago;
-
 public class MedioPagoRequestDTO {
-	
-	private String nombre;
+
+        private String nombre;
     private String tipo;
+
+        public MedioPagoRequestDTO() {}
+
+        public MedioPagoRequestDTO(String nombre, String tipo) {
+                this.nombre = nombre;
+                this.tipo = tipo;
+        }
     
 	public String getNombre() {
 		return nombre;

@@ -3,6 +3,7 @@ package com.imb2025.smedico.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.imb2025.smedico.entity.Consultorio;
 import com.imb2025.smedico.service.IConsultorioService;
 
-import dto.ConsultorioRequestDTO;
+import com.imb2025.smedico.dto.ConsultorioRequestDto;
 
 @RestController
 public class ConsultorioController {
@@ -25,7 +26,7 @@ public class ConsultorioController {
 	
 	//Crear Consultorio - POST
 	@PostMapping("/consultorio")
-	public ResponseEntity<Consultorio> create(@RequestBody ConsultorioRequestDTO consultorioRequestDto) throws Exception{
+	public ResponseEntity<Consultorio> create(@RequestBody ConsultorioRequestDto consultorioRequestDto) throws Exception{
 		return ResponseEntity.ok(servicio.create(servicio.fromDto(consultorioRequestDto)));
 	}
 		
@@ -55,12 +56,18 @@ public class ConsultorioController {
     //Eliminar por ID - DELETE
     @DeleteMapping("/consultorio/{id}")
     public ResponseEntity<String> delete(@PathVariable("id") Long id) {
-    	return ResponseEntity.ok("Consultorio " + id.toString() + " eliminado correctamente. ");
-	}
+        Consultorio consultorio = servicio.findById(id);
+        if (consultorio == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Consultorio " + id.toString() + " no encontrado");
+        }
+        servicio.deleteById(id);
+        return ResponseEntity.ok("Consultorio " + id.toString() + " eliminado correctamente. ");
+    }
        
     //Actualizar consultorio - PUT
     @PutMapping("/consultorio/{id}")
-    public ResponseEntity<Consultorio> update(@RequestBody ConsultorioRequestDTO dto,@PathVariable("id") Long id) throws Exception{
+    public ResponseEntity<Consultorio> update(@RequestBody ConsultorioRequestDto dto,@PathVariable("id") Long id) throws Exception{
     	Consultorio consultorio = new Consultorio();
     	consultorio = servicio.fromDto(dto);
     	return ResponseEntity.ok(servicio.update(id, consultorio));

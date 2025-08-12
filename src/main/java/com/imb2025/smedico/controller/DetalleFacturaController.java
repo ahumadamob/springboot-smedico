@@ -11,7 +11,7 @@ import com.imb2025.smedico.service.IDetalleFacturaService;
 
 import com.imb2025.smedico.entity.DetalleFactura;
 
-import com.imb2025.smedico.dto.DetalleFacturaRequestDTO;
+import com.imb2025.smedico.dto.DetalleFacturaRequestDto;
 
 
 import java.util.List;
@@ -49,19 +49,20 @@ public class DetalleFacturaController {
     }
 
     @PostMapping("/detallefactura")
-    public ResponseEntity<DetalleFactura> create(@RequestBody DetalleFacturaRequestDTO dto) throws Exception {
+    public ResponseEntity<DetalleFactura> create(@RequestBody DetalleFacturaRequestDto dto) throws Exception {
         DetalleFactura detalle = detalleFacturaService.fromDto(dto);
         DetalleFactura creado = detalleFacturaService.create(detalle);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/detallefactura/{id}")
-    public ResponseEntity<DetalleFactura> update(@PathVariable Long id, @RequestBody DetalleFacturaRequestDTO dto) throws Exception {
+    public ResponseEntity<DetalleFactura> update(@PathVariable Long id, @RequestBody DetalleFacturaRequestDto dto) throws Exception {
         if (!detalleFacturaService.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-        DetalleFactura actualizado = detalleFacturaService.fromDto(dto, id);
-        DetalleFactura saved = detalleFacturaService.update(id, actualizado);
+        DetalleFactura entidad = detalleFacturaService.fromDto(dto);
+        entidad.setId(id);
+        DetalleFactura saved = detalleFacturaService.update(id, entidad);
         return ResponseEntity.ok(saved);
     }
 

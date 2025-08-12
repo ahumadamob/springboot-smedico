@@ -1,6 +1,6 @@
 package com.imb2025.smedico.controller;
 
-import com.imb2025.smedico.dto.PacienteRequestDTO;
+import com.imb2025.smedico.dto.PacienteRequestDto;
 import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.service.IPacienteService;
 
@@ -31,29 +31,29 @@ public class PacienteController {
     public ResponseEntity<Paciente> getPacienteById(@PathVariable Long id) {
         Paciente paciente = pacienteService.findById(id);
         if (paciente == null) {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.ok(paciente);
     }
 
     @PostMapping
-    public ResponseEntity<Paciente> createPaciente(@RequestBody Paciente paciente) {
-        Paciente nuevo = pacienteService.save(paciente);
+    public ResponseEntity<Paciente> createPaciente(@RequestBody PacienteRequestDto dto) {
+        Paciente entidad = pacienteService.fromDto(dto);
+        Paciente nuevo = pacienteService.create(entidad);
         return ResponseEntity.ok(nuevo);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePaciente(@PathVariable Long id, @RequestBody PacienteRequestDTO dto) {
+    public ResponseEntity<?> updatePaciente(@PathVariable Long id, @RequestBody PacienteRequestDto dto) {
         if (!pacienteService.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Paciente no encontrado con ID: " + id);
         }
 
         try {
-            
+
             Paciente entidad = pacienteService.fromDto(dto);
-            entidad.setId(id);  
-            Paciente actualizado = pacienteService.updatePaciente(entidad);
+            Paciente actualizado = pacienteService.update(id, entidad);
             return ResponseEntity.ok(actualizado);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
