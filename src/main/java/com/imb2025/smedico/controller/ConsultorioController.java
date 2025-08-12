@@ -3,6 +3,7 @@ package com.imb2025.smedico.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -55,8 +56,14 @@ public class ConsultorioController {
     //Eliminar por ID - DELETE
     @DeleteMapping("/consultorio/{id}")
     public ResponseEntity<String> delete(@PathVariable("id") Long id) {
-    	return ResponseEntity.ok("Consultorio " + id.toString() + " eliminado correctamente. ");
-	}
+        Consultorio consultorio = servicio.findById(id);
+        if (consultorio == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Consultorio " + id.toString() + " no encontrado");
+        }
+        servicio.deleteById(id);
+        return ResponseEntity.ok("Consultorio " + id.toString() + " eliminado correctamente. ");
+    }
        
     //Actualizar consultorio - PUT
     @PutMapping("/consultorio/{id}")
