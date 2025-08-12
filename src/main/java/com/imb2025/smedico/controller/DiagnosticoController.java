@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 import java.util.List;
 
 @RestController
-@RequestMapping("/diagnostico")
+@RequestMapping("/diagnosticos")
 public class DiagnosticoController {
 
     @Autowired
@@ -36,19 +36,22 @@ public class DiagnosticoController {
     }
 
     // Crea nuevo
-    @PostMapping("/diagnosticos")
+    @PostMapping
     public ResponseEntity<?> crearDiagnostico(@RequestBody DiagnosticoRequestDto dto) {
         Diagnostico nuevo = service.fromDto(dto);
-        Diagnostico guardado = service.save(nuevo);
+        Diagnostico guardado = service.create(nuevo);
         return ResponseEntity.status(HttpStatus.CREATED).body(guardado); // 201 CREATED
     }
 
     // Actualiza el existente
-    @PutMapping("/diagnosticos/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Diagnostico> actualizarDiagnostico(@PathVariable Long id,
                                                              @RequestBody DiagnosticoRequestDto dto) {
+        if (!service.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
         Diagnostico diagnostico = service.fromDto(dto);
-        Diagnostico actualizado = service.actualizar(id, diagnostico);
+        Diagnostico actualizado = service.update(id, diagnostico);
         return ResponseEntity.ok(actualizado); // 200 OK
     }
 
