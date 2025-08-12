@@ -3,7 +3,7 @@ package com.imb2025.smedico.service.jpa;
 import com.imb2025.smedico.dto.HorarioAtencionRequestDto;
 import com.imb2025.smedico.entity.HorarioAtencion;
 import com.imb2025.smedico.entity.Medico;
-import com.imb2025.smedico.exception.RecursoNoEncontradoException;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.HorarioAtencionRepository;
 import com.imb2025.smedico.service.IHorarioAtencionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,11 +48,11 @@ public class HorarioAtencionServiceImpl implements IHorarioAtencionService {
     public HorarioAtencion update(Long id, HorarioAtencion horarioAtencion) throws Exception {
         try {
             if (!repository.existsById(id)) {
-                throw new RecursoNoEncontradoException("No existe un horario con ID: " + id);
+                throw new ResourceNotFoundException("No existe un horario con ID: " + id);
             }
             horarioAtencion.setId(id);
             return repository.save(horarioAtencion);
-        } catch (RecursoNoEncontradoException e) {
+        } catch (ResourceNotFoundException e) {
             throw e;
         } catch (Exception e) {
             throw new RuntimeException("Error al actualizar el horario: " + e.getMessage());
@@ -63,10 +63,10 @@ public class HorarioAtencionServiceImpl implements IHorarioAtencionService {
     public void deleteById(Long id) {
         try {
             if (!repository.existsById(id)) {
-                throw new RecursoNoEncontradoException("No existe un horario con ID: " + id);
+                throw new ResourceNotFoundException("No existe un horario con ID: " + id);
             }
             repository.deleteById(id);
-        } catch (RecursoNoEncontradoException e) {
+        } catch (ResourceNotFoundException e) {
             throw e;
         } catch (Exception e) {
             throw new RuntimeException("Error al eliminar el horario: " + e.getMessage());

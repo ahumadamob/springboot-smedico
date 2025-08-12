@@ -12,7 +12,7 @@ import com.imb2025.smedico.dto.HorarioAtencionRequestDto;
 import com.imb2025.smedico.dto.HorarioAtencionResponseDTO;
 import com.imb2025.smedico.entity.HorarioAtencion;
 import com.imb2025.smedico.entity.Medico;
-import com.imb2025.smedico.exception.RecursoNoEncontradoException;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.service.IHorarioAtencionService;
 import com.imb2025.smedico.service.IMedicoService;
 
@@ -32,7 +32,7 @@ public class HorarioAtencionController {
         if (requestDTO.getMedicoId() != null) {
             Medico medico = medicoService.findById(requestDTO.getMedicoId());
             if (medico == null) {
-                throw new RecursoNoEncontradoException("Médico no encontrado con ID: " + requestDTO.getMedicoId());
+                throw new ResourceNotFoundException("Médico no encontrado con ID: " + requestDTO.getMedicoId());
             }
             horarioEntity.setMedico(medico);
         } else {
@@ -112,8 +112,8 @@ public class HorarioAtencionController {
         }
     }
 
-    @ExceptionHandler(RecursoNoEncontradoException.class)
-    public ResponseEntity<String> handleNotFoundException(RecursoNoEncontradoException ex) {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<String> handleNotFoundException(ResourceNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
