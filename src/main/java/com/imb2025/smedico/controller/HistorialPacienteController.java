@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.imb2025.smedico.dto.HistorialPacienteRequestDTO;
+import com.imb2025.smedico.dto.HistorialPacienteRequestDto;
 import com.imb2025.smedico.entity.HistorialPaciente;
 import com.imb2025.smedico.service.IHistorialPacienteService;
 
@@ -35,21 +35,21 @@ public class HistorialPacienteController {
         if (historial != null) {
             return ResponseEntity.ok(historial);
         } else {
-            return ResponseEntity.noContent().build(); // 204
+            return ResponseEntity.notFound().build();
         }
     }
 
  // POST - Crear un nuevo historial de paciente usando DTO
     @PostMapping
-    public ResponseEntity<HistorialPaciente> createHistorialPaciente(@RequestBody HistorialPacienteRequestDTO historialPacienteDto) throws Exception {
-        HistorialPaciente nuevo = service.save(service.fromDto(historialPacienteDto));
+    public ResponseEntity<HistorialPaciente> createHistorialPaciente(@RequestBody HistorialPacienteRequestDto historialPacienteDto) throws Exception {
+        HistorialPaciente nuevo = service.create(service.fromDto(historialPacienteDto));
         return ResponseEntity.ok(nuevo); // 200 OK
     }
 
     // PUT - Actualizar historial de paciente existente usando DTO
     @PutMapping("/{idhistorialpaciente}")
     public ResponseEntity<HistorialPaciente> updateHistorialPaciente(
-            @RequestBody HistorialPacienteRequestDTO historialPacienteDto,
+            @RequestBody HistorialPacienteRequestDto historialPacienteDto,
             @PathVariable("idhistorialpaciente") Long id) throws Exception {
         HistorialPaciente actualizado = service.update(id, service.fromDto(historialPacienteDto));
         return ResponseEntity.ok(actualizado); // 200 OK

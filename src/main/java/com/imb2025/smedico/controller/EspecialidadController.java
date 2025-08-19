@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.imb2025.smedico.entity.Especialidad;
 import com.imb2025.smedico.service.IEspecialidadService;
 
-import dto.EspecialidadRequestDTO;
+import com.imb2025.smedico.dto.EspecialidadRequestDto;
 
 @RestController
 public class EspecialidadController {
@@ -25,30 +25,32 @@ public class EspecialidadController {
 	private IEspecialidadService service;
 	
 	
-	@GetMapping("/especialidad")
-	public List<Especialidad> findAllEspecialidad(){
-		return service.findall();
-	}
-	
-	@GetMapping("/especialidad/{idespecialidad}")
-	public ResponseEntity<Especialidad> findEspecialidadById(@PathVariable("idespecialidad") Long id) {	 
-		Especialidad especialidad = new Especialidad();
-		especialidad = service.findById(id);
-		 if(especialidad == null) {
-			 return ResponseEntity.badRequest().body(null);	 
-		 }else {
-			 return ResponseEntity.ok(especialidad);
-		 }
-	}
+        @GetMapping("/especialidad")
+        public ResponseEntity<List<Especialidad>> findAllEspecialidad(){
+                List<Especialidad> especialidades = service.findAll();
+                if (especialidades.isEmpty()) {
+                        return ResponseEntity.noContent().build();
+                }
+                return ResponseEntity.ok(especialidades);
+        }
+
+        @GetMapping("/especialidad/{idespecialidad}")
+        public ResponseEntity<Especialidad> findEspecialidadById(@PathVariable("idespecialidad") Long id) {
+                Especialidad especialidad = service.findById(id);
+                if (especialidad == null) {
+                        return ResponseEntity.notFound().build();
+                }
+                return ResponseEntity.ok(especialidad);
+        }
 	
 	@PostMapping("/especialidad")
-	public ResponseEntity<Especialidad> create(@RequestBody EspecialidadRequestDTO dto) throws Exception {
+	public ResponseEntity<Especialidad> create(@RequestBody EspecialidadRequestDto dto) throws Exception {
 		return ResponseEntity.ok(service.create(service.fromDto(dto)));
 		
 	}
 	 
 	@PutMapping("/especialidad/{idespecialidad}")
-	public ResponseEntity<Especialidad> update(@RequestBody EspecialidadRequestDTO dto, @PathVariable("idespecialidad") Long id) throws Exception {
+	public ResponseEntity<Especialidad> update(@RequestBody EspecialidadRequestDto dto, @PathVariable("idespecialidad") Long id) throws Exception {
 			 Especialidad entity = service.fromDto(dto);
 			 return ResponseEntity.ok(service.update(id, entity));
 	}

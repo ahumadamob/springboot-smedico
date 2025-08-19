@@ -1,12 +1,9 @@
 package com.imb2025.smedico.service.jpa;
 
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.imb2025.smedico.dto.TurnoRequestDTO;
+import com.imb2025.smedico.dto.TurnoRequestDto;
 import com.imb2025.smedico.entity.EstadoTurno;
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.entity.Paciente;
@@ -45,6 +42,11 @@ public class TurnoServiceImpl implements ITurnoService {
             .orElseThrow(() -> new RuntimeException("Turno con ID " + id + " no encontrado"));
     }
 
+    @Override
+    public boolean existsById(Long id) {
+        return repo.existsById(id);
+    }
+
 
     @Override
     public void deleteById(Long id) {
@@ -74,7 +76,7 @@ public class TurnoServiceImpl implements ITurnoService {
     }
     
     @Override
-    public Turno fromDto(TurnoRequestDTO dto) {
+    public Turno fromDto(TurnoRequestDto dto) {
         Paciente paciente = pacienteRepository.findById(dto.getPacienteId())
             .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
         Medico medico = medicoRepository.findById(dto.getMedicoId())
@@ -82,7 +84,13 @@ public class TurnoServiceImpl implements ITurnoService {
         EstadoTurno estado = estadoTurnoRepository.findById(dto.getEstadoTurnoId())
             .orElseThrow(() -> new RuntimeException("Estado turno no encontrado"));
 
-        return new Turno(dto.getFecha(), dto.getHora(), paciente, medico, estado);
+        Turno turno = new Turno();
+        turno.setEstadoTurno(estado);
+        turno.setFecha(dto.getFecha());
+        turno.setHora(dto.getHora());
+        turno.setMedico(medico);
+        turno.setPaciente(paciente);
+        return turno;
     }
     
     

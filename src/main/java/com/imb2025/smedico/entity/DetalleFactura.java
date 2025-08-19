@@ -7,23 +7,28 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
-
-
 @Entity
 public class DetalleFactura {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-        private String descripcion;
+    private String descripcion;
     private Double importe;
 
     @ManyToOne
-    @JoinColumn(name = "factura_id", nullable = false) // Aseguramos que la relación no sea nula
+    @JoinColumn(name = "factura_id", nullable = false)
     private Factura factura;
 
-    // Getters y setters
+    public DetalleFactura() {}
+
+    public DetalleFactura(Long id, String descripcion, Double importe, Factura factura) {
+        this.id = id;
+        this.descripcion = descripcion;
+        this.importe = importe;
+        this.factura = factura;
+    }
+
     public Long getId() {
         return id;
     }

@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.imb2025.smedico.dto.HistorialPacienteRequestDTO;
+import com.imb2025.smedico.dto.HistorialPacienteRequestDto;
 import com.imb2025.smedico.entity.HistorialPaciente;
 import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.repository.HistorialPacienteRepository;
@@ -20,7 +20,7 @@ public class HistorialPacienteServiceImpl implements IHistorialPacienteService {
 	@Autowired
 	private HistorialPacienteRepository repo;
 	@Autowired
-	private PacienteRepository pacienteRepository;
+	private PacienteRepository repoPaciente;
 
 	@Override
 	public List<HistorialPaciente> findAll() {
@@ -35,11 +35,6 @@ public class HistorialPacienteServiceImpl implements IHistorialPacienteService {
 		}else {
 			return null;
 		}
-	}
-
-	@Override
-	public HistorialPaciente save(HistorialPaciente historial) {
-		return repo.save(historial);
 	}
 
 	@Override
@@ -66,14 +61,15 @@ public class HistorialPacienteServiceImpl implements IHistorialPacienteService {
 	    }
 	}
 	@Override
-	public HistorialPaciente fromDto(HistorialPacienteRequestDTO dto) throws Exception {
-		if (dto.getPacienteId() == null) {
-		    throw new IllegalArgumentException("El ID del paciente no puede ser nulo");
-		}
-		Paciente paciente = pacienteRepository.findById(dto.getPacienteId())
+	public HistorialPaciente fromDto(HistorialPacienteRequestDto dto) throws Exception {
+		Paciente paciente = repoPaciente.findById(dto.getPacienteId())
 	        .orElseThrow(() -> new Exception("Paciente no encontrado" + dto.getPacienteId()));
+		HistorialPaciente historial = new HistorialPaciente();
 
-	   return new HistorialPaciente(dto.getEvento(),dto.getFecha(),dto.getObservacion(),paciente);
+		historial.setFecha(dto.getFecha());
+		historial.setObservacion(dto.getObservacion());
+		historial.setPaciente(paciente);
+		return historial;
 	}
 	
 	public boolean existsById(Long id) {

@@ -9,7 +9,7 @@ import com.imb2025.smedico.entity.Consultorio;
 import com.imb2025.smedico.repository.ConsultorioRepository;
 import com.imb2025.smedico.service.IConsultorioService;
 
-import dto.ConsultorioRequestDTO;
+import com.imb2025.smedico.dto.ConsultorioRequestDto;
 
 @Service
 public class ConsultorioServiceImpl implements IConsultorioService {
@@ -25,15 +25,20 @@ public class ConsultorioServiceImpl implements IConsultorioService {
 	
 	//Buscar por id
 	 @Override
-	 public Consultorio findById(Long id) {
-		 Optional<Consultorio> opt;
-			opt = repository.findById(id);
-			if(opt.isPresent()) {
-				return opt.get();
-			}else {
-				return null;
-		 }
-	 }
+        public Consultorio findById(Long id) {
+                Optional<Consultorio> opt;
+                       opt = repository.findById(id);
+                       if(opt.isPresent()) {
+                               return opt.get();
+                       }else {
+                               return null;
+                }
+        }
+
+        @Override
+        public boolean existsById(Long id) {
+                return repository.existsById(id);
+        }
 	 
 	//Listar todos
 	@Override
@@ -63,7 +68,7 @@ public class ConsultorioServiceImpl implements IConsultorioService {
 	}
     
     @Override
-	public Consultorio fromDto(ConsultorioRequestDTO dto) throws Exception {
+	public Consultorio fromDto(ConsultorioRequestDto dto) throws Exception {
     	if(dto.getNombre() == null || dto.getNombre().isBlank()) {
     		throw new IllegalArgumentException("El nombre no puede estar vacío");
     	}

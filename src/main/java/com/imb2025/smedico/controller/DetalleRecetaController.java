@@ -1,6 +1,6 @@
 package com.imb2025.smedico.controller;
 
-import com.imb2025.smedico.dto.DetalleRecetaRequestDTO;
+import com.imb2025.smedico.dto.DetalleRecetaRequestDto;
 import com.imb2025.smedico.entity.DetalleReceta;
 import com.imb2025.smedico.service.IDetalleRecetaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +34,9 @@ public class DetalleRecetaController {
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody DetalleRecetaRequestDTO dto) {
+    public ResponseEntity<?> save(@RequestBody DetalleRecetaRequestDto dto) {
         try {
-            DetalleReceta nueva = service.saveFromDTO(dto);
+            DetalleReceta nueva = service.create(service.fromDto(dto));
             return ResponseEntity.status(HttpStatus.CREATED).body(nueva);
         } catch (Exception e) {
             e.printStackTrace();
@@ -46,9 +46,10 @@ public class DetalleRecetaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody DetalleRecetaRequestDTO dto) {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody DetalleRecetaRequestDto dto) {
         try {
-            DetalleReceta actualizada = service.updateFromDTO(id, dto);
+            DetalleReceta entidad = service.fromDto(dto);
+            DetalleReceta actualizada = service.update(id, entidad);
             return ResponseEntity.ok(actualizada);
         } catch (IllegalArgumentException e) {
             // Se usa NOT_FOUND si el detalle o datos relacionados no existen
@@ -69,5 +70,10 @@ public class DetalleRecetaController {
         }
         service.deleteById(id);
         return ResponseEntity.noContent().build();  // 204 No Content para borrar OK
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 }

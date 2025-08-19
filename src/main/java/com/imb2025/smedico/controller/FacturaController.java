@@ -1,6 +1,6 @@
 package com.imb2025.smedico.controller;
 
-import com.imb2025.smedico.dto.FacturaRequestDTO;
+import com.imb2025.smedico.dto.FacturaRequestDto;
 import com.imb2025.smedico.entity.Factura;
 import com.imb2025.smedico.service.IFacturaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +35,12 @@ public class FacturaController {
     }
 
     @PostMapping
-    public ResponseEntity<Factura> createFactura(@RequestBody FacturaRequestDTO requestDTO) throws Exception{
+    public ResponseEntity<Factura> createFactura(@RequestBody FacturaRequestDto requestDTO) throws Exception{
         return ResponseEntity.ok(facturaService.create(facturaService.fromDto(requestDTO)));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Factura> updateFactura(@PathVariable Long id, @RequestBody FacturaRequestDTO requestDTO) throws Exception{
+    public ResponseEntity<Factura> updateFactura(@PathVariable Long id, @RequestBody FacturaRequestDto requestDTO) throws Exception{
         return ResponseEntity.ok(facturaService.update(id, facturaService.fromDto(requestDTO)));
     }
 

@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.imb2025.smedico.dto.EncuestaRequestDTO;
+import com.imb2025.smedico.dto.EncuestaRequestDto;
 import com.imb2025.smedico.entity.Consulta;
 import com.imb2025.smedico.entity.Encuesta;
 import com.imb2025.smedico.entity.Paciente;
@@ -53,7 +53,7 @@ import com.imb2025.smedico.service.IEncuestaService;
        
 
         @Override
-        public Encuesta fromDto(EncuestaRequestDTO dto) throws Exception{
+        public Encuesta fromDto(EncuestaRequestDto dto) throws Exception{
             Paciente paciente = pacienteRepo.findById(dto.getPacienteId())
                     .orElseThrow(() -> new Exception("Paciente no encontrado"));
             Consulta consulta = consultaRepo.findById(dto.getConsultaId())

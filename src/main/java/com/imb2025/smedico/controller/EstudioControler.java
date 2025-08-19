@@ -4,70 +4,69 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import com.imb2025.smedico.dto.EstudioRequestDTO;
+import com.imb2025.smedico.dto.EstudioRequestDto;
 import com.imb2025.smedico.dto.EstudioResponseDTO;
 import com.imb2025.smedico.entity.Estudio;
 import com.imb2025.smedico.service.IEstudioService;
 
 @RestController
+@RequestMapping("/estudio")
 public class EstudioControler {
 
-	@Autowired
-	private IEstudioService service;
-	
-	@GetMapping("/estudio")
-	public List<Estudio>findAllestudio(){
-		return service.findAll();
-	}
-	@GetMapping("/estudio/{idestudio}")
-	public Estudio findEstudioByid(@PathVariable("idestudio") Long id) {
-		return service.findById(id);
-	}
-	@GetMapping("/estudioCompleto")
-	public List<EstudioResponseDTO> findAllestudio1() {
-	    return service.findAll().stream()
-	        .map(EstudioResponseDTO::new)
-	        .collect(Collectors.toList());
-	}
-	
-	@PostMapping("/estudioid")
-	public Estudio saveEstudio(@RequestBody EstudioRequestDTO dto) throws Exception {
-		try {
-		Estudio estudio = service.fromDto(dto);
-	    return service.create(estudio);
-		} catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-	}
+    @Autowired
+    private IEstudioService service;
 
-	@PutMapping("/estudio/{idestudio}")
-	public Estudio updateEstudio(@PathVariable("idestudio") Long id, @RequestBody EstudioRequestDTO dto) throws Exception {
-		try {
-		Estudio estudio = service.fromDto(dto);
-	    return service.update(estudio, id);
-		} catch (Exception e) {
-            e.printStackTrace();
-            return null;
+    @GetMapping
+    public ResponseEntity<List<Estudio>> findAll() {
+        List<Estudio> lista = service.findAll();
+        if (lista.isEmpty()) {
+            return ResponseEntity.noContent().build();
         }
-	}
-	
-	@DeleteMapping("/estudio/{idestudio}")
-	public String deleteEstudio(@PathVariable("idestudio") Long id, @RequestBody EstudioRequestDTO dto) {
-		try {
-		service.deleteById(id);
-		return "Estudio "+id.toString()+ " Eliminado Correctamente";
-		} catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Estudio> findById(@PathVariable("id") Long id) {
+        Estudio estudio = service.findById(id);
+        if (estudio == null) {
+            return ResponseEntity.notFound().build();
         }
-	}
+        return ResponseEntity.ok(estudio);
+    }
+
+    @GetMapping("/completo")
+    public ResponseEntity<List<EstudioResponseDTO>> findAllDTO() {
+        List<EstudioResponseDTO> lista = service.findAll().stream()
+                .map(EstudioResponseDTO::new)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(lista);
+    }
+
+    @PostMapping
+    public ResponseEntity<Estudio> create(@RequestBody EstudioRequestDto dto) throws Exception {
+        Estudio estudio = service.fromDto(dto);
+        Estudio creado = service.create(estudio);
+        return ResponseEntity.ok(creado);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Estudio> update(@PathVariable("id") Long id, @RequestBody EstudioRequestDto dto) throws Exception {
+        Estudio estudio = service.fromDto(dto);
+        Estudio actualizado = service.update(id, estudio);
+        return ResponseEntity.ok(actualizado);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
+        service.deleteById(id);
+        return ResponseEntity.ok("Estudio " + id + " eliminado correctamente.");
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception ex) {
+        return ResponseEntity.badRequest().body("Error: " + ex.getMessage());
+    }
 }

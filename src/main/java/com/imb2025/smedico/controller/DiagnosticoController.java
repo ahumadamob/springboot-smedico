@@ -2,7 +2,7 @@ package com.imb2025.smedico.controller;
 
 import com.imb2025.smedico.entity.Diagnostico;
 import com.imb2025.smedico.service.IDiagnosticoService;
-import com.imb2025.smedico.dto.DiagnosticoRequestDTO;
+import com.imb2025.smedico.dto.DiagnosticoRequestDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 import java.util.List;
 
 @RestController
-@RequestMapping("/diagnostico")
+@RequestMapping("/diagnosticos")
 public class DiagnosticoController {
 
     @Autowired
@@ -36,19 +36,22 @@ public class DiagnosticoController {
     }
 
     // Crea nuevo
-    @PostMapping("/diagnosticos")
-    public ResponseEntity<?> crearDiagnostico(@RequestBody DiagnosticoRequestDTO dto) {
+    @PostMapping
+    public ResponseEntity<?> crearDiagnostico(@RequestBody DiagnosticoRequestDto dto) {
         Diagnostico nuevo = service.fromDto(dto);
-        Diagnostico guardado = service.save(nuevo);
+        Diagnostico guardado = service.create(nuevo);
         return ResponseEntity.status(HttpStatus.CREATED).body(guardado); // 201 CREATED
     }
 
     // Actualiza el existente
-    @PutMapping("/diagnosticos/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Diagnostico> actualizarDiagnostico(@PathVariable Long id,
-                                                             @RequestBody DiagnosticoRequestDTO dto) {
+                                                             @RequestBody DiagnosticoRequestDto dto) {
+        if (!service.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
         Diagnostico diagnostico = service.fromDto(dto);
-        Diagnostico actualizado = service.actualizar(id, diagnostico);
+        Diagnostico actualizado = service.update(id, diagnostico);
         return ResponseEntity.ok(actualizado); // 200 OK
     }
 

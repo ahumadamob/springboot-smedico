@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.imb2025.smedico.dto.MedicoRequestDTO;
+import com.imb2025.smedico.dto.MedicoRequestDto;
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.service.IMedicoService;
 
@@ -36,17 +36,21 @@ public class MedicoController {
     }
 
     @PostMapping
-    public ResponseEntity<Medico> create(@RequestBody MedicoRequestDTO dto) throws Exception {
+    public ResponseEntity<Medico> create(@RequestBody MedicoRequestDto dto) throws Exception {
         Medico medico = service.fromDto(dto);
         Medico creado = service.create(medico);
         return ResponseEntity.ok(creado); 
     }
 
     @PutMapping("/{idmedico}")
-    public ResponseEntity<Medico> update(@PathVariable("idmedico") Long id, @RequestBody MedicoRequestDTO dto) throws Exception {
+    public ResponseEntity<Medico> update(@PathVariable("idmedico") Long id, @RequestBody MedicoRequestDto dto) throws Exception {
+        if (!service.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
         Medico medico = service.fromDto(dto);
+        medico.setId(id);
         Medico actualizado = service.update(id, medico);
-        return ResponseEntity.ok(actualizado); 
+        return ResponseEntity.ok(actualizado);
     }
 
     @DeleteMapping("/{idmedico}")

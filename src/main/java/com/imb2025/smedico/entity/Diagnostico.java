@@ -1,11 +1,15 @@
 package com.imb2025.smedico.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 
 @Entity
 public class Diagnostico {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,8 +21,15 @@ public class Diagnostico {
     @ManyToOne
     @JoinColumn(name = "consulta_id")
     private Consulta consulta;
-    
-    // Getters y Setters
+
+    public Diagnostico() {}
+
+    public Diagnostico(Long id, String descripcion, LocalDate fechaDiagnostico, Consulta consulta) {
+        this.id = id;
+        this.descripcion = descripcion;
+        this.fechaDiagnostico = fechaDiagnostico;
+        this.consulta = consulta;
+    }
 
     public Long getId() {
         return id;
@@ -51,6 +62,4 @@ public class Diagnostico {
     public void setFechaDiagnostico(LocalDate fechaDiagnostico) {
         this.fechaDiagnostico = fechaDiagnostico;
     }
-    
-    
 }
