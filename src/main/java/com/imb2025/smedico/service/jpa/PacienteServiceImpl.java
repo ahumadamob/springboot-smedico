@@ -2,6 +2,7 @@ package com.imb2025.smedico.service.jpa;
 
 import com.imb2025.smedico.dto.PacienteRequestDto;
 import com.imb2025.smedico.entity.Paciente;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.PacienteRepository;
 import com.imb2025.smedico.service.IPacienteService;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,8 @@ public class PacienteServiceImpl implements IPacienteService {
 
     @Override
     public Paciente findById(Long id) {
-        return pacienteRepository.findById(id).orElse(null);
+        return pacienteRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente no encontrado con id " + id));
     }
 
     @Override
@@ -39,19 +41,23 @@ public class PacienteServiceImpl implements IPacienteService {
 
     @Override
     public Paciente update(Long id, Paciente paciente) {
-        if (!existsById(paciente.getId())) {
-            throw new IllegalArgumentException("Paciente no encontrado con id: " + paciente.getId());
-        }
-        paciente.setId(id);
-        return pacienteRepository.save(paciente);
+        Paciente existente = pacienteRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente no encontrado con id " + id));
+        // actualizar campos
+        existente.setNombre(paciente.getNombre());
+        existente.setApellido(paciente.getApellido());
+        existente.setDni(paciente.getDni());
+        existente.setEmail(paciente.getEmail());
+        existente.setFechaNacimiento(paciente.getFechaNacimiento());
+        existente.setTelefono(paciente.getTelefono());
+        return pacienteRepository.save(existente);
     }
 
     @Override
     public void deleteById(Long id) {
-        if (!existsById(id)) {
-            throw new IllegalArgumentException("No se puede eliminar: Paciente no encontrado con ID: " + id);
-        }
-        pacienteRepository.deleteById(id);
+        Paciente existente = pacienteRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente no encontrado con id " + id));
+        pacienteRepository.delete(existente);
     }
 
     @Override
