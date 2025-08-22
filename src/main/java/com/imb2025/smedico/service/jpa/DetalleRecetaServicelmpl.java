@@ -4,6 +4,7 @@ import com.imb2025.smedico.dto.DetalleRecetaRequestDTO;
 import com.imb2025.smedico.entity.DetalleReceta;
 import com.imb2025.smedico.entity.Medicamento;
 import com.imb2025.smedico.entity.Receta;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.DetalleRecetaRepository;
 import com.imb2025.smedico.repository.MedicamentoRepository;
 import com.imb2025.smedico.repository.RecetaRepository;
@@ -22,7 +23,9 @@ public class DetalleRecetaServicelmpl implements IDetalleRecetaService {
     private final MedicamentoRepository medicamentoRepository;
 
     @Autowired
-    public DetalleRecetaServicelmpl(DetalleRecetaRepository repository, RecetaRepository recetaRepository, MedicamentoRepository medicamentoRepository) {
+    public DetalleRecetaServicelmpl(DetalleRecetaRepository repository,
+                                    RecetaRepository recetaRepository,
+                                    MedicamentoRepository medicamentoRepository) {
         this.repository = repository;
         this.recetaRepository = recetaRepository;
         this.medicamentoRepository = medicamentoRepository;
@@ -35,7 +38,9 @@ public class DetalleRecetaServicelmpl implements IDetalleRecetaService {
 
     @Override
     public DetalleReceta findById(Long id) {
-        return repository.findById(id).orElse(null);
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "DetalleReceta no encontrada con id " + id));
     }
 
     @Override
@@ -52,10 +57,12 @@ public class DetalleRecetaServicelmpl implements IDetalleRecetaService {
     public DetalleReceta saveFromDTO(DetalleRecetaRequestDTO dto) {
         // Validar y obtener entidades relacionadas
         Receta receta = recetaRepository.findById(dto.getRecetaId())
-                .orElseThrow(() -> new IllegalArgumentException("Receta no encontrada con ID: " + dto.getRecetaId()));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Receta no encontrada con ID: " + dto.getRecetaId()));
 
         Medicamento medicamento = medicamentoRepository.findById(dto.getMedicamentoId())
-                .orElseThrow(() -> new IllegalArgumentException("Medicamento no encontrado con ID: " + dto.getMedicamentoId()));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Medicamento no encontrado con ID: " + dto.getMedicamentoId()));
 
         // Crear el nuevo detalle y setear valores
         DetalleReceta detalle = new DetalleReceta();
@@ -70,14 +77,17 @@ public class DetalleRecetaServicelmpl implements IDetalleRecetaService {
     @Override
     public DetalleReceta updateFromDTO(Long id, DetalleRecetaRequestDTO dto) {
         DetalleReceta existente = repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("DetalleReceta no encontrado con ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "DetalleReceta no encontrado con ID: " + id));
 
         // Validar y obtener entidades relacionadas para actualizar
         Receta receta = recetaRepository.findById(dto.getRecetaId())
-                .orElseThrow(() -> new IllegalArgumentException("Receta no encontrada con ID: " + dto.getRecetaId()));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Receta no encontrada con ID: " + dto.getRecetaId()));
 
         Medicamento medicamento = medicamentoRepository.findById(dto.getMedicamentoId())
-                .orElseThrow(() -> new IllegalArgumentException("Medicamento no encontrado con ID: " + dto.getMedicamentoId()));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Medicamento no encontrado con ID: " + dto.getMedicamentoId()));
 
         // Actualizar campos
         existente.setReceta(receta);

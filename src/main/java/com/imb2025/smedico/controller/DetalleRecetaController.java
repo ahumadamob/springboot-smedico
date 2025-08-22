@@ -1,5 +1,6 @@
 package com.imb2025.smedico.controller;
 
+import com.imb2025.smedico.dto.ApiResponseDTO;
 import com.imb2025.smedico.dto.DetalleRecetaRequestDTO;
 import com.imb2025.smedico.entity.DetalleReceta;
 import com.imb2025.smedico.service.IDetalleRecetaService;
@@ -18,56 +19,63 @@ public class DetalleRecetaController {
     private IDetalleRecetaService service;
 
     @GetMapping
-    public ResponseEntity<List<DetalleReceta>> findAll() {
+    public ResponseEntity<ApiResponseDTO<List<DetalleReceta>>> findAll() {
         List<DetalleReceta> lista = service.findAll();
-        return ResponseEntity.ok(lista);
+
+        ApiResponseDTO<List<DetalleReceta>> resp = new ApiResponseDTO<>();
+        resp.setSuccess(true);
+        resp.setData(lista);
+        resp.setMessage("Lista de DetalleRecetas obtenida correctamente");
+
+        return ResponseEntity.ok(resp);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponseDTO<DetalleReceta>> findById(@PathVariable Long id) {
         DetalleReceta detalle = service.findById(id);
-        if (detalle == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("DetalleReceta no encontrado con ID: " + id);
-        }
-        return ResponseEntity.ok(detalle);
+
+        ApiResponseDTO<DetalleReceta> resp = new ApiResponseDTO<>();
+        resp.setSuccess(true);
+        resp.setData(detalle);
+        resp.setMessage("DetalleReceta encontrada correctamente");
+
+        return ResponseEntity.ok(resp);
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody DetalleRecetaRequestDTO dto) {
-        try {
-            DetalleReceta nueva = service.saveFromDTO(dto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(nueva);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Error al guardar DetalleReceta: " + e.getMessage());
-        }
+    public ResponseEntity<ApiResponseDTO<DetalleReceta>> save(@RequestBody DetalleRecetaRequestDTO dto) {
+        DetalleReceta nueva = service.saveFromDTO(dto);
+
+        ApiResponseDTO<DetalleReceta> resp = new ApiResponseDTO<>();
+        resp.setSuccess(true);
+        resp.setData(nueva);
+        resp.setMessage("DetalleReceta creada correctamente");
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody DetalleRecetaRequestDTO dto) {
-        try {
-            DetalleReceta actualizada = service.updateFromDTO(id, dto);
-            return ResponseEntity.ok(actualizada);
-        } catch (IllegalArgumentException e) {
-            // Se usa NOT_FOUND si el detalle o datos relacionados no existen
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Error al actualizar DetalleReceta: " + e.getMessage());
-        }
+    public ResponseEntity<ApiResponseDTO<DetalleReceta>> update(@PathVariable Long id,
+                                                                @RequestBody DetalleRecetaRequestDTO dto) {
+        DetalleReceta actualizada = service.updateFromDTO(id, dto);
+
+        ApiResponseDTO<DetalleReceta> resp = new ApiResponseDTO<>();
+        resp.setSuccess(true);
+        resp.setData(actualizada);
+        resp.setMessage("DetalleReceta actualizada correctamente");
+
+        return ResponseEntity.ok(resp);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable Long id) {
-        DetalleReceta existente = service.findById(id);
-        if (existente == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("DetalleReceta no encontrado con ID: " + id);
-        }
+    public ResponseEntity<ApiResponseDTO<Void>> deleteById(@PathVariable Long id) {
         service.deleteById(id);
-        return ResponseEntity.noContent().build();  // 204 No Content para borrar OK
+
+        ApiResponseDTO<Void> resp = new ApiResponseDTO<>();
+        resp.setSuccess(true);
+        resp.setData(null);
+        resp.setMessage("DetalleReceta eliminada correctamente");
+
+        return ResponseEntity.ok(resp);
     }
 }
