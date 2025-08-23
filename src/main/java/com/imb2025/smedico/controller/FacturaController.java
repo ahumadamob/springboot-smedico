@@ -25,43 +25,43 @@ public class FacturaController {
         if(facturas.isEmpty()){
             mensaje = "No hay facturas disponibles";
         } else {
-            mensaje = "Lista de Facturas obtenidas obtenidas correctamente";
+            mensaje = "Lista de Facturas obtenidas correctamente";
         }
-        ApiResponseSuccessDto<List<Factura>> facturasResponse =
+        ApiResponseSuccessDto<List<Factura>> resp =
                 new ApiResponseSuccessDto<>(true, mensaje, facturas);
-        return ResponseEntity.ok(facturasResponse);
+        return ResponseEntity.ok(resp);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<Factura>> findById(@PathVariable Long id){
         Factura factura = facturaService.findById(id);
-        ApiResponseSuccessDto<Factura> facturaResponse =
+        ApiResponseSuccessDto<Factura> resp =
                 new ApiResponseSuccessDto<>(true, "Factura con id: " + id + " obtenida correctamente", factura);
-        return ResponseEntity.ok(facturaResponse);
+        return ResponseEntity.ok(resp);
     }
 
     @PostMapping
     public ResponseEntity<ApiResponseSuccessDto<Factura>> createFactura(@RequestBody FacturaRequestDto requestDTO) throws Exception{
         Factura factura = facturaService.create(facturaService.fromDto(requestDTO));
-        ApiResponseSuccessDto<Factura> facturaResponse =
+        ApiResponseSuccessDto<Factura> resp =
                 new ApiResponseSuccessDto<>(true, "Factura creada correctamente", factura);
-        return ResponseEntity.status(HttpStatus.CREATED).body(facturaResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<Factura>> updateFactura(@PathVariable Long id, @RequestBody FacturaRequestDto requestDTO) throws Exception{
         Factura factura = facturaService.update(id, facturaService.fromDto(requestDTO));
-        ApiResponseSuccessDto<Factura> facturaResponse =
+        ApiResponseSuccessDto<Factura> resp =
                 new ApiResponseSuccessDto<>(true, "Factura actualizada correctamente", factura);
-        return ResponseEntity.ok(facturaResponse);
+        return ResponseEntity.ok(resp);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<String>> deleteFactura(@PathVariable Long id) throws Exception{
         facturaService.deleteById(id);
-        ApiResponseSuccessDto<String> facturaResponse =
+        ApiResponseSuccessDto<String> resp =
                 new ApiResponseSuccessDto<>(true, "La factura con el ID: " + id + "fue eliminado correctamente.", "Factura ID: " + id);
-        return ResponseEntity.ok(facturaResponse);
+        return ResponseEntity.ok(resp);
     }
 
 }
