@@ -1,6 +1,8 @@
 package com.imb2025.smedico.service.jpa;
 
 import com.imb2025.smedico.dto.DetalleRecetaRequestDto;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
+
 import com.imb2025.smedico.entity.DetalleReceta;
 import com.imb2025.smedico.entity.Medicamento;
 import com.imb2025.smedico.entity.Receta;
@@ -39,8 +41,11 @@ public class DetalleRecetaServiceImpl implements IDetalleRecetaService {
 
     @Override
     public DetalleReceta findById(Long id) {
-        return repository.findById(id).orElse(null);
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                    "DetalleReceta no encontrada con id " + id));
     }
+
 
     @Override
     public boolean existsById(Long id) {
@@ -54,14 +59,22 @@ public class DetalleRecetaServiceImpl implements IDetalleRecetaService {
 
     @Override
     public DetalleReceta update(Long id, DetalleReceta detalleReceta) {
+        if (!repository.existsById(id)) {
+            throw new ResourceNotFoundException("DetalleReceta no encontrada con id " + id);
+        }
         detalleReceta.setId(id);
         return repository.save(detalleReceta);
     }
 
+
     @Override
     public void deleteById(Long id) {
+        if (!repository.existsById(id)) {
+            throw new ResourceNotFoundException("DetalleReceta no encontrada con id " + id);
+        }
         repository.deleteById(id);
     }
+
 
     @Override
     public DetalleReceta fromDto(DetalleRecetaRequestDto dto) {
