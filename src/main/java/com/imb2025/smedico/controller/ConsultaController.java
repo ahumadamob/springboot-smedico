@@ -1,11 +1,13 @@
 package com.imb2025.smedico.controller;
 
 
+
+import com.imb2025.smedico.dto.ConsultaRequestDto;
 import com.imb2025.smedico.entity.Consulta;
 import com.imb2025.smedico.service.IConsultaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -16,29 +18,39 @@ public class ConsultaController {
     private IConsultaService consultaService;
 
     @GetMapping
-    public List<Consulta> getAll() {
-        return consultaService.findAll();
+    public ResponseEntity<List<Consulta>> findAll() {
+        return ResponseEntity.ok(consultaService.findAll());
     }
 
     @GetMapping("/{id}")
-    public Consulta getById(@PathVariable Long id) {
-        return consultaService.findById(id);
+    public ResponseEntity<Consulta> getById(@PathVariable Long id) {
+        Consulta consulta = consultaService.findById(id);
+        return ResponseEntity.ok(consulta);
     }
 
     @PostMapping
-    public Consulta create(@RequestBody Consulta consulta) {
-        return consultaService.save(consulta);
+    public ResponseEntity<Consulta> create(@RequestBody ConsultaRequestDto dto) {
+        Consulta consulta = consultaService.fromDto(dto);
+        Consulta creada = consultaService.create(consulta);
+        return ResponseEntity.status(201).body(creada);
     }
 
     @PutMapping("/{id}")
-    public Consulta update(@PathVariable Long id, @RequestBody Consulta consulta) {
-        consulta.setId(id);
-        return consultaService.update(consulta);
+    public ResponseEntity<Consulta> update(@PathVariable Long id, @RequestBody ConsultaRequestDto dto) {
+        Consulta consulta = consultaService.fromDto(dto);
+        Consulta actualizada = consultaService.update(id, consulta);
+        return ResponseEntity.ok(actualizada);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         consultaService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception ex) {
+        return ResponseEntity.badRequest().body("Error: " + ex.getMessage());
     }
 }
 

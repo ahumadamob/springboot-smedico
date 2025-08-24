@@ -1,14 +1,15 @@
 package com.imb2025.smedico.service;
 
+import com.imb2025.smedico.dto.EspecialidadRequestDto;
+import com.imb2025.smedico.entity.Especialidad;
 import java.util.List;
 
-import com.imb2025.smedico.entity.Especialidad;
-
 public interface IEspecialidadService {
-
-	public List<Especialidad> findall();
-	public Especialidad findById(Long id);
-	public Especialidad save(Especialidad especialidad);
-	public void deleteById(Long id);
-	
+    public List<Especialidad> findAll();
+    public Especialidad create(Especialidad especialidad);
+    public Especialidad update(Long id, Especialidad especialidad) throws Exception;
+    public Especialidad findById(Long id);
+    public boolean existsById(Long id);
+    public void deleteById(Long id);
+    public Especialidad fromDto(EspecialidadRequestDto especialidadRequestDto) throws Exception;
 }

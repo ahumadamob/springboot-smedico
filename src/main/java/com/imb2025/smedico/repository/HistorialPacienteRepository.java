@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.imb2025.smedico.entity.HistorialPaciente;
 
-
 public interface HistorialPacienteRepository extends JpaRepository<HistorialPaciente, Long> {
 
 }

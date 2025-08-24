@@ -1,20 +1,49 @@
 package com.imb2025.smedico.entity;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "detalle_receta")
 public class DetalleReceta {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long recetaId;
-    private Long medicamentoId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receta_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Receta receta;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "medicamento_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Medicamento medicamento;
+
+    @Column(nullable = false)
     private String dosis;
+
+    @Column(nullable = false)
     private String frecuencia;
 
-    // Getters y Setters
+    public DetalleReceta() {}
+
+    public DetalleReceta(Long id, Receta receta, Medicamento medicamento, String dosis, String frecuencia) {
+        this.id = id;
+        this.receta = receta;
+        this.medicamento = medicamento;
+        this.dosis = dosis;
+        this.frecuencia = frecuencia;
+    }
+
     public Long getId() {
         return id;
     }
@@ -23,20 +52,20 @@ public class DetalleReceta {
         this.id = id;
     }
 
-    public Long getRecetaId() {
-        return recetaId;
+    public Receta getReceta() {
+        return receta;
     }
 
-    public void setRecetaId(Long recetaId) {
-        this.recetaId = recetaId;
+    public void setReceta(Receta receta) {
+        this.receta = receta;
     }
 
-    public Long getMedicamentoId() {
-        return medicamentoId;
+    public Medicamento getMedicamento() {
+        return medicamento;
     }
 
-    public void setMedicamentoId(Long medicamentoId) {
-        this.medicamentoId = medicamentoId;
+    public void setMedicamento(Medicamento medicamento) {
+        this.medicamento = medicamento;
     }
 
     public String getDosis() {

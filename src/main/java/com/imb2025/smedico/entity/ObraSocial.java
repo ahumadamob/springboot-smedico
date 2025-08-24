@@ -1,11 +1,14 @@
 package com.imb2025.smedico.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "obrasocial")
 public class ObraSocial {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,7 +18,15 @@ public class ObraSocial {
     private String direccion;
     private String cobertura;
 
-    // Getters y Setters
+    public ObraSocial() {}
+
+    public ObraSocial(Long id, String nombre, String telefono, String direccion, String cobertura) {
+        this.id = id;
+        this.nombre = nombre;
+        this.telefono = telefono;
+        this.direccion = direccion;
+        this.cobertura = cobertura;
+    }
 
     public Long getId() {
         return id;
@@ -57,4 +68,3 @@ public class ObraSocial {
         this.cobertura = cobertura;
     }
 }
-

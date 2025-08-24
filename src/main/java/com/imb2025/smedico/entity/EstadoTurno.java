@@ -4,16 +4,27 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 public class EstadoTurno {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Generación automática del ID
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
 
-    // Getters
+    @OneToMany(mappedBy = "estadoTurno")
+    private List<Turno> turnos;
+
+    public EstadoTurno() {}
+
+    public EstadoTurno(Long id, String nombre, List<Turno> turnos) {
+        this.id = id;
+        this.nombre = nombre;
+        this.turnos = turnos;
+    }
+
     public Long getId() {
         return id;
     }
@@ -22,7 +33,10 @@ public class EstadoTurno {
         return nombre;
     }
 
-    // Setters
+    public List<Turno> getTurnos() {
+        return turnos;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -30,5 +44,8 @@ public class EstadoTurno {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-}
 
+    public void setTurnos(List<Turno> turnos) {
+        this.turnos = turnos;
+    }
+}

@@ -1,16 +1,15 @@
 package com.imb2025.smedico.service;
 
+import com.imb2025.smedico.dto.HistorialPacienteRequestDto;
+import com.imb2025.smedico.entity.HistorialPaciente;
 import java.util.List;
 
-import com.imb2025.smedico.entity.HistorialPaciente;
-
-
-
 public interface IHistorialPacienteService {
-	
-	public List<HistorialPaciente> findAll();
-	public HistorialPaciente findById(Long id);
-	public HistorialPaciente save(HistorialPaciente historial);
-	public void deleteById(Long id);
-
+    public List<HistorialPaciente> findAll();
+    public HistorialPaciente create(HistorialPaciente historialPaciente);
+    public HistorialPaciente update(Long id, HistorialPaciente historialPaciente) throws Exception;
+    public HistorialPaciente findById(Long id);
+    public boolean existsById(Long id);
+    public void deleteById(Long id);
+    public HistorialPaciente fromDto(HistorialPacienteRequestDto historialPacienteRequestDto) throws Exception;
 }

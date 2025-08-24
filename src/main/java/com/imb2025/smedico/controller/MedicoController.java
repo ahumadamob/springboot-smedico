@@ -3,51 +3,65 @@ package com.imb2025.smedico.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import com.imb2025.smedico.dto.MedicoRequestDto;
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.service.IMedicoService;
 
-
 @RestController
+@RequestMapping("/medico")
 public class MedicoController {
-	
-	@Autowired
-	private IMedicoService service;
-	
-	@GetMapping("/medico")
-	List<Medico> findallMedicos(){
-		return service.findAll();
-	}
-	
-	@GetMapping("/medico/{idmedico}")
-		
-	Medico findById(@PathVariable("idmedico")Long id) {
-		return service.findById(id);
-	}
-	
-	@PostMapping("/medico")
-	public Medico create(@RequestBody Medico medico) {
-        return service.save(medico);
+
+    @Autowired
+    private IMedicoService service;
+
+    @GetMapping
+    public ResponseEntity<List<Medico>> findAllMedicos() {
+        List<Medico> lista = service.findAll();
+        if (lista.isEmpty()) {
+            return ResponseEntity.noContent().build(); 
+        }
+        return ResponseEntity.ok(lista); 
     }
-	
-	@PutMapping("/medico")
-	 public Medico update(@RequestBody Medico medico) {
-        return service.save(medico);
+
+    @GetMapping("/{idmedico}")
+    public ResponseEntity<Medico> findById(@PathVariable("idmedico") Long id) {
+        Medico medico = service.findById(id);
+        if (medico == null) {
+            return ResponseEntity.noContent().build();  
+        }
+        return ResponseEntity.ok(medico);  
     }
-	
-	@DeleteMapping("/medico/{idmedico}")
-		String deleteMedico(@PathVariable("idmedico")Long id) {
-			 service.deleteById(id);
-			 return "Medico" + id.toString() + " eliminado correctamente. "; 
-		}
-	
-	
-	
+
+    @PostMapping
+    public ResponseEntity<Medico> create(@RequestBody MedicoRequestDto dto) throws Exception {
+        Medico medico = service.fromDto(dto);
+        Medico creado = service.create(medico);
+        return ResponseEntity.ok(creado); 
+    }
+
+    @PutMapping("/{idmedico}")
+    public ResponseEntity<Medico> update(@PathVariable("idmedico") Long id, @RequestBody MedicoRequestDto dto) throws Exception {
+        if (!service.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        Medico medico = service.fromDto(dto);
+        medico.setId(id);
+        Medico actualizado = service.update(id, medico);
+        return ResponseEntity.ok(actualizado);
+    }
+
+    @DeleteMapping("/{idmedico}")
+    public ResponseEntity<String> delete(@PathVariable("idmedico") Long id) {
+        service.deleteById(id);
+        return ResponseEntity.ok("Médico con ID " + id + " eliminado correctamente."); 
+    }
+
+  
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleGlobalExceptions(Exception ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
 }

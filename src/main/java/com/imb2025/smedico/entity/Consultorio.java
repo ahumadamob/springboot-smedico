@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Consultorio {
+
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

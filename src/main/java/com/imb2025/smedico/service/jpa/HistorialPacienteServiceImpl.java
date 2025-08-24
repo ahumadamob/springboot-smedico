@@ -6,8 +6,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.imb2025.smedico.dto.HistorialPacienteRequestDto;
 import com.imb2025.smedico.entity.HistorialPaciente;
+import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.repository.HistorialPacienteRepository;
+import com.imb2025.smedico.repository.PacienteRepository;
 import com.imb2025.smedico.service.IHistorialPacienteService;
 
 
@@ -16,6 +19,8 @@ public class HistorialPacienteServiceImpl implements IHistorialPacienteService {
 	
 	@Autowired
 	private HistorialPacienteRepository repo;
+	@Autowired
+	private PacienteRepository repoPaciente;
 
 	@Override
 	public List<HistorialPaciente> findAll() {
@@ -33,13 +38,43 @@ public class HistorialPacienteServiceImpl implements IHistorialPacienteService {
 	}
 
 	@Override
-	public HistorialPaciente save(HistorialPaciente historial) {
-		return repo.save(historial);
+	public void deleteById(Long id) {
+		if (!repo.existsById(id)) {
+			throw new RuntimeException("No existe el historial con ID " + id);
+		}
+		repo.deleteById(id);
+	}
+	
+	@Override
+	public HistorialPaciente create(HistorialPaciente historial) {
+	    System.out.println("Guardando historial: " + historial);
+	    return repo.save(historial);
 	}
 
 	@Override
-	public void deleteById(Long id) {
-		repo.deleteById(id);		
+	public HistorialPaciente update(Long id, HistorialPaciente historial) throws Exception {
+	    if (repo.existsById(id)) {
+	        historial.setId(id);
+	        return repo.save(historial);
+	    } else {
+	        throw new Exception("No existe el historial del paciente");
+	    }
 	}
+	@Override
+	public HistorialPaciente fromDto(HistorialPacienteRequestDto dto) throws Exception {
+		Paciente paciente = repoPaciente.findById(dto.getPacienteId())
+	        .orElseThrow(() -> new Exception("Paciente no encontrado" + dto.getPacienteId()));
+		HistorialPaciente historial = new HistorialPaciente();
+
+		historial.setFecha(dto.getFecha());
+		historial.setObservacion(dto.getObservacion());
+		historial.setPaciente(paciente);
+		return historial;
+	}
+	
+	public boolean existsById(Long id) {
+		return repo.existsById(id);
+	}
+
 
 }

@@ -1,7 +1,8 @@
 package com.imb2025.smedico.service;
 
-import java.util.List;
+import com.imb2025.smedico.dto.ConsultorioRequestDto;
 import com.imb2025.smedico.entity.Consultorio;
+import java.util.List;
 
 import dto.ConsultorioRequestDTO;
 
@@ -18,6 +19,6 @@ public interface IConsultorioService {
 	//Actualizar
 	public Consultorio update(Long id, Consultorio fromDto) throws Exception;
 	public Consultorio fromDto(ConsultorioRequestDTO consultorioRequestDto) throws Exception;
-	
+	boolean existsById(Long id);
 	
 }
