@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.EncuestaRequestDto;
 import com.imb2025.smedico.entity.Encuesta;
 import com.imb2025.smedico.service.IEncuestaService;
@@ -30,39 +31,42 @@ import com.imb2025.smedico.service.IEncuestaService;
         @GetMapping
         public ResponseEntity<List<Encuesta>> getAllEncuesta() {
             List <Encuesta> encuesta = service.findAll();
-        	
+
         	return encuesta.isEmpty()
         			? ResponseEntity.noContent().build()
         			: ResponseEntity.ok(encuesta);
         }
 
         @GetMapping("/{id}")
-        public ResponseEntity<Encuesta> getEncuestaById(@PathVariable Long id) {
-           
-        	return service.existsById(id)
-            		
-            ? ResponseEntity.ok(service.findById(id))
-            : ResponseEntity.noContent().build();
+        public ResponseEntity<ApiResponseSuccessDto<Encuesta>> getEncuestaById(@PathVariable Long id) {
+            Encuesta data = service.findById(id);
+
+            ApiResponseSuccessDto<Encuesta> resp =
+                new ApiResponseSuccessDto<>(true, "Encuesta encontrada", data);
+
+            return ResponseEntity.ok(resp);
         }
+
+
 
         //Nuevo método POST
         @PostMapping
         public ResponseEntity<Encuesta> createEncuesta(@RequestBody EncuestaRequestDto dto) throws Exception {
         	Encuesta encuesta = service.fromDto(dto);
                 return ResponseEntity.ok(service.create(encuesta));
-            
+
         }
 
         //Nuevo método PUT
         @PutMapping("/{id}")
         public ResponseEntity<Encuesta> update(@PathVariable Long id, @RequestBody EncuestaRequestDto dto) throws Exception {
-               
+
         	    Encuesta encuesta = service.fromDto(dto);
                 return ResponseEntity.ok(service.update(id, encuesta));
-            
-                
+
+
             }
-        
+
 
 
         @DeleteMapping("/{id}")
@@ -70,13 +74,7 @@ import com.imb2025.smedico.service.IEncuestaService;
             service.deleteById(id);
             return ResponseEntity.ok().build();
         }
+
         
-        // Manejo de excepciones handler
-        @ExceptionHandler(Exception.class)
-        public ResponseEntity<String> handleException(Exception ex) {
-			return ResponseEntity.badRequest().body(ex.getMessage());
-        	
-        }
-        
+
     }
-    
