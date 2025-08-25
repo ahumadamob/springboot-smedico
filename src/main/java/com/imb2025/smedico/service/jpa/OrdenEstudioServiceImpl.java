@@ -1,16 +1,15 @@
 package com.imb2025.smedico.service.jpa;
 
 import java.util.List;   
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.imb2025.smedico.dto.OrdenEstudioRequestDto;
 import com.imb2025.smedico.entity.Estudio;
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.entity.OrdenEstudio;
 import com.imb2025.smedico.entity.Paciente;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.EstudioRepository;
 import com.imb2025.smedico.repository.MedicoRepository;
 import com.imb2025.smedico.repository.OrdenEstudioRepository;
@@ -39,8 +38,9 @@ public class OrdenEstudioServiceImpl implements IOrdenEstudioService{
 
 	@Override
 	public OrdenEstudio findById(Long id) {
-          Optional<OrdenEstudio> ord = repo.findById(id);
-          return ord.orElse(null);
+          return repo.findById(id)
+        		  .orElseThrow(() -> new ResourceNotFoundException(
+        		  "Entidad no encontrada con id"+id) );
 	}
 
 
