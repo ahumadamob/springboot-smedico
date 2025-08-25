@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.imb2025.smedico.dto.AfiliacionRequestDto;
 import com.imb2025.smedico.entity.Afiliacion;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.service.IAfiliacionService;
 import com.imb2025.smedico.service.IObraSocialService;
 import com.imb2025.smedico.service.IPacienteService;
@@ -34,7 +34,7 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
     @Override
     public Afiliacion findById(Long id) {
         return afili.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Afiliación con ID " + id + " no encontrada."));
+                .orElseThrow(() -> new ResourceNotFoundException("Afiliación con ID " + id + " no encontrada."));
     }
 
     @Override
@@ -79,4 +79,6 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
         return afili.existsById(id);
     }
 }
+
+
 
