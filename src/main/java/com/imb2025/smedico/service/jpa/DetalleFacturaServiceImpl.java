@@ -9,6 +9,7 @@ import java.util.List;
 import com.imb2025.smedico.dto.DetalleFacturaRequestDto;
 import com.imb2025.smedico.entity.DetalleFactura;
 import com.imb2025.smedico.entity.Factura;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.DetalleFacturaRepository;
 import com.imb2025.smedico.repository.FacturaRepository;
 import com.imb2025.smedico.service.IDetalleFacturaService;
@@ -32,8 +33,10 @@ public class DetalleFacturaServiceImpl implements IDetalleFacturaService {
     }
 
     @Override
-    public DetalleFactura findById(Long id) {
-        return repo.findById(id).orElse(null);
+     public DetalleFactura findById(Long id) {
+        return repo.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException(
+                "DetalleFactura no encontrada con id " + id));
     }
 
     @Override
