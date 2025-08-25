@@ -1,18 +1,10 @@
-
-
-
-
-
 package com.imb2025.smedico.controller;
 
 import org.springframework.web.bind.annotation.RestController;
-
 import com.imb2025.smedico.service.IDetalleFacturaService;
-
 import com.imb2025.smedico.entity.DetalleFactura;
-
 import com.imb2025.smedico.dto.DetalleFacturaRequestDto;
-
+import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 
 import java.util.List;
 
@@ -35,41 +27,41 @@ public class DetalleFacturaController {
     }
 
     @GetMapping("/detallefactura")
-    public ResponseEntity<List<DetalleFactura>> findAll() {
-        return ResponseEntity.ok(detalleFacturaService.findAll());
+    public ResponseEntity<ApiResponseSuccessDto<List<DetalleFactura>>> findAll() {
+        List<DetalleFactura> lista = detalleFacturaService.findAll();
+        ApiResponseSuccessDto<List<DetalleFactura>> resp = new ApiResponseSuccessDto<>(true, "Listado de detalles de factura", lista);
+        return ResponseEntity.ok(resp);
     }
 
     @GetMapping("/detallefactura/{id}")
-    public ResponseEntity<DetalleFactura> findById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponseSuccessDto<DetalleFactura>> findById(@PathVariable Long id) {
         DetalleFactura detalle = detalleFacturaService.findById(id);
-        if (detalle == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(detalle);
+        ApiResponseSuccessDto<DetalleFactura> resp = new ApiResponseSuccessDto<>(true, "DetalleFactura encontrada", detalle);
+        return ResponseEntity.ok(resp);
     }
 
     @PostMapping("/detallefactura")
-    public ResponseEntity<DetalleFactura> create(@RequestBody DetalleFacturaRequestDto dto) throws Exception {
+    public ResponseEntity<ApiResponseSuccessDto<DetalleFactura>> create(@RequestBody DetalleFacturaRequestDto dto) throws Exception {
         DetalleFactura detalle = detalleFacturaService.fromDto(dto);
         DetalleFactura creado = detalleFacturaService.create(detalle);
-        return ResponseEntity.status(HttpStatus.CREATED).body(creado);
+        ApiResponseSuccessDto<DetalleFactura> resp = new ApiResponseSuccessDto<>(true, "DetalleFactura creada", creado);
+        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 
     @PutMapping("/detallefactura/{id}")
-    public ResponseEntity<DetalleFactura> update(@PathVariable Long id, @RequestBody DetalleFacturaRequestDto dto) throws Exception {
-        if (!detalleFacturaService.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<ApiResponseSuccessDto<DetalleFactura>> update(@PathVariable Long id, @RequestBody DetalleFacturaRequestDto dto) throws Exception {
         DetalleFactura entidad = detalleFacturaService.fromDto(dto);
         entidad.setId(id);
         DetalleFactura saved = detalleFacturaService.update(id, entidad);
-        return ResponseEntity.ok(saved);
+        ApiResponseSuccessDto<DetalleFactura> resp = new ApiResponseSuccessDto<>(true, "DetalleFactura actualizada", saved);
+        return ResponseEntity.ok(resp);
     }
 
     @DeleteMapping("/detallefactura/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<ApiResponseSuccessDto<Void>> delete(@PathVariable Long id) {
         detalleFacturaService.deleteById(id);
-        return ResponseEntity.noContent().build();
+        ApiResponseSuccessDto<Void> resp = new ApiResponseSuccessDto<>(true, "DetalleFactura eliminada", null);
+        return ResponseEntity.ok(resp);
     }
 
     @ExceptionHandler(Exception.class)

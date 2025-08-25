@@ -1,6 +1,7 @@
 package com.imb2025.smedico.service.jpa;
 
 import java.util.List;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,13 +32,16 @@ import com.imb2025.smedico.service.IEncuestaService;
 
         @Override
         public Encuesta findById(Long id) {
-            return repo.findById(id).orElseThrow(() -> new RuntimeException("Encuesta no encontrada") ) ;
+        	return repo.findById(id)
+        		    .orElseThrow(() -> new ResourceNotFoundException(
+        		        "Entidad no encontrada con id " + id));
         }
-        
-        public Encuesta create(Encuesta encuesta) {
+
+        @Override
+		public Encuesta create(Encuesta encuesta) {
         	return repo.save(encuesta);
         }
-       
+
 
         @Override
         public Encuesta update(Long id, Encuesta encuesta) throws Exception{
@@ -50,7 +54,7 @@ import com.imb2025.smedico.service.IEncuestaService;
 
         }
 
-       
+
 
         @Override
         public Encuesta fromDto(EncuestaRequestDto dto) throws Exception{
@@ -58,7 +62,7 @@ import com.imb2025.smedico.service.IEncuestaService;
                     .orElseThrow(() -> new Exception("Paciente no encontrado"));
             Consulta consulta = consultaRepo.findById(dto.getConsultaId())
                     .orElseThrow(() -> new Exception("Consulta no encontrada"));
-            
+
             Encuesta encuesta = new Encuesta();
             encuesta.setPaciente(paciente);
             encuesta.setConsulta(consulta);
@@ -66,9 +70,9 @@ import com.imb2025.smedico.service.IEncuestaService;
             encuesta.setComentario(dto.getComentario());
 
             return encuesta;
-        }		
+        }
 
-		
+
 
 		 @Override
 	        public void deleteById(Long id) {
@@ -77,12 +81,12 @@ import com.imb2025.smedico.service.IEncuestaService;
 	            } else {
 	            	throw new RuntimeException("Encuesta no encontrada");
 	            }
-	        	
+
 	        }
 
 		@Override
 		public boolean existsById(Long id) {
-			
+
 			return repo.existsById(id);
 		}
 
