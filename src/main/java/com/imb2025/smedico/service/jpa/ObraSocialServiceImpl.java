@@ -9,6 +9,7 @@ import com.imb2025.smedico.dto.ObraSocialRequestDto;
 import com.imb2025.smedico.entity.ObraSocial;
 import com.imb2025.smedico.repository.ObraSocialRepository;
 import com.imb2025.smedico.service.IObraSocialService;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 @Service
 public class ObraSocialServiceImpl implements IObraSocialService {
 
@@ -22,7 +23,9 @@ public class ObraSocialServiceImpl implements IObraSocialService {
 
     @Override
     public ObraSocial findById(Long id) {
-        return repository.findById(id).orElse(null);
+    	return repository.findById(id)
+    		    .orElseThrow(() -> new ResourceNotFoundException(
+    		        "Entidad no encontrada con id " + id));
     }
 
     @Override
