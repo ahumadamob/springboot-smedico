@@ -37,18 +37,16 @@ public class OrdenEstudioController {
         }
     }
 
+    
  // GET - Obtener una orden de estudio por ID
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<OrdenEstudio>> findOrdenEstudioById(@PathVariable("id") Long id) {
         OrdenEstudio orden = service.findById(id);
-        if (orden == null) {
-            return ResponseEntity.noContent().build();
-        }
-        ApiResponseSuccessDto<OrdenEstudio> resp =
-                new ApiResponseSuccessDto<>(true, "Orden de Estudio encontrada", orden);
+        ApiResponseSuccessDto<OrdenEstudio> resp = new ApiResponseSuccessDto<>(true, "Orden de Estudio encontrada", orden);
         return ResponseEntity.ok(resp);
     }
 
+    
     // POST - Crear una nueva orden de estudio
     @PostMapping
     public ResponseEntity<ApiResponseSuccessDto<OrdenEstudio>> createOrdenEstudio(@RequestBody OrdenEstudioRequestDto dto) throws Exception {
