@@ -8,6 +8,8 @@ import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 public class Turno {
     @Id
@@ -23,6 +25,7 @@ public class Turno {
     private Medico medico;
 
     @ManyToOne
+    @JsonIgnoreProperties("turnos") // Ignora el campo "turnos" dentro de EstadoTurno al serializar
     private EstadoTurno estadoTurno;
 
     public Turno() {}
