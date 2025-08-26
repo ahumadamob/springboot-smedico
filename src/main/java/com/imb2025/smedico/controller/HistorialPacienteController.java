@@ -3,9 +3,18 @@ package com.imb2025.smedico.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.HistorialPacienteRequestDto;
 import com.imb2025.smedico.entity.HistorialPaciente;
 import com.imb2025.smedico.service.IHistorialPacienteService;
@@ -17,55 +26,44 @@ public class HistorialPacienteController {
     @Autowired
     private IHistorialPacienteService service;
 
-    // GET: Obtener todos los historiales
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponseSuccessDto<HistorialPaciente>> getById(@PathVariable Long id) {
+        HistorialPaciente historial = service.findById(id);
+        ApiResponseSuccessDto<HistorialPaciente> resp = 
+            new ApiResponseSuccessDto<>(true, "Historial encontrado correctamente", historial);
+        return ResponseEntity.ok(resp);
+    }
+
     @GetMapping
-    public ResponseEntity<List<HistorialPaciente>> findAll() {
-        List<HistorialPaciente> historiales = service.findAll();
-        if (historiales.isEmpty()) {
-            return ResponseEntity.noContent().build(); // 204
-        } else {
-            return ResponseEntity.ok(historiales); // 200
-        }
+    public ResponseEntity<ApiResponseSuccessDto<List<HistorialPaciente>>> getAll() {
+        List<HistorialPaciente> list = service.findAll();
+        ApiResponseSuccessDto<List<HistorialPaciente>> resp = 
+            new ApiResponseSuccessDto<>(true, "Historiales encontrados correctamente", list);
+        return ResponseEntity.ok(resp);
     }
 
-    // GET: Obtener historial por ID
-    @GetMapping("/{idhistorialpaciente}")
-    public ResponseEntity<HistorialPaciente> findById(@PathVariable Long idhistorialpaciente) {
-        HistorialPaciente historial = service.findById(idhistorialpaciente);
-        if (historial != null) {
-            return ResponseEntity.ok(historial);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
- // POST - Crear un nuevo historial de paciente usando DTO
     @PostMapping
-    public ResponseEntity<HistorialPaciente> createHistorialPaciente(@RequestBody HistorialPacienteRequestDto historialPacienteDto) throws Exception {
-        HistorialPaciente nuevo = service.create(service.fromDto(historialPacienteDto));
-        return ResponseEntity.ok(nuevo); // 200 OK
+    public ResponseEntity<ApiResponseSuccessDto<HistorialPaciente>> create(@RequestBody HistorialPacienteRequestDto dto) throws Exception {
+        HistorialPaciente historial = service.create(service.fromDto(dto));
+        ApiResponseSuccessDto<HistorialPaciente> resp = 
+            new ApiResponseSuccessDto<>(true, "Historial creado correctamente", historial);
+        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 
-    // PUT - Actualizar historial de paciente existente usando DTO
-    @PutMapping("/{idhistorialpaciente}")
-    public ResponseEntity<HistorialPaciente> updateHistorialPaciente(
-            @RequestBody HistorialPacienteRequestDto historialPacienteDto,
-            @PathVariable("idhistorialpaciente") Long id) throws Exception {
-        HistorialPaciente actualizado = service.update(id, service.fromDto(historialPacienteDto));
-        return ResponseEntity.ok(actualizado); // 200 OK
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponseSuccessDto<HistorialPaciente>> update(@PathVariable Long id, @RequestBody HistorialPacienteRequestDto dto) throws Exception {
+        HistorialPaciente historialEntity = service.fromDto(dto);
+        HistorialPaciente actualizado = service.update(id, historialEntity);
+        ApiResponseSuccessDto<HistorialPaciente> resp = 
+            new ApiResponseSuccessDto<>(true, "Historial actualizado correctamente", actualizado);
+        return ResponseEntity.ok(resp);
     }
 
-
-    // DELETE: Eliminar historial por ID
-    @DeleteMapping("/{idhistorialpaciente}")
-    public ResponseEntity<String> delete(@PathVariable Long idhistorialpaciente) {
-        service.deleteById(idhistorialpaciente);
-        return ResponseEntity.ok("Historial Paciente con ID " + idhistorialpaciente + " eliminado correctamente.");
-    }
-    
- // Manejador de excepciones global del controlador
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleException(Exception ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponseSuccessDto<String>> delete(@PathVariable Long id) {
+        service.deleteById(id);
+        ApiResponseSuccessDto<String> resp = 
+            new ApiResponseSuccessDto<>(true, "Historial eliminado correctamente", "Id: " + id);
+        return ResponseEntity.ok(resp);
     }
 }
