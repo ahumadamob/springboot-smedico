@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.imb2025.smedico.dto.MotivoCancelacionRequestDto;
 import com.imb2025.smedico.entity.MotivoCancelacion;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.MotivoCancelacionRepository;
 import com.imb2025.smedico.service.IMotivoCancelacionService;
 
@@ -24,8 +25,9 @@ public class MotivoCancelacionServiceImpl implements IMotivoCancelacionService {
 
 	@Override
     public MotivoCancelacion findById(Long id) {
-        Optional<MotivoCancelacion> opt = repo.findById(id);
-        return opt.orElse(null);
+        return repo.findById(id)
+        	    .orElseThrow(() -> new ResourceNotFoundException(
+        	        "Entidad no encontrada con id " + id));
     }
 
     @Override
