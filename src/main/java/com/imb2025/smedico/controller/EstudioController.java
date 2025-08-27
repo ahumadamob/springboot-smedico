@@ -19,7 +19,7 @@ import com.imb2025.smedico.service.IEstudioService;
 
 @RestController
 @RequestMapping("/estudio")
-public class EstudioControler {
+public class EstudioController {
 
     @Autowired
     private IEstudioService service;
