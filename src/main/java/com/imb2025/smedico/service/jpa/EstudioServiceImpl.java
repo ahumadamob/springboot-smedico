@@ -13,6 +13,7 @@ import com.imb2025.smedico.entity.ObraSocial;
 import com.imb2025.smedico.entity.OrdenEstudio;
 import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.entity.ResultadoEstudio;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.EspecialidadRepository;
 import com.imb2025.smedico.repository.EstudioRepository;
 import com.imb2025.smedico.repository.MedicoRepository;
@@ -47,7 +48,9 @@ public class EstudioServiceImpl implements IEstudioService {
 
     @Override
     public Estudio findById(Long id) {
-        return repo.findById(id).orElse(null);
+        return repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Estudio no encontrado con id " + id));
     }
 
     @Override
