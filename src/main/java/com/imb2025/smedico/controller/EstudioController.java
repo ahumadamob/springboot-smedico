@@ -153,20 +153,4 @@ public class EstudioController {
         return ResponseEntity.ok(resp);
     }
 
-    /*@ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleException(Exception ex) {
-        return ResponseEntity.badRequest().body("Error: " + ex.getMessage());
-    }*/
-    
-      
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiResponseErrorDto> handleNotFound(ResourceNotFoundException ex) {
-        ApiResponseErrorDto error = new ApiResponseErrorDto();
-        error.setSuccess(false);
-        FieldErrorDto fieldError = new FieldErrorDto("id", ex.getMessage());
-        error.setErrors(List.of(fieldError));
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(error);
-    }
 }
