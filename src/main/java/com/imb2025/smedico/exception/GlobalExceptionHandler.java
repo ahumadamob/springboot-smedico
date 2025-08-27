@@ -1,6 +1,5 @@
 package com.imb2025.smedico.exception;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -36,17 +35,19 @@ public class GlobalExceptionHandler {
     // DTOs validados con @Valid en @RequestBody
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponseErrorDto> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+        // Captura TODOS los errores de validación de campos
         List<FieldErrorDto> errors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .map(fe -> new FieldErrorDto(fe.getField(), messageOrCode(fe)))
                 .collect(Collectors.toList());
 
-        // También agregamos errores globales (sin campo específico) si los hubiera
+        // Captura errores globales (sin campo específico) si los hubiera
         ex.getBindingResult().getGlobalErrors().forEach(ge ->
                 errors.add(new FieldErrorDto(ge.getObjectName(), ge.getDefaultMessage()))
         );
 
+        // Devuelve la lista completa de errores en ApiResponseErrorDto
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponseErrorDto(false, errors));
     }
 
@@ -94,7 +95,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponseErrorDto(false, errors));
     }
 
-    // Tipo inválido en path variable / query param (e.g., esperaba Long y llegó "abc")
+    // Tipo inválido en path variable / query param
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ApiResponseErrorDto> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
         String name = ex.getName();
@@ -104,7 +105,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponseErrorDto(false, errors));
     }
 
-    // (Opcional) Método HTTP no soportado -> no es de validación pero útil
+    // Método HTTP no soportado
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ApiResponseErrorDto> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex) {
         List<FieldErrorDto> errors = List.of(new FieldErrorDto("method", ex.getMessage()));
@@ -131,10 +132,10 @@ public class GlobalExceptionHandler {
     }
 
     private String messageOrCode(FieldError fe) {
-        // Usa el defaultMessage si está, si no cae al código/rejectValue
         if (fe.getDefaultMessage() != null && !fe.getDefaultMessage().isBlank()) {
             return fe.getDefaultMessage();
         }
         return fe.getCode() != null ? fe.getCode() : "Valor inválido";
     }
 }
+

@@ -1,7 +1,6 @@
 package com.imb2025.smedico.controller;
 
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
-import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.dto.DetalleRecetaRequestDto;
 import com.imb2025.smedico.entity.DetalleReceta;
 import com.imb2025.smedico.service.IDetalleRecetaService;
@@ -10,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -47,7 +47,8 @@ public class DetalleRecetaController {
 
     // Crear nueva DetalleReceta
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<DetalleReceta>> save(@RequestBody DetalleRecetaRequestDto dto) {
+    public ResponseEntity<ApiResponseSuccessDto<DetalleReceta>> save(
+            @Valid @RequestBody DetalleRecetaRequestDto dto) { // <-- @Valid agregado
         DetalleReceta nueva = service.create(service.fromDto(dto));
 
         ApiResponseSuccessDto<DetalleReceta> resp = new ApiResponseSuccessDto<>();
@@ -60,7 +61,9 @@ public class DetalleRecetaController {
 
     // Actualizar DetalleReceta
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<DetalleReceta>> update(@PathVariable Long id, @RequestBody DetalleRecetaRequestDto dto) {
+    public ResponseEntity<ApiResponseSuccessDto<DetalleReceta>> update(
+            @PathVariable Long id, 
+            @Valid @RequestBody DetalleRecetaRequestDto dto) { // <-- @Valid agregado
         DetalleReceta entidad = service.fromDto(dto);
         DetalleReceta actualizada = service.update(id, entidad);
 
