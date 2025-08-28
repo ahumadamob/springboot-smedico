@@ -4,6 +4,7 @@ import com.imb2025.smedico.dto.ResultadoEstudioRequestDto;
 import com.imb2025.smedico.entity.Estudio;
 import com.imb2025.smedico.entity.OrdenEstudio;
 import com.imb2025.smedico.entity.ResultadoEstudio;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.EstudioRepository;
 import com.imb2025.smedico.repository.OrdenEstudioRepository;
 import com.imb2025.smedico.repository.ResultadoEstudioRepository;
@@ -35,9 +36,9 @@ public class ResultadoEstudioServiceImpl implements IResultadoEstudioService {
 	@Override
         public ResultadoEstudio findById(Long id) {
 
-                Optional<ResultadoEstudio> opt = repo.findById(id);
-                return opt.orElse(null);
-
+		return repo.findById(id)
+			    .orElseThrow(() -> new ResourceNotFoundException(
+			        "Entidad no encontrada con id " + id));
 
         }
 

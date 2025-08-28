@@ -4,12 +4,12 @@ import com.imb2025.smedico.dto.FacturaRequestDto;
 import com.imb2025.smedico.entity.Factura;
 import com.imb2025.smedico.entity.MedioPago;
 import com.imb2025.smedico.entity.Paciente;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.FacturaRepository;
 import com.imb2025.smedico.repository.MedioPagoRepository;
 import com.imb2025.smedico.repository.PacienteRepository;
 import com.imb2025.smedico.service.IFacturaService;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +32,10 @@ public class FacturaServiceImpl implements IFacturaService {
 
     @Override
     public Factura findById(Long id) {
-        Optional<Factura> factura = facturaRepository.findById(id);
-        return factura.orElse(null);
+        return facturaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Entidad no encontraba con id: " + id
+                ));
     }
 
     @Override

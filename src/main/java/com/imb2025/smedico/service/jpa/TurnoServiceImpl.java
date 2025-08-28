@@ -8,6 +8,7 @@ import com.imb2025.smedico.entity.EstadoTurno;
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.entity.Turno;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.EstadoTurnoRepository;
 import com.imb2025.smedico.repository.MedicoRepository;
 import com.imb2025.smedico.repository.PacienteRepository;
@@ -38,8 +39,9 @@ public class TurnoServiceImpl implements ITurnoService {
 
     @Override
     public Turno findById(Long id) {
-        return repo.findById(id)
-            .orElseThrow(() -> new RuntimeException("Turno con ID " + id + " no encontrado"));
+    	return repo.findById(id)
+    		    .orElseThrow(() -> new ResourceNotFoundException(
+    		        "Entidad no encontrada con id " + id));
     }
 
     @Override

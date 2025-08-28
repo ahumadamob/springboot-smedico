@@ -1,5 +1,5 @@
 package com.imb2025.smedico.service.jpa;
-
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.dto.ConsultaRequestDto;
 import com.imb2025.smedico.entity.Consulta;
 import com.imb2025.smedico.entity.Turno;
@@ -28,7 +28,9 @@ public class ConsultaServiceImpl implements IConsultaService {
 
     @Override
     public Consulta findById(Long id) {
-        return repository.findById(id).orElse(null);
+    	return repository.findById(id)
+    		    .orElseThrow(() -> new ResourceNotFoundException(
+    		        "Entidad no encontrada con id " + id));
     }
 
     @Override
