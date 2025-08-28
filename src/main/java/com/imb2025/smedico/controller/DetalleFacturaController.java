@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import jakarta.validation.Valid;
 
 @RestController
 public class DetalleFacturaController {
@@ -41,7 +42,7 @@ public class DetalleFacturaController {
     }
 
     @PostMapping("/detallefactura")
-    public ResponseEntity<ApiResponseSuccessDto<DetalleFactura>> create(@RequestBody DetalleFacturaRequestDto dto) throws Exception {
+    public ResponseEntity<ApiResponseSuccessDto<DetalleFactura>> create(@Valid @RequestBody DetalleFacturaRequestDto dto) throws Exception {
         DetalleFactura detalle = detalleFacturaService.fromDto(dto);
         DetalleFactura creado = detalleFacturaService.create(detalle);
         ApiResponseSuccessDto<DetalleFactura> resp = new ApiResponseSuccessDto<>(true, "DetalleFactura creada", creado);
