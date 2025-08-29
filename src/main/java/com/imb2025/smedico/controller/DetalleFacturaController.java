@@ -1,15 +1,10 @@
-
-
-
-
-
 package com.imb2025.smedico.controller;
 
 import org.springframework.web.bind.annotation.RestController;
-
 import com.imb2025.smedico.service.IDetalleFacturaService;
-
 import com.imb2025.smedico.entity.DetalleFactura;
+import com.imb2025.smedico.dto.DetalleFacturaRequestDto;
+import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 
 import java.util.List;
 
@@ -19,6 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @RestController
 public class DetalleFacturaController {
@@ -27,31 +25,47 @@ public class DetalleFacturaController {
     public DetalleFacturaController(IDetalleFacturaService detalleFacturaService) {
         this.detalleFacturaService = detalleFacturaService;
     }
-   
+
     @GetMapping("/detallefactura")
-    public List<DetalleFactura> findAll() {
-        return detalleFacturaService.findAll();
+    public ResponseEntity<ApiResponseSuccessDto<List<DetalleFactura>>> findAll() {
+        List<DetalleFactura> lista = detalleFacturaService.findAll();
+        ApiResponseSuccessDto<List<DetalleFactura>> resp = new ApiResponseSuccessDto<>(true, "Listado de detalles de factura", lista);
+        return ResponseEntity.ok(resp);
     }
-    @GetMapping("/detallefactura/{id}") 
-    public DetalleFactura findById(@PathVariable Long id) {
-        return detalleFacturaService.findById(id);
+
+    @GetMapping("/detallefactura/{id}")
+    public ResponseEntity<ApiResponseSuccessDto<DetalleFactura>> findById(@PathVariable Long id) {
+        DetalleFactura detalle = detalleFacturaService.findById(id);
+        ApiResponseSuccessDto<DetalleFactura> resp = new ApiResponseSuccessDto<>(true, "DetalleFactura encontrada", detalle);
+        return ResponseEntity.ok(resp);
     }
 
     @PostMapping("/detallefactura")
-    public DetalleFactura create(@RequestBody DetalleFactura detalleFactura) {
-        return detalleFacturaService.save(detalleFactura);
+    public ResponseEntity<ApiResponseSuccessDto<DetalleFactura>> create(@RequestBody DetalleFacturaRequestDto dto) throws Exception {
+        DetalleFactura detalle = detalleFacturaService.fromDto(dto);
+        DetalleFactura creado = detalleFacturaService.create(detalle);
+        ApiResponseSuccessDto<DetalleFactura> resp = new ApiResponseSuccessDto<>(true, "DetalleFactura creada", creado);
+        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
-    @PutMapping("/detallefactura")
-    public DetalleFactura update(@RequestBody DetalleFactura detalleFactura) {
-        return detalleFacturaService.save(detalleFactura);
-    }
+
     @PutMapping("/detallefactura/{id}")
-    public DetalleFactura update(@PathVariable Long id, @RequestBody DetalleFactura detalleFactura) {
-        detalleFactura.setId(id);
-        return detalleFacturaService.save(detalleFactura);
+    public ResponseEntity<ApiResponseSuccessDto<DetalleFactura>> update(@PathVariable Long id, @RequestBody DetalleFacturaRequestDto dto) throws Exception {
+        DetalleFactura entidad = detalleFacturaService.fromDto(dto);
+        entidad.setId(id);
+        DetalleFactura saved = detalleFacturaService.update(id, entidad);
+        ApiResponseSuccessDto<DetalleFactura> resp = new ApiResponseSuccessDto<>(true, "DetalleFactura actualizada", saved);
+        return ResponseEntity.ok(resp);
     }
+
     @DeleteMapping("/detallefactura/{id}")
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<ApiResponseSuccessDto<Void>> delete(@PathVariable Long id) {
         detalleFacturaService.deleteById(id);
+        ApiResponseSuccessDto<Void> resp = new ApiResponseSuccessDto<>(true, "DetalleFactura eliminada", null);
+        return ResponseEntity.ok(resp);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
     }
 }

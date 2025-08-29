@@ -3,6 +3,8 @@ package com.imb2025.smedico.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.imb2025.smedico.service.IMotivoCancelacionService;
+import com.imb2025.smedico.dto.ApiResponseSuccessDto;
+import com.imb2025.smedico.dto.MotivoCancelacionRequestDto;
 import com.imb2025.smedico.entity.MotivoCancelacion;
 
 @RestController
@@ -21,28 +25,47 @@ public class MotivoCancelacionController {
 	private IMotivoCancelacionService service;
 	
 	@GetMapping("/motivocancelacion")
-	public List<MotivoCancelacion>findAllMotivoCancelacion(){
-		return service.findAll();
+	public ResponseEntity<ApiResponseSuccessDto<List<MotivoCancelacion>>> findAllMotivoCancelacion() {
+        List<MotivoCancelacion> lista = service.findAll();
+        ApiResponseSuccessDto<List<MotivoCancelacion>> resp;
+        if (lista.isEmpty()) {
+        	resp = new ApiResponseSuccessDto<>(true,"No hay motivos de cancelacion disponibles",lista);
+        }else {
+        	resp = new ApiResponseSuccessDto<>(true,"Lista de motivos de cancelacion",lista);
+        }
+        return ResponseEntity.ok(resp);
 	}
 	
 	@GetMapping("/motivocancelacion/{idmotivocancelacion}")
-	public MotivoCancelacion findMotivoCancelacionByid(@PathVariable("idmotivocancelacion") Long id) {
-		return service.findById(id);
+	public ResponseEntity<ApiResponseSuccessDto<MotivoCancelacion>> findMotivoCancelacionById(@PathVariable("idmotivocancelacion") Long id) {
+        MotivoCancelacion motivoCancelacion = service.findById(id);
+        ApiResponseSuccessDto<MotivoCancelacion> resp =
+        		new ApiResponseSuccessDto<>(true,"Motivo de Cancelacion Encontrado",motivoCancelacion);
+        return ResponseEntity.ok(resp);
 	}
 	
 	@PostMapping("/motivocancelacion")
-	public MotivoCancelacion saveMotivoCancelacion(@RequestBody MotivoCancelacion motivocancelacion) {
-		return service.save(motivocancelacion);
-	}
-	
-	@PutMapping("/motivocancelacion")
-	public MotivoCancelacion updateMotivoCancelacion(@RequestBody MotivoCancelacion motivocancelacion) {
-		return service.save(motivocancelacion);
-	}
+	public ResponseEntity<ApiResponseSuccessDto<MotivoCancelacion>> create(@RequestBody MotivoCancelacionRequestDto dto) throws Exception {
+		MotivoCancelacion motivoCancelacion = service.create(service.fromDto(dto));
+		ApiResponseSuccessDto<MotivoCancelacion> resp =
+        		new ApiResponseSuccessDto<>(true,"Motivo de Cancelacion Creado Correctamente",motivoCancelacion);
+		return ResponseEntity.status(HttpStatus.CREATED).body(resp);
+    }
+		
+	@PutMapping("/motivocancelacion/{idmotivocancelacion}")
+    public ResponseEntity<ApiResponseSuccessDto<MotivoCancelacion>> update(@PathVariable("idmotivocancelacion") Long id,@RequestBody MotivoCancelacionRequestDto dto) throws Exception {
+		MotivoCancelacion motivoEntity = service.fromDto(dto);
+	    MotivoCancelacion actualizado = service.update(id, motivoEntity);
+	        ApiResponseSuccessDto<MotivoCancelacion> resp =
+	            new ApiResponseSuccessDto<>(true,"Motivo de cancelación actualizado correctamente", actualizado);
+	        return ResponseEntity.ok(resp);
+    }
 	
 	@DeleteMapping("/motivocancelacion/{idmotivocancelacion}")
-	public String deleteMotivoCancelacion(@PathVariable("idmotivocancelacion") Long id) {
-		service.deleteById(id);
-		return "Motivo de Cancelacion "+id.toString()+ " Eliminado Correctamente";
-	}
+	public ResponseEntity<ApiResponseSuccessDto<String>> deleteMotivoCancelacion(@PathVariable("idmotivocancelacion") Long id) {
+        service.deleteById(id);
+        ApiResponseSuccessDto<String> resp =
+        		new ApiResponseSuccessDto<>(true,"Motivo de Cancelacion Eliminado Correctamente","Id: "+id);
+        return ResponseEntity.ok(resp);
+    }
 }

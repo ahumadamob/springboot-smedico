@@ -4,22 +4,42 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 public class Turno {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDate fecha;
     private LocalTime hora;
-    private Long pacienteId;
-    private Long medicoId;
-    private Long estadoTurnoId;
 
-    // Getters y Setters
+    @ManyToOne
+    private Paciente paciente;
+
+    @ManyToOne
+    private Medico medico;
+
+    @ManyToOne
+    @JsonIgnoreProperties("turnos") // Ignora el campo "turnos" dentro de EstadoTurno al serializar
+    private EstadoTurno estadoTurno;
+
+    public Turno() {}
+
+    public Turno(Long id, LocalDate fecha, LocalTime hora, Paciente paciente, Medico medico,
+                 EstadoTurno estadoTurno) {
+        this.id = id;
+        this.fecha = fecha;
+        this.hora = hora;
+        this.paciente = paciente;
+        this.medico = medico;
+        this.estadoTurno = estadoTurno;
+    }
+
     public Long getId() {
         return id;
     }
@@ -44,27 +64,27 @@ public class Turno {
         this.hora = hora;
     }
 
-    public Long getPacienteId() {
-        return pacienteId;
+    public Paciente getPaciente() {
+        return paciente;
     }
 
-    public void setPacienteId(Long pacienteId) {
-        this.pacienteId = pacienteId;
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
     }
 
-    public Long getMedicoId() {
-        return medicoId;
+    public Medico getMedico() {
+        return medico;
     }
 
-    public void setMedicoId(Long medicoId) {
-        this.medicoId = medicoId;
+    public void setMedico(Medico medico) {
+        this.medico = medico;
     }
 
-    public Long getEstadoTurnoId() {
-        return estadoTurnoId;
+    public EstadoTurno getEstadoTurno() {
+        return estadoTurno;
     }
 
-    public void setEstadoTurnoId(Long estadoTurnoId) {
-        this.estadoTurnoId = estadoTurnoId;
+    public void setEstadoTurno(EstadoTurno estadoTurno) {
+        this.estadoTurno = estadoTurno;
     }
 }

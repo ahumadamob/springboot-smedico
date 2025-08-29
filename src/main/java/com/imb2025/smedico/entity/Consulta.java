@@ -1,22 +1,37 @@
 package com.imb2025.smedico.entity;
 
-
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import java.time.LocalDate;
 
 @Entity
 public class Consulta {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private LocalDate fecha;
-    private String turnoId;
+
+    @OneToOne
+    @JoinColumn(name = "turno_id")
+    private Turno turno;
+
     private int duracionMin;
     private String comentarios;
 
-    // Getters y Setters
+    public Consulta() {}
+
+    public Consulta(Long id, LocalDate fecha, Turno turno, int duracionMin, String comentarios) {
+        this.id = id;
+        this.fecha = fecha;
+        this.turno = turno;
+        this.duracionMin = duracionMin;
+        this.comentarios = comentarios;
+    }
 
     public Long getId() {
         return id;
@@ -34,12 +49,12 @@ public class Consulta {
         this.fecha = fecha;
     }
 
-    public String getTurnoId() {
-        return turnoId;
+    public Turno getTurno() {
+        return turno;
     }
 
-    public void setTurnoId(String turnoId) {
-        this.turnoId = turnoId;
+    public void setTurno(Turno turno) {
+        this.turno = turno;
     }
 
     public int getDuracionMin() {
@@ -58,4 +73,3 @@ public class Consulta {
         this.comentarios = comentarios;
     }
 }
-

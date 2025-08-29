@@ -1,5 +1,4 @@
 package com.imb2025.smedico;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -8,6 +7,7 @@ public class SmedicoApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SmedicoApplication.class, args);
+		
 	}
 
 }

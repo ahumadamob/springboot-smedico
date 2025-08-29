@@ -1,15 +1,15 @@
 package com.imb2025.smedico.service;
 
+import com.imb2025.smedico.dto.ObraSocialRequestDto;
 import com.imb2025.smedico.entity.ObraSocial;
-
 import java.util.List;
-import java.util.Optional;
 
 public interface IObraSocialService {
-    List<ObraSocial> findAll();
-    Optional<ObraSocial> findById(Long id);
-    ObraSocial save(ObraSocial obraSocial);
-    ObraSocial update(Long id, ObraSocial obraSocial);
-    void deleteById(Long id);
+    public List<ObraSocial> findAll();
+    public ObraSocial create(ObraSocial obraSocial) throws Exception;
+    public ObraSocial update(Long id, ObraSocial obraSocial) throws Exception;
+    public ObraSocial findById(Long id);
+    public boolean existsById(Long id);
+    public void deleteById(Long id);
+    public ObraSocial fromDto(ObraSocialRequestDto obraSocialRequestDto) throws Exception;
 }
-
