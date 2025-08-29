@@ -20,6 +20,8 @@ import com.imb2025.smedico.dto.ResultadoEstudioRequestDto;
 import com.imb2025.smedico.entity.ResultadoEstudio;
 import com.imb2025.smedico.service.IResultadoEstudioService;
 
+import jakarta.validation.Valid;
+
 @RestController
 public class ResultadoEstudioController {
 
@@ -53,7 +55,7 @@ public class ResultadoEstudioController {
 	
 	
 	@PostMapping("/ResultadoEstudio")
-	public ResponseEntity<ApiResponseSuccessDto<ResultadoEstudio>> createResultadoEstudio(@RequestBody ResultadoEstudioRequestDto requestDto) throws Exception {
+	public ResponseEntity<ApiResponseSuccessDto<ResultadoEstudio>> createResultadoEstudio(@Valid @RequestBody ResultadoEstudioRequestDto requestDto) throws Exception {
 		
 		ResultadoEstudio resultadoEstudio = service.create(service.fromDto(requestDto));
 		ApiResponseSuccessDto<ResultadoEstudio> resp =
@@ -65,7 +67,7 @@ public class ResultadoEstudioController {
 	
 	@PutMapping ("/ResultadoEstudio/{id}")
 	public ResponseEntity<ApiResponseSuccessDto<ResultadoEstudio>>  updateResultadoEstudio(@PathVariable Long id,
-			@RequestBody ResultadoEstudioRequestDto requestDto) throws Exception {
+		@Valid @RequestBody ResultadoEstudioRequestDto requestDto) throws Exception {
 		ResultadoEstudio resultadoEstudioEntity = service.fromDto(requestDto);
 		ResultadoEstudio actualizado = service.update(id, resultadoEstudioEntity);
 		ApiResponseSuccessDto<ResultadoEstudio> resp =
