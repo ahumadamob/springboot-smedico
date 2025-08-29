@@ -1,8 +1,13 @@
 package com.imb2025.smedico.controller;
 
+import com.imb2025.smedico.dto.ApiResponseDTO;
 import com.imb2025.smedico.dto.DireccionPacienteRequestDTO;
 import com.imb2025.smedico.entity.DireccionPaciente;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.service.DireccionPacienteService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,39 +16,59 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/direccion-paciente")
+@RequestMapping("/api/direcciones")
 public class DireccionPacienteController {
-
+	
+	public DireccionPacienteController(DireccionPacienteService direccionPacienteService) {
+    }
+    
     @Autowired
     private DireccionPacienteService direccionPacienteService;
 
     // GET todos
     @GetMapping
-    public ResponseEntity<List<DireccionPaciente>> getAll() {
+    public ResponseEntity<ApiResponseDTO<List<DireccionPaciente>>> getAll() {
         List<DireccionPaciente> direcciones = direccionPacienteService.findAll();
-        return ResponseEntity.ok(direcciones);
+
+        ApiResponseDTO<List<DireccionPaciente>> response = new ApiResponseDTO<>();
+        response.setSuccess(true);
+        response.setData(direcciones);
+        response.setMessage("Lista de direcciones obtenida con éxito");
+
+        return ResponseEntity.ok(response);
     }
 
     // GET por ID
     @GetMapping("/{id}")
-    public ResponseEntity<DireccionPaciente> getById(@PathVariable Long id) {
-        return direccionPacienteService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<ApiResponseDTO<DireccionPaciente>> getById(@PathVariable Long id) {
+        DireccionPaciente direccion = direccionPacienteService.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No existe dirección con id " + id));
+
+        ApiResponseDTO<DireccionPaciente> response = new ApiResponseDTO<>();
+        response.setSuccess(true);
+        response.setData(direccion);
+        response.setMessage("Dirección encontrada con éxito");
+
+        return ResponseEntity.ok(response);
     }
 
     // POST crear nueva dirección
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody DireccionPacienteRequestDTO dto) {
-        try {
-            DireccionPaciente nuevaDireccion = direccionPacienteService.fromDto(dto);
-            DireccionPaciente guardada = direccionPacienteService.save(nuevaDireccion);
-            return ResponseEntity.status(HttpStatus.CREATED).body(guardada);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Error al crear la dirección: " + e.getMessage());
-        }
+    public ResponseEntity<ApiResponseDTO<DireccionPaciente>> create(
+            @Valid @RequestBody DireccionPacienteRequestDTO dto) {
+
+        DireccionPaciente nuevaDireccion = direccionPacienteService.fromDto(dto);
+        DireccionPaciente guardada = direccionPacienteService.save(nuevaDireccion);
+
+        ApiResponseDTO<DireccionPaciente> response = new ApiResponseDTO<>();
+        response.setSuccess(true);
+        response.setData(guardada);
+        response.setMessage("Dirección creada con éxito");
+
+     // devolver con codigo 201
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
 
     // PUT actualizar dirección existente
     @PutMapping("/{id}")

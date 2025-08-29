@@ -26,6 +26,7 @@ public class DireccionPacienteServiceImpl implements DireccionPacienteService {
         return direccionPacienteRepository.findById(id);
     }
 
+
     @Override
     public DireccionPaciente save(DireccionPaciente direccionPaciente) {
         return direccionPacienteRepository.save(direccionPaciente);
