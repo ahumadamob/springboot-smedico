@@ -1,9 +1,20 @@
 package com.imb2025.smedico.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 public class ConsultorioRequestDto {
 
-    private String nombre;
+    @NotBlank(message = "El campo nombre es obligatorio")
+    @Size(min = 3, max = 30,message = "El campo combre del consultorio debe tener entre 3 y 30 caracteres")
+	private String nombre;
+    @NotBlank(message = "El campo ubicación es obligatorio")
+    @Size(min = 3, max = 30,message = "El campo ubicación del consultorio debe tener entre 3 y 30 caracteres")
     private String ubicacion;
+    @NotNull(message = "El campo piso es obligatorio")
+    @Min(value = 0, message = "El número de piso debe ser mayor o igual a 0")
     private int piso;
 
     public ConsultorioRequestDto() {}
