@@ -1,7 +1,6 @@
 package com.imb2025.smedico.controller;
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 
-import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import java.util.List;
 
 import java.util.stream.Collectors;
@@ -16,6 +15,8 @@ import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.service.IHorarioAtencionService;
 import com.imb2025.smedico.service.IMedicoService;
+
+import jakarta.validation.Valid; 
 
 @RestController
 @RequestMapping("/horarioAtencion")
@@ -84,7 +85,7 @@ public class HorarioAtencionController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<HorarioAtencion>> createHorarioAtencion(@RequestBody HorarioAtencionRequestDto requestDto) throws Exception {
+    public ResponseEntity<ApiResponseSuccessDto<HorarioAtencion>> createHorarioAtencion(@Valid @RequestBody HorarioAtencionRequestDto requestDto) throws Exception {
         HorarioAtencion horarioEntity = convertToEntity(requestDto);
         horarioEntity.setId(null);
         HorarioAtencion savedHorario = horarioAtencionService.create(horarioEntity);
@@ -99,7 +100,7 @@ public class HorarioAtencionController {
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<HorarioAtencion>> updateHorarioAtencion(@PathVariable Long id, @RequestBody HorarioAtencionRequestDto requestDto) throws Exception {
+    public ResponseEntity<ApiResponseSuccessDto<HorarioAtencion>> updateHorarioAtencion(@PathVariable Long id, @Valid @RequestBody HorarioAtencionRequestDto requestDto) throws Exception {
         if (!horarioAtencionService.existsById(id)) {
             ApiResponseSuccessDto<HorarioAtencion> response = new ApiResponseSuccessDto<>(
                 false,
@@ -139,7 +140,6 @@ public class HorarioAtencionController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
-
 
    
     
