@@ -12,13 +12,13 @@ public class Asistente {
     private Long id;
     private String apellido;
     private String nombre;
-    private String telefono;
-    private String dni;
+    private Long telefono;
+    private Long dni;
     private String email;
 
     public Asistente() {}
 
-    public Asistente(Long id, String apellido, String nombre, String telefono, String dni, String email) {
+    public Asistente(Long id, String apellido, String nombre, Long telefono, Long dni, String email) {
         this.id = id;
         this.apellido = apellido;
         this.nombre = nombre;
@@ -45,16 +45,16 @@ public class Asistente {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    public String getTelefono() {
+    public Long getTelefono() {
         return telefono;
     }
-    public void setTelefono(String telefono) {
+    public void setTelefono(Long telefono) {
         this.telefono = telefono;
     }
-    public String getDni() {
+    public Long getDni() {
         return dni;
     }
-    public void setDni(String dni) {
+    public void setDni(Long dni) {
         this.dni = dni;
     }
     public String getEmail() {
