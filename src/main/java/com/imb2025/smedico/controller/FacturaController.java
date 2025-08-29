@@ -4,6 +4,7 @@ import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.FacturaRequestDto;
 import com.imb2025.smedico.entity.Factura;
 import com.imb2025.smedico.service.IFacturaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,7 @@ public class FacturaController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<Factura>> createFactura(@RequestBody FacturaRequestDto requestDTO) throws Exception{
+    public ResponseEntity<ApiResponseSuccessDto<Factura>> createFactura(@Valid @RequestBody FacturaRequestDto requestDTO) throws Exception{
         Factura factura = facturaService.create(facturaService.fromDto(requestDTO));
         ApiResponseSuccessDto<Factura> resp =
                 new ApiResponseSuccessDto<>(true, "Factura creada correctamente", factura);
@@ -49,7 +50,7 @@ public class FacturaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<Factura>> updateFactura(@PathVariable Long id, @RequestBody FacturaRequestDto requestDTO) throws Exception{
+    public ResponseEntity<ApiResponseSuccessDto<Factura>> updateFactura(@PathVariable Long id, @Valid @RequestBody FacturaRequestDto requestDTO) throws Exception{
         Factura factura = facturaService.update(id, facturaService.fromDto(requestDTO));
         ApiResponseSuccessDto<Factura> resp =
                 new ApiResponseSuccessDto<>(true, "Factura actualizada correctamente", factura);
