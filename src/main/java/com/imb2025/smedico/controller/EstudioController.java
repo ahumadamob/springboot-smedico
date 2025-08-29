@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.*;
 import com.imb2025.smedico.dto.ApiResponseErrorDto;
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.EstudioRequestDto;
-import com.imb2025.smedico.dto.EstudioResponseDTO;
+import com.imb2025.smedico.dto.EstudioResponseDto;
 import com.imb2025.smedico.dto.FieldErrorDto;
 import com.imb2025.smedico.entity.Estudio;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.service.IEstudioService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/estudio")
@@ -78,12 +80,12 @@ public class EstudioController {
     }*/
     
     @GetMapping("/completo")
-    public ResponseEntity<ApiResponseSuccessDto<List<EstudioResponseDTO>>> findAllDTO() {
-        List<EstudioResponseDTO> lista = service.findAll().stream()
-                .map(EstudioResponseDTO::new)
+    public ResponseEntity<ApiResponseSuccessDto<List<EstudioResponseDto>>> findAllDTO() {
+        List<EstudioResponseDto> lista = service.findAll().stream()
+                .map(EstudioResponseDto::new)
                 .collect(Collectors.toList());
 
-        ApiResponseSuccessDto<List<EstudioResponseDTO>> resp = new ApiResponseSuccessDto<>(
+        ApiResponseSuccessDto<List<EstudioResponseDto>> resp = new ApiResponseSuccessDto<>(
                 true,
                 "Listado de estudios (DTO) obtenido correctamente",
                 lista
@@ -100,7 +102,7 @@ public class EstudioController {
     }*/
     
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<Estudio>> create(@RequestBody EstudioRequestDto dto) throws Exception {
+    public ResponseEntity<ApiResponseSuccessDto<Estudio>> create(@Valid @RequestBody EstudioRequestDto dto) throws Exception {
         Estudio estudio = service.fromDto(dto);
         Estudio creado = service.create(estudio);
 
@@ -121,7 +123,7 @@ public class EstudioController {
     }*/
     
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<Estudio>> update(@PathVariable("id") Long id, @RequestBody EstudioRequestDto dto) throws Exception {
+    public ResponseEntity<ApiResponseSuccessDto<Estudio>> update(@PathVariable("id") Long id, @Valid @RequestBody EstudioRequestDto dto) throws Exception {
         Estudio estudio = service.fromDto(dto);
         Estudio actualizado = service.update(id, estudio);
 
