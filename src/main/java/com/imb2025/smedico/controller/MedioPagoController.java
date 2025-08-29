@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.imb2025.smedico.dto.MedioPagoRequestDto;
 import com.imb2025.smedico.entity.MedioPago;
 import com.imb2025.smedico.service.IMedioPagoService;
+
+import jakarta.validation.Valid;
+
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 
 @RestController
@@ -34,7 +36,7 @@ public class MedioPagoController {
     @GetMapping
     public ResponseEntity<ApiResponseSuccessDto<List<MedioPago>>> findAllMedioPago() {
     	List<MedioPago> lista = service.findAll();
-    	ApiResponseSuccessDto<List<MedioPago>> response;
+    	ApiResponseSuccessDto<List<MedioPago>> response; 
     	if (lista.isEmpty()) {
     		response = new ApiResponseSuccessDto<>(true,"No hay registro de medios de pago",lista);
     		
@@ -52,7 +54,7 @@ public class MedioPagoController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<MedioPago>> createMedioPago(@RequestBody MedioPagoRequestDto mediopagoRequestDto) throws Exception {
+    public ResponseEntity<ApiResponseSuccessDto<MedioPago>> createMedioPago(@Valid @RequestBody MedioPagoRequestDto mediopagoRequestDto) throws Exception {
             MedioPago medioPago = service.fromDto(mediopagoRequestDto);
             MedioPago creado = service.create(medioPago);
             ApiResponseSuccessDto<MedioPago> response = new ApiResponseSuccessDto<>(true, "Medio de pago creado exitosamente!", medioPago);
@@ -60,7 +62,7 @@ public class MedioPagoController {
     } 
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<MedioPago>> updateMedioPago(@PathVariable Long id, @RequestBody MedioPagoRequestDto mediopagoDto) throws Exception {
+    public ResponseEntity<ApiResponseSuccessDto<MedioPago>> updateMedioPago(@PathVariable Long id,@Valid @RequestBody MedioPagoRequestDto mediopagoDto) throws Exception {
             MedioPago medioPago = service.fromDto(mediopagoDto);
             MedioPago actualizado = service.update(id, medioPago); 
             ApiResponseSuccessDto<MedioPago> response = new ApiResponseSuccessDto<>(true,"Medio de pago actualizado exitosamente!", actualizado);
@@ -72,11 +74,6 @@ public class MedioPagoController {
             service.deleteById(id); 
             ApiResponseSuccessDto<String> response = new ApiResponseSuccessDto<>(true, "Medio de pago eliminado exitosamente!", "id: "+ id);
             return ResponseEntity.ok(response);
-    }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleException(Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
 }  
