@@ -18,6 +18,8 @@ import com.imb2025.smedico.dto.EncuestaRequestDto;
 import com.imb2025.smedico.entity.Encuesta;
 import com.imb2025.smedico.service.IEncuestaService;
 
+import jakarta.validation.Valid;
+
 
 
     @RestController
@@ -47,7 +49,7 @@ import com.imb2025.smedico.service.IEncuestaService;
 
         //Nuevo método POST
         @PostMapping
-        public ResponseEntity<Encuesta> createEncuesta(@RequestBody EncuestaRequestDto dto) throws Exception {
+        public ResponseEntity<Encuesta> createEncuesta(@RequestBody @Valid EncuestaRequestDto dto) throws Exception {
         	Encuesta encuesta = service.fromDto(dto);
                 return ResponseEntity.ok(service.create(encuesta));
             
@@ -55,7 +57,7 @@ import com.imb2025.smedico.service.IEncuestaService;
 
         //Nuevo método PUT
         @PutMapping("/{id}")
-        public ResponseEntity<Encuesta> update(@PathVariable Long id, @RequestBody EncuestaRequestDto dto) throws Exception {
+        public ResponseEntity<Encuesta> update(@PathVariable Long id, @Valid @RequestBody EncuestaRequestDto dto) throws Exception {
                
         	    Encuesta encuesta = service.fromDto(dto);
                 return ResponseEntity.ok(service.update(id, encuesta));
@@ -72,11 +74,11 @@ import com.imb2025.smedico.service.IEncuestaService;
         }
         
         // Manejo de excepciones handler
-        @ExceptionHandler(Exception.class)
-        public ResponseEntity<String> handleException(Exception ex) {
-			return ResponseEntity.badRequest().body(ex.getMessage());
-        	
-        }
+//        @ExceptionHandler(Exception.class)
+//        public ResponseEntity<String> handleException(Exception ex) {
+//			return ResponseEntity.badRequest().body(ex.getMessage());
+//        	
+//        }
         
     }
     
