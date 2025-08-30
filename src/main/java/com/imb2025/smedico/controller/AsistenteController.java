@@ -11,6 +11,8 @@ import com.imb2025.smedico.dto.AsistenteRequestDto;
 import com.imb2025.smedico.entity.Asistente;
 import com.imb2025.smedico.service.IAsistenteService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/asistentes")
 public class AsistenteController {
@@ -40,7 +42,7 @@ public class AsistenteController {
     }
 
     @PostMapping
-    public ResponseEntity<Asistente> create(@RequestBody AsistenteRequestDto dto) {
+    public ResponseEntity<Asistente> create(@Valid @RequestBody AsistenteRequestDto dto) {
         Asistente asistente = service.fromDto(dto);           // conversión DTO → entidad
         Asistente creado = service.create(asistente);         
         return ResponseEntity.ok(creado);
@@ -67,8 +69,4 @@ public class AsistenteController {
         return ResponseEntity.ok(resp);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleException(Exception ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());  // 400
-    }
 }
