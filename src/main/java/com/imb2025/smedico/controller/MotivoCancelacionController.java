@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.imb2025.smedico.service.IMotivoCancelacionService;
+
+import jakarta.validation.Valid;
+
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.MotivoCancelacionRequestDto;
 import com.imb2025.smedico.entity.MotivoCancelacion;
@@ -45,7 +48,7 @@ public class MotivoCancelacionController {
 	}
 	
 	@PostMapping("/motivocancelacion")
-	public ResponseEntity<ApiResponseSuccessDto<MotivoCancelacion>> create(@RequestBody MotivoCancelacionRequestDto dto) throws Exception {
+	public ResponseEntity<ApiResponseSuccessDto<MotivoCancelacion>> create(@Valid @RequestBody MotivoCancelacionRequestDto dto) throws Exception {
 		MotivoCancelacion motivoCancelacion = service.create(service.fromDto(dto));
 		ApiResponseSuccessDto<MotivoCancelacion> resp =
         		new ApiResponseSuccessDto<>(true,"Motivo de Cancelacion Creado Correctamente",motivoCancelacion);
@@ -53,7 +56,7 @@ public class MotivoCancelacionController {
     }
 		
 	@PutMapping("/motivocancelacion/{idmotivocancelacion}")
-    public ResponseEntity<ApiResponseSuccessDto<MotivoCancelacion>> update(@PathVariable("idmotivocancelacion") Long id,@RequestBody MotivoCancelacionRequestDto dto) throws Exception {
+    public ResponseEntity<ApiResponseSuccessDto<MotivoCancelacion>> update(@PathVariable("idmotivocancelacion") Long id,@Valid @RequestBody MotivoCancelacionRequestDto dto) throws Exception {
 		MotivoCancelacion motivoEntity = service.fromDto(dto);
 	    MotivoCancelacion actualizado = service.update(id, motivoEntity);
 	        ApiResponseSuccessDto<MotivoCancelacion> resp =
