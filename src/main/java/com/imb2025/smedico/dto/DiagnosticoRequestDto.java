@@ -55,4 +55,3 @@ public class DiagnosticoRequestDto {
         this.fechaDiagnostico = fechaDiagnostico;
     }
 }
-
