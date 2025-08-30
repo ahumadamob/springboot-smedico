@@ -2,6 +2,9 @@ package com.imb2025.smedico.controller;
 
 import com.imb2025.smedico.entity.Diagnostico;
 import com.imb2025.smedico.service.IDiagnosticoService;
+
+import jakarta.validation.Valid;
+
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.DiagnosticoRequestDto;
 
@@ -41,7 +44,7 @@ public class DiagnosticoController {
 
     // Crea nuevo
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<Diagnostico>> crearDiagnostico(@RequestBody DiagnosticoRequestDto dto) {
+    public ResponseEntity<ApiResponseSuccessDto<Diagnostico>> crearDiagnostico(@Valid @RequestBody DiagnosticoRequestDto dto) {
         Diagnostico nuevo = service.fromDto(dto);
         Diagnostico guardado = service.create(nuevo);
         ApiResponseSuccessDto<Diagnostico> resp =
@@ -52,7 +55,7 @@ public class DiagnosticoController {
     // Actualiza el existente
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<Diagnostico>> actualizarDiagnostico(
-            @PathVariable Long id, @RequestBody DiagnosticoRequestDto dto) {
+            @PathVariable Long id,@Valid @RequestBody DiagnosticoRequestDto dto) {
         
     	Diagnostico diagnostico = service.fromDto(dto);
         Diagnostico actualizado = service.update(id, diagnostico);
