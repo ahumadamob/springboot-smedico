@@ -1,4 +1,5 @@
 package com.imb2025.smedico.service.jpa;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,8 +27,11 @@ public class EstadoTurnoServiceImpl implements IEstadoTurnoService {
 
     @Override
     public EstadoTurno findById(Long id) {
-        return estadoTurnoRepository.findById(id).orElse(null);
+        return estadoTurnoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                    "EstadoTurno no encontrado con id " + id));
     }
+
 
     @Override
     public boolean existsById(Long id) {

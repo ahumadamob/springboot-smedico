@@ -4,6 +4,7 @@ import com.imb2025.smedico.dto.RecetaRequestDto;
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.entity.Receta;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.MedicoRepository;
 import com.imb2025.smedico.repository.PacienteRepository;
 import com.imb2025.smedico.repository.RecetaRepository;
@@ -32,8 +33,9 @@ public class RecetaServiceImpl implements IRecetaService {
 
     @Override
     public Receta findById(Long id) {
-        Optional<Receta> opt = repo.findById(id);
-        return opt.orElse(null);
+    	return repo.findById(id)
+    		    .orElseThrow(() -> new ResourceNotFoundException(
+    		        "Entidad no encontrada con id " + id));
     }
 
     @Override

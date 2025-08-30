@@ -2,10 +2,10 @@ package com.imb2025.smedico.service.jpa;
 
 import com.imb2025.smedico.dto.MedicamentoRequestDto;
 import com.imb2025.smedico.entity.Medicamento;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.MedicamentoRepository;
 import com.imb2025.smedico.service.IMedicamentoService;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +22,7 @@ public class MedicamentoServiceImpl implements IMedicamentoService {
         }
 
         public Medicamento findById(Long id) {
-                Optional<Medicamento> opt = repoMedic.findById(id);
-                return opt.orElse(null);
+        	return repoMedic.findById(id).orElseThrow(() -> new ResourceNotFoundException("Entidad no encontrada con id " + id));
         }
 	
 	@Override

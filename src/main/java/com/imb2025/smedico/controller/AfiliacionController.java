@@ -7,58 +7,57 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.imb2025.smedico.dto.AfiliacionRequestDto;
+import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.entity.Afiliacion;
 import com.imb2025.smedico.service.IAfiliacionService;
 
 @RestController
-@RequestMapping("/afiliacion")
+@RequestMapping("/api/afiliaciones")
 public class AfiliacionController {
 
     @Autowired
-    private IAfiliacionService servi;
+    private IAfiliacionService service;
 
+    
     @GetMapping
-    public ResponseEntity<List<Afiliacion>> findAllAfiliacion() {
-        List<Afiliacion> lista = servi.findAll();
-        if (lista.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(lista);
+    public ResponseEntity<List<Afiliacion>> getAllAfiliaciones() {
+        List<Afiliacion> lista = service.findAll();
+
+        return lista.isEmpty()
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.ok(lista);
     }
 
+ 
     @GetMapping("/{id}")
-    public ResponseEntity<Afiliacion> findAfiliacionById(@PathVariable("id") Long idAfiliacion) {
-        Afiliacion af = servi.findById(idAfiliacion);
-        if (af == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(af);
+    public ResponseEntity<ApiResponseSuccessDto<Afiliacion>> getAfiliacionById(@PathVariable Long id) {
+        Afiliacion data = service.findById(id);
+
+        ApiResponseSuccessDto<Afiliacion> resp =
+            new ApiResponseSuccessDto<>(true, "Afiliación encontrada", data);
+
+        return ResponseEntity.ok(resp);
     }
+
 
     @PostMapping
     public ResponseEntity<Afiliacion> createAfiliacion(@RequestBody AfiliacionRequestDto dto) throws Exception {
-        Afiliacion afiliacion = servi.fromDto(dto);
-        Afiliacion creada = servi.create(afiliacion);
-        return ResponseEntity.ok(creada);
+        Afiliacion afiliacion = service.fromDto(dto);
+        return ResponseEntity.ok(service.create(afiliacion));
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Afiliacion> updateAfiliacion(@PathVariable Long id, @RequestBody AfiliacionRequestDto dto) throws Exception {
-        Afiliacion afiliacion = servi.fromDto(dto);
-        Afiliacion actualizada = servi.update(id, afiliacion);
-        return ResponseEntity.ok(actualizada);
+        Afiliacion afiliacion = service.fromDto(dto);
+        return ResponseEntity.ok(service.update(id, afiliacion));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteAfiliacion(@PathVariable Long id) {
-        servi.deleteById(id);
-        return ResponseEntity.ok("Afiliación " + id + " eliminada correctamente.");
-    }
-
-    // Manejo global de errores
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleException(Exception ex) {
-        return ResponseEntity.badRequest().body("Error: " + ex.getMessage());
+    public ResponseEntity<Void> deleteAfiliacion(@PathVariable Long id) {
+        service.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }
+
 

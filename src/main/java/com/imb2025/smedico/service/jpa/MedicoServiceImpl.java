@@ -12,6 +12,7 @@
 import com.imb2025.smedico.repository.EspecialidadRepository;
 import com.imb2025.smedico.repository.MedicoRepository;
 	import com.imb2025.smedico.service.IMedicoService;
+	import com.imb2025.smedico.exception.ResourceNotFoundException;
 	
 	@Service
 	public class MedicoServiceImpl implements IMedicoService {
@@ -29,8 +30,9 @@ import com.imb2025.smedico.repository.MedicoRepository;
 	
 	    @Override
 	    public Medico findById(Long id) {
-	        Optional<Medico> opt = repo.findById(id);
-	        return opt.orElse(null);
+	        return repo.findById(id)
+	                .orElseThrow(() -> new ResourceNotFoundException(
+	                        "Medico no encontrado con id " + id));
 	    }
 	    
 	    @Override
