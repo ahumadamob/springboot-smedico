@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.imb2025.smedico.entity.Especialidad;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.EspecialidadRepository;
 import com.imb2025.smedico.service.IEspecialidadService;
 
@@ -25,8 +26,9 @@ public class EspecialidadServiceImpl implements IEspecialidadService{
 
 	@Override
     public Especialidad findById(Long id) {
-		Optional<Especialidad> opt = repo.findById(id);
-        return opt.orElse(null);
+		   return repo.findById(id)	        	    
+				   .orElseThrow(() -> new ResourceNotFoundException(
+	        	        "Entidad no encontrada con id " + id));
     }
 
     @Override
@@ -71,6 +73,7 @@ public class EspecialidadServiceImpl implements IEspecialidadService{
 		repo.deleteById(id);
 
 	}
+	
 	
 }
 	

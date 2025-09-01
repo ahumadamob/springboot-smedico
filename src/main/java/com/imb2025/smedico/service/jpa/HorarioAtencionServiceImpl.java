@@ -28,11 +28,9 @@ public class HorarioAtencionServiceImpl implements IHorarioAtencionService {
 
     @Override
     public HorarioAtencion findById(Long id) {
-        try {
-            return repository.findById(id).orElse(null);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al buscar el horario: " + e.getMessage());
-        }
+    	return repository.findById(id)
+    		    .orElseThrow(() -> new ResourceNotFoundException(
+    		        "Entidad no encontrada con id " + id));
     }
 
     @Override

@@ -2,6 +2,10 @@ package com.imb2025.smedico.controller;
 
 import com.imb2025.smedico.entity.ObraSocial;
 import com.imb2025.smedico.service.IObraSocialService;
+
+import jakarta.validation.Valid;
+
+import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.ObraSocialRequestDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,17 +34,20 @@ public class ObraSocialController {
 
     
     @GetMapping("/{id}")
-    public ResponseEntity<ObraSocial> getById(@PathVariable Long id) {
-        ObraSocial obraSocial = service.findById(id);
-        if (obraSocial == null) {
-            throw new RuntimeException("No existe obra social para el ID: " + id);
-        }
-        return ResponseEntity.ok(obraSocial);
+    public ResponseEntity<ApiResponseSuccessDto<ObraSocial>> getObraSocialById(@PathVariable Long id) {
+        ObraSocial encontrada = service.findById(id);
+
+        ApiResponseSuccessDto<ObraSocial> resp = new ApiResponseSuccessDto<>();
+        resp.setSuccess(true);
+        resp.setData(encontrada);
+        resp.setMessage("Obra social encontrada correctamente.");
+
+        return ResponseEntity.ok(resp);
     }
 
     
     @PostMapping
-    public ResponseEntity<Map<String, Object>> createObraSocial(@RequestBody ObraSocialRequestDto dto) throws Exception {
+    public ResponseEntity<Map<String, Object>> createObraSocial(@Valid @RequestBody ObraSocialRequestDto dto) throws Exception {
         ObraSocial obra = service.create(service.fromDto(dto));
         
         Map<String, Object> response = new HashMap<>();
@@ -53,7 +60,7 @@ public class ObraSocialController {
 
    
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizarObraSocial(@PathVariable Long id, @RequestBody ObraSocialRequestDto dto) throws Exception {
+    public ResponseEntity<?> actualizarObraSocial(@Valid @PathVariable Long id, @RequestBody ObraSocialRequestDto dto) throws Exception {
         ObraSocial obraSocial = service.findById(id);
         if (obraSocial == null) {
             throw new RuntimeException("No se encontró una obra social con el ID: " + id);
@@ -85,16 +92,7 @@ public class ObraSocialController {
     }
 
     
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<String> handleRuntime(RuntimeException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-    }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGeneral(Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Error interno: " + ex.getMessage());
-    }
 }
 
 

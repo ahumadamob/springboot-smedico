@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.imb2025.smedico.dto.AsistenteRequestDto;
 import com.imb2025.smedico.entity.Asistente;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.AsistenteRepository;
 import com.imb2025.smedico.service.IAsistenteService;
 
@@ -23,8 +24,8 @@ public class AsistenteServiceImpl implements IAsistenteService {
     @Override
     public Asistente findById(Long id) {
         return repo.findById(id)
-                .orElseThrow(() ->
-                    new RuntimeException("Asistente con ID " + id + " no encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                    "EstadoTurno no encontrado con id " + id));
     }
 
     @Override
@@ -62,7 +63,7 @@ public class AsistenteServiceImpl implements IAsistenteService {
     @Override
     public Asistente fromDto(AsistenteRequestDto dto) {
         Asistente asistente = new Asistente();
-        asistente.setApellido(dto.getDni());
+        asistente.setApellido(dto.getApellido());
         asistente.setDni(dto.getDni());
         asistente.setEmail(dto.getEmail());
         asistente.setNombre(dto.getNombre());

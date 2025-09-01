@@ -2,10 +2,14 @@ package com.imb2025.smedico.dto;
 
 import com.imb2025.smedico.entity.MedioPago.TipoPago;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class MedioPagoRequestDto {
 
-    private String nombre;
-private String tipo;
+
+  private String nombre;
+  private String tipo;
 
 public MedioPagoRequestDto() {}
 
@@ -26,7 +30,5 @@ public String getTipo() {
 public void setTipo(String tipo) {
 	this.tipo = tipo;
 }
-
-
 
 }

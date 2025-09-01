@@ -3,14 +3,18 @@ package com.imb2025.smedico.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.OrdenEstudioRequestDto;
 import com.imb2025.smedico.entity.OrdenEstudio;
 import com.imb2025.smedico.service.IOrdenEstudioService;
 
-import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
+
+
+
 
 @RestController
 @RequestMapping("/ordenestudio")
@@ -21,54 +25,63 @@ public class OrdenEstudioController {
 
     // GET - Obtener todas las órdenes de estudio
     @GetMapping
-    public ResponseEntity<List<OrdenEstudio>> findAllOrdenEstudio() {
-        List<OrdenEstudio> lista = service.findAll();
-        if (lista.isEmpty()) {
-            return ResponseEntity.noContent().build(); 
+    public ResponseEntity<ApiResponseSuccessDto<List<OrdenEstudio>>> findAllOrdenEstudio() {
+        List<OrdenEstudio> orden = service.findAll();
+
+        ApiResponseSuccessDto<List<OrdenEstudio>> resp;
+
+        if (orden.isEmpty()) {
+            resp = new ApiResponseSuccessDto<>(true, "No hay órdenes de estudio disponibles", orden);
+            return ResponseEntity.noContent().build();
+        } else {
+            resp = new ApiResponseSuccessDto<>(true, "Lista de órdenes de estudio", orden);
+            return ResponseEntity.ok(resp);
         }
-        return ResponseEntity.ok(lista); 
     }
 
-    // GET - Obtener una orden de estudio por ID
+    
+ // GET - Obtener una orden de estudio por ID
     @GetMapping("/{id}")
-    public ResponseEntity<OrdenEstudio> findOrdenEstudioById(@PathVariable("id") Long id) {
+    public ResponseEntity<ApiResponseSuccessDto<OrdenEstudio>> findOrdenEstudioById(@PathVariable("id") Long id) {
         OrdenEstudio orden = service.findById(id);
-        if (orden == null) {
-            return ResponseEntity.noContent().build(); 
-        }
-        return ResponseEntity.ok(orden); 
+        ApiResponseSuccessDto<OrdenEstudio> resp = new ApiResponseSuccessDto<>(true, "Orden de Estudio encontrada", orden);
+        return ResponseEntity.ok(resp);
     }
 
+    
     // POST - Crear una nueva orden de estudio
     @PostMapping
-    public ResponseEntity<OrdenEstudio> createOrdenEstudio(@RequestBody OrdenEstudioRequestDto dto) throws Exception {
-        OrdenEstudio entity = service.fromDto(dto);
-        return ResponseEntity.ok(service.create(entity)); 
+    public ResponseEntity<ApiResponseSuccessDto<OrdenEstudio>> createOrdenEstudio(@Valid @RequestBody OrdenEstudioRequestDto dto) throws Exception {
+        OrdenEstudio orden = service.create(service.fromDto(dto));
+        ApiResponseSuccessDto<OrdenEstudio> resp =
+                new ApiResponseSuccessDto<>(true, "Orden de Estudio creada correctamente", orden);
+        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 
     // PUT - Actualizar una orden de estudio
     @PutMapping("/{id}")
-    public ResponseEntity<OrdenEstudio> updateOrdenEstudio(@PathVariable("id") Long id, @RequestBody OrdenEstudioRequestDto dto) throws Exception {
-        OrdenEstudio entity = service.fromDto(dto);
-        return ResponseEntity.ok(service.update(id, entity)); 
+    public ResponseEntity<ApiResponseSuccessDto<OrdenEstudio>> updateOrdenEstudio(@PathVariable("id") Long id,@Valid @RequestBody OrdenEstudioRequestDto dto) throws Exception {
+        
+        OrdenEstudio orden = service.fromDto(dto);
+        OrdenEstudio ordenActualizada = service.update(id, orden);
+
+        ApiResponseSuccessDto<OrdenEstudio> resp =
+                new ApiResponseSuccessDto<>(true, "Orden de Estudio actualizada correctamente", ordenActualizada);
+
+        return ResponseEntity.ok(resp);
     }
 
     // DELETE - Eliminar una orden de estudio
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteOrdenEstudio(@PathVariable Long id) {
+    public ResponseEntity<ApiResponseSuccessDto<String>> deleteOrdenEstudio(@PathVariable Long id) {
         service.deleteById(id);
-        return ResponseEntity.ok("Orden de estudio " + id + " eliminada correctamente."); 
+        ApiResponseSuccessDto<String> resp =
+                new ApiResponseSuccessDto<>(true, "Orden de Estudio eliminada correctamente", "Id " + id);
+        return ResponseEntity.ok(resp);
     }
 
-    // Manejador de excepciones específicas
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<String> handleNotFound(EntityNotFoundException ex) {
-        return ResponseEntity.badRequest().body("Error: " + ex.getMessage()); // 400 Bad Request
-    }
 
-    // Manejador global de excepciones
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleException(Exception ex) {
-        return ResponseEntity.badRequest().body("Excepción general: " + ex.getMessage()); // 400 Bad Request
-    }
+
+    
+    
 }

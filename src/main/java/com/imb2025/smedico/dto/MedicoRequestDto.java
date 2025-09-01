@@ -1,23 +1,39 @@
 package com.imb2025.smedico.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 public class MedicoRequestDto {
 
+	@NotBlank(message = "El Nombre es obligatorio")
+	@Size(min = 2, max = 50, message = "El nombre debe contener entre 2 y 50 caracteres")
     private String nombre;
+	
+	@NotBlank(message = "El Apellido es obligatorio")
+	@Size(min = 2, max = 50, message = "El apellido debe tener entre 2 y 50 caracteres")
     private String apellido;
-    private String matricula;    
+	
+	@NotBlank(message = "La matricula debe ser obligatoria")
+	@Pattern(regexp = "^[A-Z0-9-]+$", message = "La matrícula debe ser alfanumérica y en mayúsculas")
+    private String matricula;
+	
+	@NotNull(message = "La especialidad debe ser obligatoria")
     private Long especialidadId;
+	
+    @NotBlank(message = "El email es obligatorio")
+    @Email(message = "El formato del Email no es valido")
     private String email;
+    
+    @NotBlank(message = "El teléfono es obligatorio")
+    @Pattern(regexp = "^[0-9]{7,15}$", message = "El teléfono debe contener entre 7 y 15 dígitos")
     private String telefono;
 
         public MedicoRequestDto() {}
 
-        public MedicoRequestDto(
-                String nombre,
-                String apellido,
-                String matricula,
-                Long especialidadId,
-                String email,
-                String telefono) {
+        public MedicoRequestDto(String nombre, String apellido, String matricula, Long especialidadId, String email, String telefono) {
                 this.nombre = nombre;
                 this.apellido = apellido;
                 this.matricula = matricula;

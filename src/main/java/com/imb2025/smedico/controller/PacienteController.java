@@ -1,8 +1,12 @@
 package com.imb2025.smedico.controller;
 
+import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.PacienteRequestDto;
 import com.imb2025.smedico.entity.Paciente;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.service.IPacienteService;
+
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,40 +22,52 @@ public class PacienteController {
     @Autowired
     private IPacienteService pacienteService;
 
+    // Listar todos los pacientes
     @GetMapping
-    public ResponseEntity<List<Paciente>> getAllPacientes() {
+    public ResponseEntity<ApiResponseSuccessDto<List<Paciente>>> getAllPacientes() {
         List<Paciente> pacientes = pacienteService.findAll();
-        if (pacientes.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(pacientes);
+        ApiResponseSuccessDto<List<Paciente>> resp = new ApiResponseSuccessDto<>();
+        resp.setSuccess(true);
+        resp.setData(pacientes);
+        resp.setMessage(pacientes.isEmpty() ? "No hay pacientes registrados" : "Lista de pacientes");
+        return ResponseEntity.ok(resp);
     }
 
+    // Obtener paciente por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Paciente> getPacienteById(@PathVariable Long id) {
-        Paciente paciente = pacienteService.findById(id);
-        if (paciente == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.ok(paciente);
+    public ResponseEntity<ApiResponseSuccessDto<Paciente>> getPacienteById(@PathVariable Long id) {
+        Paciente paciente = pacienteService.findById(id); // Lanza ResourceNotFoundException si no existe
+
+        ApiResponseSuccessDto<Paciente> resp = new ApiResponseSuccessDto<>();
+        resp.setSuccess(true);
+        resp.setData(paciente);
+        resp.setMessage("Paciente encontrado correctamente");
+
+        return ResponseEntity.ok(resp);
     }
 
+    // Crear paciente
     @PostMapping
-    public ResponseEntity<Paciente> createPaciente(@RequestBody PacienteRequestDto dto) {
+    public ResponseEntity<ApiResponseSuccessDto<Paciente>> createPaciente(
+            @Valid @RequestBody PacienteRequestDto dto) {
         Paciente entidad = pacienteService.fromDto(dto);
         Paciente nuevo = pacienteService.create(entidad);
-        return ResponseEntity.ok(nuevo);
+
+        ApiResponseSuccessDto<Paciente> resp = new ApiResponseSuccessDto<>();
+        resp.setSuccess(true);
+        resp.setData(nuevo);
+        resp.setMessage("Paciente creado correctamente");
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePaciente(@PathVariable Long id, @RequestBody PacienteRequestDto dto) {
+    public ResponseEntity<?> updatePaciente(@PathVariable Long id,@Valid @RequestBody PacienteRequestDto dto) {
         if (!pacienteService.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Paciente no encontrado con ID: " + id);
         }
-
         try {
-
             Paciente entidad = pacienteService.fromDto(dto);
             Paciente actualizado = pacienteService.update(id, entidad);
             return ResponseEntity.ok(actualizado);
@@ -63,14 +79,11 @@ public class PacienteController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePaciente(@PathVariable Long id) {
         if (!pacienteService.existsById(id)) {
-            return ResponseEntity.badRequest().body("No se puede eliminar: Paciente no encontrado con ID: " + id);
+            return ResponseEntity.badRequest()
+                    .body("No se puede eliminar: Paciente no encontrado con ID: " + id);
         }
         pacienteService.deleteById(id);
         return ResponseEntity.ok().build();
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleException(Exception ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
-    }
 }
