@@ -1,10 +1,12 @@
 package com.imb2025.smedico.controller;
 
+import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.DireccionPacienteRequestDTO;
 import com.imb2025.smedico.entity.DireccionPaciente;
 import com.imb2025.smedico.service.DireccionPacienteService;
+
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,60 +21,58 @@ public class DireccionPacienteController {
 
     // GET todos
     @GetMapping
-    public ResponseEntity<List<DireccionPaciente>> getAll() {
+    public ResponseEntity<ApiResponseSuccessDto<List<DireccionPaciente>>> getAll() {
         List<DireccionPaciente> direcciones = direccionPacienteService.findAll();
-        return ResponseEntity.ok(direcciones);
+        ApiResponseSuccessDto<List<DireccionPaciente>> resp =
+                new ApiResponseSuccessDto<>(direcciones, "Direcciones encontradas con éxito");
+        return ResponseEntity.ok(resp);
     }
 
     // GET por ID
     @GetMapping("/{id}")
-    public ResponseEntity<DireccionPaciente> getById(@PathVariable Long id) {
-        return direccionPacienteService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<ApiResponseSuccessDto<DireccionPaciente>> getById(@PathVariable Long id) {
+        DireccionPaciente direccion = direccionPacienteService.findById(id)
+                .orElseThrow(() -> new RuntimeException("No se encontró la dirección con ID: " + id));
+
+        ApiResponseSuccessDto<DireccionPaciente> resp =
+                new ApiResponseSuccessDto<>(direccion, "Dirección encontrada con éxito");
+        return ResponseEntity.ok(resp);
     }
 
     // POST crear nueva dirección
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody DireccionPacienteRequestDTO dto) {
-        try {
-            DireccionPaciente nuevaDireccion = direccionPacienteService.fromDto(dto);
-            DireccionPaciente guardada = direccionPacienteService.save(nuevaDireccion);
-            return ResponseEntity.status(HttpStatus.CREATED).body(guardada);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Error al crear la dirección: " + e.getMessage());
-        }
+    public ResponseEntity<ApiResponseSuccessDto<DireccionPaciente>> create(
+            @Valid @RequestBody DireccionPacienteRequestDTO dto) {
+
+        DireccionPaciente nuevaDireccion = direccionPacienteService.fromDto(dto);
+        DireccionPaciente guardada = direccionPacienteService.save(nuevaDireccion);
+
+        ApiResponseSuccessDto<DireccionPaciente> resp =
+                new ApiResponseSuccessDto<>(guardada, "Dirección creada con éxito");
+        return ResponseEntity.status(201).body(resp);
     }
 
     // PUT actualizar dirección existente
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id,
-                                    @RequestBody DireccionPacienteRequestDTO dto) {
-        try {
-            if (!direccionPacienteService.existePorId(id)) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("No se encontró la dirección con ID: " + id);
-            }
+    public ResponseEntity<ApiResponseSuccessDto<DireccionPaciente>> update(
+            @PathVariable Long id,
+            @Valid @RequestBody DireccionPacienteRequestDTO dto) {
 
-            DireccionPaciente actualizada = direccionPacienteService.update(id, dto);
-            return ResponseEntity.ok(actualizada);
+        DireccionPaciente actualizada = direccionPacienteService.update(id, dto);
 
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Error al actualizar la dirección: " + e.getMessage());
-        }
+        ApiResponseSuccessDto<DireccionPaciente> resp =
+                new ApiResponseSuccessDto<>(actualizada, "Dirección actualizada con éxito");
+        return ResponseEntity.ok(resp);
     }
 
     // DELETE eliminar por ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        if (!direccionPacienteService.existePorId(id)) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<ApiResponseSuccessDto<Void>> delete(@PathVariable Long id) {
         direccionPacienteService.deleteById(id);
-        return ResponseEntity.noContent().build();
+
+        ApiResponseSuccessDto<Void> resp =
+                new ApiResponseSuccessDto<>(null, "Dirección eliminada con éxito");
+        return ResponseEntity.ok(resp);
     }
 }
-
 
