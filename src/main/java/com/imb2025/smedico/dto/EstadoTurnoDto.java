@@ -1,4 +1,4 @@
-/*package com.imb2025.smedico.dto;
+package com.imb2025.smedico.dto;
 
 import com.imb2025.smedico.entity.EstadoTurno;
 
@@ -25,4 +25,4 @@ public class EstadoTurnoDto {
         estadoTurno.setNombre(dto.getNombre());
         return estadoTurno;
     }
-}*/
+}
