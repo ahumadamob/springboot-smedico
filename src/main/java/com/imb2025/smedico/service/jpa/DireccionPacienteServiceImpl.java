@@ -2,13 +2,13 @@ package com.imb2025.smedico.service.jpa;
 
 import com.imb2025.smedico.dto.DireccionPacienteRequestDTO;
 import com.imb2025.smedico.entity.DireccionPaciente;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.DireccionPacienteRepository;
 import com.imb2025.smedico.service.DireccionPacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DireccionPacienteServiceImpl implements DireccionPacienteService {
@@ -22,8 +22,10 @@ public class DireccionPacienteServiceImpl implements DireccionPacienteService {
     }
 
     @Override
-    public Optional<DireccionPaciente> findById(Long id) {
-        return direccionPacienteRepository.findById(id);
+    public DireccionPaciente findById(Long id) {
+        return direccionPacienteRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Entidad no encontrada con id " + id));
     }
 
     @Override
@@ -34,7 +36,8 @@ public class DireccionPacienteServiceImpl implements DireccionPacienteService {
     @Override
     public DireccionPaciente update(Long id, DireccionPacienteRequestDTO dto) {
         DireccionPaciente direccion = direccionPacienteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Dirección no encontrada con ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "No se encontró la dirección con ID: " + id));
 
         mapearDTO(direccion, dto);
         return direccionPacienteRepository.save(direccion);
@@ -42,6 +45,9 @@ public class DireccionPacienteServiceImpl implements DireccionPacienteService {
 
     @Override
     public void deleteById(Long id) {
+        if (!direccionPacienteRepository.existsById(id)) {
+            throw new ResourceNotFoundException("No se encontró la dirección con ID: " + id);
+        }
         direccionPacienteRepository.deleteById(id);
     }
 
@@ -64,6 +70,6 @@ public class DireccionPacienteServiceImpl implements DireccionPacienteService {
         direccion.setLocalidad(dto.getLocalidad());
         direccion.setProvincia(dto.getProvincia());
         direccion.setCcpp(dto.getCcpp());
-        // No hay relación pacienteId, así que no seteamos nada aquí
     }
 }
+
