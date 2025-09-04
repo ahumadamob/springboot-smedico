@@ -3,27 +3,48 @@ package com.imb2025.smedico.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.EncuestaRequestDto;
 import com.imb2025.smedico.entity.Encuesta;
 import com.imb2025.smedico.service.IEncuestaService;
 
+import jakarta.validation.Valid;
+
+@RestController
+@RequestMapping("/api/encuestas")
+public class EncuestaController {
+
+    @Autowired
+    private IEncuestaService service;
 
 
-    @RestController
-    @RequestMapping("/api/encuestas")
-    public class EncuestaController {
+    @GetMapping
+    public ResponseEntity<List<Encuesta>> getAllEncuesta() {
+        List<Encuesta> encuesta = service.findAll();
+        return encuesta.isEmpty()
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.ok(encuesta);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponseSuccessDto<Encuesta>> getEncuestaById(@PathVariable Long id) {
+        Encuesta data = service.findById(id);
+        ApiResponseSuccessDto<Encuesta> resp =
+                new ApiResponseSuccessDto<>(true, "Encuesta encontrada", data);
+        return ResponseEntity.ok(resp);
+    }
+
+    // POST con @Valid
+    @PostMapping
+    public ResponseEntity<Encuesta> createEncuesta(@Valid @RequestBody EncuestaRequestDto dto) throws Exception {
+        Encuesta encuesta = service.fromDto(dto);
+        Encuesta creada = service.create(encuesta);
+        return ResponseEntity.status(HttpStatus.CREATED).body(creada);
+    }
 
         @Autowired
         private IEncuestaService service;
@@ -69,6 +90,22 @@ import com.imb2025.smedico.service.IEncuestaService;
 
 
 
+    // PUT con @Valid
+    @PutMapping("/{id}")
+    public ResponseEntity<Encuesta> update(@PathVariable Long id,
+                                           @Valid @RequestBody EncuestaRequestDto dto) throws Exception {
+        Encuesta encuesta = service.fromDto(dto);
+        return ResponseEntity.ok(service.update(id, encuesta));
+    }
+
+ tp05-jordan-humberto
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        service.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
+}
+
         @DeleteMapping("/{id}")
         public ResponseEntity<Void> deleteById(@PathVariable Long id) {
             service.deleteById(id);
@@ -78,3 +115,4 @@ import com.imb2025.smedico.service.IEncuestaService;
         
 
     }
+

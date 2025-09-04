@@ -1,13 +1,32 @@
 package com.imb2025.smedico.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.FutureOrPresent;
+
 import java.time.LocalDate;
 
 public class AfiliacionRequestDto {
 
+    @NotNull(message = "El número de afiliado es obligatorio")
+    @Min(value = 1, message = "El número de afiliado debe ser positivo")
     private Long numeroAfiliado;
+
+    @NotNull(message = "La fecha de vigencia es obligatoria")
+    @PastOrPresent(message = "La fecha de vigencia desde debe ser pasada o presente")
     private LocalDate fechaVigenciaDesde;
+
+    @NotNull(message = "La fecha de vigencia hasta es obligatoria")
+    @FutureOrPresent(message = "La fecha de vigencia hasta debe ser presente o futura")
     private LocalDate fechaHasta;
+
+    @NotNull(message = "El ID del paciente es obligatorio")
+    @Min(value = 1, message = "El ID del paciente debe ser mayor a 0")
     private Long idpaciente;
+
+    @NotNull(message = "El ID de la obra social es obligatorio")
+    @Min(value = 1, message = "El ID de la obra debe ser mayor a 0")
     private Long idobra;
 
     public AfiliacionRequestDto() {}
@@ -65,4 +84,3 @@ public class AfiliacionRequestDto {
         this.idobra = idobra;
     }
 }
-

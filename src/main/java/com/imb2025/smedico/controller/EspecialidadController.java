@@ -19,6 +19,8 @@ import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.entity.Especialidad;
 import com.imb2025.smedico.service.IEspecialidadService;
 
+import jakarta.validation.Valid;
+
 import com.imb2025.smedico.dto.EspecialidadRequestDto;
 
 @RestController
@@ -48,14 +50,14 @@ public class EspecialidadController {
         }
 	
 	@PostMapping("/especialidad")
-	public ResponseEntity<ApiResponseSuccessDto<Especialidad>> create(@RequestBody EspecialidadRequestDto dto) throws Exception {
+	public ResponseEntity<ApiResponseSuccessDto<Especialidad>> create(@Valid @RequestBody EspecialidadRequestDto dto) throws Exception {
 		Especialidad especialidad = service.create(service.fromDto(dto));
 		ApiResponseSuccessDto<Especialidad> resp = new ApiResponseSuccessDto<>(true, "Especialidad creada correctamente",especialidad);
 		return ResponseEntity.status(HttpStatus.CREATED).body(resp);
 	}
 	 
 	@PutMapping("/especialidad/{idespecialidad}")
-	public ResponseEntity<ApiResponseSuccessDto<Especialidad>> update(@RequestBody EspecialidadRequestDto dto, @PathVariable("idespecialidad") Long id) throws Exception {
+	public ResponseEntity<ApiResponseSuccessDto<Especialidad>> update(@Valid @RequestBody EspecialidadRequestDto dto, @PathVariable("idespecialidad") Long id) throws Exception {
 			 Especialidad especialidadEntity = service.fromDto(dto);
 			 Especialidad actualizado = service.update(id, especialidadEntity);
 			 ApiResponseSuccessDto<Especialidad> resp = new ApiResponseSuccessDto<>(true, "Especialidad actualizada correctamente",actualizado);

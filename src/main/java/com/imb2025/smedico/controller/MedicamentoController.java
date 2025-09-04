@@ -3,6 +3,7 @@ package com.imb2025.smedico.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,9 +14,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.MedicamentoRequestDto;
 import com.imb2025.smedico.entity.Medicamento;
 import com.imb2025.smedico.service.IMedicamentoService;
+
+import jakarta.validation.Valid;
 
 @RestController
 public class MedicamentoController {
@@ -24,48 +28,46 @@ public class MedicamentoController {
 	private IMedicamentoService service;
 	
 	@GetMapping("/medicamento")
-	public ResponseEntity<List<Medicamento>> findAllMedicamentos(){
+	public ResponseEntity<ApiResponseSuccessDto<List<Medicamento>>> findAllMedicamentos(){
 		List<Medicamento> listaMedic = service.findAll();
+		ApiResponseSuccessDto<List<Medicamento>> resp;
 		if(listaMedic.isEmpty()) {
-			return ResponseEntity.noContent().build();
+			resp = new ApiResponseSuccessDto<>(true, "No hay medicamentos disponibles", listaMedic);
+		}else {
+			resp = new ApiResponseSuccessDto<>(true, "Lista de medicamentos", listaMedic);
 		}
-		return ResponseEntity.ok(listaMedic);
+		return ResponseEntity.ok(resp);
 	}
 	
 	@GetMapping("/medicamento/{idmedicamento}")
-	public ResponseEntity<Medicamento> findMedicamentoById(@PathVariable("idmedicamento") Long id) {
+	public ResponseEntity<ApiResponseSuccessDto<Medicamento>> findMedicamentoById(@PathVariable("idmedicamento") Long id) {
 		Medicamento medicamento = service.findById(id);
-		if(medicamento == null) {
-			return ResponseEntity.noContent().build();
-		}
-		return ResponseEntity.ok(medicamento);
+		ApiResponseSuccessDto<Medicamento> resp = new ApiResponseSuccessDto<>(true, "Medicamento encontrado", medicamento);
+		return ResponseEntity.ok(resp);
 	}
 	
 	@PostMapping("/medicamento")
-	public ResponseEntity<Medicamento> createMedicamento(@RequestBody MedicamentoRequestDto dto) throws Exception {
+	public ResponseEntity<ApiResponseSuccessDto<Medicamento>> createMedicamento(@Valid @RequestBody MedicamentoRequestDto dto) throws Exception {
 		Medicamento medicamento = service.fromDto(dto);
-		Medicamento createMedic = service.create(medicamento);
-		return ResponseEntity.ok(createMedic);
+		ApiResponseSuccessDto<Medicamento> resp = new ApiResponseSuccessDto<>(true, "Medicamento agregado correctamente", medicamento);
+		return ResponseEntity.status(HttpStatus.CREATED).body(resp);
 	}
 	
 	@PutMapping("/medicamento/{id}")
-	public ResponseEntity<Medicamento> updateMedicamento(@PathVariable Long id, @RequestBody MedicamentoRequestDto dto) throws Exception {
+	public ResponseEntity<ApiResponseSuccessDto<Medicamento>> updateMedicamento(@PathVariable Long id, @Valid @RequestBody MedicamentoRequestDto dto) throws Exception {
 		Medicamento medicamento = service.fromDto(dto);
-		Medicamento updateMedic = service.update(id, medicamento);
-		return ResponseEntity.ok(updateMedic);
+		Medicamento actualizado = service.update(id, medicamento);
+		ApiResponseSuccessDto<Medicamento> resp = new ApiResponseSuccessDto<>(true, "Medicamento actualizado correctamente", actualizado);
+		return ResponseEntity.ok(resp);
 	}
 	
 	@DeleteMapping("/medicamento/{idmedicamento}")
-	public ResponseEntity<String> deleteMedicamento(@PathVariable("idmedicamento") Long id) {
+	public ResponseEntity<ApiResponseSuccessDto<String>> deleteMedicamento(@PathVariable("idmedicamento") Long id) {
 		service.deleteById(id);
-		return ResponseEntity.ok("Medicamento " + id + " eliminado correctamente. ");
+		ApiResponseSuccessDto<String> resp = new ApiResponseSuccessDto<>(true, "Medicamento eliminado correctamente", "ID: "+id);
+		return ResponseEntity.ok(resp);
 	}
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<String> handleException(Exception ex) {
-	  return ResponseEntity.badRequest().body(ex.getMessage());
-	}
-	
 	
 	
 }

@@ -3,6 +3,7 @@ package com.imb2025.smedico.service.jpa;
 import com.imb2025.smedico.dto.DiagnosticoRequestDto;
 import com.imb2025.smedico.entity.Consulta;
 import com.imb2025.smedico.entity.Diagnostico;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.ConsultaRepository;
 import com.imb2025.smedico.repository.DiagnosticoRepository;
 import com.imb2025.smedico.service.IDiagnosticoService;
@@ -25,8 +26,11 @@ public class DiagnosticoServiceImpl implements IDiagnosticoService {
 
     @Override
     public Diagnostico findById(Long id) {
-        return repo.findById(id).orElse(null);
+        return repo.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException(
+                "Diagnóstico no encontrado con id " + id));
     }
+
 
     @Override
     public Diagnostico create(Diagnostico diagnostico) {
@@ -36,7 +40,7 @@ public class DiagnosticoServiceImpl implements IDiagnosticoService {
     @Override
     public void deleteById(Long id) {
         if (!repo.existsById(id)) {
-            throw new RuntimeException("Diagnóstico con ID " + id + " no encontrado.");
+            throw new ResourceNotFoundException("Diagnóstico con ID " + id + " no encontrado.");
         }
         repo.deleteById(id);
     }
@@ -52,7 +56,8 @@ public class DiagnosticoServiceImpl implements IDiagnosticoService {
         diagnostico.setFechaDiagnostico(dto.getFechaDiagnostico());
 
         Consulta consulta = consultaRepository.findById(dto.getConsultaId())
-            .orElseThrow(() -> new RuntimeException("Consulta no encontrada"));
+            .orElseThrow(() -> new ResourceNotFoundException(
+                    "Consulta no encontrada con id " + dto.getConsultaId()));
 
         diagnostico.setConsulta(consulta);
 
@@ -63,7 +68,8 @@ public class DiagnosticoServiceImpl implements IDiagnosticoService {
     @Override
     public Diagnostico update(Long id, Diagnostico diagnostico) {
         Diagnostico existente = repo.findById(id)
-            .orElseThrow(() -> new RuntimeException("Diagnóstico no encontrado"));
+            .orElseThrow(() -> new ResourceNotFoundException(
+                    "Diagnóstico no encontrado con id " + id));
 
         existente.setDescripcion(diagnostico.getDescripcion());
         existente.setFechaDiagnostico(diagnostico.getFechaDiagnostico());

@@ -2,7 +2,7 @@ package com.imb2025.smedico.dto;
 
 import java.time.LocalDate;
 
-public class EstudioResponseDTO {
+public class EstudioResponseDto {
 
 	private Long id;
 	private String nombre;
@@ -14,7 +14,7 @@ public class EstudioResponseDTO {
     private LocalDate ordenFecha;
     private String resultadoDescripcion;
     
-    public EstudioResponseDTO(com.imb2025.smedico.entity.Estudio estudio) {
+    public EstudioResponseDto(com.imb2025.smedico.entity.Estudio estudio) {
         this.id = estudio.getId();
         this.nombre = estudio.getNombre();
         this.descripcion = estudio.getDescripcion();
