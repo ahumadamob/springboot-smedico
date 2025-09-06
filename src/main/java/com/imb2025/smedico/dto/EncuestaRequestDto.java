@@ -1,10 +1,18 @@
 package com.imb2025.smedico.dto;
 
-public class EncuestaRequestDto {
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
+public class EncuestaRequestDto {
+    
+	@NotNull(message = "El paciente es obligatorio")
 	private Long pacienteId;
+	@NotNull(message = "El paciente debe tener una consulta medica")
 	private Long consultaId;
-	private int puntaje;
+	@Min(value = 1, message = "El puntaje minimo es 1")
+	private int puntaje;	
+	@NotBlank(message = "El comentario es obligatorio")
 	private String comentario;
 
         public EncuestaRequestDto() {}

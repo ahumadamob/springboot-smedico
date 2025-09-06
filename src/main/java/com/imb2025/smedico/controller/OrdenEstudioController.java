@@ -13,6 +13,7 @@ import com.imb2025.smedico.service.IOrdenEstudioService;
 
 import jakarta.validation.Valid;
 
+
 @RestController
 @RequestMapping("/ordenestudio")
 public class OrdenEstudioController {
@@ -49,9 +50,9 @@ public class OrdenEstudioController {
 
     // POST - Crear una nueva orden de estudio
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<OrdenEstudio>> createOrdenEstudio(
-            @Valid @RequestBody OrdenEstudioRequestDto dto) throws Exception {
 
+
+    public ResponseEntity<ApiResponseSuccessDto<OrdenEstudio>> createOrdenEstudio(@Valid @RequestBody OrdenEstudioRequestDto dto) throws Exception {
         OrdenEstudio orden = service.create(service.fromDto(dto));
 
         ApiResponseSuccessDto<OrdenEstudio> resp =
@@ -62,11 +63,12 @@ public class OrdenEstudioController {
 
     // PUT - Actualizar una orden de estudio
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<OrdenEstudio>> updateOrdenEstudio(
-            @PathVariable("id") Long id,
-            @Valid @RequestBody OrdenEstudioRequestDto dto) throws Exception {
 
-        OrdenEstudio ordenActualizada = service.update(id, service.fromDto(dto));
+    public ResponseEntity<ApiResponseSuccessDto<OrdenEstudio>> updateOrdenEstudio(@PathVariable("id") Long id,@Valid @RequestBody OrdenEstudioRequestDto dto) throws Exception {
+        
+        OrdenEstudio orden = service.fromDto(dto);
+        OrdenEstudio ordenActualizada = service.update(id, orden);
+
 
         ApiResponseSuccessDto<OrdenEstudio> resp =
                 new ApiResponseSuccessDto<>(true, "Orden de Estudio actualizada correctamente", ordenActualizada);

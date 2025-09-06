@@ -1,10 +1,18 @@
 package com.imb2025.smedico.dto;
 
-public class ObraSocialRequestDto {
+import jakarta.validation.constraints.NotBlank;
 
+public class ObraSocialRequestDto {
+	
+ @NotBlank (message = "El nombre no puede estar vacio")
     private String nombre;
+    
     private String telefono;
+    
+    @NotBlank (message = "La direccion no puede estar vacio")
     private String direccion;
+    
+    @NotBlank (message = "Debe colocar Cobertura/Plan")
     private String cobertura;
 
     public ObraSocialRequestDto() {}

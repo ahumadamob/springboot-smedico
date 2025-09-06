@@ -1,8 +1,15 @@
 package com.imb2025.smedico.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class MedicamentoRequestDto {
-        private String nombre;
+        @NotBlank(message = "El nombre del medicamento no puede estar vacio")
+        @Size(min = 2, max = 50, message = "Debe contener entre 2 y 50 caracteres")
+		private String nombre;
+        @NotBlank(message = "Se debe especificar cantidad y tipo del medicamento")
         private String presentacion;
+        @Size(max = 200, message = "Se permiten hasta 200 caracteres")
         private String dosisSugerida;
 
         public MedicamentoRequestDto() {}

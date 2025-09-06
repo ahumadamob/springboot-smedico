@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.imb2025.smedico.service.IRecetaService;
+
+import jakarta.validation.Valid;
+
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.RecetaRequestDto;
 import com.imb2025.smedico.entity.Receta;
@@ -45,7 +48,7 @@ public class RecetaController {
 	  
 	}
 	@PostMapping("/receta")
-	public ResponseEntity<ApiResponseSuccessDto<Receta>> create(@RequestBody RecetaRequestDto recetaRequestDto) throws Exception {
+	public ResponseEntity<ApiResponseSuccessDto<Receta>> create(@Valid @RequestBody RecetaRequestDto recetaRequestDto) throws Exception {
         Receta receta = service.create(service.fromDto(recetaRequestDto));
         ApiResponseSuccessDto<Receta> resp =
 				new ApiResponseSuccessDto<>(true,"Receta creada correctamente",receta);
@@ -53,8 +56,8 @@ public class RecetaController {
     }
 	
 	@PutMapping("/receta/{idreceta}")
-	public ResponseEntity<ApiResponseSuccessDto<Receta>> update(@PathVariable("idreceta") Long id,
-	        @RequestBody RecetaRequestDto recetaRequestDto) throws Exception {
+	public ResponseEntity<ApiResponseSuccessDto<Receta>> update( @PathVariable("idreceta") Long id,
+			@Valid @RequestBody RecetaRequestDto recetaRequestDto) throws Exception {
         Receta recetaEntity = service.fromDto(recetaRequestDto);
         Receta actualizado = service.update(id, recetaEntity);
 		ApiResponseSuccessDto<Receta> resp =

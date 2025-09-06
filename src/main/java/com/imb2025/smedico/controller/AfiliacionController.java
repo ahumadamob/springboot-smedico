@@ -2,6 +2,7 @@ package com.imb2025.smedico.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,6 @@ public class AfiliacionController {
     @Autowired
     private IAfiliacionService service;
 
-    
     @GetMapping
     public ResponseEntity<List<Afiliacion>> getAllAfiliaciones() {
         List<Afiliacion> lista = service.findAll();
@@ -28,7 +28,6 @@ public class AfiliacionController {
                 : ResponseEntity.ok(lista);
     }
 
- 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<Afiliacion>> getAfiliacionById(@PathVariable Long id) {
         Afiliacion data = service.findById(id);
@@ -39,18 +38,31 @@ public class AfiliacionController {
         return ResponseEntity.ok(resp);
     }
 
-
     @PostMapping
-    public ResponseEntity<Afiliacion> createAfiliacion(@RequestBody AfiliacionRequestDto dto) throws Exception {
+    public ResponseEntity<ApiResponseSuccessDto<Afiliacion>> createAfiliacion(
+            @Valid @RequestBody AfiliacionRequestDto dto) throws Exception {
+        
         Afiliacion afiliacion = service.fromDto(dto);
-        return ResponseEntity.ok(service.create(afiliacion));
+        Afiliacion creada = service.create(afiliacion);
+
+        ApiResponseSuccessDto<Afiliacion> resp =
+            new ApiResponseSuccessDto<>(true, "Afiliación creada con éxito", creada);
+
+        return ResponseEntity.status(201).body(resp);
     }
 
-
     @PutMapping("/{id}")
-    public ResponseEntity<Afiliacion> updateAfiliacion(@PathVariable Long id, @RequestBody AfiliacionRequestDto dto) throws Exception {
+    public ResponseEntity<ApiResponseSuccessDto<Afiliacion>> updateAfiliacion(
+            @PathVariable Long id, 
+            @Valid @RequestBody AfiliacionRequestDto dto) throws Exception {
+        
         Afiliacion afiliacion = service.fromDto(dto);
-        return ResponseEntity.ok(service.update(id, afiliacion));
+        Afiliacion actualizada = service.update(id, afiliacion);
+
+        ApiResponseSuccessDto<Afiliacion> resp =
+            new ApiResponseSuccessDto<>(true, "Afiliación actualizada con éxito", actualizada);
+
+        return ResponseEntity.ok(resp);
     }
 
     @DeleteMapping("/{id}")
@@ -59,5 +71,3 @@ public class AfiliacionController {
         return ResponseEntity.ok().build();
     }
 }
-
-

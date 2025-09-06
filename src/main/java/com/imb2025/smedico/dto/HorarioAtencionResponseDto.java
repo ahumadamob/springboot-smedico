@@ -1,6 +1,6 @@
 package com.imb2025.smedico.dto;
 
-public class HorarioAtencionResponseDTO {
+public class HorarioAtencionResponseDto {
 
     private Long id;
     private Long medicoId;
@@ -8,10 +8,10 @@ public class HorarioAtencionResponseDTO {
     private String horaInicio;
     private String horaFin;
 
-    public HorarioAtencionResponseDTO() {
+    public HorarioAtencionResponseDto() {
     }
 
-    public HorarioAtencionResponseDTO(Long id, Long medicoId, String diaSemana, String horaInicio, String horaFin) {
+    public HorarioAtencionResponseDto(Long id, Long medicoId, String diaSemana, String horaInicio, String horaFin) {
         this.id = id;
         this.medicoId = medicoId;
         this.diaSemana = diaSemana;
