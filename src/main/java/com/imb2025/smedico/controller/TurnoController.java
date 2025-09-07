@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -62,18 +61,20 @@ public class TurnoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
  
-    // PUT - Actualizar turno
-    @PutMapping("/{idturno}")
-    public ResponseEntity<ApiResponseSuccessDto<Turno>> update(@PathVariable("idturno") Long idturno,
-    		@Valid @RequestBody TurnoRequestDto dto) throws Exception {
+ // PUT - Actualizar turno
+    @PutMapping("/turno/{idturno}")  // <--- fijate que tenga /turno/ delante
+    public ResponseEntity<ApiResponseSuccessDto<Turno>> update(
+            @PathVariable("idturno") Long idturno,
+            @Valid @RequestBody TurnoRequestDto dto) throws Exception {
+
         Turno turno = service.fromDto(dto);
         Turno actualizado = service.update(idturno, turno);
+
         ApiResponseSuccessDto<Turno> resp = new ApiResponseSuccessDto<>(true, "Turno actualizado correctamente", actualizado);
         return ResponseEntity.ok(resp);
     }
 
-    // DELETE - Eliminar turno
-    @DeleteMapping("/{idturno}")
+    @DeleteMapping("/turno/{idturno}")
     public ResponseEntity<ApiResponseSuccessDto<Void>> deleteTurno(@PathVariable("idturno") Long id) throws Exception {
         Turno existente = service.findById(id);
         if (existente == null) {
@@ -85,6 +86,7 @@ public class TurnoController {
         ApiResponseSuccessDto<Void> resp = new ApiResponseSuccessDto<>(true, "Turno " + id + " eliminado correctamente", null);
         return ResponseEntity.ok(resp);
     }
+
 
    
 }
