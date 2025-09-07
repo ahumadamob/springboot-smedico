@@ -15,19 +15,19 @@ import com.imb2025.smedico.service.IMotivoCancelacionService;
 @Service
 public class MotivoCancelacionServiceImpl implements IMotivoCancelacionService {
 
-        @Autowired
-        private MotivoCancelacionRepository repo;
+	@Autowired
+    private MotivoCancelacionRepository repo;
 
-	@Override
-        public List<MotivoCancelacion> findAll() {
-                return repo.findAll();
-        }
+    @Override
+    public List<MotivoCancelacion> findAll() {
+        return repo.findAll();
+    }
 
-	@Override
+    @Override
     public MotivoCancelacion findById(Long id) {
         return repo.findById(id)
-        	    .orElseThrow(() -> new ResourceNotFoundException(
-        	        "Entidad no encontrada con id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "MotivoCancelacion no encontrada con id " + id));
     }
 
     @Override
@@ -41,18 +41,18 @@ public class MotivoCancelacionServiceImpl implements IMotivoCancelacionService {
     }
 
     @Override
-    public MotivoCancelacion update(Long id, MotivoCancelacion motivoCancelacion) throws Exception {
-        if (repo.existsById(id)) {
-            motivoCancelacion.setId(id);
-            return repo.save(motivoCancelacion);
+    public MotivoCancelacion update(Long id, MotivoCancelacion motivoCancelacion) {
+        if (!repo.existsById(id)) {
+            throw new ResourceNotFoundException("MotivoCancelacion con ID " + id + " no existe");
         }
-        throw new Exception("MotivoCancelacion con ID " + id + " no existe");
+        motivoCancelacion.setId(id);
+        return repo.save(motivoCancelacion);
     }
 
     @Override
     public void deleteById(Long id) {
         if (!repo.existsById(id)) {
-            throw new IllegalArgumentException("El MotivoCancelacion con ID " + id + " no existe");
+            throw new ResourceNotFoundException("MotivoCancelacion con ID " + id + " no existe");
         }
         repo.deleteById(id);
     }
