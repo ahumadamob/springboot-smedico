@@ -73,11 +73,25 @@ public class PacienteController {
         resp.setData(actualizado);
         resp.setMessage("Paciente actualizado correctamente");
         return ResponseEntity.ok(resp);
+    public ResponseEntity<?> updatePaciente(@PathVariable Long id,@Valid @RequestBody PacienteRequestDto dto) {
+        if (!pacienteService.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Paciente no encontrado con ID: " + id);
+        }
+        try {
+            Paciente entidad = pacienteService.fromDto(dto);
+            Paciente actualizado = pacienteService.update(id, entidad);
+            return ResponseEntity.ok(actualizado);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<Void>> deletePaciente(@PathVariable Long id) {
         pacienteService.deleteById(id);
+
 
         ApiResponseSuccessDto<Void> resp = new ApiResponseSuccessDto<>();
         resp.setSuccess(true);

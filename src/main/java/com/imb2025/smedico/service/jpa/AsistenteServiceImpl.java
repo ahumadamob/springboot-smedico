@@ -63,7 +63,7 @@ public class AsistenteServiceImpl implements IAsistenteService {
     @Override
     public Asistente fromDto(AsistenteRequestDto dto) {
         Asistente asistente = new Asistente();
-        asistente.setApellido(dto.getDni());
+        asistente.setApellido(dto.getApellido());
         asistente.setDni(dto.getDni());
         asistente.setEmail(dto.getEmail());
         asistente.setNombre(dto.getNombre());

@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.imb2025.smedico.entity.Consultorio;
 import com.imb2025.smedico.service.IConsultorioService;
+
+import jakarta.validation.Valid;
+
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.ConsultorioRequestDto;
 
@@ -26,7 +29,7 @@ public class ConsultorioController {
 	
 	//Crear Consultorio - POST
 	@PostMapping("/consultorio")
-	public ResponseEntity<ApiResponseSuccessDto<Consultorio>> create(@RequestBody ConsultorioRequestDto consultorioRequestDto) throws Exception{
+	public ResponseEntity<ApiResponseSuccessDto<Consultorio>> create(@Valid @RequestBody ConsultorioRequestDto consultorioRequestDto) throws Exception{
 		Consultorio consultorio = servicio.create(servicio.fromDto(consultorioRequestDto));
 		ApiResponseSuccessDto<Consultorio> respuesta = new ApiResponseSuccessDto<>(true, "Consultorio creado correctamente", consultorio);
 		return ResponseEntity.status(HttpStatus.CREATED).body(respuesta);
@@ -69,7 +72,7 @@ public class ConsultorioController {
        
     //Actualizar consultorio - PUT
     @PutMapping("/consultorio/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<Consultorio>> update(@PathVariable("id") Long id,@RequestBody ConsultorioRequestDto consultorioRequestDto) throws Exception{
+    public ResponseEntity<ApiResponseSuccessDto<Consultorio>> update(@PathVariable("id") Long id, @Valid @RequestBody ConsultorioRequestDto consultorioRequestDto) throws Exception{
     	Consultorio consultorio = servicio.fromDto(consultorioRequestDto);
     	Consultorio actualizar = servicio.update(id, consultorio);
     	ApiResponseSuccessDto<Consultorio> respuesta = new ApiResponseSuccessDto<>(true, "Consultorio actualizado", actualizar);

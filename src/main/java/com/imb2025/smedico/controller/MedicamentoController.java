@@ -19,6 +19,8 @@ import com.imb2025.smedico.dto.MedicamentoRequestDto;
 import com.imb2025.smedico.entity.Medicamento;
 import com.imb2025.smedico.service.IMedicamentoService;
 
+import jakarta.validation.Valid;
+
 @RestController
 public class MedicamentoController {
 	
@@ -45,14 +47,14 @@ public class MedicamentoController {
 	}
 	
 	@PostMapping("/medicamento")
-	public ResponseEntity<ApiResponseSuccessDto<Medicamento>> createMedicamento(@RequestBody MedicamentoRequestDto dto) throws Exception {
+	public ResponseEntity<ApiResponseSuccessDto<Medicamento>> createMedicamento(@Valid @RequestBody MedicamentoRequestDto dto) throws Exception {
 		Medicamento medicamento = service.fromDto(dto);
 		ApiResponseSuccessDto<Medicamento> resp = new ApiResponseSuccessDto<>(true, "Medicamento agregado correctamente", medicamento);
 		return ResponseEntity.status(HttpStatus.CREATED).body(resp);
 	}
 	
 	@PutMapping("/medicamento/{id}")
-	public ResponseEntity<ApiResponseSuccessDto<Medicamento>> updateMedicamento(@PathVariable Long id, @RequestBody MedicamentoRequestDto dto) throws Exception {
+	public ResponseEntity<ApiResponseSuccessDto<Medicamento>> updateMedicamento(@PathVariable Long id, @Valid @RequestBody MedicamentoRequestDto dto) throws Exception {
 		Medicamento medicamento = service.fromDto(dto);
 		Medicamento actualizado = service.update(id, medicamento);
 		ApiResponseSuccessDto<Medicamento> resp = new ApiResponseSuccessDto<>(true, "Medicamento actualizado correctamente", actualizado);

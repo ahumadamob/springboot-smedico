@@ -42,10 +42,6 @@ public class OrdenEstudio {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public LocalDate getFecha() {
         return fecha;
     }
@@ -54,27 +50,31 @@ public class OrdenEstudio {
         return medico;
     }
 
-    public void setMedico(Medico medico) {
-        this.medico = medico;
-    }
-
     public Paciente getPaciente() {
         return paciente;
-    }
-
-    public void setPaciente(Paciente paciente) {
-        this.paciente = paciente;
     }
 
     public Estudio getEstudio() {
         return estudio;
     }
 
-    public void setEstudio(Estudio estudio) {
-        this.estudio = estudio;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
+    }
+
+    public void setMedico(Medico medico) {
+        this.medico = medico;
+    }
+
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
+    }
+
+    public void setEstudio(Estudio estudio) {
+        this.estudio = estudio;
     }
 }
