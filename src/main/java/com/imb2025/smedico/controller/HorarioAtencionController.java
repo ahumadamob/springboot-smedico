@@ -1,4 +1,5 @@
 package com.imb2025.smedico.controller;
+import com.imb2025.smedico.dto.ApiResponseErrorDto;
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 
 import java.util.List;
@@ -16,6 +17,11 @@ import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.service.IHorarioAtencionService;
 import com.imb2025.smedico.service.IMedicoService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid; 
 
 @RestController
@@ -59,18 +65,28 @@ public class HorarioAtencionController {
         return responseDto;
     }
 
+    @Operation(summary = "Obtiene todos los horarios de atención")
+    @ApiResponse(responseCode = "200", description = "Horarios obtenidos exitosamente")
     @GetMapping
-    public ResponseEntity<List<HorarioAtencionResponseDto>> getAllHorarioAtencion() {
+    public ResponseEntity<ApiResponseSuccessDto<List<HorarioAtencionResponseDto>>> getAllHorarioAtencion() {
         List<HorarioAtencionResponseDto> horarios = horarioAtencionService.findAll().stream()
                 .map(this::convertToResponseDto)
                 .collect(Collectors.toList());
 
-        if (horarios.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(horarios);
+        ApiResponseSuccessDto<List<HorarioAtencionResponseDto>> response = new ApiResponseSuccessDto<>(
+            true,
+            "Horarios obtenidos exitosamente",
+            horarios
+        );
+        return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Obtiene un horario de atención por su ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Horario encontrado exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Horario no encontrado", 
+                     content = @Content(schema = @Schema(implementation = ApiResponseErrorDto.class)))
+    })
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<HorarioAtencion>> getHorarioAtencionById(@PathVariable Long id) {
         HorarioAtencion horario = horarioAtencionService.findById(id);
@@ -84,8 +100,14 @@ public class HorarioAtencionController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Crea un nuevo horario de atención")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Horario creado exitosamente"),
+        @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos", 
+                     content = @Content(schema = @Schema(implementation = ApiResponseErrorDto.class)))
+    })
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<HorarioAtencion>> createHorarioAtencion(@Valid @RequestBody HorarioAtencionRequestDto requestDto) throws Exception {
+    public ResponseEntity<ApiResponseSuccessDto<HorarioAtencion>> createHorarioAtencion(@Valid @RequestBody HorarioAtencionRequestDto requestDto) {
         HorarioAtencion horarioEntity = convertToEntity(requestDto);
         horarioEntity.setId(null);
         HorarioAtencion savedHorario = horarioAtencionService.create(horarioEntity);
@@ -99,17 +121,16 @@ public class HorarioAtencionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     
+    @Operation(summary = "Actualiza un horario de atención existente")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Horario actualizado exitosamente"),
+        @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos", 
+                     content = @Content(schema = @Schema(implementation = ApiResponseErrorDto.class))),
+        @ApiResponse(responseCode = "404", description = "Horario no encontrado", 
+                     content = @Content(schema = @Schema(implementation = ApiResponseErrorDto.class)))
+    })
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<HorarioAtencion>> updateHorarioAtencion(@PathVariable Long id, @Valid @RequestBody HorarioAtencionRequestDto requestDto) throws Exception {
-        if (!horarioAtencionService.existsById(id)) {
-            ApiResponseSuccessDto<HorarioAtencion> response = new ApiResponseSuccessDto<>(
-                false,
-                "Horario no encontrado con ID: " + id,
-                null
-            );
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
-
+    public ResponseEntity<ApiResponseSuccessDto<HorarioAtencion>> updateHorarioAtencion(@PathVariable Long id, @Valid @RequestBody HorarioAtencionRequestDto requestDto) {
         HorarioAtencion horarioEntity = convertToEntity(requestDto);
         HorarioAtencion updatedHorario = horarioAtencionService.update(id, horarioEntity);
 
@@ -121,26 +142,20 @@ public class HorarioAtencionController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Elimina un horario de atención por su ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Horario eliminado correctamente"),
+        @ApiResponse(responseCode = "404", description = "Horario no encontrado", 
+                     content = @Content(schema = @Schema(implementation = ApiResponseErrorDto.class)))
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<Void>> deleteHorarioAtencion(@PathVariable Long id) {
-        try {
-            horarioAtencionService.deleteById(id);
-            ApiResponseSuccessDto<Void> response = new ApiResponseSuccessDto<>(
-                true,
-                "Horario de atención " + id + " eliminado correctamente.",
-                null
-            );
-            return ResponseEntity.ok(response);
-        } catch (IllegalArgumentException e) {
-            ApiResponseSuccessDto<Void> response = new ApiResponseSuccessDto<>(
-                false,
-                e.getMessage(),
-                null
-            );
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
+        horarioAtencionService.deleteById(id);
+        ApiResponseSuccessDto<Void> response = new ApiResponseSuccessDto<>(
+            true,
+            "Horario de atención " + id + " eliminado correctamente.",
+            null
+        );
+        return ResponseEntity.ok(response);
     }
-
-   
-    
 }
