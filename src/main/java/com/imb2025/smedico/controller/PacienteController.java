@@ -62,28 +62,27 @@ public class PacienteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePaciente(@PathVariable Long id,@Valid @RequestBody PacienteRequestDto dto) {
-        if (!pacienteService.existsById(id)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Paciente no encontrado con ID: " + id);
-        }
-        try {
-            Paciente entidad = pacienteService.fromDto(dto);
-            Paciente actualizado = pacienteService.update(id, entidad);
-            return ResponseEntity.ok(actualizado);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<ApiResponseSuccessDto<Paciente>> updatePaciente(
+            @PathVariable Long id, @Valid @RequestBody PacienteRequestDto dto) {
+
+        Paciente entidad = pacienteService.fromDto(dto);
+        Paciente actualizado = pacienteService.update(id, entidad);
+
+        ApiResponseSuccessDto<Paciente> resp = new ApiResponseSuccessDto<>();
+        resp.setSuccess(true);
+        resp.setData(actualizado);
+        resp.setMessage("Paciente actualizado correctamente");
+        return ResponseEntity.ok(resp);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePaciente(@PathVariable Long id) {
-        if (!pacienteService.existsById(id)) {
-            return ResponseEntity.badRequest()
-                    .body("No se puede eliminar: Paciente no encontrado con ID: " + id);
-        }
+    public ResponseEntity<ApiResponseSuccessDto<Void>> deletePaciente(@PathVariable Long id) {
         pacienteService.deleteById(id);
-        return ResponseEntity.ok().build();
+
+        ApiResponseSuccessDto<Void> resp = new ApiResponseSuccessDto<>();
+        resp.setSuccess(true);
+        resp.setMessage("Paciente eliminado correctamente");
+        return ResponseEntity.ok(resp);
     }
 
 }
