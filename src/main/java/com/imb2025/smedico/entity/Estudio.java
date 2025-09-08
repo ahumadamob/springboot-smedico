@@ -1,5 +1,6 @@
 package com.imb2025.smedico.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -16,31 +17,39 @@ public class Estudio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String nombre;
     private String descripcion;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "paciente_id")
+    @JsonIgnoreProperties("estudios")
     private Paciente paciente;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "medico_id")
+    @JsonIgnoreProperties("estudios")
     private Medico medico;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "especialidad_id")
+    @JsonIgnoreProperties("estudios")
     private Especialidad especialidad;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "obra_social_id")
+    @JsonIgnoreProperties("estudios")
     private ObraSocial obraSocial;
 
+    // Conservamos OneToOne como en tu modelo
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "orden_estudio_id")
+    @JsonIgnoreProperties("estudios")
     private OrdenEstudio oredenEstudio;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "resultado_estudio_id")
+    @JsonIgnoreProperties("estudios")
     private ResultadoEstudio resultadoEstudio;
 
     public Estudio() {}
@@ -59,60 +68,30 @@ public class Estudio {
         this.resultadoEstudio = resultadoEstudio;
     }
 
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public String getNombre() {
-        return nombre;
-    }
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-    public String getDescripcion() {
-        return descripcion;
-    }
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public Paciente getPaciente() {
-        return paciente;
-    }
-    public void setPaciente(Paciente paciente) {
-        this.paciente = paciente;
-    }
-    public Medico getMedico() {
-        return medico;
-    }
-    public void setMedico(Medico medico) {
-        this.medico = medico;
-    }
-    public Especialidad getEspecialidad() {
-        return especialidad;
-    }
-    public void setEspecialidad(Especialidad especialidad) {
-        this.especialidad = especialidad;
-    }
-    public ObraSocial getObraSocial() {
-        return obraSocial;
-    }
-    public void setObraSocial(ObraSocial obraSocial) {
-        this.obraSocial = obraSocial;
-    }
-    public OrdenEstudio getOredenEstudio() {
-        return oredenEstudio;
-    }
-    public void setOredenEstudio(OrdenEstudio oredenEstudio) {
-        this.oredenEstudio = oredenEstudio;
-    }
-    public ResultadoEstudio getResultadoEstudio() {
-        return resultadoEstudio;
-    }
-    public void setResultadoEstudio(ResultadoEstudio resultadoEstudio) {
-        this.resultadoEstudio = resultadoEstudio;
-    }
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+
+    public Paciente getPaciente() { return paciente; }
+    public void setPaciente(Paciente paciente) { this.paciente = paciente; }
+
+    public Medico getMedico() { return medico; }
+    public void setMedico(Medico medico) { this.medico = medico; }
+
+    public Especialidad getEspecialidad() { return especialidad; }
+    public void setEspecialidad(Especialidad especialidad) { this.especialidad = especialidad; }
+
+    public ObraSocial getObraSocial() { return obraSocial; }
+    public void setObraSocial(ObraSocial obraSocial) { this.obraSocial = obraSocial; }
+
+    public OrdenEstudio getOredenEstudio() { return oredenEstudio; }
+    public void setOredenEstudio(OrdenEstudio oredenEstudio) { this.oredenEstudio = oredenEstudio; }
+
+    public ResultadoEstudio getResultadoEstudio() { return resultadoEstudio; }
+    public void setResultadoEstudio(ResultadoEstudio resultadoEstudio) { this.resultadoEstudio = resultadoEstudio; }
 }
