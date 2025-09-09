@@ -1,14 +1,16 @@
 package com.imb2025.smedico.service.jpa;
-import com.imb2025.smedico.exception.ResourceNotFoundException;
+
 import com.imb2025.smedico.dto.ConsultaRequestDto;
 import com.imb2025.smedico.entity.Consulta;
 import com.imb2025.smedico.entity.Turno;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.ConsultaRepository;
 import com.imb2025.smedico.repository.TurnoRepository;
 import com.imb2025.smedico.service.IConsultaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,9 +30,8 @@ public class ConsultaServiceImpl implements IConsultaService {
 
     @Override
     public Consulta findById(Long id) {
-    	return repository.findById(id)
-    		    .orElseThrow(() -> new ResourceNotFoundException(
-    		        "Entidad no encontrada con id " + id));
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Consulta no encontrada con id " + id));
     }
 
     @Override
@@ -39,30 +40,61 @@ public class ConsultaServiceImpl implements IConsultaService {
     }
 
     @Override
-    public Consulta create(Consulta consulta) {
-        return repository.save(consulta);
+    @Transactional
+    public Consulta createFromDto(ConsultaRequestDto dto) {
+        // 1) Validar Turno existente
+        Turno turno = turnoRepository.findById(dto.getTurnoId())
+                .orElseThrow(() -> new ResourceNotFoundException("Turno no encontrado con id " + dto.getTurnoId()));
+
+        // 2) Regla: un Turno solo puede estar asociado a una Consulta
+        if (repository.existsByTurno_Id(dto.getTurnoId())) {
+            // Podés mapear esta excepción a 422 en tu GlobalExceptionHandler
+            throw new IllegalArgumentException("El turno ya está asignado a otra consulta");
+        }
+
+        // 3) Mapear y persistir
+        Consulta c = new Consulta();
+        c.setFecha(dto.getFecha());
+        c.setTurno(turno);
+        c.setDuracionMin(dto.getDuracionMin());
+        c.setComentarios(dto.getComentarios());
+
+        return repository.save(c);
     }
 
     @Override
-    public Consulta update(Long id, Consulta consulta) {
-        consulta.setId(id);
-        return repository.save(consulta);
+    @Transactional
+    public Consulta updateFromDto(Long id, ConsultaRequestDto dto) {
+        // Verificar existencia de Consulta
+        Consulta existente = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Consulta no encontrada con id " + id));
+
+        // Validar Turno
+        Turno turno = turnoRepository.findById(dto.getTurnoId())
+                .orElseThrow(() -> new ResourceNotFoundException("Turno no encontrado con id " + dto.getTurnoId()));
+
+        // Unicidad de Turno: permitir el mismo turno si es la misma consulta,
+        // pero si pertenece a otra consulta, rechazar
+        if (repository.existsByTurno_IdAndIdNot(dto.getTurnoId(), id)) {
+            // Podés mapear esta excepción a 422 en tu GlobalExceptionHandler
+            throw new IllegalArgumentException("El turno ya está asignado a otra consulta");
+        }
+
+        // Mapear cambios permitidos
+        existente.setFecha(dto.getFecha());
+        existente.setTurno(turno);
+        existente.setDuracionMin(dto.getDuracionMin());
+        existente.setComentarios(dto.getComentarios());
+
+        return repository.save(existente);
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
+        if (!repository.existsById(id)) {
+            throw new ResourceNotFoundException("Consulta no encontrada con id " + id);
+        }
         repository.deleteById(id);
     }
-
-    @Override
-    public Consulta fromDto(ConsultaRequestDto dto) {
-        Turno turno = turnoRepository.findById(dto.getTurnoId()).orElse(null);
-        Consulta consulta = new Consulta();
-        consulta.setFecha(dto.getFecha());
-        consulta.setTurno(turno);
-        consulta.setDuracionMin(dto.getDuracionMin());
-        consulta.setComentarios(dto.getComentarios());
-        return consulta;
-    }
 }
-

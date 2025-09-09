@@ -2,14 +2,19 @@ package com.imb2025.smedico.service;
 
 import com.imb2025.smedico.dto.ConsultaRequestDto;
 import com.imb2025.smedico.entity.Consulta;
+
 import java.util.List;
 
 public interface IConsultaService {
-    public List<Consulta> findAll();
-    public Consulta create(Consulta consulta);
-    public Consulta update(Long id, Consulta consulta);
-    public Consulta findById(Long id);
-    public boolean existsById(Long id);
-    public void deleteById(Long id);
-    public Consulta fromDto(ConsultaRequestDto consultaRequestDto);
+    List<Consulta> findAll();
+    Consulta findById(Long id);
+
+    // Crear/actualizar a partir del DTO (mapeo y reglas dentro del Service)
+    Consulta createFromDto(ConsultaRequestDto dto);
+    Consulta updateFromDto(Long id, ConsultaRequestDto dto);
+
+    void deleteById(Long id);
+
+    // (Opcional) utilidades previas que tenías:
+    boolean existsById(Long id);
 }

@@ -1,26 +1,27 @@
 package com.imb2025.smedico.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "consulta")
 public class Consulta {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private LocalDate fecha;
 
-    @OneToOne
-    @JoinColumn(name = "turno_id")
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "turno_id", nullable = false, unique = true)
     private Turno turno;
 
+    @Column(name = "duracion_min", nullable = false)
     private int duracionMin;
+
+    @Column(length = 500)
     private String comentarios;
 
     public Consulta() {}
@@ -33,43 +34,18 @@ public class Consulta {
         this.comentarios = comentarios;
     }
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public LocalDate getFecha() { return fecha; }
+    public void setFecha(LocalDate fecha) { this.fecha = fecha; }
 
-    public LocalDate getFecha() {
-        return fecha;
-    }
+    public Turno getTurno() { return turno; }
+    public void setTurno(Turno turno) { this.turno = turno; }
 
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
-    }
+    public int getDuracionMin() { return duracionMin; }
+    public void setDuracionMin(int duracionMin) { this.duracionMin = duracionMin; }
 
-    public Turno getTurno() {
-        return turno;
-    }
-
-    public void setTurno(Turno turno) {
-        this.turno = turno;
-    }
-
-    public int getDuracionMin() {
-        return duracionMin;
-    }
-
-    public void setDuracionMin(int duracionMin) {
-        this.duracionMin = duracionMin;
-    }
-
-    public String getComentarios() {
-        return comentarios;
-    }
-
-    public void setComentarios(String comentarios) {
-        this.comentarios = comentarios;
-    }
+    public String getComentarios() { return comentarios; }
+    public void setComentarios(String comentarios) { this.comentarios = comentarios; }
 }
