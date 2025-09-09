@@ -45,21 +45,25 @@ public class HistorialPacienteController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<HistorialPaciente>> create(@Valid @RequestBody HistorialPacienteRequestDto dto) throws Exception {
+    public ResponseEntity<ApiResponseSuccessDto<HistorialPaciente>> create(
+            @Valid @RequestBody HistorialPacienteRequestDto dto) throws Exception {
         HistorialPaciente historial = service.create(service.fromDto(dto));
-        ApiResponseSuccessDto<HistorialPaciente> resp = 
+        ApiResponseSuccessDto<HistorialPaciente> resp =
             new ApiResponseSuccessDto<>(true, "Historial creado correctamente", historial);
         return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<HistorialPaciente>> update(@PathVariable Long id, @Valid @RequestBody HistorialPacienteRequestDto dto) throws Exception {
+    public ResponseEntity<ApiResponseSuccessDto<HistorialPaciente>> update(
+            @PathVariable Long id, 
+            @Valid @RequestBody HistorialPacienteRequestDto dto) throws Exception {
         HistorialPaciente historialEntity = service.fromDto(dto);
         HistorialPaciente actualizado = service.update(id, historialEntity);
-        ApiResponseSuccessDto<HistorialPaciente> resp = 
+        ApiResponseSuccessDto<HistorialPaciente> resp =
             new ApiResponseSuccessDto<>(true, "Historial actualizado correctamente", actualizado);
         return ResponseEntity.ok(resp);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<String>> delete(@PathVariable Long id) {

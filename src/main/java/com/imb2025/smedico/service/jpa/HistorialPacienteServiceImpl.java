@@ -51,7 +51,8 @@ public class HistorialPacienteServiceImpl implements IHistorialPacienteService {
 	public HistorialPaciente update(Long id, HistorialPaciente historial) {
 	    HistorialPaciente existente = repo.findById(id)
 	        .orElseThrow(() -> new ResourceNotFoundException("No existe el historial con ID " + id));
-
+	    
+	    existente.setEvento(historial.getEvento());
 	    existente.setFecha(historial.getFecha());
 	    existente.setObservacion(historial.getObservacion());
 	    existente.setPaciente(historial.getPaciente());
@@ -63,7 +64,8 @@ public class HistorialPacienteServiceImpl implements IHistorialPacienteService {
 		Paciente paciente = repoPaciente.findById(dto.getPacienteId())
 	        .orElseThrow(() -> new ResourceNotFoundException("Paciente no encontrado" + dto.getPacienteId()));
 		HistorialPaciente historial = new HistorialPaciente();
-
+		
+		historial.setEvento(dto.getEvento());
 		historial.setFecha(dto.getFecha());
 		historial.setObservacion(dto.getObservacion());
 		historial.setPaciente(paciente);
