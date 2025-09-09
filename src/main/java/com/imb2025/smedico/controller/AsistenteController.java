@@ -2,6 +2,7 @@ package com.imb2025.smedico.controller;
 //Controller
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,53 +21,72 @@ public class AsistenteController {
     @Autowired
     private IAsistenteService service;
 
-
     @GetMapping
-    public ResponseEntity<List<Asistente>> findAll() {
+    public ResponseEntity<ApiResponseSuccessDto<List<Asistente>>> findAll() {
         List<Asistente> lista = service.findAll();
-        return lista.isEmpty()
-                ? ResponseEntity.noContent().build()           
-                : ResponseEntity.ok(lista);                    
+
+        if (lista.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        ApiResponseSuccessDto<List<Asistente>> resp = new ApiResponseSuccessDto<>(
+                true,
+                "Listado de asistentes obtenido con éxito",
+                lista
+        );
+        return ResponseEntity.ok(resp);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<Asistente>> findById(@PathVariable Long id) {
         Asistente asistente = service.findById(id);
 
-        ApiResponseSuccessDto<Asistente> resp = new ApiResponseSuccessDto<>();
-        resp.setSuccess(true);
-        resp.setMessage("Asistente encontrado con éxito");
-        resp.setData(asistente);
-
+        ApiResponseSuccessDto<Asistente> resp = new ApiResponseSuccessDto<>(
+                true,
+                "Asistente encontrado con éxito",
+                asistente
+        );
         return ResponseEntity.ok(resp);
     }
 
     @PostMapping
-    public ResponseEntity<Asistente> create(@Valid @RequestBody AsistenteRequestDto dto) {
-        Asistente asistente = service.fromDto(dto);           // conversión DTO → entidad
-        Asistente creado = service.create(asistente);         
-        return ResponseEntity.ok(creado);
+    public ResponseEntity<ApiResponseSuccessDto<Asistente>> create(@Valid @RequestBody AsistenteRequestDto dto) {
+        Asistente asistente = service.fromDto(dto);
+        Asistente creado = service.create(asistente);
+
+        ApiResponseSuccessDto<Asistente> resp = new ApiResponseSuccessDto<>(
+                true,
+                "Asistente creado con éxito",
+                creado
+        );
+        return ResponseEntity.status(201).body(resp); // 201 CREATED
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Asistente> update(@PathVariable Long id,
-                                            @RequestBody AsistenteRequestDto dto) {
-        Asistente asistente = service.fromDto(dto);           // conversión DTO → entidad
-        Asistente actualizado = service.update(id, asistente);
-        return ResponseEntity.ok(actualizado);
-    }
+    public ResponseEntity<ApiResponseSuccessDto<Asistente>> update(
+            @PathVariable Long id,
+            @Valid @RequestBody AsistenteRequestDto dto) {
 
+        Asistente asistente = service.fromDto(dto);
+        Asistente actualizado = service.update(id, asistente);
+
+        ApiResponseSuccessDto<Asistente> resp = new ApiResponseSuccessDto<>(
+                true,
+                "Asistente actualizado con éxito",
+                actualizado
+        );
+        return ResponseEntity.ok(resp);
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<Void>> delete(@PathVariable Long id) {
         service.deleteById(id);
 
-        ApiResponseSuccessDto<Void> resp = new ApiResponseSuccessDto<>();
-        resp.setSuccess(true);
-        resp.setMessage("Asistente eliminado con éxito");
-        resp.setData(null);
-
+        ApiResponseSuccessDto<Void> resp = new ApiResponseSuccessDto<>(
+                true,
+                "Asistente eliminado con éxito",
+                null
+        );
         return ResponseEntity.ok(resp);
     }
-
 }
