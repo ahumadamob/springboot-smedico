@@ -1,24 +1,20 @@
 package com.imb2025.smedico.service.jpa;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.imb2025.smedico.dto.AfiliacionRequestDto;
 import com.imb2025.smedico.entity.Afiliacion;
-import com.imb2025.smedico.exception.ResourceNotFoundException;
+import com.imb2025.smedico.exception.ResourceNotFoundException; // CAMBIO: excepción custom
 import com.imb2025.smedico.service.IAfiliacionService;
 import com.imb2025.smedico.service.IObraSocialService;
 import com.imb2025.smedico.service.IPacienteService;
 import com.imb2025.smedico.repository.AfiliacionRepository;
 
-import jakarta.persistence.EntityNotFoundException;
-
 @Service
 public class AfiliacionServiceImpl implements IAfiliacionService {
-   
- 
+
     @Autowired
     private AfiliacionRepository afili;
 
@@ -35,9 +31,8 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
 
     @Override
     public Afiliacion findById(Long id) {
-     return afili.findById(id)
-    .orElseThrow(() -> new ResourceNotFoundException(
-        "Entidad no encontrada con id " + id));
+        return afili.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Afiliación no encontrada con id " + id)); // CAMBIO
     }
 
     @Override
@@ -48,7 +43,7 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
     @Override
     public Afiliacion update(Long id, Afiliacion afiliacion) throws Exception {
         if (!afili.existsById(id)) {
-            throw new EntityNotFoundException("No se puede actualizar. Afiliación con ID " + id + " no existe.");
+            throw new ResourceNotFoundException("No se puede actualizar. Afiliación con ID " + id + " no existe."); // CAMBIO
         }
         afiliacion.setId(id);
         return afili.save(afiliacion);
@@ -57,7 +52,7 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
     @Override
     public void deleteById(Long id) {
         if (!afili.existsById(id)) {
-            throw new EntityNotFoundException("No se puede eliminar. Afiliación con ID " + id + " no existe.");
+            throw new ResourceNotFoundException("No se puede eliminar. Afiliación con ID " + id + " no existe."); // CAMBIO
         }
         afili.deleteById(id);
     }
@@ -68,6 +63,7 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
         afiliacion.setNumeroAfiliado(dto.getNumeroAfiliado());
         afiliacion.setFechaVigenciaDesde(dto.getFechaVigenciaDesde());
         afiliacion.setFechaHasta(dto.getFechaHasta());
+
         if (dto.getIdpaciente() != null) {
             afiliacion.setPaciente(pacienteService.findById(dto.getIdpaciente()));
         }
@@ -82,4 +78,3 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
         return afili.existsById(id);
     }
 }
-
