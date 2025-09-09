@@ -42,7 +42,7 @@ public class FacturaController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<Factura>> createFactura(@Valid @RequestBody FacturaRequestDto requestDTO) throws Exception{
+    public ResponseEntity<ApiResponseSuccessDto<Factura>> createFactura(@Valid @RequestBody FacturaRequestDto requestDTO){
         Factura factura = facturaService.create(facturaService.fromDto(requestDTO));
         ApiResponseSuccessDto<Factura> resp =
                 new ApiResponseSuccessDto<>(true, "Factura creada correctamente", factura);
@@ -50,7 +50,7 @@ public class FacturaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<Factura>> updateFactura(@PathVariable Long id, @Valid @RequestBody FacturaRequestDto requestDTO) throws Exception{
+    public ResponseEntity<ApiResponseSuccessDto<Factura>> updateFactura(@PathVariable Long id, @Valid @RequestBody FacturaRequestDto requestDTO){
         Factura factura = facturaService.update(id, facturaService.fromDto(requestDTO));
         ApiResponseSuccessDto<Factura> resp =
                 new ApiResponseSuccessDto<>(true, "Factura actualizada correctamente", factura);
@@ -58,7 +58,7 @@ public class FacturaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<String>> deleteFactura(@PathVariable Long id) throws Exception{
+    public ResponseEntity<ApiResponseSuccessDto<String>> deleteFactura(@PathVariable Long id) {
         facturaService.deleteById(id);
         ApiResponseSuccessDto<String> resp =
                 new ApiResponseSuccessDto<>(true, "La factura con el ID: " + id + "fue eliminado correctamente.", "Factura ID: " + id);
