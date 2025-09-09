@@ -81,10 +81,4 @@ public class MedioPagoController {
             return ResponseEntity.ok(response);
     }
 
-
-    @ExceptionHandler(Exception.class) 
-    public ResponseEntity<String> handleException(Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-    }
-
 }  
