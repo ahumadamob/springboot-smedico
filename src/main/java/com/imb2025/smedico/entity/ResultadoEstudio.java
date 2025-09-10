@@ -21,16 +21,18 @@ public class ResultadoEstudio {
 
     @OneToOne(mappedBy = "resultadoEstudio")
     private Estudio estudio;
+    private Long resultado;
     private LocalTime fechaCarga;
     private String observaciones;
 
     public ResultadoEstudio() {}
 
-    public ResultadoEstudio(long id, OrdenEstudio ordenEstudio, Estudio estudio, LocalTime fechaCarga,
+    public ResultadoEstudio(long id, OrdenEstudio ordenEstudio, Estudio estudio, Long resultado, LocalTime fechaCarga,
                              String observaciones) {
         this.id = id;
         this.ordenEstudio = ordenEstudio;
         this.estudio = estudio;
+        this.resultado = resultado;
         this.fechaCarga = fechaCarga;
         this.observaciones = observaciones;
     }
@@ -58,8 +60,17 @@ public class ResultadoEstudio {
     public void setEstudio(Estudio estudio) {
         this.estudio = estudio;
     }
+    
 
-    public LocalTime getFechaCarga() {
+    public Long getResultado() {
+		return resultado;
+	}
+
+	public void setResultado(Long resultado) {
+		this.resultado = resultado;
+	}
+
+	public LocalTime getFechaCarga() {
         return fechaCarga;
     }
 

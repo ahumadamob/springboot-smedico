@@ -2,8 +2,8 @@ package com.imb2025.smedico.dto;
 
 import java.time.LocalTime;
 
-import jakarta.validation.constraints.NotBlank;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
@@ -11,15 +11,15 @@ import jakarta.validation.constraints.Size;
 
 public class ResultadoEstudioRequestDto {
 
-	@NotBlank(message = "La orden de estudio es obligatoria")
+	@NotNull(message = "La orden de estudio es obligatoria")
 	@Positive(message = "El id de la ordenEstudio debe ser positivo")
 	private long ordenEstudioId;
-	@NotBlank(message = "El estudio es obligatorio")
+	@NotNull(message = "El estudio es obligatorio")
 	@Positive(message = "El id del estudio debe ser positivo")
 	private long estudioId;
-	@NotBlank(message = "El resultado es obligatorio")
+	@NotNull(message = "El resultado es obligatorio")
 	private long resultado;
-	@NotBlank(message = "La fecha es obligatoria")
+	@NotNull(message = "La fecha es obligatoria")
 	@PastOrPresent(message = "La fecha no puede ser futura")
 	private LocalTime fechaCarga;
 	@Size(min = 5, message = "Las observaciones no pueden tener menos de 5 caracteres")
