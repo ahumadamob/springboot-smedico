@@ -1,10 +1,11 @@
 package com.imb2025.smedico.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
@@ -21,98 +22,49 @@ public class EncuestaController {
     @Autowired
     private IEncuestaService service;
 
-
     @GetMapping
-    public ResponseEntity<List<Encuesta>> getAllEncuesta() {
-        List<Encuesta> encuesta = service.findAll();
-        return encuesta.isEmpty()
-                ? ResponseEntity.noContent().build()
-                : ResponseEntity.ok(encuesta);
+    public ResponseEntity<ApiResponseSuccessDto<List<Map<String, Object>>>> getAllEncuesta() {
+        List<Encuesta> list = service.findAll();
+        List<Map<String, Object>> data = list.stream().map(this::toMap).toList();
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "OK", data));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<Encuesta>> getEncuestaById(@PathVariable Long id) {
-        Encuesta data = service.findById(id);
-        ApiResponseSuccessDto<Encuesta> resp =
-                new ApiResponseSuccessDto<>(true, "Encuesta encontrada", data);
-        return ResponseEntity.ok(resp);
+    public ResponseEntity<ApiResponseSuccessDto<Map<String, Object>>> getEncuestaById(@PathVariable Long id) {
+        Encuesta e = service.findById(id);
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Encuesta encontrada", toMap(e)));
     }
 
-    // POST con @Valid
     @PostMapping
-    public ResponseEntity<Encuesta> createEncuesta(@Valid @RequestBody EncuestaRequestDto dto) throws Exception {
-        Encuesta encuesta = service.fromDto(dto);
-        Encuesta creada = service.create(encuesta);
-        return ResponseEntity.status(HttpStatus.CREATED).body(creada);
+    public ResponseEntity<ApiResponseSuccessDto<Map<String, Object>>> createEncuesta(
+            @Valid @RequestBody EncuestaRequestDto dto) throws Exception {
+        Encuesta creada = service.create(service.fromDto(dto));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ApiResponseSuccessDto<>(true, "Encuesta creada", toMap(creada)));
     }
 
-        @Autowired
-        private IEncuestaService service;
-
-        @GetMapping
-        public ResponseEntity<List<Encuesta>> getAllEncuesta() {
-            List <Encuesta> encuesta = service.findAll();
-
-        	return encuesta.isEmpty()
-        			? ResponseEntity.noContent().build()
-        			: ResponseEntity.ok(encuesta);
-        }
-
-        @GetMapping("/{id}")
-        public ResponseEntity<ApiResponseSuccessDto<Encuesta>> getEncuestaById(@PathVariable Long id) {
-            Encuesta data = service.findById(id);
-
-            ApiResponseSuccessDto<Encuesta> resp =
-                new ApiResponseSuccessDto<>(true, "Encuesta encontrada", data);
-
-            return ResponseEntity.ok(resp);
-        }
-
-
-
-        //Nuevo método POST
-        @PostMapping
-        public ResponseEntity<Encuesta> createEncuesta(@RequestBody EncuestaRequestDto dto) throws Exception {
-        	Encuesta encuesta = service.fromDto(dto);
-                return ResponseEntity.ok(service.create(encuesta));
-
-        }
-
-        //Nuevo método PUT
-        @PutMapping("/{id}")
-        public ResponseEntity<Encuesta> update(@PathVariable Long id, @RequestBody EncuestaRequestDto dto) throws Exception {
-
-        	    Encuesta encuesta = service.fromDto(dto);
-                return ResponseEntity.ok(service.update(id, encuesta));
-
-
-            }
-
-
-
-    // PUT con @Valid
     @PutMapping("/{id}")
-    public ResponseEntity<Encuesta> update(@PathVariable Long id,
-                                           @Valid @RequestBody EncuestaRequestDto dto) throws Exception {
-        Encuesta encuesta = service.fromDto(dto);
-        return ResponseEntity.ok(service.update(id, encuesta));
+    public ResponseEntity<ApiResponseSuccessDto<Map<String, Object>>> update(
+            @PathVariable Long id, @Valid @RequestBody EncuestaRequestDto dto) throws Exception {
+        Encuesta actualizada = service.update(id, service.fromDto(dto));
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Encuesta actualizada", toMap(actualizada)));
     }
 
- tp05-jordan-humberto
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponseSuccessDto<Void>> deleteById(@PathVariable Long id) {
         service.deleteById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Encuesta eliminada", null));
+    }
+
+    // --- Mapeo sin crear clases nuevas ---
+    private Map<String, Object> toMap(Encuesta e) {
+        Map<String, Object> r = new HashMap<>();
+        r.put("id", e.getId());
+        r.put("puntaje", e.getPuntaje());
+        r.put("comentario", e.getComentario());
+        r.put("pacienteId", (e.getPaciente() != null) ? e.getPaciente().getId() : null);
+        r.put("consultaId", (e.getConsulta() != null) ? e.getConsulta().getId() : null);
+        return r;
     }
 }
-
-        @DeleteMapping("/{id}")
-        public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-            service.deleteById(id);
-            return ResponseEntity.ok().build();
-        }
-
-        
-
-    }
 
