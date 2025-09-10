@@ -6,6 +6,7 @@ import com.imb2025.smedico.service.IObraSocialService;
 import jakarta.validation.Valid;
 
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
+import com.imb2025.smedico.dto.ApiResponseErrorDto;
 import com.imb2025.smedico.dto.ObraSocialRequestDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,20 +23,23 @@ public class ObraSocialController {
     @Autowired
     private IObraSocialService service;
 
-    
     @GetMapping
-    public ResponseEntity<?> getAll() {
+    public ResponseEntity<ApiResponseSuccessDto<List<ObraSocial>>> getAll() {
         List<ObraSocial> obras = service.findAll();
-        if (obras.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.OK).body("Sin datos: no hay obras sociales registradas.");
-        }
-        return ResponseEntity.ok(obras);
+        ApiResponseSuccessDto<List<ObraSocial>> response = new ApiResponseSuccessDto<>();
+        response.setSuccess(true);
+        response.setData(obras);
+        response.setMessage(obras.isEmpty() ? "Sin datos: no hay obras sociales registradas." : "Listado de obras sociales obtenido correctamente.");
+        return ResponseEntity.ok(response);
     }
 
-    
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<ObraSocial>> getObraSocialById(@PathVariable Long id) {
+    public ResponseEntity<?> getObraSocialById(@PathVariable Long id) {
         ObraSocial encontrada = service.findById(id);
+        if (encontrada == null) {
+            ApiResponseErrorDto error = new ApiResponseErrorDto("No se encontró una obra social con el ID: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        }
 
         ApiResponseSuccessDto<ObraSocial> resp = new ApiResponseSuccessDto<>();
         resp.setSuccess(true);
@@ -45,25 +49,29 @@ public class ObraSocialController {
         return ResponseEntity.ok(resp);
     }
 
-    
     @PostMapping
-    public ResponseEntity<Map<String, Object>> createObraSocial(@Valid @RequestBody ObraSocialRequestDto dto) throws Exception {
-        ObraSocial obra = service.create(service.fromDto(dto));
+    public ResponseEntity<ApiResponseSuccessDto<ObraSocial>> createObraSocial(
+            @Valid @RequestBody ObraSocialRequestDto dto) throws Exception {
         
-        Map<String, Object> response = new HashMap<>();
-        response.put("Perfecto", "Obra social agregada con éxito");
-        response.put("obraSocial", obra);
+        ObraSocial nueva = service.create(service.fromDto(dto));
         
+        ApiResponseSuccessDto<ObraSocial> response = new ApiResponseSuccessDto<>();
+        response.setSuccess(true);
+        response.setMessage("Obra social creada exitosamente.");
+        response.setData(nueva);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
 
    
+
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizarObraSocial(@Valid @PathVariable Long id, @RequestBody ObraSocialRequestDto dto) throws Exception {
         ObraSocial obraSocial = service.findById(id);
         if (obraSocial == null) {
-            throw new RuntimeException("No se encontró una obra social con el ID: " + id);
+            ApiResponseErrorDto error = new ApiResponseErrorDto("No se encontró una obra social con el ID: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
         }
 
         obraSocial.setNombre(dto.getNombre());
@@ -73,26 +81,31 @@ public class ObraSocialController {
 
         service.update(id, obraSocial);
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("mensaje", "Datos actualizados correctamente");
-        response.put("obraSocial", obraSocial);
+        ApiResponseSuccessDto<ObraSocial> response = new ApiResponseSuccessDto<>();
+        response.setSuccess(true);
+        response.setData(obraSocial);
+        response.setMessage("Datos actualizados correctamente");
 
         return ResponseEntity.ok(response);
     }
 
-    
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        if (service.findById(id) == null) {
-            throw new RuntimeException("No se encontró una obra social con el ID: " + id);
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        ObraSocial obra = service.findById(id);
+        if (obra == null) {
+            ApiResponseErrorDto error = new ApiResponseErrorDto("No se encontró una obra social con el ID: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
         }
 
         service.deleteById(id);
-        return ResponseEntity.noContent().build();
+
+        ApiResponseSuccessDto<Void> response = new ApiResponseSuccessDto<>();
+        response.setSuccess(true);
+        response.setData(null);
+        response.setMessage("Obra social eliminada correctamente");
+
+        return ResponseEntity.ok(response);
     }
-
-    
-
 }
 
 
