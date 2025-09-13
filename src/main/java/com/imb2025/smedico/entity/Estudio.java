@@ -14,6 +14,7 @@ import jakarta.persistence.Table;
 @Table(name = "estudio")
 @Entity
 public class Estudio {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,30 +23,9 @@ public class Estudio {
     private String descripcion;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "paciente_id")
-    @JsonIgnoreProperties("estudios")
-    private Paciente paciente;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "medico_id")
-    @JsonIgnoreProperties("estudios")
-    private Medico medico;
-
-    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "especialidad_id")
     @JsonIgnoreProperties("estudios")
     private Especialidad especialidad;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "obra_social_id")
-    @JsonIgnoreProperties("estudios")
-    private ObraSocial obraSocial;
-
-    // Conservamos OneToOne como en tu modelo
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "orden_estudio_id")
-    @JsonIgnoreProperties("estudios")
-    private OrdenEstudio oredenEstudio;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "resultado_estudio_id")
@@ -54,17 +34,12 @@ public class Estudio {
 
     public Estudio() {}
 
-    public Estudio(Long id, String nombre, String descripcion, Paciente paciente, Medico medico,
-                   Especialidad especialidad, ObraSocial obraSocial, OrdenEstudio oredenEstudio,
-                   ResultadoEstudio resultadoEstudio) {
+    public Estudio(Long id, String nombre, String descripcion,
+                   Especialidad especialidad, ResultadoEstudio resultadoEstudio) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.paciente = paciente;
-        this.medico = medico;
         this.especialidad = especialidad;
-        this.obraSocial = obraSocial;
-        this.oredenEstudio = oredenEstudio;
         this.resultadoEstudio = resultadoEstudio;
     }
 
@@ -77,20 +52,8 @@ public class Estudio {
     public String getDescripcion() { return descripcion; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
-    public Paciente getPaciente() { return paciente; }
-    public void setPaciente(Paciente paciente) { this.paciente = paciente; }
-
-    public Medico getMedico() { return medico; }
-    public void setMedico(Medico medico) { this.medico = medico; }
-
     public Especialidad getEspecialidad() { return especialidad; }
     public void setEspecialidad(Especialidad especialidad) { this.especialidad = especialidad; }
-
-    public ObraSocial getObraSocial() { return obraSocial; }
-    public void setObraSocial(ObraSocial obraSocial) { this.obraSocial = obraSocial; }
-
-    public OrdenEstudio getOredenEstudio() { return oredenEstudio; }
-    public void setOredenEstudio(OrdenEstudio oredenEstudio) { this.oredenEstudio = oredenEstudio; }
 
     public ResultadoEstudio getResultadoEstudio() { return resultadoEstudio; }
     public void setResultadoEstudio(ResultadoEstudio resultadoEstudio) { this.resultadoEstudio = resultadoEstudio; }
