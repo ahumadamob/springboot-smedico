@@ -7,10 +7,6 @@ import jakarta.validation.constraints.Size;
 
 public class EstudioRequestDto {
 	
-	@NotNull(message = "El ID del paciente es obligatorio.")
-    @Positive(message = "El ID del paciente debe ser un número positivo.")
-    private Long pacientId;
-
 	@NotBlank(message = "El nombre del estudio no puede estar vacío.")
     @Size(min = 3, max = 150, message = "El nombre debe tener entre 3 y 150 caracteres.")
     private String nombre;
@@ -29,23 +25,14 @@ public class EstudioRequestDto {
     public EstudioRequestDto() {}
 
     public EstudioRequestDto(
-    		Long pacientId,
             String nombre,
             String descripcion,
             Long especialidadId,
             Long resultadoEstudioId) {
-    	this.pacientId = pacientId;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.especialidadId = especialidadId;
         this.resultadoEstudioId = resultadoEstudioId;
-    }
-    public Long getPacientId() {
-        return pacientId;
-    }
-
-    public void setPacientId(Long pacientId) {
-        this.pacientId = pacientId;
     }
 
     public String getNombre() {

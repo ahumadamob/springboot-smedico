@@ -1,35 +1,29 @@
 package com.imb2025.smedico.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
-@Table(name = "estudio")
 @Entity
+@Table(name = "estudio")
 public class Estudio {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 150, nullable = false)
     private String nombre;
+
+    @Column(length = 500, nullable = false)
     private String descripcion;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "especialidad_id")
-    @JsonIgnoreProperties("estudios")
+    // Muchas estudios pertenecen a una especialidad
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "especialidad_id", nullable = false)
     private Especialidad especialidad;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "resultado_estudio_id")
-    @JsonIgnoreProperties("estudios")
+    // Relación 1–1 unidireccional: la FK está en Estudio
+    @OneToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "resultado_estudio_id", unique = true)
     private ResultadoEstudio resultadoEstudio;
 
     public Estudio() {}

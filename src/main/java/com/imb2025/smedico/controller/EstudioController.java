@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.EstudioRequestDto;
 import com.imb2025.smedico.dto.EstudioResponseDto;
 import com.imb2025.smedico.entity.Estudio;
@@ -22,84 +21,55 @@ public class EstudioController {
     @Autowired
     private IEstudioService service;
 
+    
     @GetMapping
-    public ResponseEntity<?> findAll() {
+    public ResponseEntity<List<EstudioResponseDto>> findAll() {
         List<Estudio> lista = service.findAll();
-        if (lista.isEmpty()) {
-            return ResponseEntity.noContent().build(); // 204 sin body
+        if (lista == null || lista.isEmpty()) {
+            return ResponseEntity.noContent().build();
         }
         List<EstudioResponseDto> dtoList = lista.stream()
-                .map(EstudioResponseDto::new)
+                .map(EstudioResponseDto::new) 
                 .collect(Collectors.toList());
-
-        ApiResponseSuccessDto<List<EstudioResponseDto>> resp = new ApiResponseSuccessDto<>(
-                true,
-                "Listado de estudios (DTO)",
-                dtoList
-        );
-        return ResponseEntity.ok(resp); // 200 con DTOs, sin ciclos
+        return ResponseEntity.ok(dtoList); 
     }
 
+    
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<EstudioResponseDto>> findById(@PathVariable("id") Long id) {
-        Estudio estudio = service.findById(id);
-        EstudioResponseDto dto = new EstudioResponseDto(estudio);
-
-        ApiResponseSuccessDto<EstudioResponseDto> resp = new ApiResponseSuccessDto<>(
-                true,
-                "Estudio (DTO)",
-                dto
-        );
-        return ResponseEntity.ok(resp);
+    public ResponseEntity<EstudioResponseDto> findById(@PathVariable("id") Long id) {
+        if (!service.existsById(id)) {
+            return ResponseEntity.noContent().build();
+        }
+        Estudio entidad = service.findById(id);
+        EstudioResponseDto dto = new EstudioResponseDto(entidad); 
+        return ResponseEntity.ok(dto);
     }
 
-    @GetMapping("/completo")
-    public ResponseEntity<ApiResponseSuccessDto<List<EstudioResponseDto>>> findAllDTO() {
-        List<EstudioResponseDto> lista = service.findAll().stream()
-                .map(EstudioResponseDto::new)
-                .collect(Collectors.toList());
-
-        ApiResponseSuccessDto<List<EstudioResponseDto>> resp = new ApiResponseSuccessDto<>(
-                true,
-                "Listado de estudios (DTO) obtenido correctamente",
-                lista
-        );
-        return ResponseEntity.ok(resp);
-    }
-
+    
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<Estudio>> create(
-            @Valid @RequestBody EstudioRequestDto dto) throws Exception {
-        Estudio creado = service.create(service.fromDto(dto));
-        ApiResponseSuccessDto<Estudio> resp = new ApiResponseSuccessDto<>(
-                true,
-                "Estudio creado correctamente",
-                creado
-        );
-        return ResponseEntity.status(201).body(resp);
+    public ResponseEntity<EstudioResponseDto> create(@Valid @RequestBody EstudioRequestDto dto) {
+        Estudio entidad = service.create(service.fromDto(dto));
+        return ResponseEntity.ok(new EstudioResponseDto(entidad));
     }
 
+    
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<Estudio>> update(
-            @PathVariable("id") Long id,
-            @Valid @RequestBody EstudioRequestDto dto) throws Exception {
+    public ResponseEntity<EstudioResponseDto> update(@PathVariable("id") Long id,
+                                                     @Valid @RequestBody EstudioRequestDto dto) {
+        if (!service.existsById(id)) {
+            return ResponseEntity.noContent().build();
+        }
         Estudio actualizado = service.update(id, service.fromDto(dto));
-        ApiResponseSuccessDto<Estudio> resp = new ApiResponseSuccessDto<>(
-                true,
-                "Estudio actualizado correctamente",
-                actualizado
-        );
-        return ResponseEntity.ok(resp);
+        return ResponseEntity.ok(new EstudioResponseDto(actualizado)); 
     }
 
+    
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<Void>> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
+        if (!service.existsById(id)) {
+            return ResponseEntity.noContent().build(); // 204 si no existe
+        }
         service.deleteById(id);
-        ApiResponseSuccessDto<Void> resp = new ApiResponseSuccessDto<>(
-                true,
-                "Estudio " + id + " eliminado correctamente.",
-                null
-        );
-        return ResponseEntity.ok(resp);
+        return ResponseEntity.ok().build(); // 200
     }
 }

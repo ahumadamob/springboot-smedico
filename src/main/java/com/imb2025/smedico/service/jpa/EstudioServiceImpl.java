@@ -52,17 +52,20 @@ public class EstudioServiceImpl implements IEstudioService {
     }
 
     @Override
-    public Estudio create(Estudio estudio) throws Exception {
-        // Verificación mínima, coherente con tus lineamientos
-        if (estudio.getEspecialidad() == null) throw new Exception("Especialidad es obligatoria");
-        // nombre puede ser obligatorio según tu DTO; si querés, valida acá
+    public Estudio create(Estudio estudio) {
+        // Validaciones mínimas SIN checked exceptions:
+        if (estudio.getEspecialidad() == null) {
+            // Si preferís, usá BadRequestException en lugar de IllegalArgumentException
+            throw new IllegalArgumentException("Especialidad es obligatoria");
+        }
         return repoEstudio.save(estudio);
     }
 
     @Override
-    public Estudio update(Long id, Estudio estudio) throws Exception {
+    public Estudio update(Long id, Estudio estudio) {
         Estudio existente = repoEstudio.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Estudio no encontrado con id " + id));
+
         existente.setNombre(estudio.getNombre());
         existente.setDescripcion(estudio.getDescripcion());
         existente.setEspecialidad(estudio.getEspecialidad());
@@ -72,15 +75,14 @@ public class EstudioServiceImpl implements IEstudioService {
     }
 
     @Override
-    public Estudio fromDto(EstudioRequestDto dto) throws Exception {
+    public Estudio fromDto(EstudioRequestDto dto) {
         Especialidad especialidad = repoEspecialidad.findById(dto.getEspecialidadId())
-                .orElseThrow(() -> new Exception("Especialidad no encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Especialidad no encontrada: " + dto.getEspecialidadId()));
 
- 
         ResultadoEstudio resultadoEstudio = null;
         if (dto.getResultadoEstudioId() != null) {
             resultadoEstudio = repoResultadoEstudio.findById(dto.getResultadoEstudioId())
-                    .orElseThrow(() -> new Exception("Resultado de estudio no encontrado"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Resultado de estudio no encontrado: " + dto.getResultadoEstudioId()));
         }
 
         Estudio estudio = new Estudio();
