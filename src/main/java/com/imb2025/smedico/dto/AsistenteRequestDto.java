@@ -22,7 +22,7 @@ public class AsistenteRequestDto {
     private String email;
 
     @NotNull(message = "El teléfono no puede ser nulo")
-    @Positive(message = "El teléfono debe ser un número positivo")
+    @Size(min = 7, max = 15, message = "El teléfono debe tener entre 7 y 15 dígitos")
     @Pattern(regexp = "\\d{7,15}", message = "El teléfono debe tener entre 7 y 15 dígitos")
     private String telefono;
 

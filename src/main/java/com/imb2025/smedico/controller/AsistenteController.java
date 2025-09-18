@@ -22,61 +22,100 @@ public class AsistenteController {
     private IAsistenteService service;
 
     @GetMapping
-    public ResponseEntity<ApiResponseSuccessDto<List<Asistente>>> findAll() {
+    public ResponseEntity<ApiResponseSuccessDto<List<AsistenteRequestDto>>> findAll() {
         List<Asistente> lista = service.findAll();
 
         if (lista.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
 
-        ApiResponseSuccessDto<List<Asistente>> resp = new ApiResponseSuccessDto<>(
+        // Convertir entidad -> DTO
+        List<AsistenteRequestDto> dtoList = lista.stream().map(a -> {
+            AsistenteRequestDto dto = new AsistenteRequestDto();
+            dto.setApellido(a.getApellido());
+            dto.setNombre(a.getNombre());
+            dto.setEmail(a.getEmail());
+            dto.setTelefono(a.getTelefono());
+            dto.setDni(a.getDni());
+            return dto;
+        }).toList();
+
+        ApiResponseSuccessDto<List<AsistenteRequestDto>> resp = new ApiResponseSuccessDto<>(
                 true,
                 "Listado de asistentes obtenido con éxito",
-                lista
+                dtoList
         );
         return ResponseEntity.ok(resp);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<Asistente>> findById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponseSuccessDto<AsistenteRequestDto>> findById(@PathVariable Long id) {
         Asistente asistente = service.findById(id);
 
-        ApiResponseSuccessDto<Asistente> resp = new ApiResponseSuccessDto<>(
+        AsistenteRequestDto dto = new AsistenteRequestDto(
+                asistente.getApellido(),
+                asistente.getNombre(),
+                asistente.getEmail(),
+                asistente.getTelefono(),
+                asistente.getDni()
+        );
+
+        ApiResponseSuccessDto<AsistenteRequestDto> resp = new ApiResponseSuccessDto<>(
                 true,
                 "Asistente encontrado con éxito",
-                asistente
+                dto
         );
         return ResponseEntity.ok(resp);
     }
-
+    
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<Asistente>> create(@Valid @RequestBody AsistenteRequestDto dto) {
+    public ResponseEntity<ApiResponseSuccessDto<AsistenteRequestDto>> create(@Valid @RequestBody AsistenteRequestDto dto) {
         Asistente asistente = service.fromDto(dto);
         Asistente creado = service.create(asistente);
 
-        ApiResponseSuccessDto<Asistente> resp = new ApiResponseSuccessDto<>(
+        // Convertimos la entidad creada a DTO
+        AsistenteRequestDto respDto = new AsistenteRequestDto(
+                creado.getApellido(),
+                creado.getNombre(),
+                creado.getEmail(),
+                creado.getTelefono(),
+                creado.getDni()
+        );
+
+        ApiResponseSuccessDto<AsistenteRequestDto> resp = new ApiResponseSuccessDto<>(
                 true,
                 "Asistente creado con éxito",
-                creado
+                respDto
         );
         return ResponseEntity.status(201).body(resp); // 201 CREATED
     }
 
+
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<Asistente>> update(
+    public ResponseEntity<ApiResponseSuccessDto<AsistenteRequestDto>> update(
             @PathVariable Long id,
             @Valid @RequestBody AsistenteRequestDto dto) {
 
         Asistente asistente = service.fromDto(dto);
         Asistente actualizado = service.update(id, asistente);
 
-        ApiResponseSuccessDto<Asistente> resp = new ApiResponseSuccessDto<>(
+        // Convertimos la entidad actualizada → DTO
+        AsistenteRequestDto respDto = new AsistenteRequestDto(
+                actualizado.getApellido(),
+                actualizado.getNombre(),
+                actualizado.getEmail(),
+                actualizado.getTelefono(),
+                actualizado.getDni()
+        );
+
+        ApiResponseSuccessDto<AsistenteRequestDto> resp = new ApiResponseSuccessDto<>(
                 true,
                 "Asistente actualizado con éxito",
-                actualizado
+                respDto
         );
         return ResponseEntity.ok(resp);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<Void>> delete(@PathVariable Long id) {
