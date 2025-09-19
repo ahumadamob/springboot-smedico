@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.imb2025.smedico.dto.MedioPagoRequestDto;
 import com.imb2025.smedico.entity.MedioPago;
 import com.imb2025.smedico.service.IMedioPagoService;
+import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 
 import jakarta.validation.Valid;
 
@@ -36,7 +37,9 @@ public class MedioPagoController {
     @GetMapping
     public ResponseEntity<ApiResponseSuccessDto<List<MedioPago>>> findAllMedioPago() {
     	List<MedioPago> lista = service.findAll();
+
     	ApiResponseSuccessDto<List<MedioPago>> response; 
+
     	if (lista.isEmpty()) {
     		response = new ApiResponseSuccessDto<>(true,"No hay registro de medios de pago",lista);
     		
@@ -54,7 +57,8 @@ public class MedioPagoController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<MedioPago>> createMedioPago(@Valid @RequestBody MedioPagoRequestDto mediopagoRequestDto) throws Exception {
+    public ResponseEntity<ApiResponseSuccessDto<MedioPago>> createMedioPago(@RequestBody MedioPagoRequestDto mediopagoRequestDto) throws Exception { 
+
             MedioPago medioPago = service.fromDto(mediopagoRequestDto);
             MedioPago creado = service.create(medioPago);
             ApiResponseSuccessDto<MedioPago> response = new ApiResponseSuccessDto<>(true, "Medio de pago creado exitosamente!", medioPago);
@@ -62,7 +66,8 @@ public class MedioPagoController {
     } 
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<MedioPago>> updateMedioPago(@PathVariable Long id,@Valid @RequestBody MedioPagoRequestDto mediopagoDto) throws Exception {
+    public ResponseEntity<ApiResponseSuccessDto<MedioPago>> updateMedioPago(@PathVariable Long id, @RequestBody MedioPagoRequestDto mediopagoDto) throws Exception { 
+
             MedioPago medioPago = service.fromDto(mediopagoDto);
             MedioPago actualizado = service.update(id, medioPago); 
             ApiResponseSuccessDto<MedioPago> response = new ApiResponseSuccessDto<>(true,"Medio de pago actualizado exitosamente!", actualizado);
