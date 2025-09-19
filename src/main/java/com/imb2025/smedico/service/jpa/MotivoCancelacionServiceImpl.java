@@ -59,12 +59,6 @@ public class MotivoCancelacionServiceImpl implements IMotivoCancelacionService {
 
     @Override
     public MotivoCancelacion fromDto(MotivoCancelacionRequestDto dto) {
-        if (dto.getNombre() == null || dto.getNombre().isBlank()) {
-            throw new IllegalArgumentException("El nombre no puede estar nulo o vacío");
-        }
-        if (dto.getDescripcion() == null || dto.getDescripcion().isBlank()) {
-            throw new IllegalArgumentException("La descripción no puede estar nula o vacía");
-        }
         MotivoCancelacion motivoCancelacion = new MotivoCancelacion();
         motivoCancelacion.setNombre(dto.getNombre());
         motivoCancelacion.setDescripcion(dto.getDescripcion());
