@@ -1,5 +1,4 @@
 package com.imb2025.smedico.entity;
-
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -7,6 +6,8 @@ import java.time.LocalDate;
 @Table(name = "consulta")
 public class Consulta {
 
+	
+	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

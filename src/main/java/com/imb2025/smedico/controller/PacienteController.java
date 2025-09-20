@@ -5,6 +5,9 @@ import com.imb2025.smedico.dto.PacienteRequestDto;
 import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.service.IPacienteService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +48,8 @@ public class PacienteController {
 
     // Crear paciente
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<Paciente>> createPaciente(@RequestBody PacienteRequestDto dto) {
+    public ResponseEntity<ApiResponseSuccessDto<Paciente>> createPaciente(
+            @Valid @RequestBody PacienteRequestDto dto) {
         Paciente entidad = pacienteService.fromDto(dto);
         Paciente nuevo = pacienteService.create(entidad);
 
@@ -58,7 +62,7 @@ public class PacienteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePaciente(@PathVariable Long id, @RequestBody PacienteRequestDto dto) {
+    public ResponseEntity<?> updatePaciente(@PathVariable Long id,@Valid @RequestBody PacienteRequestDto dto) {
         if (!pacienteService.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Paciente no encontrado con ID: " + id);
@@ -82,8 +86,4 @@ public class PacienteController {
         return ResponseEntity.ok().build();
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleException(Exception ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
-    }
 }

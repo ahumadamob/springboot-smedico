@@ -12,6 +12,8 @@ import com.imb2025.smedico.dto.EstadoTurnoRequestDto;
 import com.imb2025.smedico.entity.EstadoTurno;
 import com.imb2025.smedico.service.IEstadoTurnoService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/estado-turno") //Los endpoints definidos comenzarán con "/estado-turno"
 public class EstadoTurnoController {
@@ -63,12 +65,19 @@ public class EstadoTurnoController {
 
     // POST de EstadoTurnoE (Crear un nuevo registro)
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<EstadoTurnoRequestDto>> create(@RequestBody EstadoTurnoRequestDto dto) {
+    public ResponseEntity<ApiResponseSuccessDto<EstadoTurnoRequestDto>> create(
+            @Valid @RequestBody EstadoTurnoRequestDto dto) {
+
+        // conversión DTO a entidad
         EstadoTurno entidad = estadoTurnoService.fromDto(dto);
+
+        // persistencia
         EstadoTurno creado = estadoTurnoService.create(entidad);
 
-        EstadoTurnoRequestDto responseDto = new EstadoTurnoRequestDto( creado.getNombre());
+        // DTO de respuesta
+        EstadoTurnoRequestDto responseDto = new EstadoTurnoRequestDto(creado.getNombre());
 
+        // respuesta estándar
         ApiResponseSuccessDto<EstadoTurnoRequestDto> response =
                 new ApiResponseSuccessDto<>(true, "EstadoTurno creado correctamente", responseDto);
 

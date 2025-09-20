@@ -15,6 +15,5 @@ public interface IConsultaService {
 
     void deleteById(Long id);
 
-    // (Opcional) utilidades previas que tenías:
     boolean existsById(Long id);
 }

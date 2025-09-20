@@ -61,7 +61,6 @@ public class ConsultaServiceImpl implements IConsultaService {
 
         return repository.save(c);
     }
-
     @Override
     @Transactional
     public Consulta updateFromDto(Long id, ConsultaRequestDto dto) {
@@ -85,7 +84,6 @@ public class ConsultaServiceImpl implements IConsultaService {
         existente.setTurno(turno);
         existente.setDuracionMin(dto.getDuracionMin());
         existente.setComentarios(dto.getComentarios());
-
         return repository.save(existente);
     }
 
