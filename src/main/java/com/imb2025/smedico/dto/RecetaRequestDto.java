@@ -10,8 +10,8 @@ public class RecetaRequestDto {
 	@NotNull(message = "La fecha es obligatoria")
 	@PastOrPresent(message = "La fecha no puede ser futura")
     private LocalDate fecha;
-    @Size(min = 10, message = "Las observaciones no pueden tener menos de 10 caracteres")
-    private String observaciones;
+	@Size(min = 10, max = 500, message = "Las observaciones deben tener entre 10 y 500 caracteres")
+	private String observaciones;
     @NotNull(message = "El médico es obligatorio")
     private Long medicoId;
     @NotNull(message = "El paciente es obligatorio")

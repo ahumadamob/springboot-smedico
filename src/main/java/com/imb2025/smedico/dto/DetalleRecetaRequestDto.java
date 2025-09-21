@@ -1,21 +1,25 @@
-package com.imb2025.smedico.dto;
+package com.imb2025.smedico.dto.request;
+
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public class DetalleRecetaRequestDto {
 
+    @NotNull(message = "El ID de la receta no puede ser nulo")
+    @Positive(message = "El ID de la receta debe ser positivo")
     private Long recetaId;
+
+    @NotNull(message = "El ID del medicamento no puede ser nulo")
+    @Positive(message = "El ID del medicamento debe ser positivo")
     private Long medicamentoId;
+
+    @NotNull(message = "La dosis no puede ser nula")
     private String dosis;
+
+    @NotNull(message = "La frecuencia no puede ser nula")
     private String frecuencia;
 
-    public DetalleRecetaRequestDto() {}
-
-    public DetalleRecetaRequestDto(Long recetaId, Long medicamentoId, String dosis, String frecuencia) {
-        this.recetaId = recetaId;
-        this.medicamentoId = medicamentoId;
-        this.dosis = dosis;
-        this.frecuencia = frecuencia;
-    }
-
+    // Getters y Setters
     public Long getRecetaId() {
         return recetaId;
     }
