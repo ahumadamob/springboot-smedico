@@ -1,5 +1,6 @@
 package com.imb2025.smedico.controller;
 
+<<<<<<< Updated upstream
 import com.imb2025.smedico.dto.ApiResponseErrorDto;
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.DetalleRecetaRequestDto;
@@ -14,6 +15,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+=======
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "detalle_receta")
+public class DetalleReceta {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+>>>>>>> Stashed changes
 
 @RestController
 @RequestMapping("/detalleReceta")
@@ -22,6 +35,7 @@ public class DetalleRecetaController {
     @Autowired
     private IDetalleRecetaService service;
 
+<<<<<<< Updated upstream
     // Método utilitario para construir respuestas estándar de éxito
     private <T> ResponseEntity<ApiResponseSuccessDto<T>> buildSuccess(T data, String message, HttpStatus status) {
         ApiResponseSuccessDto<T> resp = new ApiResponseSuccessDto<>();
@@ -94,4 +108,38 @@ public class DetalleRecetaController {
         service.deleteById(id);
         return buildSuccess(null, "DetalleReceta eliminada con éxito", HttpStatus.OK);
     }
+=======
+    @Column(nullable = false)
+    private String dosis;
+
+    @Column(nullable = false)
+    private String frecuencia;
+
+    // Constructor vacío obligatorio para JPA
+    public DetalleReceta() {}
+
+    // Constructor sin ID (porque lo genera la DB)
+    public DetalleReceta(Receta receta, Medicamento medicamento, String dosis, String frecuencia) {
+        this.receta = receta;
+        this.medicamento = medicamento;
+        this.dosis = dosis;
+        this.frecuencia = frecuencia;
+    }
+
+    // Getters y setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Receta getReceta() { return receta; }
+    public void setReceta(Receta receta) { this.receta = receta; }
+
+    public Medicamento getMedicamento() { return medicamento; }
+    public void setMedicamento(Medicamento medicamento) { this.medicamento = medicamento; }
+
+    public String getDosis() { return dosis; }
+    public void setDosis(String dosis) { this.dosis = dosis; }
+
+    public String getFrecuencia() { return frecuencia; }
+    public void setFrecuencia(String frecuencia) { this.frecuencia = frecuencia; }
+>>>>>>> Stashed changes
 }
