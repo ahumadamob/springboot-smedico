@@ -28,9 +28,9 @@ public class EstadoTurnoController {
     public ResponseEntity<ApiResponseSuccessDto<List<EstadoTurnoRequestDto>>> getAll() {
         List<EstadoTurno> estados = estadoTurnoService.findAll();
 
-        // Convertimos la lista de entidades a lista de DTOs de respuesta
+        // Convertimos la lista de entidades a lista de DTOs de respuesta con ID
         List<EstadoTurnoRequestDto> dtos = estados.stream()
-                .map(e -> new EstadoTurnoRequestDto(e.getNombre()))
+                .map(e -> new EstadoTurnoRequestDto(e.getId(), e.getNombre()))
                 .collect(Collectors.toList());
 
         // Envolvemos todo en el DTO estándar de éxito
@@ -46,8 +46,8 @@ public class EstadoTurnoController {
         // Buscamos la entidad, el servicio lanzará ResourceNotFoundException si no existe
         EstadoTurno estadoTurno = estadoTurnoService.findById(id);
 
-        // Convertimos la entidad a DTO
-        EstadoTurnoRequestDto dto = new EstadoTurnoRequestDto(estadoTurno.getNombre());
+        // Convertimos la entidad a DTO incluyendo el ID
+        EstadoTurnoRequestDto dto = new EstadoTurnoRequestDto(estadoTurno.getId(), estadoTurno.getNombre());
 
         // Armamos la respuesta genérica
         ApiResponseSuccessDto<EstadoTurnoRequestDto> response = new ApiResponseSuccessDto<>(
@@ -68,8 +68,8 @@ public class EstadoTurnoController {
         EstadoTurno entidad = estadoTurnoService.fromDto(dto);
         EstadoTurno creado = estadoTurnoService.create(entidad);
 
-        // DTO de respuesta
-        EstadoTurnoRequestDto responseDto = new EstadoTurnoRequestDto(creado.getNombre());
+        // DTO de respuesta con el ID del nuevo recurso
+        EstadoTurnoRequestDto responseDto = new EstadoTurnoRequestDto(creado.getId(), creado.getNombre());
 
         // respuesta estándar
         ApiResponseSuccessDto<EstadoTurnoRequestDto> response =
@@ -87,8 +87,8 @@ public class EstadoTurnoController {
         EstadoTurno estadoTurno = estadoTurnoService.fromDto(dto);
         EstadoTurno actualizado = estadoTurnoService.update(id, estadoTurno);
 
-        // Reutilizamos el mismo DTO para la respuesta
-        EstadoTurnoRequestDto responseDto = new EstadoTurnoRequestDto(actualizado.getNombre());
+        // Reutilizamos el mismo DTO para la respuesta, incluyendo el ID
+        EstadoTurnoRequestDto responseDto = new EstadoTurnoRequestDto(actualizado.getId(), actualizado.getNombre());
 
         ApiResponseSuccessDto<EstadoTurnoRequestDto> response =
                 new ApiResponseSuccessDto<>(true, "EstadoTurno actualizado correctamente", responseDto);
@@ -96,11 +96,15 @@ public class EstadoTurnoController {
         return ResponseEntity.ok(response);
     }
 
-    // DELETE de EstadoTurnoE (Eliminar un registro)
+ // DELETE de EstadoTurnoE (Eliminar un registro)
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        // La lógica de verificación de existencia y el manejo de la excepción se hacen en la capa de servicio
+    public ResponseEntity<ApiResponseSuccessDto<Void>> delete(@PathVariable Long id) {
         estadoTurnoService.deleteById(id);
-        return ResponseEntity.ok().build();
+        ApiResponseSuccessDto<Void> response = new ApiResponseSuccessDto<>(
+                true,
+                "EstadoTurno eliminado correctamente",
+                null
+        );
+        return ResponseEntity.ok(response);
     }
 }
