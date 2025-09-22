@@ -39,15 +39,15 @@ public class MedicamentoController {
 		
 	}
 	
-	@GetMapping("/{idmedicamento}")
-	public ResponseEntity<ApiResponseSuccessDto<Medicamento>> findMedicamentoById(@PathVariable("idmedicamento") Long id) {
+	@GetMapping("/{id}")
+	public ResponseEntity<ApiResponseSuccessDto<Medicamento>> findMedicamentoById(@PathVariable Long id) {
 		Medicamento medicamento = service.findById(id);
 		ApiResponseSuccessDto<Medicamento> resp = new ApiResponseSuccessDto<>(true, "Medicamento encontrado", medicamento);
 		return ResponseEntity.ok(resp);
 	}
 		
 	@PostMapping
-	public ResponseEntity<ApiResponseSuccessDto<Medicamento>> createMedicamento(@Valid @RequestBody MedicamentoRequestDto dto) throws Exception {
+	public ResponseEntity<ApiResponseSuccessDto<Medicamento>> createMedicamento(@Valid @RequestBody MedicamentoRequestDto dto) {
 		Medicamento medicamento = service.fromDto(dto);
 	    Medicamento guardado = service.create(medicamento);
 	    ApiResponseSuccessDto<Medicamento> resp = new ApiResponseSuccessDto<>(true, "Medicamento agregado correctamente", guardado);
@@ -55,15 +55,15 @@ public class MedicamentoController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<ApiResponseSuccessDto<Medicamento>> updateMedicamento(@PathVariable Long id, @Valid @RequestBody MedicamentoRequestDto dto) throws Exception {
+	public ResponseEntity<ApiResponseSuccessDto<Medicamento>> updateMedicamento(@PathVariable Long id, @Valid @RequestBody MedicamentoRequestDto dto) {
 		Medicamento medicamento = service.fromDto(dto);
 		Medicamento actualizado = service.update(id, medicamento);
 		ApiResponseSuccessDto<Medicamento> resp = new ApiResponseSuccessDto<>(true, "Medicamento actualizado correctamente", actualizado);
 		return ResponseEntity.ok(resp);
 	}
 	
-	@DeleteMapping("/{idmedicamento}")
-	public ResponseEntity<ApiResponseSuccessDto<String>> deleteMedicamento(@PathVariable("idmedicamento") Long id) {
+	@DeleteMapping("/{id}")
+	public ResponseEntity<ApiResponseSuccessDto<String>> deleteMedicamento(@PathVariable Long id) {
 		service.deleteById(id);
 		ApiResponseSuccessDto<String> resp = new ApiResponseSuccessDto<>(true, "Medicamento eliminado correctamente", "ID: "+id);
 		return ResponseEntity.ok(resp);
