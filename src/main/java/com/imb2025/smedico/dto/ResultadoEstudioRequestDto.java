@@ -13,12 +13,12 @@ public class ResultadoEstudioRequestDto {
 
 	@NotNull(message = "La orden de estudio es obligatoria")
 	@Positive(message = "El id de la ordenEstudio debe ser positivo")
-	private long ordenEstudioId;
+	private Long ordenEstudioId;
 	@NotNull(message = "El estudio es obligatorio")
 	@Positive(message = "El id del estudio debe ser positivo")
-	private long estudioId;
+	private Long estudioId;
 	@NotNull(message = "El resultado es obligatorio")
-	private long resultado;
+	private Long resultado;
 	@NotNull(message = "La fecha es obligatoria")
 	@PastOrPresent(message = "La fecha no puede ser futura")
 	private LocalTime fechaCarga;

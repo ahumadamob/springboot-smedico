@@ -58,8 +58,7 @@ public class ResultadoEstudioServiceImpl implements IResultadoEstudioService {
 	
 
 	@Override
-	public ResultadoEstudio create(ResultadoEstudio resultadoEstudio) {
-		System.out.println("ResultadoEstudio Guardado: " + resultadoEstudio);	
+	public ResultadoEstudio create(ResultadoEstudio resultadoEstudio) {	
 		return repo.save(resultadoEstudio);
 	}
 
@@ -77,7 +76,7 @@ public class ResultadoEstudioServiceImpl implements IResultadoEstudioService {
 	    OrdenEstudio ordenEstudio = ordenEstudioRepository.findById(requestDto.getOrdenEstudioId())
 	        .orElseThrow(() -> new ResourceNotFoundException("Orden de Estudio NO encontrado con ID " + requestDto.getOrdenEstudioId()));
 	    
-	    Estudio estudio = estudioRepository.findById(requestDto.getOrdenEstudioId())
+	    Estudio estudio = estudioRepository.findById(requestDto.getEstudioId())
 	    	.orElseThrow(() -> new ResourceNotFoundException("Estudio NO encontrado con ID " + requestDto.getEstudioId()));
 	    
 	    ResultadoEstudio resultado = new ResultadoEstudio();
