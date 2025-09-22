@@ -62,23 +62,7 @@ public class MedicoServiceImpl implements IMedicoService {
     }
 
     @Override
-    public Medico fromDto(MedicoRequestDto dto) throws ResourceNotFoundException, IllegalArgumentException {
-        if (dto.getNombre() == null || dto.getNombre().isBlank()) {
-            throw new IllegalArgumentException("El nombre no puede estar nulo o vacío");
-        }
-        if (dto.getApellido() == null || dto.getApellido().isBlank()) {
-            throw new IllegalArgumentException("El apellido no puede estar nulo o vacío");
-        }
-        if (dto.getMatricula() == null || dto.getMatricula().isBlank()) {
-            throw new IllegalArgumentException("La matrícula no puede estar nula o vacía");
-        }
-        if (dto.getEmail() == null || dto.getEmail().isBlank()) {
-            throw new IllegalArgumentException("El email no puede estar nulo o vacío");
-        }
-        if (dto.getTelefono() == null || dto.getTelefono().isBlank()) {
-            throw new IllegalArgumentException("El teléfono no puede estar nulo o vacío");
-        }
-
+    public Medico fromDto(MedicoRequestDto dto) throws ResourceNotFoundException {
         Especialidad especialidad = repoEspecialidad.findById(dto.getEspecialidadId())
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "No se encontró especialidad con el id: " + dto.getEspecialidadId()));
