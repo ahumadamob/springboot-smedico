@@ -1,12 +1,14 @@
 package com.imb2025.smedico.service.jpa;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.imb2025.smedico.dto.ObraSocialRequestDto;
+import com.imb2025.smedico.dto.ObraSocialResponseDto;
 import com.imb2025.smedico.entity.ObraSocial;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.ObraSocialRepository;
@@ -22,32 +24,40 @@ public class ObraSocialServiceImpl implements IObraSocialService {
     private ObraSocialRepository repository;
 
     @Override
-    public List<ObraSocial> findAll() {
-        return repository.findAll();
+    public List<ObraSocialResponseDto> findAll() {
+        return repository.findAll()
+                .stream()
+                .map(this::toDto) // ✅ Se convierte la entidad a DTO de respuesta
+                .collect(Collectors.toList());
     }
 
     @Override
-    public ObraSocial findById(Long id) {
-        return repository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Entidad no encontrada con id " + id));
+    public ObraSocialResponseDto findById(Long id) {
+        ObraSocial obraSocial = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Entidad no encontrada con id " + id));
+        return toDto(obraSocial); // ✅ Devuelve DTO
     }
 
     @Override
-    public ObraSocial create(ObraSocial obraSocial) throws Exception {
-        // Validación opcional si nombre es único en DB
-        if (repository.existsByNombre(obraSocial.getNombre())) {
-            throw new Exception("Ya existe una obra social con ese nombre.");
+    public ObraSocialResponseDto create(ObraSocialRequestDto dto) {
+        if (repository.existsByNombre(dto.getNombre())) {
+            throw new IllegalArgumentException("Ya existe una obra social con ese nombre.");
+            // ✅ Cambio: se elimina "throws Exception" → usamos excepción específica
         }
-        return repository.save(obraSocial);
+        ObraSocial nueva = fromDto(dto);
+        ObraSocial guardada = repository.save(nueva);
+        return toDto(guardada); // ✅ Devuelve DTO
     }
 
     @Override
-    public ObraSocial update(Long id, ObraSocial obraSocial) throws Exception {
+    public ObraSocialResponseDto update(Long id, ObraSocialRequestDto dto) {
         if (!repository.existsById(id)) {
             throw new ResourceNotFoundException("No existe la obra social con ID: " + id);
         }
-        obraSocial.setId(id);
-        return repository.save(obraSocial);
+        ObraSocial entidad = fromDto(dto);
+        entidad.setId(id); // ✅ El id se setea aquí, no en el controller
+        ObraSocial actualizada = repository.save(entidad);
+        return toDto(actualizada); // ✅ Devuelve DTO
     }
 
     @Override
@@ -60,8 +70,12 @@ public class ObraSocialServiceImpl implements IObraSocialService {
     }
 
     @Override
-    public ObraSocial fromDto(ObraSocialRequestDto dto) throws Exception {
-        // Aquí podrías agregar validaciones manuales si lo deseas
+    public boolean existsById(Long id) {
+        return repository.existsById(id);
+    }
+
+    // ✅ Métodos auxiliares privados de conversión
+    private ObraSocial fromDto(ObraSocialRequestDto dto) {
         return new ObraSocial(
             dto.getNombre(),
             dto.getTelefono(),
@@ -70,11 +84,18 @@ public class ObraSocialServiceImpl implements IObraSocialService {
         );
     }
 
-    @Override
-    public boolean existsById(Long id) {
-        return repository.existsById(id);
+    private ObraSocialResponseDto toDto(ObraSocial entity) {
+        ObraSocialResponseDto dto = new ObraSocialResponseDto();
+        dto.setId(entity.getId());
+        dto.setNombre(entity.getNombre());
+        dto.setTelefono(entity.getTelefono());
+        dto.setDireccion(entity.getDireccion());
+        dto.setCobertura(entity.getCobertura());
+        return dto;
     }
+
 }
+
 
 
 
