@@ -1,6 +1,7 @@
 package com.imb2025.smedico.controller;
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.ConsultaRequestDto;
+import com.imb2025.smedico.dto.ConsultaResponseDto;
 import com.imb2025.smedico.entity.Consulta;
 import com.imb2025.smedico.service.IConsultaService;
 import jakarta.validation.Valid;
@@ -8,11 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import java.util.stream.Collectors;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/consulta")
@@ -21,70 +23,82 @@ public class ConsultaController {
     @Autowired
     private IConsultaService consultaService;
 
-    @Operation(summary = "Listar consultas")
-    @ApiResponse(responseCode = "200", description = "Listado de consultas")
     @GetMapping
-    public ResponseEntity<ApiResponseSuccessDto<List<Consulta>>> findAll() {
+    public ResponseEntity<ApiResponseSuccessDto<List<ConsultaResponseDto>>> findAll() {
         List<Consulta> lista = consultaService.findAll();
-        ApiResponseSuccessDto<List<Consulta>> resp = new ApiResponseSuccessDto<>();
+        List<ConsultaResponseDto> data = lista.stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+
+        ApiResponseSuccessDto<List<ConsultaResponseDto>> resp = new ApiResponseSuccessDto<>();
         resp.setSuccess(true);
-        resp.setData(lista);
-        resp.setMessage(lista.isEmpty() ? "No hay consultas" : "Listado de consultas");
+        resp.setData(data);
+        resp.setMessage(data.isEmpty() ? "No hay consultas" : "Listado de consultas");
         return ResponseEntity.ok(resp);
     }
 
-    @Operation(summary = "Obtener consulta por id")
-    @ApiResponse(responseCode = "200", description = "Consulta encontrada")
-    @ApiResponse(responseCode = "404", description = "Consulta no encontrada")
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<Consulta>> getById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponseSuccessDto<ConsultaResponseDto>> getById(@Valid@PathVariable Long id) {
         Consulta c = consultaService.findById(id);
-        ApiResponseSuccessDto<Consulta> resp = new ApiResponseSuccessDto<>();
+        ConsultaResponseDto data = toResponse(c);
+
+        ApiResponseSuccessDto<ConsultaResponseDto> resp = new ApiResponseSuccessDto<>();
         resp.setSuccess(true);
-        resp.setData(c);
+        resp.setData(data);
         resp.setMessage("Consulta encontrada");
         return ResponseEntity.ok(resp);
     }
 
-    @Operation(summary = "Crear consulta")
-    @ApiResponse(responseCode = "201", description = "Consulta creada")
-    @ApiResponse(responseCode = "400", description = "Error de validación de datos")
-    @ApiResponse(responseCode = "404", description = "Turno no encontrado")
-    @ApiResponse(responseCode = "422", description = "Regla de negocio: turno ya asignado")
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<Consulta>> create(@Valid @RequestBody ConsultaRequestDto dto) {
+    public ResponseEntity<ApiResponseSuccessDto<ConsultaResponseDto>> create(@Valid @RequestBody ConsultaRequestDto dto) {
         Consulta creada = consultaService.createFromDto(dto);
-        ApiResponseSuccessDto<Consulta> resp = new ApiResponseSuccessDto<>();
+        ConsultaResponseDto data = toResponse(creada);
+
+        ApiResponseSuccessDto<ConsultaResponseDto> resp = new ApiResponseSuccessDto<>();
         resp.setSuccess(true);
-        resp.setData(creada);
+        resp.setData(data);
         resp.setMessage("Consulta creada");
         return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 
-    @Operation(summary = "Actualizar consulta")
-    @ApiResponse(responseCode = "200", description = "Consulta actualizada")
-    @ApiResponse(responseCode = "400", description = "Error de validación de datos")
-    @ApiResponse(responseCode = "404", description = "Consulta o Turno no encontrado")
-    @ApiResponse(responseCode = "422", description = "Regla de negocio: turno ya asignado")
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<Consulta>> update(
+    public ResponseEntity<ApiResponseSuccessDto<ConsultaResponseDto>> update(
             @PathVariable Long id,
             @Valid @RequestBody ConsultaRequestDto dto) {
 
         Consulta actualizada = consultaService.updateFromDto(id, dto);
-        ApiResponseSuccessDto<Consulta> resp = new ApiResponseSuccessDto<>();
+        ConsultaResponseDto data = toResponse(actualizada);
+
+        ApiResponseSuccessDto<ConsultaResponseDto> resp = new ApiResponseSuccessDto<>();
         resp.setSuccess(true);
-        resp.setData(actualizada);
+        resp.setData(data);
         resp.setMessage("Consulta actualizada");
         return ResponseEntity.ok(resp);
     }
 
+
     @Operation(summary = "Eliminar consulta")
-    @ApiResponse(responseCode = "204", description = "Consulta eliminada")
+    @ApiResponse(responseCode = "200", description = "Consulta eliminada")
     @ApiResponse(responseCode = "404", description = "Consulta no encontrada")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<ApiResponseSuccessDto<Void>> delete(@Valid@PathVariable Long id) { 
         consultaService.deleteById(id);
-        return ResponseEntity.noContent().build(); // 204 sin body
+        ApiResponseSuccessDto<Void> resp = new ApiResponseSuccessDto<>();
+        resp.setSuccess(true);
+        resp.setData(null);
+        resp.setMessage("Consulta eliminada");
+        return ResponseEntity.ok(resp); // 200 con wrapper (política del curso)
+    }
+    private ConsultaResponseDto toResponse(Consulta c) {
+        if (c == null) return null;
+        ConsultaResponseDto dto = new ConsultaResponseDto();
+        dto.setId(c.getId());
+        dto.setFecha(c.getFecha());
+        dto.setDuracionMin(c.getDuracionMin());
+        dto.setComentarios(c.getComentarios());
+        // Esto NO fuerza cargar la entidad; el proxy de Hibernate expone el id igual:
+        dto.setTurnoId(c.getTurno() != null ? c.getTurno().getId() : null);
+        return dto;
     }
 }
+

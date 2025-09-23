@@ -64,28 +64,30 @@ public class ConsultaServiceImpl implements IConsultaService {
     @Override
     @Transactional
     public Consulta updateFromDto(Long id, ConsultaRequestDto dto) {
-        // Verificar existencia de Consulta
+        // 1) Existe la consulta
         Consulta existente = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Consulta no encontrada con id " + id));
 
-        // Validar Turno
+        // 2) Validar Turno
         Turno turno = turnoRepository.findById(dto.getTurnoId())
                 .orElseThrow(() -> new ResourceNotFoundException("Turno no encontrado con id " + dto.getTurnoId()));
 
-        // Unicidad de Turno: permitir el mismo turno si es la misma consulta,
-        // pero si pertenece a otra consulta, rechazar
+        // 3) Unicidad de turno (permitir si es la misma consulta)
         if (repository.existsByTurno_IdAndIdNot(dto.getTurnoId(), id)) {
-            // Podés mapear esta excepción a 422 en tu GlobalExceptionHandler
+            // tu consigna usa 409 para conflictos:
             throw new IllegalArgumentException("El turno ya está asignado a otra consulta");
         }
 
-        // Mapear cambios permitidos
+        // 4) Mapear cambios
         existente.setFecha(dto.getFecha());
-        existente.setTurno(turno);
         existente.setDuracionMin(dto.getDuracionMin());
         existente.setComentarios(dto.getComentarios());
+        existente.setTurno(turno);
+
+        // 5) Persistir
         return repository.save(existente);
     }
+
 
     @Override
     @Transactional
