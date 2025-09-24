@@ -71,4 +71,24 @@ public class PacienteServiceImpl implements IPacienteService {
         paciente.setTelefono(dto.getTelefono());
         return paciente;
     }
+
+	@Override
+	public List<Paciente> findAllOrder() {
+		return pacienteRepository.findByOrderByApellidoAscNombreAsc();
+	}
+
+	@Override
+	public List<Paciente> findByDni(String dni) {
+		return pacienteRepository.findByDni(dni);
+	}
+
+	@Override
+	public List<Paciente> findByDomainEmail(String domain) {
+		return pacienteRepository.findByEmailEndingWith(domain);
+	}
+
+	@Override
+	public Long countBy() {
+		return pacienteRepository.countBy();
+	}
 }
