@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import com.imb2025.smedico.dto.HorarioAtencionRequestDto;
 import com.imb2025.smedico.dto.HorarioAtencionResponseDto; 
 import com.imb2025.smedico.entity.HorarioAtencion;
-import com.imb2025.smedico.entity.Medico;
-import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.service.IHorarioAtencionService;
-import com.imb2025.smedico.service.IMedicoService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -31,26 +28,6 @@ public class HorarioAtencionController {
     @Autowired
     private IHorarioAtencionService horarioAtencionService;
 
-    @Autowired
-    private IMedicoService medicoService;
-
-    private HorarioAtencion convertToEntity(HorarioAtencionRequestDto requestDto) {
-        HorarioAtencion horarioEntity = new HorarioAtencion();
-
-        if (requestDto.getMedicoId() != null) {
-            Medico medico = medicoService.findById(requestDto.getMedicoId());
-            if (medico == null) {
-                throw new ResourceNotFoundException("Médico no encontrado con ID: " + requestDto.getMedicoId());
-            }
-            horarioEntity.setMedico(medico);
-        }
-
-        horarioEntity.setDiaSemana(requestDto.getDiaSemana());
-        horarioEntity.setHoraInicio(requestDto.getHoraInicio());
-        horarioEntity.setHoraFin(requestDto.getHoraFin());
-        return horarioEntity;
-    }
-    
     private HorarioAtencionResponseDto convertToResponseDto(HorarioAtencion horarioEntity) {
         HorarioAtencionResponseDto responseDto = new HorarioAtencionResponseDto();
         responseDto.setId(horarioEntity.getId());
@@ -64,7 +41,7 @@ public class HorarioAtencionController {
         responseDto.setHoraFin(horarioEntity.getHoraFin());
         return responseDto;
     }
-
+    
     @Operation(summary = "Obtiene todos los horarios de atención")
     @ApiResponse(responseCode = "200", description = "Horarios obtenidos exitosamente")
     @GetMapping
@@ -108,9 +85,7 @@ public class HorarioAtencionController {
     })
     @PostMapping
     public ResponseEntity<ApiResponseSuccessDto<HorarioAtencion>> createHorarioAtencion(@Valid @RequestBody HorarioAtencionRequestDto requestDto) {
-        HorarioAtencion horarioEntity = convertToEntity(requestDto);
-        horarioEntity.setId(null);
-        HorarioAtencion savedHorario = horarioAtencionService.create(horarioEntity);
+        HorarioAtencion savedHorario = horarioAtencionService.create(requestDto);
 
         ApiResponseSuccessDto<HorarioAtencion> response = new ApiResponseSuccessDto<>(
             true,
@@ -131,8 +106,7 @@ public class HorarioAtencionController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<HorarioAtencion>> updateHorarioAtencion(@PathVariable Long id, @Valid @RequestBody HorarioAtencionRequestDto requestDto) {
-        HorarioAtencion horarioEntity = convertToEntity(requestDto);
-        HorarioAtencion updatedHorario = horarioAtencionService.update(id, horarioEntity);
+        HorarioAtencion updatedHorario = horarioAtencionService.update(id, requestDto);
 
         ApiResponseSuccessDto<HorarioAtencion> response = new ApiResponseSuccessDto<>(
             true,
