@@ -75,8 +75,11 @@ public class SignosVitalesController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSignosVitales(@PathVariable Long id) {
-        service.deleteById(id);
-        return ResponseEntity.ok().build();
-    }
+    public ResponseEntity<ApiResponseSuccessDto<String>> deleteSignosVitales(@PathVariable Long id) {
+    service.deleteById(id);
+    ApiResponseSuccessDto<String> resp =
+            new ApiResponseSuccessDto<>(true, "Signos Vitales eliminados con éxito", null);
+    return ResponseEntity.ok(resp);
+}
+
 }
