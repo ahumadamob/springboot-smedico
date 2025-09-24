@@ -39,23 +39,25 @@ public class SignosVitalesServiceImpl implements ISignosVitalesService {
         return signos.save(signosVitales);
     }
 
-    @Override
-    public SignosVitales update(Long id, SignosVitales signosVitales) {
-        if (!signos.existsById(id)) {
-            throw new EntityNotFoundException(
-                    "No se puede actualizar. Los Signos Vitales con ID " + id + " no existen.");
-        }
-        signosVitales.setId(id);
-        return signos.save(signosVitales);
+   @Override
+public SignosVitales update(Long id, SignosVitales signosVitales) {
+    if (!signos.existsById(id)) {
+        throw new ResourceNotFoundException(
+                "No se puede actualizar. Los Signos Vitales con ID " + id + " no existen.");
     }
+    signosVitales.setId(id);
+    return signos.save(signosVitales);
+}
 
-    @Override
-    public void deleteById(Long id) {
-        if (!signos.existsById(id)) {
-            throw new EntityNotFoundException("No se puede eliminar. Los Signos Vitales con ID " + id + " no existen.");
-        }
-        signos.deleteById(id);
+@Override
+public void deleteById(Long id) {
+    if (!signos.existsById(id)) {
+        throw new ResourceNotFoundException(
+                "No se puede eliminar. Los Signos Vitales con ID " + id + " no existen.");
     }
+    signos.deleteById(id);
+}
+
 
     @Override
     public SignosVitales fromDto(SignosVitalesRequestDto dto) {
