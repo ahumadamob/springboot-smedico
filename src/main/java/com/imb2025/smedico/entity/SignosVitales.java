@@ -1,6 +1,6 @@
 package com.imb2025.smedico.entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,137 +11,81 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class SignosVitales {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	private LocalDate fecha_hora;
-	private Double peso;
-	private Double altura;
-	private Double imc; 
-	private Double temperatura;
-	private Integer frecuencia_cardiaca;
-	private Integer presion_sistolica;
-	private Integer presion_diastolica;
-	private Integer saturacion_o2;
-	private String observaciones;
-	
-	@ManyToOne
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    // fecha y hora completa
+    private LocalDateTime fechaHora;
+
+    private Double peso;
+    private Double altura;
+    private Double imc;
+    private Double temperatura;
+
+    private Integer frecuenciaCardiaca;
+    private Integer presionSistolica;
+    private Integer presionDiastolica;
+    private Integer saturacionO2;
+
+    private String observaciones;
+
+    @ManyToOne
     private Consulta consulta;
 
-	public SignosVitales() {}
+    public SignosVitales() {}
 
-	public SignosVitales(Long id, LocalDate fecha_hora, Double peso, Double altura, Double imc, Double temperatura,
-			Integer recuencia_cardiaca, Integer presion_sistolica, Integer presion_diastolica, Integer saturacion_o2,
-			String observaciones, Consulta consulta) {
-		super();
-		this.id = id;
-		this.fecha_hora = fecha_hora;
-		this.peso = peso;
-		this.altura = altura;
-		this.imc = imc;
-		this.temperatura = temperatura;
-		this.frecuencia_cardiaca = recuencia_cardiaca;
-		this.presion_sistolica = presion_sistolica;
-		this.presion_diastolica = presion_diastolica;
-		this.saturacion_o2 = saturacion_o2;
-		this.observaciones = observaciones;
-		this.consulta = consulta;
-	}
+    public SignosVitales(Long id, LocalDateTime fechaHora, Double peso, Double altura, Double imc, Double temperatura,
+            Integer frecuenciaCardiaca, Integer presionSistolica, Integer presionDiastolica, Integer saturacionO2,
+            String observaciones, Consulta consulta) {
+        this.id = id;
+        this.fechaHora = fechaHora;
+        this.peso = peso;
+        this.altura = altura;
+        this.imc = imc;
+        this.temperatura = temperatura;
+        this.frecuenciaCardiaca = frecuenciaCardiaca;
+        this.presionSistolica = presionSistolica;
+        this.presionDiastolica = presionDiastolica;
+        this.saturacionO2 = saturacionO2;
+        this.observaciones = observaciones;
+        this.consulta = consulta;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    // getters y setters (nombres en camelCase)
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public LocalDateTime getFechaHora() { return fechaHora; }
+    public void setFechaHora(LocalDateTime fechaHora) { this.fechaHora = fechaHora; }
 
-	public LocalDate getFecha_hora() {
-		return fecha_hora;
-	}
+    public Double getPeso() { return peso; }
+    public void setPeso(Double peso) { this.peso = peso; }
 
-	public void setFecha_hora(LocalDate fecha_hora) {
-		this.fecha_hora = fecha_hora;
-	}
+    public Double getAltura() { return altura; }
+    public void setAltura(Double altura) { this.altura = altura; }
 
-	public Double getPeso() {
-		return peso;
-	}
+    public Double getImc() { return imc; }
+    public void setImc(Double imc) { this.imc = imc; }
 
-	public void setPeso(Double peso) {
-		this.peso = peso;
-	}
+    public Double getTemperatura() { return temperatura; }
+    public void setTemperatura(Double temperatura) { this.temperatura = temperatura; }
 
-	public Double getAltura() {
-		return altura;
-	}
+    public Integer getFrecuenciaCardiaca() { return frecuenciaCardiaca; }
+    public void setFrecuenciaCardiaca(Integer frecuenciaCardiaca) { this.frecuenciaCardiaca = frecuenciaCardiaca; }
 
-	public void setAltura(Double altura) {
-		this.altura = altura;
-	}
+    public Integer getPresionSistolica() { return presionSistolica; }
+    public void setPresionSistolica(Integer presionSistolica) { this.presionSistolica = presionSistolica; }
 
-	public Double getImc() {
-		return imc;
-	}
+    public Integer getPresionDiastolica() { return presionDiastolica; }
+    public void setPresionDiastolica(Integer presionDiastolica) { this.presionDiastolica = presionDiastolica; }
 
-	public void setImc(Double imc) {
-		this.imc = imc;
-	}
+    public Integer getSaturacionO2() { return saturacionO2; }
+    public void setSaturacionO2(Integer saturacionO2) { this.saturacionO2 = saturacionO2; }
 
-	public Double getTemperatura() {
-		return temperatura;
-	}
+    public String getObservaciones() { return observaciones; }
+    public void setObservaciones(String observaciones) { this.observaciones = observaciones; }
 
-	public void setTemperatura(Double temperatura) {
-		this.temperatura = temperatura;
-	}
-
-	public Integer getFrecuencia_cardiaca() {
-		return frecuencia_cardiaca;
-	}
-
-	public void setFrecuencia_cardiaca(Integer recuencia_cardiaca) {
-		this.frecuencia_cardiaca = recuencia_cardiaca;
-	}
-
-	public Integer getPresion_sistolica() {
-		return presion_sistolica;
-	}
-
-	public void setPresion_sistolica(Integer presion_sistolica) {
-		this.presion_sistolica = presion_sistolica;
-	}
-
-	public Integer getPresion_diastolica() {
-		return presion_diastolica;
-	}
-
-	public void setPresion_diastolica(Integer presion_diastolica) {
-		this.presion_diastolica = presion_diastolica;
-	}
-
-	public Integer getSaturacion_o2() {
-		return saturacion_o2;
-	}
-
-	public void setSaturacion_o2(Integer saturacion_o2) {
-		this.saturacion_o2 = saturacion_o2;
-	}
-
-	public String getObservaciones() {
-		return observaciones;
-	}
-
-	public void setObservaciones(String observaciones) {
-		this.observaciones = observaciones;
-	}
-
-	public Consulta getConsulta() {
-		return consulta;
-	}
-
-	public void setConsulta(Consulta consulta) {
-		this.consulta = consulta;
-	}
-	
+    public Consulta getConsulta() { return consulta; }
+    public void setConsulta(Consulta consulta) { this.consulta = consulta; }
 }

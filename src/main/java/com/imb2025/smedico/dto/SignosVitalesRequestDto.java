@@ -1,166 +1,107 @@
 package com.imb2025.smedico.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
 
 public class SignosVitalesRequestDto {
 
-	@NotNull(message = "La fecha de los signos vitales es obligatoria")
-	private LocalDate fecha_hora;
+    @NotNull(message = "La fecha y hora de los signos vitales es obligatoria")
+    @PastOrPresent(message = "La fecha y hora no puede ser futura")
+    private LocalDateTime fechaHora;
 
-	@NotNull(message = "El peso registrado en los Signos Vitales es obligatorio")
-	@Min(value = 1, message = "El peso registrado en los Signos Vitales debe ser positivo")
-	private Double peso;
+    @NotNull(message = "El peso es obligatorio")
+    @DecimalMin(value = "0.1", inclusive = true, message = "El peso debe ser mayor que 0")
+    private Double peso;
 
-	@NotNull(message = "La altura registrada en los Signos Vitales es obligatoria")
-	@Min(value = 1, message = "La altura registrada en los Signos Vitales debe ser positiva")
-	private Double altura;
+    @NotNull(message = "La altura es obligatoria")
+    @DecimalMin(value = "0.1", inclusive = true, message = "La altura debe ser mayor que 0")
+    private Double altura;
 
-	@NotNull(message = "El indice de masa corporal registrado en los Signos Vitales es obligatorio")
-	@Min(value = 1, message = "El indice de masa corporal registrado en los Signos Vitales debe ser positivo")
-	private Double imc;
+    @NotNull(message = "El IMC es obligatorio")
+    @DecimalMin(value = "0.1", inclusive = true, message = "El IMC debe ser mayor que 0")
+    private Double imc;
 
-	@NotNull(message = "La temperatura registrada en los Signos Vitales es obligatoria")
-	@Min(value = 1, message = "La temperatura registrada en los Signos Vitales debe ser positiva")
-	private Double temperatura;
+    @NotNull(message = "La temperatura es obligatoria")
+    // permitimos temperaturas válidas (p. ej. 30.0). Usamos un mínimo razonable.
+    @DecimalMin(value = "20.0", inclusive = false, message = "La temperatura registrada parece inválida")
+    private Double temperatura;
 
-	@NotNull(message = "La frecuencia cardiaca registrada en los Signos Vitales es obligatoria")
-	@Min(value = 1, message = "La frecuencia cardiaca registrada en los Signos Vitales debe ser positiva")
-	private Integer frecuencia_cardiaca;
+    @NotNull(message = "La frecuencia cardiaca es obligatoria")
+    @Min(value = 1, message = "La frecuencia cardiaca debe ser mayor que 0")
+    private Integer frecuenciaCardiaca;
 
-	@NotNull(message = "La presion sistolica registrada en los Signos Vitales es obligatoria")
-	@Min(value = 1, message = "La presion sistolica registrada en los Signos Vitales debe ser positiva")
-	private Integer presion_sistolica;
+    @NotNull(message = "La presión sistólica es obligatoria")
+    @Min(value = 1, message = "La presión sistólica debe ser mayor que 0")
+    private Integer presionSistolica;
 
-	@NotNull(message = "La presion diastolica registrada en los Signos Vitales es obligatoria")
-	@Min(value = 1, message = "La presion diastolica registrada en los Signos Vitales debe ser positiva")
-	private Integer presion_diastolica;
+    @NotNull(message = "La presión diastólica es obligatoria")
+    @Min(value = 1, message = "La presión diastólica debe ser mayor que 0")
+    private Integer presionDiastolica;
 
-	@NotNull(message = "La saturacion de o2 registrada en los Signos Vitales es obligatoria")
-	@Min(value = 1, message = "La saturacion de o2 registrada en los Signos Vitales debe ser positiva")
-	private Integer saturacion_o2;
+    @NotNull(message = "La saturación de O2 es obligatoria")
+    @Min(value = 1, message = "La saturación de O2 debe ser mayor que 0")
+    private Integer saturacionO2;
 
-	private String observaciones;
+    private String observaciones;
 
-	@NotNull(message = "El ID de la consulta social es obligatoria")
-	@Min(value = 1, message = "El ID de la consulta debe ser mayor a 0")
-	private Long idConsulta;
+    @NotNull(message = "El ID de la consulta es obligatorio")
+    @Min(value = 1, message = "El ID de la consulta debe ser mayor a 0")
+    private Long idConsulta;
 
-	public SignosVitalesRequestDto() {}
+    public SignosVitalesRequestDto() {}
 
-	public SignosVitalesRequestDto(
-			LocalDate fecha_hora,
-			Double peso,
-			Double altura,
-			Double imc,
-			Double temperatura,
-			Integer frecuencia_cardiaca,
-			Integer presion_sistolica,
-			Integer presion_diastolica,
-			Integer saturacion_o2,
-			String observaciones,
-			Long idConsulta) {
-		this.fecha_hora = fecha_hora;
-		this.peso = peso;
-		this.altura = altura;
-		this.imc = imc;
-		this.temperatura = temperatura;
-		this.frecuencia_cardiaca = frecuencia_cardiaca;
-		this.presion_sistolica = presion_sistolica;
-		this.presion_diastolica = presion_diastolica;
-		this.saturacion_o2 = saturacion_o2;
-		this.observaciones = observaciones;
-		this.idConsulta = idConsulta;
-	}
+    public SignosVitalesRequestDto(LocalDateTime fechaHora, Double peso, Double altura, Double imc, Double temperatura,
+            Integer frecuenciaCardiaca, Integer presionSistolica, Integer presionDiastolica, Integer saturacionO2,
+            String observaciones, Long idConsulta) {
+        this.fechaHora = fechaHora;
+        this.peso = peso;
+        this.altura = altura;
+        this.imc = imc;
+        this.temperatura = temperatura;
+        this.frecuenciaCardiaca = frecuenciaCardiaca;
+        this.presionSistolica = presionSistolica;
+        this.presionDiastolica = presionDiastolica;
+        this.saturacionO2 = saturacionO2;
+        this.observaciones = observaciones;
+        this.idConsulta = idConsulta;
+    }
 
-	public LocalDate getFecha_hora() {
-		return fecha_hora;
-	}
+    // getters / setters
+    public LocalDateTime getFechaHora() { return fechaHora; }
+    public void setFechaHora(LocalDateTime fechaHora) { this.fechaHora = fechaHora; }
 
-	public void setFecha_hora(LocalDate fecha_hora) {
-		this.fecha_hora = fecha_hora;
-	}
+    public Double getPeso() { return peso; }
+    public void setPeso(Double peso) { this.peso = peso; }
 
-	public Double getPeso() {
-		return peso;
-	}
+    public Double getAltura() { return altura; }
+    public void setAltura(Double altura) { this.altura = altura; }
 
-	public void setPeso(Double peso) {
-		this.peso = peso;
-	}
+    public Double getImc() { return imc; }
+    public void setImc(Double imc) { this.imc = imc; }
 
-	public Double getAltura() {
-		return altura;
-	}
+    public Double getTemperatura() { return temperatura; }
+    public void setTemperatura(Double temperatura) { this.temperatura = temperatura; }
 
-	public void setAltura(Double altura) {
-		this.altura = altura;
-	}
+    public Integer getFrecuenciaCardiaca() { return frecuenciaCardiaca; }
+    public void setFrecuenciaCardiaca(Integer frecuenciaCardiaca) { this.frecuenciaCardiaca = frecuenciaCardiaca; }
 
-	public Double getImc() {
-		return imc;
-	}
+    public Integer getPresionSistolica() { return presionSistolica; }
+    public void setPresionSistolica(Integer presionSistolica) { this.presionSistolica = presionSistolica; }
 
-	public void setImc(Double imc) {
-		this.imc = imc;
-	}
+    public Integer getPresionDiastolica() { return presionDiastolica; }
+    public void setPresionDiastolica(Integer presionDiastolica) { this.presionDiastolica = presionDiastolica; }
 
-	public Double getTemperatura() {
-		return temperatura;
-	}
+    public Integer getSaturacionO2() { return saturacionO2; }
+    public void setSaturacionO2(Integer saturacionO2) { this.saturacionO2 = saturacionO2; }
 
-	public void setTemperatura(Double temperatura) {
-		this.temperatura = temperatura;
-	}
+    public String getObservaciones() { return observaciones; }
+    public void setObservaciones(String observaciones) { this.observaciones = observaciones; }
 
-	public Integer getFrecuencia_cardiaca() {
-		return frecuencia_cardiaca;
-	}
-
-	public void setFrecuencia_cardiaca(Integer frecuencia_cardiaca) {
-		this.frecuencia_cardiaca = frecuencia_cardiaca;
-	}
-
-	public Integer getPresion_sistolica() {
-		return presion_sistolica;
-	}
-
-	public void setPresion_sistolica(Integer presion_sistolica) {
-		this.presion_sistolica = presion_sistolica;
-	}
-
-	public Integer getPresion_diastolica() {
-		return presion_diastolica;
-	}
-
-	public void setPresion_diastolica(Integer presion_diastolica) {
-		this.presion_diastolica = presion_diastolica;
-	}
-
-	public Integer getSaturacion_o2() {
-		return saturacion_o2;
-	}
-
-	public void setSaturacion_o2(Integer saturacion_o2) {
-		this.saturacion_o2 = saturacion_o2;
-	}
-
-	public String getObservaciones() {
-		return observaciones;
-	}
-
-	public void setObservaciones(String observaciones) {
-		this.observaciones = observaciones;
-	}
-
-	public Long getIdConsulta() {
-		return idConsulta;
-	}
-
-	public void setIdConsulta(Long idConsulta) {
-		this.idConsulta = idConsulta;
-	}
-	
+    public Long getIdConsulta() { return idConsulta; }
+    public void setIdConsulta(Long idConsulta) { this.idConsulta = idConsulta; }
 }
