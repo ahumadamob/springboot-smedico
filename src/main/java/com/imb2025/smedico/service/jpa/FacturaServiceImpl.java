@@ -44,30 +44,28 @@ public class FacturaServiceImpl implements IFacturaService {
     }
 
     @Override
-    public Factura update(Long id, Factura factura) throws Exception {
+    public Factura update(Long id, Factura factura){
         if (this.existsById(id)) {
             factura.setId(id);
             return facturaRepository.save(factura);
         }
-        throw new Exception("Factura no encontrada");
+        throw new ResourceNotFoundException("Factura con ID: " + id + " no encontrada");
     }
 
     @Override
-    public void deleteById(Long id) throws Exception {
-        if (this.existsById(id)) {
-            facturaRepository.deleteById(id);
-            return;
-        }
-        throw new Exception("Factura no encontrada");
+    public void deleteById(Long id) {
+        Factura existente = facturaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Factura con ID: " + id + " no encontrada"));
+        facturaRepository.deleteById(id);
     }
 
     @Override
-    public Factura fromDto(FacturaRequestDto requestDTO) throws Exception {
+    public Factura fromDto(FacturaRequestDto requestDTO) {
         Paciente paciente = pacienteRepository.findById(requestDTO.getPacienteId())
-            .orElseThrow(() -> new Exception("No se encontró ningún paciente con el id: " + requestDTO.getPacienteId()));
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró ningún paciente con el id: " + requestDTO.getPacienteId()));
         MedioPago medioPago = medioPagoRepository.findById(requestDTO.getMedioPagoId())
-            .orElseThrow(() -> new Exception("No se encontró ningún medio de pago con el id: " + requestDTO.getMedioPagoId()));
-        
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró ningún medio de pago con el id: " + requestDTO.getMedioPagoId()));
+
         Factura factura = new Factura();
         factura.setFecha(requestDTO.getFecha());
         factura.setMedioPago(medioPago);

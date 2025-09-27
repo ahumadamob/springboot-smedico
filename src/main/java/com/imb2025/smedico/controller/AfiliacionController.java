@@ -1,12 +1,16 @@
 package com.imb2025.smedico.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.imb2025.smedico.dto.AfiliacionRequestDto;
+import com.imb2025.smedico.dto.AfiliacionResponseDto;
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.entity.Afiliacion;
 import com.imb2025.smedico.service.IAfiliacionService;
@@ -18,46 +22,78 @@ public class AfiliacionController {
     @Autowired
     private IAfiliacionService service;
 
-    
     @GetMapping
-    public ResponseEntity<List<Afiliacion>> getAllAfiliaciones() {
+    public ResponseEntity<ApiResponseSuccessDto<List<AfiliacionResponseDto>>> getAllAfiliaciones() {
         List<Afiliacion> lista = service.findAll();
+        List<AfiliacionResponseDto> dtos = lista.stream()
+                .map(this::toResponseDto)
+                .collect(Collectors.toList());
 
-        return lista.isEmpty()
-                ? ResponseEntity.noContent().build()
-                : ResponseEntity.ok(lista);
-    }
-
- 
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<Afiliacion>> getAfiliacionById(@PathVariable Long id) {
-        Afiliacion data = service.findById(id);
-
-        ApiResponseSuccessDto<Afiliacion> resp =
-            new ApiResponseSuccessDto<>(true, "Afiliación encontrada", data);
+        ApiResponseSuccessDto<List<AfiliacionResponseDto>> resp =
+                new ApiResponseSuccessDto<>(true, "Listado de afiliaciones", dtos);
 
         return ResponseEntity.ok(resp);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponseSuccessDto<AfiliacionResponseDto>> getAfiliacionById(@PathVariable Long id) {
+        Afiliacion afiliacion = service.findById(id);
+        AfiliacionResponseDto dto = toResponseDto(afiliacion);
 
-    @PostMapping
-    public ResponseEntity<Afiliacion> createAfiliacion(@RequestBody AfiliacionRequestDto dto) throws Exception {
-        Afiliacion afiliacion = service.fromDto(dto);
-        return ResponseEntity.ok(service.create(afiliacion));
+        ApiResponseSuccessDto<AfiliacionResponseDto> resp =
+                new ApiResponseSuccessDto<>(true, "Afiliación encontrada", dto);
+
+        return ResponseEntity.ok(resp);
     }
 
+    @PostMapping
+    public ResponseEntity<ApiResponseSuccessDto<AfiliacionResponseDto>> createAfiliacion(
+            @Valid @RequestBody AfiliacionRequestDto dto) {
+
+        Afiliacion afiliacion = service.fromDto(dto);
+        Afiliacion creada = service.create(afiliacion);
+
+        AfiliacionResponseDto respDto = toResponseDto(creada);
+
+        ApiResponseSuccessDto<AfiliacionResponseDto> resp =
+                new ApiResponseSuccessDto<>(true, "Afiliación creada con éxito", respDto);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
+    }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Afiliacion> updateAfiliacion(@PathVariable Long id, @RequestBody AfiliacionRequestDto dto) throws Exception {
+    public ResponseEntity<ApiResponseSuccessDto<AfiliacionResponseDto>> updateAfiliacion(
+            @PathVariable Long id,
+            @Valid @RequestBody AfiliacionRequestDto dto) {
+
         Afiliacion afiliacion = service.fromDto(dto);
-        return ResponseEntity.ok(service.update(id, afiliacion));
+        Afiliacion actualizada = service.update(id, afiliacion);
+
+        AfiliacionResponseDto respDto = toResponseDto(actualizada);
+
+        ApiResponseSuccessDto<AfiliacionResponseDto> resp =
+                new ApiResponseSuccessDto<>(true, "Afiliación actualizada con éxito", respDto);
+
+        return ResponseEntity.ok(resp);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAfiliacion(@PathVariable Long id) {
+    public ResponseEntity<ApiResponseSuccessDto<Void>> deleteAfiliacion(@PathVariable Long id) {
         service.deleteById(id);
-        return ResponseEntity.ok().build();
+        ApiResponseSuccessDto<Void> resp =
+                new ApiResponseSuccessDto<>(true, "Afiliación eliminada con éxito", null);
+        return ResponseEntity.ok(resp);
+    }
+
+    // 🔹 Mapper interno: Entity -> ResponseDto
+    private AfiliacionResponseDto toResponseDto(Afiliacion afiliacion) {
+        return new AfiliacionResponseDto(
+                afiliacion.getId(),
+                afiliacion.getNumeroAfiliado(),
+                afiliacion.getFechaVigenciaDesde(),
+                afiliacion.getFechaHasta(),
+                afiliacion.getPaciente() != null ? afiliacion.getPaciente().getId() : null,
+                afiliacion.getObra() != null ? afiliacion.getObra().getId() : null
+        );
     }
 }
-
-

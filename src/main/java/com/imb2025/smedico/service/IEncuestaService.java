@@ -1,15 +1,23 @@
 package com.imb2025.smedico.service;
 
-import com.imb2025.smedico.dto.EncuestaRequestDto;
-import com.imb2025.smedico.entity.Encuesta;
 import java.util.List;
 
+import com.imb2025.smedico.dto.EncuestaRequestDto;
+import com.imb2025.smedico.entity.Encuesta;
+
 public interface IEncuestaService {
-    public List<Encuesta> findAll();
-    public Encuesta create(Encuesta encuesta);
-    public Encuesta update(Long id, Encuesta encuesta) throws Exception;
-    public Encuesta findById(Long id);
-    public boolean existsById(Long id);
-    public void deleteById(Long id);
-    public Encuesta fromDto(EncuestaRequestDto encuestaRequestDto) throws Exception;
+
+    List<Encuesta> findAll();
+
+    Encuesta findById(Long id);
+
+    Encuesta create(Encuesta encuesta);
+
+    Encuesta update(Long id, Encuesta encuesta);
+
+    Encuesta fromDto(EncuestaRequestDto dto);
+
+    void deleteById(Long id);
+
+    boolean existsById(Long id);
 }

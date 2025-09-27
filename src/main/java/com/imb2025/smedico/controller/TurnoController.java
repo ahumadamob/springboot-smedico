@@ -19,6 +19,8 @@ import com.imb2025.smedico.dto.TurnoRequestDto;
 import com.imb2025.smedico.entity.Turno;
 import com.imb2025.smedico.service.ITurnoService;
 
+import jakarta.validation.Valid;
+
 @RestController
 public class TurnoController {
 
@@ -54,7 +56,7 @@ public class TurnoController {
 
     // POST - Crear turno
     @PostMapping("/turno")
-    public ResponseEntity<ApiResponseSuccessDto<Turno>>create(@RequestBody TurnoRequestDto dto) throws Exception {
+    public ResponseEntity<ApiResponseSuccessDto<Turno>>create(@Valid @RequestBody TurnoRequestDto dto) throws Exception {
         Turno turno = service.create(service.fromDto(dto));
         ApiResponseSuccessDto<Turno> resp = new ApiResponseSuccessDto<>(true,"Turno creado exitosamente",turno);
         return ResponseEntity.status(HttpStatus.CREATED).body(resp);
@@ -63,7 +65,7 @@ public class TurnoController {
     // PUT - Actualizar turno
     @PutMapping("/{idturno}")
     public ResponseEntity<ApiResponseSuccessDto<Turno>> update(@PathVariable("idturno") Long idturno,
-                                                               @RequestBody TurnoRequestDto dto) throws Exception {
+    		@Valid @RequestBody TurnoRequestDto dto) throws Exception {
         Turno turno = service.fromDto(dto);
         Turno actualizado = service.update(idturno, turno);
         ApiResponseSuccessDto<Turno> resp = new ApiResponseSuccessDto<>(true, "Turno actualizado correctamente", actualizado);
@@ -84,10 +86,5 @@ public class TurnoController {
         return ResponseEntity.ok(resp);
     }
 
-    // Manejo de excepciones globales
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponseSuccessDto<String>> handleException(Exception ex) {
-        ApiResponseSuccessDto<String> resp = new ApiResponseSuccessDto<>(false, ex.getMessage(), null);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resp);
-    }
+   
 }
