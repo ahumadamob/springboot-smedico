@@ -55,7 +55,7 @@ public class ResultadoEstudioController {
 	
 	
 	@PostMapping("/ResultadoEstudio")
-	public ResponseEntity<ApiResponseSuccessDto<ResultadoEstudio>> createResultadoEstudio(@Valid @RequestBody ResultadoEstudioRequestDto requestDto) throws Exception {
+	public ResponseEntity<ApiResponseSuccessDto<ResultadoEstudio>> createResultadoEstudio(@Valid @RequestBody ResultadoEstudioRequestDto requestDto) {
 		
 		ResultadoEstudio resultadoEstudio = service.create(service.fromDto(requestDto));
 		ApiResponseSuccessDto<ResultadoEstudio> resp =
@@ -67,7 +67,7 @@ public class ResultadoEstudioController {
 	
 	@PutMapping ("/ResultadoEstudio/{id}")
 	public ResponseEntity<ApiResponseSuccessDto<ResultadoEstudio>>  updateResultadoEstudio(@PathVariable Long id,
-		@Valid @RequestBody ResultadoEstudioRequestDto requestDto) throws Exception {
+		@Valid @RequestBody ResultadoEstudioRequestDto requestDto) {
 		ResultadoEstudio resultadoEstudioEntity = service.fromDto(requestDto);
 		ResultadoEstudio actualizado = service.update(id, resultadoEstudioEntity);
 		ApiResponseSuccessDto<ResultadoEstudio> resp =
