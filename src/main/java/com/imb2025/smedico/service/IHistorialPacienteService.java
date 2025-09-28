@@ -7,9 +7,9 @@ import java.util.List;
 public interface IHistorialPacienteService {
     public List<HistorialPaciente> findAll();
     public HistorialPaciente create(HistorialPaciente historialPaciente);
-    public HistorialPaciente update(Long id, HistorialPaciente historialPaciente) throws Exception;
+    public HistorialPaciente update(Long id, HistorialPaciente historialPaciente);
     public HistorialPaciente findById(Long id);
     public boolean existsById(Long id);
     public void deleteById(Long id);
-    public HistorialPaciente fromDto(HistorialPacienteRequestDto historialPacienteRequestDto) throws Exception;
+    public HistorialPaciente fromDto(HistorialPacienteRequestDto historialPacienteRequestDto);
 }

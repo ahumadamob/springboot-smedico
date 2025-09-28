@@ -31,7 +31,7 @@ public class HistorialPacienteController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<HistorialPaciente>> getById(@PathVariable Long id) {
         HistorialPaciente historial = service.findById(id);
-        ApiResponseSuccessDto<HistorialPaciente> resp = 
+        ApiResponseSuccessDto<HistorialPaciente> resp =
             new ApiResponseSuccessDto<>(true, "Historial encontrado correctamente", historial);
         return ResponseEntity.ok(resp);
     }
@@ -39,24 +39,27 @@ public class HistorialPacienteController {
     @GetMapping
     public ResponseEntity<ApiResponseSuccessDto<List<HistorialPaciente>>> getAll() {
         List<HistorialPaciente> list = service.findAll();
-        ApiResponseSuccessDto<List<HistorialPaciente>> resp = 
+        ApiResponseSuccessDto<List<HistorialPaciente>> resp =
             new ApiResponseSuccessDto<>(true, "Historiales encontrados correctamente", list);
         return ResponseEntity.ok(resp);
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<HistorialPaciente>> create(@Valid @RequestBody HistorialPacienteRequestDto dto) throws Exception {
+    public ResponseEntity<ApiResponseSuccessDto<HistorialPaciente>> create(
+            @Valid @RequestBody HistorialPacienteRequestDto dto) {
         HistorialPaciente historial = service.create(service.fromDto(dto));
-        ApiResponseSuccessDto<HistorialPaciente> resp = 
+        ApiResponseSuccessDto<HistorialPaciente> resp =
             new ApiResponseSuccessDto<>(true, "Historial creado correctamente", historial);
         return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<HistorialPaciente>> update(@PathVariable Long id, @Valid @RequestBody HistorialPacienteRequestDto dto) throws Exception {
+    public ResponseEntity<ApiResponseSuccessDto<HistorialPaciente>> update(
+            @PathVariable Long id,
+            @Valid @RequestBody HistorialPacienteRequestDto dto) {
         HistorialPaciente historialEntity = service.fromDto(dto);
         HistorialPaciente actualizado = service.update(id, historialEntity);
-        ApiResponseSuccessDto<HistorialPaciente> resp = 
+        ApiResponseSuccessDto<HistorialPaciente> resp =
             new ApiResponseSuccessDto<>(true, "Historial actualizado correctamente", actualizado);
         return ResponseEntity.ok(resp);
     }
@@ -64,8 +67,9 @@ public class HistorialPacienteController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<String>> delete(@PathVariable Long id) {
         service.deleteById(id);
-        ApiResponseSuccessDto<String> resp = 
+        ApiResponseSuccessDto<String> resp =
             new ApiResponseSuccessDto<>(true, "Historial eliminado correctamente", "Id: " + id);
         return ResponseEntity.ok(resp);
     }
 }
+
