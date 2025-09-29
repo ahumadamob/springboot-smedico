@@ -52,10 +52,9 @@ public class TurnoServiceImpl implements ITurnoService {
 
     @Override
     public void deleteById(Long id) {
-        if (!repo.existsById(id)) {
-            throw new RuntimeException("No existe un turno con ID " + id);
-        }
-        repo.deleteById(id);
+        Turno existente = repo.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Turno con ID " + id + " no encontrado"));
+        repo.delete(existente);
     }
     
     @Override
@@ -64,10 +63,10 @@ public class TurnoServiceImpl implements ITurnoService {
     }
 
     @Override
-    public Turno update(Long id, Turno turno) throws Exception {
+    public Turno update(Long id, Turno turno) {
         Turno turnoExistente = repo.findById(id)
-            .orElseThrow(() -> new Exception("Turno con ID " + id + " no encontrado"));
-        
+            .orElseThrow(() -> new ResourceNotFoundException("Turno con ID " + id + " no encontrado"));
+
         turnoExistente.setFecha(turno.getFecha());
         turnoExistente.setHora(turno.getHora());
         turnoExistente.setPaciente(turno.getPaciente());
@@ -80,11 +79,11 @@ public class TurnoServiceImpl implements ITurnoService {
     @Override
     public Turno fromDto(TurnoRequestDto dto) {
         Paciente paciente = pacienteRepository.findById(dto.getPacienteId())
-            .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
+            .orElseThrow(() -> new ResourceNotFoundException("Paciente con ID " + dto.getPacienteId() + " no encontrado"));
         Medico medico = medicoRepository.findById(dto.getMedicoId())
-            .orElseThrow(() -> new RuntimeException("Médico no encontrado"));
+            .orElseThrow(() -> new ResourceNotFoundException("Médico con ID " + dto.getMedicoId() + " no encontrado"));
         EstadoTurno estado = estadoTurnoRepository.findById(dto.getEstadoTurnoId())
-            .orElseThrow(() -> new RuntimeException("Estado turno no encontrado"));
+            .orElseThrow(() -> new ResourceNotFoundException("Estado de turno con ID " + dto.getEstadoTurnoId() + " no encontrado"));
 
         Turno turno = new Turno();
         turno.setEstadoTurno(estado);
@@ -94,6 +93,7 @@ public class TurnoServiceImpl implements ITurnoService {
         turno.setPaciente(paciente);
         return turno;
     }
+
     
     
     

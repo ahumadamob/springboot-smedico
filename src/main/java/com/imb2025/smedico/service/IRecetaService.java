@@ -7,9 +7,9 @@ import java.util.List;
 public interface IRecetaService {
     public List<Receta> findAll();
     public Receta create(Receta receta);
-    public Receta update(Long id, Receta receta) throws Exception;
+    public Receta update(Long id, Receta receta);
     public Receta findById(Long id);
     public boolean existsById(Long id);
     public void deleteById(Long id);
-    public Receta fromDto(RecetaRequestDto recetaRequestDto) throws Exception;
+    public Receta fromDto(RecetaRequestDto recetaRequestDto);
 }

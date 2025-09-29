@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,26 +30,18 @@ public class TurnoController {
   
     @GetMapping("/turno")
     public ResponseEntity<ApiResponseSuccessDto<List<Turno>>> findAllTurnos() {
-    	 List<Turno> lista = service.findAll();
-        ApiResponseSuccessDto<List<Turno>> resp;
-        if (lista.isEmpty()) {
-            resp = new ApiResponseSuccessDto<>(true,"No hay turnos disponibles",lista);
-        }else {
-            resp = new ApiResponseSuccessDto<>(true,"Lista de turnos",lista);
-        }
+        List<Turno> lista = service.findAll();
+        ApiResponseSuccessDto<List<Turno>> resp =
+                new ApiResponseSuccessDto<>(true, "Lista de turnos", lista);
         return ResponseEntity.ok(resp);
     }
-   
 
     // GET - Obtener turno por ID
-    @GetMapping("turno/{idturno}")
+    @GetMapping("/turno/{idturno}")
     public ResponseEntity<ApiResponseSuccessDto<Turno>> findTurnoById(@PathVariable("idturno") Long id) {
-        Turno turno = service.findById(id);
-        if (turno == null) {
-            ApiResponseSuccessDto<Turno> resp = new ApiResponseSuccessDto<>(false, "Turno no encontrado", null);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resp);
-        }
-        ApiResponseSuccessDto<Turno> resp = new ApiResponseSuccessDto<>(true, "Turno encontrado", turno);
+        Turno turno = service.findById(id); 
+        ApiResponseSuccessDto<Turno> resp =
+                new ApiResponseSuccessDto<>(true, "Turno encontrado", turno);
         return ResponseEntity.ok(resp);
     }
 
@@ -62,27 +53,24 @@ public class TurnoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
  
-    // PUT - Actualizar turno
-    @PutMapping("/{idturno}")
-    public ResponseEntity<ApiResponseSuccessDto<Turno>> update(@PathVariable("idturno") Long idturno,
-    		@Valid @RequestBody TurnoRequestDto dto) throws Exception {
+ // PUT - Actualizar turno
+    @PutMapping("/turno/{idturno}") 
+    public ResponseEntity<ApiResponseSuccessDto<Turno>> update(
+            @PathVariable("idturno") Long idturno,
+            @Valid @RequestBody TurnoRequestDto dto) throws Exception {
+
         Turno turno = service.fromDto(dto);
         Turno actualizado = service.update(idturno, turno);
+
         ApiResponseSuccessDto<Turno> resp = new ApiResponseSuccessDto<>(true, "Turno actualizado correctamente", actualizado);
         return ResponseEntity.ok(resp);
     }
 
-    // DELETE - Eliminar turno
-    @DeleteMapping("/{idturno}")
-    public ResponseEntity<ApiResponseSuccessDto<Void>> deleteTurno(@PathVariable("idturno") Long id) throws Exception {
-        Turno existente = service.findById(id);
-        if (existente == null) {
-            ApiResponseSuccessDto<Void> resp = new ApiResponseSuccessDto<>(false, "Turno no encontrado", null);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resp);
-        }
-
-        service.deleteById(id);
-        ApiResponseSuccessDto<Void> resp = new ApiResponseSuccessDto<>(true, "Turno " + id + " eliminado correctamente", null);
+    @DeleteMapping("/turno/{idturno}")
+    public ResponseEntity<ApiResponseSuccessDto<Void>> deleteTurno(@PathVariable("idturno") Long id) {
+        service.deleteById(id); 
+        ApiResponseSuccessDto<Void> resp =
+                new ApiResponseSuccessDto<>(true, "Turno " + id + " eliminado correctamente", null);
         return ResponseEntity.ok(resp);
     }
 

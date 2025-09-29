@@ -18,6 +18,7 @@ public class MedicoRequestDto {
 	
 	@NotBlank(message = "La matricula debe ser obligatoria")
 	@Pattern(regexp = "^[A-Z0-9-]+$", message = "La matrícula debe ser alfanumérica y en mayúsculas")
+	@Size(max = 20, message = "La matrícula no puede superar los 20 caracteres")
     private String matricula;
 	
 	@NotNull(message = "La especialidad debe ser obligatoria")
@@ -29,6 +30,7 @@ public class MedicoRequestDto {
     
     @NotBlank(message = "El teléfono es obligatorio")
     @Pattern(regexp = "^[0-9]{7,15}$", message = "El teléfono debe contener entre 7 y 15 dígitos")
+    @Size(min = 7, max = 15, message = "El teléfono debe tener entre 7 y 15 caracteres")
     private String telefono;
 
         public MedicoRequestDto() {}

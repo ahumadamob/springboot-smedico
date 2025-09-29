@@ -2,7 +2,6 @@ package com.imb2025.smedico.service.jpa;
 
 import com.imb2025.smedico.dto.MedioPagoRequestDto;
 import com.imb2025.smedico.entity.MedioPago;
-import com.imb2025.smedico.entity.MedioPago.TipoPago;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.MedioPagoRepository;
 import com.imb2025.smedico.service.IMedioPagoService;
@@ -23,15 +22,15 @@ public class MedioPagoServiceImpl implements IMedioPagoService {
 
 	@Override
         public MedioPago findById(Long id) {
-                	return repo.findById(id)//c
-                		    .orElseThrow(() -> new ResourceNotFoundException(//c
-                		        "Entidad no encontrada, id: " + id)); //c
+                	return repo.findById(id)
+                		    .orElseThrow(() -> new ResourceNotFoundException(
+                		        "Entidad no encontrada, id: " + id)); 
         }
 
-        @Override
-        public boolean existsById(Long id) {
-                return repo.existsById(id);
-        }
+   @Override
+   public boolean existsById(Long id) {
+          return repo.existsById(id);
+   }
 
 	@Override
         public MedioPago create(MedioPago medioPago) {
@@ -45,8 +44,8 @@ public class MedioPagoServiceImpl implements IMedioPagoService {
                         return repo.save(medioPago);
                 }
                 return repo.findById(id)//c
-            		    .orElseThrow(() -> new ResourceNotFoundException(//c
-            		        "No se pudo actualizar. Entidad no encontrada de id " + id)); //c
+            		    .orElseThrow(() -> new ResourceNotFoundException(
+            		        "No se pudo actualizar. Entidad no encontrada de id " + id)); 
         } 
 
 	@Override
@@ -58,7 +57,7 @@ public class MedioPagoServiceImpl implements IMedioPagoService {
         public MedioPago fromDto(MedioPagoRequestDto dto) {
                 MedioPago medioPago = new MedioPago();
                 medioPago.setNombre(dto.getNombre());
-                medioPago.setTipo(TipoPago.valueOf(dto.getTipo()));//c
+                medioPago.setTipo(dto.getTipo());     //m     Ya no se utiliza ValueOf() para pasar texto a enum. pasamos de enum a enum
                 return medioPago;
         }
 }

@@ -6,6 +6,7 @@ import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.HorarioAtencionRepository;
 import com.imb2025.smedico.service.IHorarioAtencionService;
+import com.imb2025.smedico.service.IMedicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,79 +17,62 @@ public class HorarioAtencionServiceImpl implements IHorarioAtencionService {
 
     @Autowired
     private HorarioAtencionRepository repository;
+    
+    @Autowired
+    private IMedicoService medicoService;
 
     @Override
     public List<HorarioAtencion> findAll() {
-        try {
-            return repository.findAll();
-        } catch (Exception e) {
-            throw new RuntimeException("Error al obtener los horarios: " + e.getMessage());
-        }
+        return repository.findAll();
     }
 
     @Override
     public HorarioAtencion findById(Long id) {
-    	return repository.findById(id)
-    		    .orElseThrow(() -> new ResourceNotFoundException(
-    		        "Entidad no encontrada con id " + id));
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                    "Entidad no encontrada con id " + id));
     }
 
     @Override
-    public HorarioAtencion create(HorarioAtencion horarioAtencion) throws Exception {
-        try {
-            return repository.save(horarioAtencion);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al guardar el horario: " + e.getMessage());
-        }
+    public HorarioAtencion create(HorarioAtencionRequestDto requestDto) {
+        HorarioAtencion horarioAtencion = fromDto(requestDto);
+        return repository.save(horarioAtencion);
     }
 
     @Override
-    public HorarioAtencion update(Long id, HorarioAtencion horarioAtencion) throws Exception {
-        try {
-            if (!repository.existsById(id)) {
-                throw new ResourceNotFoundException("No existe un horario con ID: " + id);
-            }
-            horarioAtencion.setId(id);
-            return repository.save(horarioAtencion);
-        } catch (ResourceNotFoundException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException("Error al actualizar el horario: " + e.getMessage());
+    public HorarioAtencion update(Long id, HorarioAtencionRequestDto requestDto) {
+        if (!repository.existsById(id)) {
+            throw new ResourceNotFoundException("No existe un horario con ID: " + id);
         }
+        HorarioAtencion horarioAtencion = fromDto(requestDto);
+        horarioAtencion.setId(id);
+        return repository.save(horarioAtencion);
     }
 
     @Override
     public void deleteById(Long id) {
-        try {
-            if (!repository.existsById(id)) {
-                throw new ResourceNotFoundException("No existe un horario con ID: " + id);
-            }
-            repository.deleteById(id);
-        } catch (ResourceNotFoundException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException("Error al eliminar el horario: " + e.getMessage());
+        if (!repository.existsById(id)) {
+            throw new ResourceNotFoundException("No existe un horario con ID: " + id);
         }
-    }
-
-    @Override
-    public HorarioAtencion fromDto(HorarioAtencionRequestDto dto) throws Exception {
-        HorarioAtencion horario = new HorarioAtencion();
-        Medico medico = new Medico();
-        medico.setId(dto.getMedicoId());
-        horario.setMedico(medico);
-        horario.setDiaSemana(dto.getDiaSemana());
-        horario.setHoraInicio(dto.getHoraInicio());
-        horario.setHoraFin(dto.getHoraFin());
-        return horario;
+        repository.deleteById(id);
     }
 
     @Override
     public boolean existsById(Long id) {
-        try {
-            return repository.existsById(id);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al verificar existencia: " + e.getMessage());
-        }
+        return repository.existsById(id);
+    }
+
+    @Override
+    public HorarioAtencion fromDto(HorarioAtencionRequestDto requestDto) {
+        // Validar que el médico existe antes de crear la entidad
+        Medico medico = medicoService.findById(requestDto.getMedicoId());
+        
+        HorarioAtencion horarioAtencion = new HorarioAtencion();
+        horarioAtencion.setMedico(medico);
+        horarioAtencion.setDiaSemana(requestDto.getDiaSemana());
+        horarioAtencion.setHoraInicio(requestDto.getHoraInicio());
+        horarioAtencion.setHoraFin(requestDto.getHoraFin());
+        
+        return horarioAtencion;
     }
 }
