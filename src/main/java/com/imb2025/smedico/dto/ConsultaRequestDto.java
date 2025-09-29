@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 public class ConsultaRequestDto {
-
+//.
     @NotNull(message = "La fecha es obligatoria")
     @PastOrPresent(message = "La fecha no puede ser futura")
     private LocalDate fecha;
