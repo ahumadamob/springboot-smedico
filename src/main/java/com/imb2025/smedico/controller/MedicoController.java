@@ -71,6 +71,23 @@ public class MedicoController {
                 new ApiResponseSuccessDto<>(true, "Médico eliminado correctamente", "Id: " + id);
         return ResponseEntity.ok(resp);
     }
+    
+    @GetMapping("/apellido/{apellido}")
+    public ResponseEntity<ApiResponseSuccessDto<List<Medico>>> findByApellido(@PathVariable String apellido){
+    	List<Medico> lista = service.findByApellido(apellido);
+    	ApiResponseSuccessDto<List<Medico>> resp =
+    			new ApiResponseSuccessDto<> (true, "Medicos con apellido: " + apellido, lista);
+    	return ResponseEntity.ok(resp);
+    }
+    
+    @GetMapping("/count/especialidad/{nombre}")
+    public ResponseEntity<ApiResponseSuccessDto<Long>> countByEspecialidad(
+            @PathVariable("nombre") String nombreEspecialidad) {
+        Long cantidad = service.countByEspecialidad(nombreEspecialidad);
+        ApiResponseSuccessDto<Long> resp =
+                new ApiResponseSuccessDto<>(true, "Cantidad de médicos en la especialidad: " + nombreEspecialidad, cantidad);
+        return ResponseEntity.ok(resp);
+    }
 
   
    
