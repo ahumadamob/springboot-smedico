@@ -77,4 +77,15 @@ public class AsistenteServiceImpl implements IAsistenteService {
         asistente.setDni(dto.getDni());
         return asistente;
     }
+    
+ // Métodos mágicos
+    @Override
+    public List<Asistente> findByApellido(String apellido) {
+        return repo.findByApellido(apellido);
+    }
+
+    @Override
+    public Long countByNombre(String nombre) {
+        return repo.countByNombre(nombre);
+    }
 }
