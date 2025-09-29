@@ -8,22 +8,25 @@ import java.util.stream.StreamSupport;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 
+import org.springframework.core.annotation.Order;
+import org.springframework.dao.DataIntegrityViolationException; // CHANGE: para 409
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.imb2025.smedico.dto.ApiResponseErrorDto;
 import com.imb2025.smedico.dto.FieldErrorDto;
 
-@RestControllerAdvice
+@Order(org.springframework.core.Ordered.HIGHEST_PRECEDENCE)
+@RestControllerAdvice(basePackages = "com.imb2025.smedico")
 public class GlobalExceptionHandler {
 
     // 404 de dominio
@@ -32,6 +35,23 @@ public class GlobalExceptionHandler {
         List<FieldErrorDto> errors = List.of(new FieldErrorDto("error", ex.getMessage()));
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponseErrorDto(false, errors));
     }
+ // 409 por violación de integridad (FK/únicos)
+    @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
+    public ResponseEntity<ApiResponseErrorDto> handleDataIntegrity(org.springframework.dao.DataIntegrityViolationException ex) {
+        List<FieldErrorDto> errors = List.of(new FieldErrorDto("data", "Conflicto de datos"));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponseErrorDto(false, errors));
+    }
+
+   
+
+
+    // 409 por wrapper de Hibernate (a veces llega así)
+    @ExceptionHandler(org.hibernate.exception.ConstraintViolationException.class)
+    public ResponseEntity<ApiResponseErrorDto> handleHibernateConstraint(org.hibernate.exception.ConstraintViolationException ex) {
+        List<FieldErrorDto> errors = List.of(new FieldErrorDto("data", "Conflicto de datos"));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponseErrorDto(false, errors));
+    }
+
 
     // DTOs validados con @Valid en @RequestBody
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -99,12 +119,15 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponseErrorDto> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
         String name = ex.getName();
         String expected = ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "tipo esperado";
-        String msg = "Valor inválido para '" + name + "'. Se esperaba " + expected + ".";
+        String given = ex.getValue() != null ? String.valueOf(ex.getValue()) : "valor nulo"; // CHANGE: muestra valor recibido
+        String msg = "Valor inválido para '" + name + "': '" + given + "'. Se esperaba " + expected + ".";
         List<FieldErrorDto> errors = List.of(new FieldErrorDto(name, msg));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponseErrorDto(false, errors));
     }
 
-    // (Opcional) Método HTTP no soportado -> no es de validación pero útil
+    
+
+    // (Opcional) Método HTTP no soportado
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ApiResponseErrorDto> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex) {
         List<FieldErrorDto> errors = List.of(new FieldErrorDto("method", ex.getMessage()));
@@ -114,8 +137,9 @@ public class GlobalExceptionHandler {
     // Fallback genérico
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponseErrorDto> handleGeneric(Exception ex) {
-        List<FieldErrorDto> errors = List.of(new FieldErrorDto("error", ex.getMessage()));
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponseErrorDto(false, errors));
+        // CHANGE: usar 500 y mensaje genérico para no filtrar detalles internos
+        List<FieldErrorDto> errors = List.of(new FieldErrorDto("error", "Error inesperado"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponseErrorDto(false, errors));
     }
 
     // ---- Helpers ----

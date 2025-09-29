@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import com.imb2025.smedico.dto.MedicoRequestDto;
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.service.IMedicoService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 
@@ -42,7 +45,7 @@ public class MedicoController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<Medico>> create(@RequestBody MedicoRequestDto dto) throws Exception {
+    public ResponseEntity<ApiResponseSuccessDto<Medico>> create(@Valid @RequestBody MedicoRequestDto dto) {
         Medico medico = service.fromDto(dto);
         Medico creado = service.create(medico);
         ApiResponseSuccessDto<Medico> resp =
@@ -51,8 +54,9 @@ public class MedicoController {
     }
 
     @PutMapping("/{idmedico}")
-    public ResponseEntity<ApiResponseSuccessDto<Medico>> update(@PathVariable("idmedico") Long id,
-                                                                @RequestBody MedicoRequestDto dto) throws Exception {
+    public ResponseEntity<ApiResponseSuccessDto<Medico>> update(
+            @PathVariable("idmedico") Long id,
+            @Valid @RequestBody MedicoRequestDto dto) {
         Medico medico = service.fromDto(dto);
         medico.setId(id);
         Medico actualizado = service.update(id, medico);
@@ -68,7 +72,6 @@ public class MedicoController {
                 new ApiResponseSuccessDto<>(true, "Médico eliminado correctamente", "Id: " + id);
         return ResponseEntity.ok(resp);
     }
-
   
    
 }

@@ -2,17 +2,28 @@ package com.imb2025.smedico.dto;
 
 import java.time.LocalDate;
 
-public class OrdenEstudioRequestDto {
 
+
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotNull;
+
+public class OrdenEstudioRequestDto {
+	
+    @FutureOrPresent(message = "La fecha debe ser hoy o una fecha futura")
     private LocalDate fecha;
+    
+    @NotNull(message="El campo medicoId es obligatorio")
     private Long medicoId;
+
+    @NotNull(message="El campo pacienteId es obligatorio")
     private Long pacienteId;
+
+    @NotNull(message="El campo estudioId es obligatorio")
     private Long estudioId;
 
     public OrdenEstudioRequestDto() {}
 
-    public OrdenEstudioRequestDto(
-            LocalDate fecha, Long medicoId, Long pacienteId, Long estudioId) {
+    public OrdenEstudioRequestDto(LocalDate fecha, Long medicoId, Long pacienteId, Long estudioId) {
         this.fecha = fecha;
         this.medicoId = medicoId;
         this.pacienteId = pacienteId;
@@ -51,4 +62,3 @@ public class OrdenEstudioRequestDto {
         this.estudioId = estudioId;
     }
 }
-

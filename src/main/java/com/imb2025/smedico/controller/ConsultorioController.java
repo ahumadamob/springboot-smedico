@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.imb2025.smedico.entity.Consultorio;
 import com.imb2025.smedico.service.IConsultorioService;
+
+import jakarta.validation.Valid;
+
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.ConsultorioRequestDto;
 
@@ -26,7 +29,7 @@ public class ConsultorioController {
 	
 	//Crear Consultorio - POST
 	@PostMapping("/consultorio")
-	public ResponseEntity<ApiResponseSuccessDto<Consultorio>> create(@RequestBody ConsultorioRequestDto consultorioRequestDto) throws Exception{
+	public ResponseEntity<ApiResponseSuccessDto<Consultorio>> create(@Valid @RequestBody ConsultorioRequestDto consultorioRequestDto) throws Exception{
 		Consultorio consultorio = servicio.create(servicio.fromDto(consultorioRequestDto));
 		ApiResponseSuccessDto<Consultorio> respuesta = new ApiResponseSuccessDto<>(true, "Consultorio creado correctamente", consultorio);
 		return ResponseEntity.status(HttpStatus.CREATED).body(respuesta);
@@ -39,37 +42,28 @@ public class ConsultorioController {
 		ApiResponseSuccessDto<Consultorio> respuesta = new ApiResponseSuccessDto<>(true, "Consultorio encontrado correctamente", consultorio);
 		return ResponseEntity.ok(respuesta);
     }
-		
+	    
 	//Buscar lista - GET 
     @GetMapping("/consultorio")
     public ResponseEntity<ApiResponseSuccessDto<List<Consultorio>>> findAllConsultorio() {
     	List<Consultorio> consultorio = servicio.findAll();
-    	ApiResponseSuccessDto<List<Consultorio>> respuesta;
-    	if(consultorio.isEmpty()) {
-    		respuesta = new ApiResponseSuccessDto<>(true, "El consultorio no existe", consultorio);
-    	}else {
-    		respuesta = new ApiResponseSuccessDto<>(true, "Consultorios", consultorio);
-    	}
+    	ApiResponseSuccessDto<List<Consultorio>> respuesta = new ApiResponseSuccessDto<>(true, consultorio.isEmpty() ? "No hay lista de consultorios para mostrar" : "Lista de consultorios: ", consultorio);
     	return ResponseEntity.ok(respuesta);
     }
-   
-    
+       
     //Eliminar por ID - DELETE
     @DeleteMapping("/consultorio/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
-        Consultorio consultorio = servicio.findById(id);
-        if (consultorio == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Consultorio " + id.toString() + " no encontrado");
-        }
+    public ResponseEntity<ApiResponseSuccessDto<String>> delete(@PathVariable("id") Long id) {
         servicio.deleteById(id);
-        return ResponseEntity.ok("Consultorio " + id.toString() + " eliminado correctamente. ");
+        ApiResponseSuccessDto<String> respuesta = 
+        		new ApiResponseSuccessDto<>(true, "Consultorio eliminado", "ID: " + id);
+        return ResponseEntity.ok(respuesta);
     }
     
        
     //Actualizar consultorio - PUT
     @PutMapping("/consultorio/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<Consultorio>> update(@PathVariable("id") Long id,@RequestBody ConsultorioRequestDto consultorioRequestDto) throws Exception{
+    public ResponseEntity<ApiResponseSuccessDto<Consultorio>> update(@PathVariable("id") Long id, @Valid @RequestBody ConsultorioRequestDto consultorioRequestDto) throws Exception{
     	Consultorio consultorio = servicio.fromDto(consultorioRequestDto);
     	Consultorio actualizar = servicio.update(id, consultorio);
     	ApiResponseSuccessDto<Consultorio> respuesta = new ApiResponseSuccessDto<>(true, "Consultorio actualizado", actualizar);

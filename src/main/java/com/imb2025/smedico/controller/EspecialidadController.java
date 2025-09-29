@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +17,8 @@ import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 
 import com.imb2025.smedico.entity.Especialidad;
 import com.imb2025.smedico.service.IEspecialidadService;
+
+import jakarta.validation.Valid;
 
 import com.imb2025.smedico.dto.EspecialidadRequestDto;
 
@@ -33,9 +34,9 @@ public class EspecialidadController {
                 List<Especialidad> especialidad = service.findAll();
                 ApiResponseSuccessDto<List<Especialidad>> resp;
                 if (especialidad.isEmpty()) {
-                	resp = new ApiResponseSuccessDto<>(true,"No hay motivos de cancelacion disponibles",especialidad);
+                	resp = new ApiResponseSuccessDto<>(true,"No hay especialidades disponibles",especialidad);
                 }else {
-                	resp = new ApiResponseSuccessDto<>(true,"Lista de motivos de cancelacion",especialidad);
+                	resp = new ApiResponseSuccessDto<>(true,"Lista de especialidades",especialidad);
         }
                 return ResponseEntity.ok(resp);
         }
@@ -48,14 +49,14 @@ public class EspecialidadController {
         }
 	
 	@PostMapping("/especialidad")
-	public ResponseEntity<ApiResponseSuccessDto<Especialidad>> create(@RequestBody EspecialidadRequestDto dto) throws Exception {
+	public ResponseEntity<ApiResponseSuccessDto<Especialidad>> create(@Valid @RequestBody EspecialidadRequestDto dto) {
 		Especialidad especialidad = service.create(service.fromDto(dto));
 		ApiResponseSuccessDto<Especialidad> resp = new ApiResponseSuccessDto<>(true, "Especialidad creada correctamente",especialidad);
 		return ResponseEntity.status(HttpStatus.CREATED).body(resp);
 	}
 	 
 	@PutMapping("/especialidad/{idespecialidad}")
-	public ResponseEntity<ApiResponseSuccessDto<Especialidad>> update(@RequestBody EspecialidadRequestDto dto, @PathVariable("idespecialidad") Long id) throws Exception {
+	public ResponseEntity<ApiResponseSuccessDto<Especialidad>> update(@Valid @RequestBody EspecialidadRequestDto dto, @PathVariable("idespecialidad") Long id){
 			 Especialidad especialidadEntity = service.fromDto(dto);
 			 Especialidad actualizado = service.update(id, especialidadEntity);
 			 ApiResponseSuccessDto<Especialidad> resp = new ApiResponseSuccessDto<>(true, "Especialidad actualizada correctamente",actualizado);

@@ -20,7 +20,7 @@ public class ApiResponseErrorDto {
     @Schema(description = "Marca de tiempo del error")
     private Instant timestamp;
 
-    public ApiResponseErrorDto() {
+    public ApiResponseErrorDto(String string) {
         this.timestamp = Instant.now();
     }
 

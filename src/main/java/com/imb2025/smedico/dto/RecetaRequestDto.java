@@ -2,10 +2,19 @@ package com.imb2025.smedico.dto;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Size;
+
 public class RecetaRequestDto {
+	@NotNull(message = "La fecha es obligatoria")
+	@PastOrPresent(message = "La fecha no puede ser futura")
     private LocalDate fecha;
-    private String observaciones;
+	@Size(min = 10, max = 500, message = "Las observaciones deben tener entre 10 y 500 caracteres")
+	private String observaciones;
+    @NotNull(message = "El médico es obligatorio")
     private Long medicoId;
+    @NotNull(message = "El paciente es obligatorio")
     private Long pacienteId;
 
     public RecetaRequestDto() {}
