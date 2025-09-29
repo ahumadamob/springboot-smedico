@@ -1,6 +1,7 @@
 package com.imb2025.smedico.service.jpa;
 
-import java.util.List;   
+import java.time.LocalDate;
+import java.util.List;    
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,5 +93,18 @@ public class OrdenEstudioServiceImpl implements IOrdenEstudioService{
 	@Override
 	public boolean existsById(Long id) {
 	    return repo.existsById(id);
-	}	
+	}
+
+	@Override
+	public List<OrdenEstudio> findByFecha(LocalDate fecha) {
+	    return repo.findByFecha(fecha);
+	}
+
+	@Override
+	public long countByMedico(Medico medico) {
+		return repo.countByMedico(medico);
+	}
+
+
+	
 	}
