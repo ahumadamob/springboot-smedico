@@ -1,6 +1,7 @@
 package com.imb2025.smedico.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,13 +107,34 @@ public class HorarioAtencionController {
     public ResponseEntity<String> deleteHorarioAtencion(@PathVariable Long id) {
         try {
             horarioAtencionService.deleteById(id);
-            return ResponseEntity.ok("Horario de atención " + id + " eliminado correctamente.");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+        return ResponseEntity.ok("Horario de atención " + id + " eliminado correctamente.");
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
+}
 
-    @ExceptionHandler(ResourceNotFoundException.class)
+// Endpoints para métodos mágicos del TP07
+@GetMapping("/dia/{diaSemana}")
+public ResponseEntity<List<HorarioAtencionResponseDTO>> getHorariosByDia(@PathVariable String diaSemana) {
+    List<HorarioAtencionResponseDTO> horarios = horarioAtencionService.findHorariosByDia(diaSemana).stream()
+            .map(this::convertToResponseDTO)
+            .collect(Collectors.toList());
+    
+    if (horarios.isEmpty()) {
+        return ResponseEntity.noContent().build();
+    }
+    return ResponseEntity.ok(horarios);
+}
+
+@GetMapping("/medico/{medicoId}/count")
+public ResponseEntity<Object> countHorariosByMedico(@PathVariable Long medicoId) {
+    long count = horarioAtencionService.countHorariosByMedico(medicoId);
+    return ResponseEntity.ok(Map.of(
+        "medicoId", medicoId,
+        "cantidadHorarios", count,
+        "mensaje", "Cantidad de horarios encontrados para el médico ID: " + medicoId
+    ));
+}    @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<String> handleNotFoundException(ResourceNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
