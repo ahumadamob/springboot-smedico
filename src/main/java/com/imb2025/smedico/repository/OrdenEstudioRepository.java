@@ -1,8 +1,13 @@
 package com.imb2025.smedico.repository;
 
+import java.time.LocalDate;
+import java.util.List;
+
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.entity.OrdenEstudio;
 
 /**
@@ -11,5 +16,12 @@ import com.imb2025.smedico.entity.OrdenEstudio;
  */
 @Repository
 public interface OrdenEstudioRepository extends JpaRepository<OrdenEstudio, Long> {
-    // No se agregan métodos adicionales, se usan los heredados de JpaRepository
+ 
+    
+	List<OrdenEstudio> findByFecha(LocalDate fecha);
+
+	long countByMedico(Medico medico);
+	
+	
+
 }
