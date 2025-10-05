@@ -66,4 +66,20 @@ public class MotivoCancelacionController {
                 new ApiResponseSuccessDto<>(true, "Motivo de cancelación eliminado correctamente", "Id: " + id);
         return ResponseEntity.ok(resp);
     }
+    
+    @GetMapping("/nombre/{nombreMotivo}")
+    public ResponseEntity<ApiResponseSuccessDto<List<MotivoCancelacion>>> getMotivoCancelacionByNombre(@PathVariable String nombreMotivo) {
+        List<MotivoCancelacion> lista = service.findByNombre(nombreMotivo);
+        ApiResponseSuccessDto<List<MotivoCancelacion>> resp = new ApiResponseSuccessDto<>(true,lista.isEmpty() ? "No hay motivos de cancelación disponibles" : "Lista de motivos de cancelación",lista);
+        return ResponseEntity.ok(resp);
+    }
+    
+    @GetMapping("/descripcion/{descripcion}")
+    public ResponseEntity<ApiResponseSuccessDto<Long>> getMotivoCancelacionCountByDescripcion(@PathVariable String descripcion) {
+        long cantidad = service.countByDescripcion(descripcion);
+        ApiResponseSuccessDto<Long> resp = new ApiResponseSuccessDto<>(true, cantidad == 0 ? "No existen motivos de cancelación con esa descripcion" : "Cantidad de motivos de cancelación encontrados", cantidad);
+        return ResponseEntity.ok(resp);
+    }
+
+            
 }
