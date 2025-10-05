@@ -71,5 +71,24 @@ public class HistorialPacienteController {
             new ApiResponseSuccessDto<>(true, "Historial eliminado correctamente", "Id: " + id);
         return ResponseEntity.ok(resp);
     }
+ // Buscar historiales por evento
+    @GetMapping("/buscar/evento/{evento}")
+    public ResponseEntity<ApiResponseSuccessDto<List<HistorialPaciente>>> getByEvento(@PathVariable String evento) {
+        List<HistorialPaciente> lista = service.findByEvento(evento);
+        ApiResponseSuccessDto<List<HistorialPaciente>> resp =
+            new ApiResponseSuccessDto<>(true, "Historiales encontrados por evento", lista);
+        return ResponseEntity.ok(resp);
+    }
+
+    // Contar historiales por fecha
+    @GetMapping("/contar/fecha/{fecha}")
+    public ResponseEntity<ApiResponseSuccessDto<Long>> countByFecha(@PathVariable String fecha) {
+        java.time.LocalDate date = java.time.LocalDate.parse(fecha); // formato YYYY-MM-DD
+        Long cantidad = service.countByFecha(date);
+        ApiResponseSuccessDto<Long> resp =
+            new ApiResponseSuccessDto<>(true, "Cantidad de historiales en esa fecha", cantidad);
+        return ResponseEntity.ok(resp);
+    }
+
 }
 
