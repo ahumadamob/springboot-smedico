@@ -6,10 +6,10 @@ import java.util.List;
 
 public interface IHorarioAtencionService {
     public List<HorarioAtencion> findAll();
-    public HorarioAtencion create(HorarioAtencion horarioAtencion) throws Exception;
-    public HorarioAtencion update(Long id, HorarioAtencion horarioAtencion) throws Exception;
+    public HorarioAtencion create(HorarioAtencionRequestDto requestDto);
+    public HorarioAtencion update(Long id, HorarioAtencionRequestDto requestDto);
     public HorarioAtencion findById(Long id);
     public boolean existsById(Long id);
     public void deleteById(Long id);
-    public HorarioAtencion fromDto(HorarioAtencionRequestDto horarioAtencionRequestDto) throws Exception;
+    public HorarioAtencion fromDto(HorarioAtencionRequestDto requestDto);
 }

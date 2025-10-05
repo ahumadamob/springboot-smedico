@@ -1,6 +1,7 @@
 package com.imb2025.smedico.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,14 +19,16 @@ public class Turno {
     private LocalDate fecha;
     private LocalTime hora;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Paciente paciente;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Medico medico;
 
-    @ManyToOne
-    @JsonIgnoreProperties("turnos") // Ignora el campo "turnos" dentro de EstadoTurno al serializar
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "turnos"})
     private EstadoTurno estadoTurno;
 
     public Turno() {}
