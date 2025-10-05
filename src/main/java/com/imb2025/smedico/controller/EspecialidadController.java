@@ -47,6 +47,21 @@ public class EspecialidadController {
                 ApiResponseSuccessDto<Especialidad> resp = new ApiResponseSuccessDto<>(true, "Especialidad encontrada", especialidad);
                 return ResponseEntity.ok(resp);
         }
+        
+        @GetMapping("/especialidad/{nombreEspecialidad}")
+        public ResponseEntity<ApiResponseSuccessDto<List<Especialidad>>> getEspecialidadByNombre(@PathVariable String nombreEspecialidad){
+        	List<Especialidad> lista = service.findByNombre(nombreEspecialidad);
+        	 ApiResponseSuccessDto<List<Especialidad>> resp = new ApiResponseSuccessDto<>(true, "Especialidades encontradas", lista);
+        	 	return ResponseEntity.ok(resp);
+         }
+        
+        @GetMapping("/descripcion/{descripcion}")
+        public ResponseEntity<ApiResponseSuccessDto<Long>> getEspecialidadCountByDescripcion(@PathVariable String descripcion){
+        	long cantidad = service.countByDescripcion(descripcion);
+        	ApiResponseSuccessDto<Long> resp = new ApiResponseSuccessDto<>(true, "Cantidad de especialidades encontradas", cantidad);
+            return ResponseEntity.ok(resp);
+        }
+
 	
 	@PostMapping("/especialidad")
 	public ResponseEntity<ApiResponseSuccessDto<Especialidad>> create(@Valid @RequestBody EspecialidadRequestDto dto) {
