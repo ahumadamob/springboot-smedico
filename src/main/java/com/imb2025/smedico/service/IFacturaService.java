@@ -12,4 +12,6 @@ public interface IFacturaService {
     public boolean existsById(Long id);
     public void deleteById(Long id);
     public Factura fromDto(FacturaRequestDto facturaRequestDto);
+    public List<Factura> findAllByPacienteId(Long id);
+    public Long countByMedioPago(String medioPago);
 }
