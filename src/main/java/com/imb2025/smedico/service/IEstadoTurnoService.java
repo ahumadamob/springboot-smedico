@@ -12,4 +12,22 @@ public interface IEstadoTurnoService {
     public boolean existsById(Long id);
     public void deleteById(Long id);
     public EstadoTurno fromDto(EstadoTurnoRequestDto dto);
+    
+  
+    // Consigna TP07 Métodos para usar los filtros del Repository
+    
+    
+    /*
+      Usa el método findBy... del Repository para filtrar por nombre.
+      @param nombreFiltro Cadena a buscar.
+      @return Lista de estados de turno que coinciden.
+     */
+    public List<EstadoTurno> findByNombreContaining(String nombreFiltro);
+    
+    /*
+      Usa el método countBy... del Repository para contar coincidencias.
+      @param nombre Nombre exacto a contar.
+      @return Cantidad de registros.
+     */
+    public long countByNombre(String nombre);
 }
