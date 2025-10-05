@@ -9,6 +9,8 @@ import com.imb2025.smedico.repository.EstudioRepository;
 import com.imb2025.smedico.repository.OrdenEstudioRepository;
 import com.imb2025.smedico.repository.ResultadoEstudioRepository;
 import com.imb2025.smedico.service.IResultadoEstudioService;
+
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,20 +88,21 @@ public class ResultadoEstudioServiceImpl implements IResultadoEstudioService {
 	    resultado.setOrdenEstudio(ordenEstudio);	    
 	    return resultado;
 
+	    
+		
+	
 	}
 
+	@Override
+	public List<ResultadoEstudio> findByFecha(LocalDate fecha) {
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		return repo.findByFecha(fecha);
+	}
+
+	@Override
+	public long countByFecha(LocalDate fecha) {
+		
+		return repo.countByFecha(fecha);
+	}
 	
 }
