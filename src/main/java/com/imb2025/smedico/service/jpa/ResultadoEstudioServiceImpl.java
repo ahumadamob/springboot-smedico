@@ -74,24 +74,22 @@ public class ResultadoEstudioServiceImpl implements IResultadoEstudioService {
         }
 
 	@Override
-	public ResultadoEstudio fromDto(ResultadoEstudioRequestDto requestDto) {
-	    OrdenEstudio ordenEstudio = ordenEstudioRepository.findById(requestDto.getOrdenEstudioId())
-	        .orElseThrow(() -> new ResourceNotFoundException("Orden de Estudio NO encontrado con ID " + requestDto.getOrdenEstudioId()));
-	    
-	    Estudio estudio = estudioRepository.findById(requestDto.getEstudioId())
-	    	.orElseThrow(() -> new ResourceNotFoundException("Estudio NO encontrado con ID " + requestDto.getEstudioId()));
-	    
-	    ResultadoEstudio resultado = new ResultadoEstudio();
-	    resultado.setEstudio(estudio);
-	    resultado.setFechaCarga(null);
-	    resultado.setObservaciones(null);
-	    resultado.setOrdenEstudio(ordenEstudio);	    
-	    return resultado;
+        public ResultadoEstudio fromDto(ResultadoEstudioRequestDto requestDto) {
+            OrdenEstudio ordenEstudio = ordenEstudioRepository.findById(requestDto.getOrdenEstudioId())
+                .orElseThrow(() -> new ResourceNotFoundException("Orden de Estudio NO encontrado con ID " + requestDto.getOrdenEstudioId()));
 
-	    
-		
-	
-	}
+            Estudio estudio = estudioRepository.findById(requestDto.getEstudioId())
+                .orElseThrow(() -> new ResourceNotFoundException("Estudio NO encontrado con ID " + requestDto.getEstudioId()));
+
+            ResultadoEstudio resultado = new ResultadoEstudio();
+            resultado.setOrdenEstudio(ordenEstudio);
+            resultado.setEstudio(estudio);
+            resultado.setResultado(requestDto.getResultado());
+            resultado.setFecha(requestDto.getFecha());
+            resultado.setFechaCarga(requestDto.getFechaCarga());
+            resultado.setObservaciones(requestDto.getObservaciones());
+            return resultado;
+        }
 
 	@Override
 	public List<ResultadoEstudio> findByFecha(LocalDate fecha) {

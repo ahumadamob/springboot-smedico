@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
@@ -22,17 +23,19 @@ public class ResultadoEstudio {
     @OneToOne(mappedBy = "resultadoEstudio")
     private Estudio estudio;
     private Long resultado;
+    private LocalDate fecha;
     private LocalTime fechaCarga;
     private String observaciones;
 
     public ResultadoEstudio() {}
 
-    public ResultadoEstudio(long id, OrdenEstudio ordenEstudio, Estudio estudio, Long resultado, LocalTime fechaCarga,
-                             String observaciones) {
+    public ResultadoEstudio(long id, OrdenEstudio ordenEstudio, Estudio estudio, Long resultado, LocalDate fecha,
+                             LocalTime fechaCarga, String observaciones) {
         this.id = id;
         this.ordenEstudio = ordenEstudio;
         this.estudio = estudio;
         this.resultado = resultado;
+        this.fecha = fecha;
         this.fechaCarga = fechaCarga;
         this.observaciones = observaciones;
     }
@@ -63,14 +66,22 @@ public class ResultadoEstudio {
     
 
     public Long getResultado() {
-		return resultado;
-	}
+        return resultado;
+    }
 
-	public void setResultado(Long resultado) {
-		this.resultado = resultado;
-	}
+    public void setResultado(Long resultado) {
+        this.resultado = resultado;
+    }
 
-	public LocalTime getFechaCarga() {
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
+
+    public LocalTime getFechaCarga() {
         return fechaCarga;
     }
 
