@@ -2,6 +2,7 @@ package com.imb2025.smedico.service;
 
 import com.imb2025.smedico.dto.AfiliacionRequestDto;
 import com.imb2025.smedico.entity.Afiliacion;
+
 import java.util.List;
 
 public interface IAfiliacionService {
@@ -19,4 +20,9 @@ public interface IAfiliacionService {
     void deleteById(Long id);
 
     Afiliacion fromDto(AfiliacionRequestDto afiliacionRequestDto);
+
+    // métodos "mágicos" del repository
+    List<Afiliacion> findByIdGreaterThan(Long idMin);
+
+    long countByIdGreaterThan(Long idMin);
 }
