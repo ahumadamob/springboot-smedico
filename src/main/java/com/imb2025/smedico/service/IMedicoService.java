@@ -12,4 +12,13 @@ public interface IMedicoService {
     public boolean existsById(Long id);
     public void deleteById(Long id);
     public Medico fromDto(MedicoRequestDto medicoRequestDto) throws Exception;
+    public List<Medico> findByApellido(String apellido);
+    public Long countByEspecialidad(String nombreEspecialidad);
+ 
+
+        
+
+       
+   
+
 }

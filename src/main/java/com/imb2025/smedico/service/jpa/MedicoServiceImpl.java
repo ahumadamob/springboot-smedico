@@ -62,7 +62,6 @@ public class MedicoServiceImpl implements IMedicoService {
         }
     }
     
- 
     @Override
     public List<Medico> findByApellido(String apellido) {
         return repo.findByApellido(apellido);
@@ -105,5 +104,5 @@ public class MedicoServiceImpl implements IMedicoService {
         return medico;
     }
 
-    
+  
 }
