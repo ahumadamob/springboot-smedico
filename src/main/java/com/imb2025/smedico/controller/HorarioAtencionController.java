@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.imb2025.smedico.dto.HorarioAtencionRequestDto;
-import com.imb2025.smedico.dto.HorarioAtencionResponseDTO;
+import com.imb2025.smedico.dto.HorarioAtencionResponseDto;
 import com.imb2025.smedico.entity.HorarioAtencion;
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
@@ -46,8 +46,8 @@ public class HorarioAtencionController {
         return horarioEntity;
     }
 
-    private HorarioAtencionResponseDTO convertToResponseDTO(HorarioAtencion horarioEntity) {
-        HorarioAtencionResponseDTO responseDTO = new HorarioAtencionResponseDTO();
+    private HorarioAtencionResponseDto convertToResponseDTO(HorarioAtencion horarioEntity) {
+        HorarioAtencionResponseDto responseDTO = new HorarioAtencionResponseDto();
         responseDTO.setId(horarioEntity.getId());
 
         if (horarioEntity.getMedico() != null) {
@@ -63,8 +63,8 @@ public class HorarioAtencionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<HorarioAtencionResponseDTO>> getAllHorarioAtencion() {
-        List<HorarioAtencionResponseDTO> horarios = horarioAtencionService.findAll().stream()
+    public ResponseEntity<List<HorarioAtencionResponseDto>> getAllHorarioAtencion() {
+        List<HorarioAtencionResponseDto> horarios = horarioAtencionService.findAll().stream()
                 .map(this::convertToResponseDTO)
                 .collect(Collectors.toList());
 
@@ -107,34 +107,36 @@ public class HorarioAtencionController {
     public ResponseEntity<String> deleteHorarioAtencion(@PathVariable Long id) {
         try {
             horarioAtencionService.deleteById(id);
-        return ResponseEntity.ok("Horario de atención " + id + " eliminado correctamente.");
-    } catch (IllegalArgumentException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.ok("Horario de atención " + id + " eliminado correctamente.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
-}
 
-// Endpoints para métodos mágicos del TP07
-@GetMapping("/dia/{diaSemana}")
-public ResponseEntity<List<HorarioAtencionResponseDTO>> getHorariosByDia(@PathVariable String diaSemana) {
-    List<HorarioAtencionResponseDTO> horarios = horarioAtencionService.findHorariosByDia(diaSemana).stream()
-            .map(this::convertToResponseDTO)
-            .collect(Collectors.toList());
-    
-    if (horarios.isEmpty()) {
-        return ResponseEntity.noContent().build();
+    // Endpoints para métodos mágicos del TP07
+    @GetMapping("/dia/{diaSemana}")
+    public ResponseEntity<List<HorarioAtencionResponseDto>> getHorariosByDia(@PathVariable String diaSemana) {
+        List<HorarioAtencionResponseDto> horarios = horarioAtencionService.findHorariosByDia(diaSemana).stream()
+                .map(this::convertToResponseDTO)
+                .collect(Collectors.toList());
+
+        if (horarios.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(horarios);
     }
-    return ResponseEntity.ok(horarios);
-}
 
-@GetMapping("/medico/{medicoId}/count")
-public ResponseEntity<Object> countHorariosByMedico(@PathVariable Long medicoId) {
-    long count = horarioAtencionService.countHorariosByMedico(medicoId);
-    return ResponseEntity.ok(Map.of(
-        "medicoId", medicoId,
-        "cantidadHorarios", count,
-        "mensaje", "Cantidad de horarios encontrados para el médico ID: " + medicoId
-    ));
-}    @ExceptionHandler(ResourceNotFoundException.class)
+    @GetMapping("/medico/{medicoId}/count")
+    public ResponseEntity<Object> countHorariosByMedico(@PathVariable Long medicoId) {
+        long count = horarioAtencionService.countHorariosByMedico(medicoId);
+        return ResponseEntity.ok(Map.of(
+                "medicoId", medicoId,
+                "cantidadHorarios", count,
+                "mensaje", "Cantidad de horarios encontrados para el médico ID: " + medicoId
+        ));
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<String> handleNotFoundException(ResourceNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
