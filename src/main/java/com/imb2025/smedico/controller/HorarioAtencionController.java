@@ -1,25 +1,21 @@
 package com.imb2025.smedico.controller;
-import com.imb2025.smedico.dto.ApiResponseErrorDto;
-import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 
 import java.util.List;
-
+import java.util.Map;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.imb2025.smedico.dto.HorarioAtencionRequestDto;
-import com.imb2025.smedico.dto.HorarioAtencionResponseDto; 
-import com.imb2025.smedico.entity.HorarioAtencion;
-import com.imb2025.smedico.service.IHorarioAtencionService;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.validation.Valid; 
+import com.imb2025.smedico.dto.HorarioAtencionRequestDto;
+import com.imb2025.smedico.dto.HorarioAtencionResponseDTO;
+import com.imb2025.smedico.entity.HorarioAtencion;
+import com.imb2025.smedico.entity.Medico;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
+import com.imb2025.smedico.service.IHorarioAtencionService;
+import com.imb2025.smedico.service.IMedicoService;
 
 @RestController
 @RequestMapping("/horarioAtencion")
@@ -28,108 +24,123 @@ public class HorarioAtencionController {
     @Autowired
     private IHorarioAtencionService horarioAtencionService;
 
-    private HorarioAtencionResponseDto convertToResponseDto(HorarioAtencion horarioEntity) {
-        HorarioAtencionResponseDto responseDto = new HorarioAtencionResponseDto();
-        responseDto.setId(horarioEntity.getId());
+    @Autowired
+    private IMedicoService medicoService;
 
-        if (horarioEntity.getMedico() != null) {
-            responseDto.setMedicoId(horarioEntity.getMedico().getId());
+    private HorarioAtencion convertToEntity(HorarioAtencionRequestDto requestDTO) {
+        HorarioAtencion horarioEntity = new HorarioAtencion();
+
+        if (requestDTO.getMedicoId() != null) {
+            Medico medico = medicoService.findById(requestDTO.getMedicoId());
+            if (medico == null) {
+                throw new ResourceNotFoundException("Médico no encontrado con ID: " + requestDTO.getMedicoId());
+            }
+            horarioEntity.setMedico(medico);
+        } else {
+            horarioEntity.setMedico(null);
         }
 
-        responseDto.setDiaSemana(horarioEntity.getDiaSemana());
-        responseDto.setHoraInicio(horarioEntity.getHoraInicio());
-        responseDto.setHoraFin(horarioEntity.getHoraFin());
-        return responseDto;
+        horarioEntity.setDiaSemana(requestDTO.getDiaSemana());
+        horarioEntity.setHoraInicio(requestDTO.getHoraInicio());
+        horarioEntity.setHoraFin(requestDTO.getHoraFin());
+        return horarioEntity;
     }
-    
-    @Operation(summary = "Obtiene todos los horarios de atención")
-    @ApiResponse(responseCode = "200", description = "Horarios obtenidos exitosamente")
+
+    private HorarioAtencionResponseDTO convertToResponseDTO(HorarioAtencion horarioEntity) {
+        HorarioAtencionResponseDTO responseDTO = new HorarioAtencionResponseDTO();
+        responseDTO.setId(horarioEntity.getId());
+
+        if (horarioEntity.getMedico() != null) {
+            responseDTO.setMedicoId(horarioEntity.getMedico().getId());
+        } else {
+            responseDTO.setMedicoId(null);
+        }
+
+        responseDTO.setDiaSemana(horarioEntity.getDiaSemana());
+        responseDTO.setHoraInicio(horarioEntity.getHoraInicio());
+        responseDTO.setHoraFin(horarioEntity.getHoraFin());
+        return responseDTO;
+    }
+
     @GetMapping
-    public ResponseEntity<ApiResponseSuccessDto<List<HorarioAtencionResponseDto>>> getAllHorarioAtencion() {
-        List<HorarioAtencionResponseDto> horarios = horarioAtencionService.findAll().stream()
-                .map(this::convertToResponseDto)
+    public ResponseEntity<List<HorarioAtencionResponseDTO>> getAllHorarioAtencion() {
+        List<HorarioAtencionResponseDTO> horarios = horarioAtencionService.findAll().stream()
+                .map(this::convertToResponseDTO)
                 .collect(Collectors.toList());
 
-        ApiResponseSuccessDto<List<HorarioAtencionResponseDto>> response = new ApiResponseSuccessDto<>(
-            true,
-            "Horarios obtenidos exitosamente",
-            horarios
-        );
-        return ResponseEntity.ok(response);
+        if (horarios.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(horarios);
     }
 
-    @Operation(summary = "Obtiene un horario de atención por su ID")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Horario encontrado exitosamente"),
-        @ApiResponse(responseCode = "404", description = "Horario no encontrado", 
-                     content = @Content(schema = @Schema(implementation = ApiResponseErrorDto.class)))
-    })
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<HorarioAtencion>> getHorarioAtencionById(@PathVariable Long id) {
+    public ResponseEntity<Object> getHorarioAtencionById(@PathVariable Long id) {
         HorarioAtencion horario = horarioAtencionService.findById(id);
-
-        ApiResponseSuccessDto<HorarioAtencion> response = new ApiResponseSuccessDto<>(
-        		true,
-        	    "Horario encontrado exitosamente", 
-        	    horario 
-  );
-
-        return ResponseEntity.ok(response);
+        if (horario == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Horario de atención no encontrado con ID: " + id);
+        } else {
+            return ResponseEntity.ok(convertToResponseDTO(horario));
+        }
     }
 
-    @Operation(summary = "Crea un nuevo horario de atención")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Horario creado exitosamente"),
-        @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos", 
-                     content = @Content(schema = @Schema(implementation = ApiResponseErrorDto.class)))
-    })
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<HorarioAtencion>> createHorarioAtencion(@Valid @RequestBody HorarioAtencionRequestDto requestDto) {
-        HorarioAtencion savedHorario = horarioAtencionService.create(requestDto);
-
-        ApiResponseSuccessDto<HorarioAtencion> response = new ApiResponseSuccessDto<>(
-            true,
-            "Horario creado exitosamente",
-            savedHorario
-        );
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public ResponseEntity<Object> createHorarioAtencion(@RequestBody HorarioAtencionRequestDto requestDTO) throws Exception {
+        HorarioAtencion horarioEntity = convertToEntity(requestDTO);
+        horarioEntity.setId(null);
+        HorarioAtencion savedHorario = horarioAtencionService.create(horarioEntity);
+        return ResponseEntity.status(HttpStatus.CREATED).body(convertToResponseDTO(savedHorario));
     }
-    
-    @Operation(summary = "Actualiza un horario de atención existente")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Horario actualizado exitosamente"),
-        @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos", 
-                     content = @Content(schema = @Schema(implementation = ApiResponseErrorDto.class))),
-        @ApiResponse(responseCode = "404", description = "Horario no encontrado", 
-                     content = @Content(schema = @Schema(implementation = ApiResponseErrorDto.class)))
-    })
+
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<HorarioAtencion>> updateHorarioAtencion(@PathVariable Long id, @Valid @RequestBody HorarioAtencionRequestDto requestDto) {
-        HorarioAtencion updatedHorario = horarioAtencionService.update(id, requestDto);
+    public ResponseEntity<Object> updateHorarioAtencion(@PathVariable Long id, @RequestBody HorarioAtencionRequestDto requestDTO) throws Exception {
+        if (!horarioAtencionService.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Horario no encontrado con ID: " + id);
+        }
 
-        ApiResponseSuccessDto<HorarioAtencion> response = new ApiResponseSuccessDto<>(
-            true,
-            "Horario actualizado exitosamente",
-            updatedHorario
-        );
-        return ResponseEntity.ok(response);
+        HorarioAtencion horarioEntity = convertToEntity(requestDTO);
+        HorarioAtencion updatedHorario = horarioAtencionService.update(id, horarioEntity);
+        return ResponseEntity.ok(convertToResponseDTO(updatedHorario));
     }
 
-    @Operation(summary = "Elimina un horario de atención por su ID")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Horario eliminado correctamente"),
-        @ApiResponse(responseCode = "404", description = "Horario no encontrado", 
-                     content = @Content(schema = @Schema(implementation = ApiResponseErrorDto.class)))
-    })
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<Void>> deleteHorarioAtencion(@PathVariable Long id) {
-        horarioAtencionService.deleteById(id);
-        ApiResponseSuccessDto<Void> response = new ApiResponseSuccessDto<>(
-            true,
-            "Horario de atención " + id + " eliminado correctamente.",
-            null
-        );
-        return ResponseEntity.ok(response);
+    public ResponseEntity<String> deleteHorarioAtencion(@PathVariable Long id) {
+        try {
+            horarioAtencionService.deleteById(id);
+        return ResponseEntity.ok("Horario de atención " + id + " eliminado correctamente.");
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+}
+
+// Endpoints para métodos mágicos del TP07
+@GetMapping("/dia/{diaSemana}")
+public ResponseEntity<List<HorarioAtencionResponseDTO>> getHorariosByDia(@PathVariable String diaSemana) {
+    List<HorarioAtencionResponseDTO> horarios = horarioAtencionService.findHorariosByDia(diaSemana).stream()
+            .map(this::convertToResponseDTO)
+            .collect(Collectors.toList());
+    
+    if (horarios.isEmpty()) {
+        return ResponseEntity.noContent().build();
+    }
+    return ResponseEntity.ok(horarios);
+}
+
+@GetMapping("/medico/{medicoId}/count")
+public ResponseEntity<Object> countHorariosByMedico(@PathVariable Long medicoId) {
+    long count = horarioAtencionService.countHorariosByMedico(medicoId);
+    return ResponseEntity.ok(Map.of(
+        "medicoId", medicoId,
+        "cantidadHorarios", count,
+        "mensaje", "Cantidad de horarios encontrados para el médico ID: " + medicoId
+    ));
+}    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<String> handleNotFoundException(ResourceNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleGlobalException(Exception ex) {
+        return ResponseEntity.badRequest().body("Error: " + ex.getMessage());
     }
 }

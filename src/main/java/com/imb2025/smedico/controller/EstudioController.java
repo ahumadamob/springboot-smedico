@@ -44,6 +44,27 @@ public class EstudioController {
         EstudioResponseDto dto = new EstudioResponseDto(entidad); 
         return ResponseEntity.ok(dto);
     }
+    
+    @GetMapping("/ordenados")
+    public ResponseEntity<List<EstudioResponseDto>> findAllNombreOrdenados() {
+        var lista = service.findAllOrder();
+        if (lista == null || lista.isEmpty()) return ResponseEntity.noContent().build();
+        var dto = lista.stream().map(EstudioResponseDto::new).toList();
+        return ResponseEntity.ok(dto);
+    }
+    
+    @GetMapping("/buscar")
+    public ResponseEntity<List<EstudioResponseDto>> buscar(@RequestParam String nombre) {
+        var lista = service.findByNombre(nombre);
+        if (lista == null || lista.isEmpty()) return ResponseEntity.noContent().build();
+        var dto = lista.stream().map(EstudioResponseDto::new).toList();
+        return ResponseEntity.ok(dto);
+    }
+    
+    @GetMapping("/count/especialidad/{id}")
+    public ResponseEntity<Long> countPorEspecialidad(@PathVariable("id") Long especialidadId) {
+        return ResponseEntity.ok(service.countByEspecialidadId(especialidadId));
+    }
 
     
     @PostMapping

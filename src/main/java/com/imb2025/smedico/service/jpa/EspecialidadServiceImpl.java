@@ -65,6 +65,16 @@ public class EspecialidadServiceImpl implements IEspecialidadService{
 		repo.deleteById(id);
 
 	}
+
+	@Override
+	public List<Especialidad> findByNombre(String nombre) {
+		return repo.findByNombre(nombre);
+	}
+
+	@Override
+	public long countByDescripcion(String descripcion) {
+		return repo.countByDescripcion(descripcion);
+	}
 	
 	
 }

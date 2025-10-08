@@ -12,4 +12,8 @@ public interface IHistorialPacienteService {
     public boolean existsById(Long id);
     public void deleteById(Long id);
     public HistorialPaciente fromDto(HistorialPacienteRequestDto historialPacienteRequestDto);
+    
+ // Nuevos métodos mágicos
+    List<HistorialPaciente> findByEvento(String evento);
+    Long countByFecha(java.time.LocalDate fecha);
 }

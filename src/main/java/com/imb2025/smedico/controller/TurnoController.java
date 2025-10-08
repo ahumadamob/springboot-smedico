@@ -1,8 +1,10 @@
 package com.imb2025.smedico.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
@@ -75,4 +78,31 @@ public class TurnoController {
     }
 
    
-}
+    // --- Buscar turnos por fecha (GET /turno/fecha/{fecha})
+    @GetMapping("/turno/fecha/{fecha}")
+    public ResponseEntity<ApiResponseSuccessDto<List<Turno>>> getTurnofindByFecha(
+    @PathVariable("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
+        List<Turno> lista = service.findByFecha(fecha);
+        ApiResponseSuccessDto<List<Turno>> resp = new ApiResponseSuccessDto<>(
+            true,
+            lista.isEmpty() ? "No hay turnos para la fecha indicada" : "Turnos por fecha",
+            lista
+        );
+        return ResponseEntity.ok(resp);
+    }
+    // --- Contar turnos por fecha (GET /turno/count?fecha=yyyy-MM-dd)
+    @GetMapping("/turno/count")
+    public ResponseEntity<ApiResponseSuccessDto<Long>> countTurnoByFecha(
+    @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
+        long total = service.countByFecha(fecha);
+        ApiResponseSuccessDto<Long> resp = new ApiResponseSuccessDto<>(
+            true,
+            "Cantidad de turnos en fecha " + fecha.toString(),
+            total
+        );
+        return ResponseEntity.ok(resp);
+    }
+  
+ }
+
+    

@@ -9,6 +9,8 @@ import com.imb2025.smedico.repository.MedicoRepository;
 import com.imb2025.smedico.repository.PacienteRepository;
 import com.imb2025.smedico.repository.RecetaRepository;
 import com.imb2025.smedico.service.IRecetaService;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,4 +93,16 @@ public class RecetaServiceImpl implements IRecetaService {
 
         return receta;
     }
+    
+    @Override
+    public List<Receta> findByFecha(LocalDate fecha) {
+        return repo.findByFecha(fecha);
+    }
+
+    @Override
+    public long countByFecha(LocalDate fecha) {
+        return repo.countByFecha(fecha);
+        }
+
+    
 }

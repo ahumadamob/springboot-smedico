@@ -1,5 +1,6 @@
 package com.imb2025.smedico.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.OrdenEstudioRequestDto;
+import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.entity.OrdenEstudio;
+import com.imb2025.smedico.repository.MedicoRepository;
 import com.imb2025.smedico.service.IOrdenEstudioService;
 
 import jakarta.validation.Valid;
@@ -20,6 +23,9 @@ public class OrdenEstudioController {
 
     @Autowired
     private IOrdenEstudioService service;
+    
+    @Autowired
+    private MedicoRepository medicoRepository;
 
     // GET - Obtener todas las órdenes de estudio
     @GetMapping
@@ -48,10 +54,30 @@ public class OrdenEstudioController {
         return ResponseEntity.ok(resp);
     }
 
+
+ // GET - Obtener órdenes de estudio por fecha
+    @GetMapping("/fecha/{fecha}")
+    public ResponseEntity<ApiResponseSuccessDto<List<OrdenEstudio>>> findOrdenEstudioByFecha(@PathVariable LocalDate fecha) {
+        List<OrdenEstudio> ordenes = service.findByFecha(fecha);
+        ApiResponseSuccessDto<List<OrdenEstudio>> resp = new ApiResponseSuccessDto<>(true, "Órdenes encontradas", ordenes);
+        return ResponseEntity.ok(resp);
+    }
+
+    // GET - Obtener la cantidad de órdenes por médico
+    @GetMapping("/medico/{idMedico}/count")
+    public ResponseEntity<ApiResponseSuccessDto<Long>> countByMedico(@PathVariable Long idMedico) {
+        Medico medico = medicoRepository.findById(idMedico)
+            .orElseThrow(() -> new RuntimeException("Médico no encontrado"));
+
+        long cantidad = service.countByMedico(medico);
+        ApiResponseSuccessDto<Long> resp = new ApiResponseSuccessDto<>(true, "Cantidad encontrada", cantidad);
+        return ResponseEntity.ok(resp);
+    }
+
+
+
     // POST - Crear una nueva orden de estudio
     @PostMapping
-
-
     public ResponseEntity<ApiResponseSuccessDto<OrdenEstudio>> createOrdenEstudio(@Valid @RequestBody OrdenEstudioRequestDto dto) throws Exception {
         OrdenEstudio orden = service.create(service.fromDto(dto));
 

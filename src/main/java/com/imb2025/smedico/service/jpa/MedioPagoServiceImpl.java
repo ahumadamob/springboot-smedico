@@ -2,6 +2,7 @@ package com.imb2025.smedico.service.jpa;
 
 import com.imb2025.smedico.dto.MedioPagoRequestDto;
 import com.imb2025.smedico.entity.MedioPago;
+import com.imb2025.smedico.entity.MedioPago.TipoPago;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.MedioPagoRepository;
 import com.imb2025.smedico.service.IMedioPagoService;
@@ -53,11 +54,25 @@ public class MedioPagoServiceImpl implements IMedioPagoService {
 		repo.deleteById(id);
 	}
 
-        @Override
-        public MedioPago fromDto(MedioPagoRequestDto dto) {
-                MedioPago medioPago = new MedioPago();
-                medioPago.setNombre(dto.getNombre());
-                medioPago.setTipo(dto.getTipo());     //m     Ya no se utiliza ValueOf() para pasar texto a enum. pasamos de enum a enum
-                return medioPago;
-        }
+    @Override
+    public MedioPago fromDto(MedioPagoRequestDto dto) {
+    	MedioPago medioPago = new MedioPago();
+    	medioPago.setNombre(dto.getNombre());
+    	medioPago.setTipo(dto.getTipo());     
+    	return medioPago; 
+    }
+    
+    //a
+    @Override
+    public List<MedioPago> findByTipo(TipoPago tipo) {
+    	return repo.findByTipo(tipo);
+    }
+
+    //a
+    @Override
+    	public Long countByNombre(String nombre) {
+    	return repo.countByNombre(nombre);
+    }
+ 
+    
 }
