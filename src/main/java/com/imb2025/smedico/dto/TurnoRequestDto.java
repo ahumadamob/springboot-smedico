@@ -15,15 +15,15 @@ public class TurnoRequestDto {
     private LocalTime hora;
 
     @NotNull(message = "Debe especificar el paciente")
-    @Positive(message = "El ID del paciente no puede ser menor o igual a cero")
+    @Positive(message = "Identificador obligatorio y positivo")
     private Long pacienteId;
 
     @NotNull(message = "Debe especificar el médico")
-    @Positive(message = "El ID del médico no puede ser menor o igual a cero")
+    @Positive(message = "Identificador obligatorio y positivo")
     private Long medicoId;
 
     @NotNull(message = "Debe especificar el estado del turno")
-    @Positive(message = "El ID del estado no puede ser menor o igual a cero")
+    @Positive(message = "Identificador obligatorio y positivo")
     private Long estadoTurnoId;
 
     public TurnoRequestDto() {}
