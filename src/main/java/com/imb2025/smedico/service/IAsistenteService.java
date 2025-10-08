@@ -12,4 +12,9 @@ public interface IAsistenteService {
     public boolean existsById(Long id);
     public void deleteById(Long id);
     public Asistente fromDto(AsistenteRequestDto asistenteRequestDto);
+    
+ // Métodos mágicos
+    List<Asistente> findByApellido(String apellido);
+    Long countByNombre(String nombre);
+
 }
