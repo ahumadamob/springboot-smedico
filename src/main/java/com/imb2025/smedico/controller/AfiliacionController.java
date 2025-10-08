@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +18,19 @@ import com.imb2025.smedico.service.IAfiliacionService;
 @RequestMapping("/api/afiliaciones")
 public class AfiliacionController {
 
-    @Autowired
-    private IAfiliacionService service;
+    private final IAfiliacionService service;
+
+    public AfiliacionController(IAfiliacionService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<ApiResponseSuccessDto<List<AfiliacionResponseDto>>> getAllAfiliaciones() {
         List<Afiliacion> lista = service.findAll();
+        if (lista == null || lista.isEmpty()) {
+            return ResponseEntity.noContent().build(); // 204 si está vacío
+        }
+
         List<AfiliacionResponseDto> dtos = lista.stream()
                 .map(this::toResponseDto)
                 .collect(Collectors.toList());
@@ -82,6 +88,47 @@ public class AfiliacionController {
         service.deleteById(id);
         ApiResponseSuccessDto<Void> resp =
                 new ApiResponseSuccessDto<>(true, "Afiliación eliminada con éxito", null);
+        return ResponseEntity.ok(resp);
+    }
+
+    /**
+     * Buscar afiliaciones con id > minId
+     * Ej: GET /api/afiliaciones/search?minId=100
+     */
+    @GetMapping("/search")
+    public ResponseEntity<?> searchByMinId(@RequestParam(name = "minId", required = true) Long minId) {
+        if (minId == null || minId < 0) {
+            ApiResponseSuccessDto<List<AfiliacionResponseDto>> bad =
+                    new ApiResponseSuccessDto<>(false, "minId debe ser un número >= 0", null);
+            return ResponseEntity.badRequest().body(bad);
+        }
+
+        List<Afiliacion> lista = service.findByIdGreaterThan(minId);
+        if (lista == null || lista.isEmpty()) {
+            return ResponseEntity.noContent().build(); // 204 si no hay resultados
+        }
+
+        List<AfiliacionResponseDto> dtos = lista.stream().map(this::toResponseDto).collect(Collectors.toList());
+        ApiResponseSuccessDto<List<AfiliacionResponseDto>> resp =
+                new ApiResponseSuccessDto<>(true, "Listado filtrado por minId=" + minId, dtos);
+        return ResponseEntity.ok(resp);
+    }
+
+    /**
+     * Contar afiliaciones con id > minId
+     * Ej: GET /api/afiliaciones/count?minId=100
+     */
+    @GetMapping("/count")
+    public ResponseEntity<ApiResponseSuccessDto<Long>> countByMinId(@RequestParam(name = "minId", required = true) Long minId) {
+        if (minId == null || minId < 0) {
+            ApiResponseSuccessDto<Long> bad =
+                    new ApiResponseSuccessDto<>(false, "minId debe ser un número >= 0", null);
+            return ResponseEntity.badRequest().body(bad);
+        }
+
+        long count = service.countByIdGreaterThan(minId);
+        ApiResponseSuccessDto<Long> resp =
+                new ApiResponseSuccessDto<>(true, "Cantidad de afiliaciones con id > " + minId, count);
         return ResponseEntity.ok(resp);
     }
 
