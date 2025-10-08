@@ -1,4 +1,6 @@
 package com.imb2025.smedico.service.jpa;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.imb2025.smedico.dto.ConsultaRequestDto;
 import com.imb2025.smedico.entity.Consulta;
@@ -9,9 +11,12 @@ import com.imb2025.smedico.repository.TurnoRepository;
 import com.imb2025.smedico.service.IConsultaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -39,6 +44,13 @@ public class ConsultaServiceImpl implements IConsultaService {
         return repository.existsById(id);
     }
 //.
+    
+    private final ConsultaRepository consultaRepository;
+
+    // 🔹 2) Constructor para que Spring inyecte el repositorio automáticamente
+    public ConsultaServiceImpl(ConsultaRepository consultaRepository) {
+        this.consultaRepository = consultaRepository;
+    }
     @Override   
     @Transactional
     public Consulta createFromDto(ConsultaRequestDto dto) {
@@ -97,4 +109,26 @@ public class ConsultaServiceImpl implements IConsultaService {
         }
         repository.deleteById(id);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Consulta> findByFechaBetween(LocalDate desde, LocalDate hasta, Pageable pageable) {
+        if (desde == null || hasta == null)
+            throw new IllegalArgumentException("Debe indicar las fechas 'desde' y 'hasta'");
+        if (desde.isAfter(hasta))
+            throw new IllegalArgumentException("'desde' no puede ser posterior a 'hasta'");
+
+        return consultaRepository.findByFechaBetween(desde, hasta, pageable);
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public long countByPacienteId(Long pacienteId) {
+        if (pacienteId == null)
+            throw new IllegalArgumentException("Debe indicar el id del paciente");
+
+        return consultaRepository.countByPaciente_Id(pacienteId);
+    }
+
 }
