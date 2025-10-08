@@ -1,13 +1,30 @@
 package com.imb2025.smedico.dto;
 
+import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 
 public class PacienteRequestDto {
+    @NotBlank(message = "El nombre es obligatorio")
+    @Size(min = 2, max = 50, message = "El nombre debe tener entre 2 y 50 caracteres")
     private String nombre;
+
+    @NotBlank(message = "El apellido es obligatorio")
+    @Size(min = 2, max = 50, message = "El apellido debe tener entre 2 y 50 caracteres")
     private String apellido;
+
+    @NotBlank(message = "El DNI es obligatorio")
+    @Pattern(regexp = "\\d{7,10}", message = "El DNI debe contener solo números (7 a 10 dígitos)")
     private String dni;
+
+    @NotBlank(message = "El email es obligatorio")
+    @Email(message = "El email debe tener un formato válido")
     private String email;
+
+    @PastOrPresent(message = "La fecha de nacimiento debe ser pasada o actual")
     private LocalDate fechaNacimiento;
+
+    @NotBlank(message = "El teléfono es obligatorio")
+    @Pattern(regexp = "\\+?\\d{7,15}", message = "El teléfono debe ser un número válido (7 a 15 dígitos)")
     private String telefono;
 
     public PacienteRequestDto() {}

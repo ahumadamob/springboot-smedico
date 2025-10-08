@@ -2,14 +2,14 @@ package com.imb2025.smedico.service.jpa;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.imb2025.smedico.entity.Consultorio;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.ConsultorioRepository;
 import com.imb2025.smedico.service.IConsultorioService;
-
 import com.imb2025.smedico.dto.ConsultorioRequestDto;
+
 
 @Service
 public class ConsultorioServiceImpl implements IConsultorioService {
@@ -25,20 +25,16 @@ public class ConsultorioServiceImpl implements IConsultorioService {
 	
 	//Buscar por id
 	 @Override
-        public Consultorio findById(Long id) {
-                Optional<Consultorio> opt;
-                       opt = repository.findById(id);
-                       if(opt.isPresent()) {
-                               return opt.get();
-                       }else {
-                               return null;
-                }
-        }
-
-        @Override
-        public boolean existsById(Long id) {
-                return repository.existsById(id);
-        }
+	 public Consultorio findById(Long id) {
+		 return repository.findById(id)
+				    .orElseThrow(() -> new ResourceNotFoundException(
+				        "Consultorio no encontrado con id " + id));			
+	 }
+	 
+    @Override
+    public boolean existsById(Long id) {
+         return repository.existsById(id);
+    }
 	 
 	//Listar todos
 	@Override
@@ -50,7 +46,7 @@ public class ConsultorioServiceImpl implements IConsultorioService {
     @Override
     public void deleteById(Long id) {
     	if(!repository.existsById(id)) {
-    		throw new IllegalArgumentException("El consultorio que desea eliminar no existe");
+    		throw new ResourceNotFoundException("El consultorio que desea eliminar no existe");
     	}
         repository.deleteById(id);
     }
@@ -69,22 +65,8 @@ public class ConsultorioServiceImpl implements IConsultorioService {
     
     @Override
 	public Consultorio fromDto(ConsultorioRequestDto dto) throws Exception {
-    	if(dto.getNombre() == null || dto.getNombre().isBlank()) {
-    		throw new IllegalArgumentException("El nombre no puede estar vacío");
-    	}
-    	if(dto.getUbicacion() == null || dto.getUbicacion().isBlank()) {
-    		throw new IllegalArgumentException("La ubicación no puede estar vacía");
-    	}
-    	if(dto.getPiso() == 0) {
-    		throw new IllegalArgumentException("El piso no puede ser nulo");
-    	}
-    	Consultorio consultorio = new Consultorio();
     	
-    	consultorio.setNombre(dto.getNombre());
-    	consultorio.setUbicacion(dto.getUbicacion());
-    	consultorio.setPiso(dto.getPiso());
-    	
-    	return consultorio;
+    	return new Consultorio(null, dto.getNombre(), dto.getUbicacion(), dto.getPiso());
 	}
 
 	

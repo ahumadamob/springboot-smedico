@@ -1,5 +1,6 @@
 package com.imb2025.smedico.service.jpa;
 
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import com.imb2025.smedico.entity.EstadoTurno;
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.entity.Turno;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.EstadoTurnoRepository;
 import com.imb2025.smedico.repository.MedicoRepository;
 import com.imb2025.smedico.repository.PacienteRepository;
@@ -38,8 +40,9 @@ public class TurnoServiceImpl implements ITurnoService {
 
     @Override
     public Turno findById(Long id) {
-        return repo.findById(id)
-            .orElseThrow(() -> new RuntimeException("Turno con ID " + id + " no encontrado"));
+    	return repo.findById(id)
+    		    .orElseThrow(() -> new ResourceNotFoundException(
+    		        "Entidad no encontrada con id " + id));
     }
 
     @Override
@@ -50,10 +53,9 @@ public class TurnoServiceImpl implements ITurnoService {
 
     @Override
     public void deleteById(Long id) {
-        if (!repo.existsById(id)) {
-            throw new RuntimeException("No existe un turno con ID " + id);
-        }
-        repo.deleteById(id);
+        Turno existente = repo.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Turno con ID " + id + " no encontrado"));
+        repo.delete(existente);
     }
     
     @Override
@@ -62,10 +64,10 @@ public class TurnoServiceImpl implements ITurnoService {
     }
 
     @Override
-    public Turno update(Long id, Turno turno) throws Exception {
+    public Turno update(Long id, Turno turno) {
         Turno turnoExistente = repo.findById(id)
-            .orElseThrow(() -> new Exception("Turno con ID " + id + " no encontrado"));
-        
+            .orElseThrow(() -> new ResourceNotFoundException("Turno con ID " + id + " no encontrado"));
+
         turnoExistente.setFecha(turno.getFecha());
         turnoExistente.setHora(turno.getHora());
         turnoExistente.setPaciente(turno.getPaciente());
@@ -78,11 +80,11 @@ public class TurnoServiceImpl implements ITurnoService {
     @Override
     public Turno fromDto(TurnoRequestDto dto) {
         Paciente paciente = pacienteRepository.findById(dto.getPacienteId())
-            .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
+            .orElseThrow(() -> new ResourceNotFoundException("Paciente con ID " + dto.getPacienteId() + " no encontrado"));
         Medico medico = medicoRepository.findById(dto.getMedicoId())
-            .orElseThrow(() -> new RuntimeException("Médico no encontrado"));
+            .orElseThrow(() -> new ResourceNotFoundException("Médico con ID " + dto.getMedicoId() + " no encontrado"));
         EstadoTurno estado = estadoTurnoRepository.findById(dto.getEstadoTurnoId())
-            .orElseThrow(() -> new RuntimeException("Estado turno no encontrado"));
+            .orElseThrow(() -> new ResourceNotFoundException("Estado de turno con ID " + dto.getEstadoTurnoId() + " no encontrado"));
 
         Turno turno = new Turno();
         turno.setEstadoTurno(estado);
@@ -92,8 +94,17 @@ public class TurnoServiceImpl implements ITurnoService {
         turno.setPaciente(paciente);
         return turno;
     }
+
     
-    
+    @Override
+    public List<Turno> findByFecha(LocalDate fecha) {
+        return repo.findByFecha(fecha);
+    }
+    @Override
+    public long countByFecha(LocalDate fecha) {
+        return repo.countByFecha(fecha);
+    }
+
     
   
 }

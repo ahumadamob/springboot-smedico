@@ -1,21 +1,27 @@
 package com.imb2025.smedico.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.TurnoRequestDto;
 import com.imb2025.smedico.entity.Turno;
 import com.imb2025.smedico.service.ITurnoService;
+
+import jakarta.validation.Valid;
 
 @RestController
 public class TurnoController {
@@ -24,53 +30,79 @@ public class TurnoController {
     private ITurnoService service;
     
 
-
-    // GET - Obtener todos los turnos
+  
     @GetMapping("/turno")
-    public ResponseEntity<List<Turno>> findAllTurnos() {
+    public ResponseEntity<ApiResponseSuccessDto<List<Turno>>> findAllTurnos() {
         List<Turno> lista = service.findAll();
-        if (lista.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(lista);
+        ApiResponseSuccessDto<List<Turno>> resp =
+                new ApiResponseSuccessDto<>(true, "Lista de turnos", lista);
+        return ResponseEntity.ok(resp);
     }
 
     // GET - Obtener turno por ID
     @GetMapping("/turno/{idturno}")
-    public ResponseEntity<Turno> findTurnoById(@PathVariable("idturno") Long id) {
-        Turno turno = service.findById(id);
-        if (turno == null) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(turno);
+    public ResponseEntity<ApiResponseSuccessDto<Turno>> findTurnoById(@PathVariable("idturno") Long id) {
+        Turno turno = service.findById(id); 
+        ApiResponseSuccessDto<Turno> resp =
+                new ApiResponseSuccessDto<>(true, "Turno encontrado", turno);
+        return ResponseEntity.ok(resp);
     }
 
+    // POST - Crear turno
     @PostMapping("/turno")
-    public ResponseEntity<Turno> create(@RequestBody TurnoRequestDto dto) throws Exception {
-        Turno turno = service.fromDto(dto);
-        return ResponseEntity.ok(service.create(turno));
+    public ResponseEntity<ApiResponseSuccessDto<Turno>>create(@Valid @RequestBody TurnoRequestDto dto) throws Exception {
+        Turno turno = service.create(service.fromDto(dto));
+        ApiResponseSuccessDto<Turno> resp = new ApiResponseSuccessDto<>(true,"Turno creado exitosamente",turno);
+        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
-
-    @PutMapping("/turno/{idturno}")
-    public ResponseEntity<Turno> update(@PathVariable("idturno") Long idturno, @RequestBody TurnoRequestDto dto) throws Exception {
-        Turno turno = service.fromDto(dto);
-        return ResponseEntity.ok(service.update(idturno, turno));
-    }
-
-    // DELETE - Eliminar turno
-    @DeleteMapping("/turno/{idturno}")
-    public ResponseEntity<String> deleteTurno(@PathVariable("idturno") Long id) {
-        service.deleteById(id);
-        return ResponseEntity.ok("Turno " + id + " eliminado correctamente.");
-    }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleException(Exception ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
-
-    }
-
  
+ // PUT - Actualizar turno
+    @PutMapping("/turno/{idturno}") 
+    public ResponseEntity<ApiResponseSuccessDto<Turno>> update(
+            @PathVariable("idturno") Long idturno,
+            @Valid @RequestBody TurnoRequestDto dto) throws Exception {
+
+        Turno turno = service.fromDto(dto);
+        Turno actualizado = service.update(idturno, turno);
+
+        ApiResponseSuccessDto<Turno> resp = new ApiResponseSuccessDto<>(true, "Turno actualizado correctamente", actualizado);
+        return ResponseEntity.ok(resp);
+    }
+
+    @DeleteMapping("/turno/{idturno}")
+    public ResponseEntity<ApiResponseSuccessDto<Void>> deleteTurno(@PathVariable("idturno") Long id) {
+        service.deleteById(id); 
+        ApiResponseSuccessDto<Void> resp =
+                new ApiResponseSuccessDto<>(true, "Turno " + id + " eliminado correctamente", null);
+        return ResponseEntity.ok(resp);
+    }
+
+   
+    // --- Buscar turnos por fecha (GET /turno/fecha/{fecha})
+    @GetMapping("/turno/fecha/{fecha}")
+    public ResponseEntity<ApiResponseSuccessDto<List<Turno>>> getTurnofindByFecha(
+    @PathVariable("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
+        List<Turno> lista = service.findByFecha(fecha);
+        ApiResponseSuccessDto<List<Turno>> resp = new ApiResponseSuccessDto<>(
+            true,
+            lista.isEmpty() ? "No hay turnos para la fecha indicada" : "Turnos por fecha",
+            lista
+        );
+        return ResponseEntity.ok(resp);
+    }
+    // --- Contar turnos por fecha (GET /turno/count?fecha=yyyy-MM-dd)
+    @GetMapping("/turno/count")
+    public ResponseEntity<ApiResponseSuccessDto<Long>> countTurnoByFecha(
+    @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
+        long total = service.countByFecha(fecha);
+        ApiResponseSuccessDto<Long> resp = new ApiResponseSuccessDto<>(
+            true,
+            "Cantidad de turnos en fecha " + fecha.toString(),
+            total
+        );
+        return ResponseEntity.ok(resp);
+    }
+  
+ }
+
     
-    
-}

@@ -2,11 +2,28 @@ package com.imb2025.smedico.dto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 public class TurnoRequestDto {
+	@NotNull(message = "La fecha del turno es obligatoria")
+    @Future(message = "La fecha debe ser futura")
     private LocalDate fecha;
+
+    @NotNull(message = "La hora del turno es obligatoria")
     private LocalTime hora;
+
+    @NotNull(message = "Debe especificar el paciente")
+    @Positive(message = "Identificador obligatorio y positivo")
     private Long pacienteId;
+
+    @NotNull(message = "Debe especificar el médico")
+    @Positive(message = "Identificador obligatorio y positivo")
     private Long medicoId;
+
+    @NotNull(message = "Debe especificar el estado del turno")
+    @Positive(message = "Identificador obligatorio y positivo")
     private Long estadoTurnoId;
 
     public TurnoRequestDto() {}

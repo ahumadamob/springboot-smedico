@@ -1,11 +1,15 @@
 package com.imb2025.smedico.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,9 +17,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.ResultadoEstudioRequestDto;
 import com.imb2025.smedico.entity.ResultadoEstudio;
 import com.imb2025.smedico.service.IResultadoEstudioService;
+
+import jakarta.validation.Valid;
 
 @RestController
 public class ResultadoEstudioController {
@@ -24,49 +31,96 @@ public class ResultadoEstudioController {
 	private IResultadoEstudioService service;
 	
 	@GetMapping("/ResultadoEstudio")
-	public ResponseEntity<List<ResultadoEstudio>>findAll(){
+	public ResponseEntity<ApiResponseSuccessDto<List<ResultadoEstudio>>>findAll(){
 		List<ResultadoEstudio> resultadoEstudio = service.findAll();
+		ApiResponseSuccessDto<List<ResultadoEstudio>> resp;
 		
 		if(resultadoEstudio.isEmpty()) {
 			
-			return ResponseEntity.noContent().build();
-		}
-		return ResponseEntity.ok(resultadoEstudio);
+			resp = new ApiResponseSuccessDto<>(true,"No hay Estudios disponibles",resultadoEstudio);
+        }else {
+            resp = new ApiResponseSuccessDto<>(true,"Lista de Estudios",resultadoEstudio);
+	}
+		return ResponseEntity.ok(resp);
 	}
 	
 	
 	@GetMapping("/ResultadoEstudio/{idResultadoEstudio}")
-	public ResponseEntity<ResultadoEstudio> findById(@PathVariable("idResultadoEstudio") long id) {
+	public ResponseEntity<ApiResponseSuccessDto<ResultadoEstudio>> findById(@PathVariable("idResultadoEstudio") long id) {
 
 		ResultadoEstudio resultadoEstudio = service.findById(id);
-		if(resultadoEstudio == null) {
-			return ResponseEntity.notFound().build();
-			
-		}
-		return ResponseEntity.ok(resultadoEstudio);
+		ApiResponseSuccessDto<ResultadoEstudio> resp =
+				new ApiResponseSuccessDto<>(true,"Estudio encontrado",resultadoEstudio);
+		
+		return ResponseEntity.ok(resp);
 	}
+
+	
 	
 	@PostMapping("/ResultadoEstudio")
-	public ResponseEntity<ResultadoEstudio> createResultadoEstudio(@RequestBody ResultadoEstudioRequestDto requestDto) throws Exception {
+	public ResponseEntity<ApiResponseSuccessDto<ResultadoEstudio>> createResultadoEstudio(@Valid @RequestBody ResultadoEstudioRequestDto requestDto) {
+		
 		ResultadoEstudio resultadoEstudio = service.create(service.fromDto(requestDto));
-		return ResponseEntity.ok(resultadoEstudio);
+		ApiResponseSuccessDto<ResultadoEstudio> resp =
+				new ApiResponseSuccessDto<>(true,"Estudio creado correctamente",resultadoEstudio);
+		return ResponseEntity.status(HttpStatus.CREATED).body(resp);
 		
 	}
 	
 	
 	@PutMapping ("/ResultadoEstudio/{id}")
-	public ResponseEntity<ResultadoEstudio>  updateResultadoEstudio(@PathVariable Long id,@RequestBody ResultadoEstudioRequestDto requestDto) throws Exception {
-		return ResponseEntity.ok(service.update(id, service.fromDto(requestDto)));
+	public ResponseEntity<ApiResponseSuccessDto<ResultadoEstudio>>  updateResultadoEstudio(@PathVariable Long id,
+		@Valid @RequestBody ResultadoEstudioRequestDto requestDto) {
+		ResultadoEstudio resultadoEstudioEntity = service.fromDto(requestDto);
+		ResultadoEstudio actualizado = service.update(id, resultadoEstudioEntity);
+		ApiResponseSuccessDto<ResultadoEstudio> resp =
+				new ApiResponseSuccessDto<>(true,"Estudio actualizado correctamente",actualizado);
+		return ResponseEntity.ok(resp);
 	}
 	
 	@DeleteMapping ("/ResultadoEstudio/{idResultadoEstudio}")
-	public ResponseEntity<String> deleteResultadoEstudio (@PathVariable("idResultadoEstudio") Long id) {
+	public ResponseEntity<ApiResponseSuccessDto<String>> deleteResultadoEstudio (@PathVariable("idResultadoEstudio") Long id) {
 		service.deleteById(id);
-		return ResponseEntity.ok("Estudio "+id.toString()+ " Eliminado Correctamente");	
+		ApiResponseSuccessDto<String> resp =
+				new ApiResponseSuccessDto<>(true,"Estudio eliminado correctamente", "Id: " + id);
+		
+		return ResponseEntity.ok(resp);	
 		}
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<String> handleException(Exception ex) {
-	  return ResponseEntity.badRequest().body(ex.getMessage());
+	
+	
+	@GetMapping("/ResultadoEstudio/fecha/{fecha}")
+	public ResponseEntity<ApiResponseSuccessDto<List<ResultadoEstudio>>> getResultadoEstudioPorFecha(@PathVariable("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha){
+			List<ResultadoEstudio> lista = service.findByFecha(fecha);
+			ApiResponseSuccessDto<List<ResultadoEstudio>> resp;
+			
+			 if (lista.isEmpty()) {
+			        resp = new ApiResponseSuccessDto<>(true, "No hay estudios en la fecha " + fecha, lista);
+			    } else {
+			        resp = new ApiResponseSuccessDto<>(true, "Lista de estudios en la fecha " + fecha, lista);
+			    }
+			 
+			 return ResponseEntity.ok(resp);
+	
+		}
+	
+	@GetMapping("/ResultadoEstudio/count/{fecha}")
+	public ResponseEntity<ApiResponseSuccessDto<Long>> countResultadoEstudioByFecha(
+	        @PathVariable("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
+		
+		long cantidad = service.countByFecha(fecha);
+		
+		ApiResponseSuccessDto<Long> resp = new ApiResponseSuccessDto<>(
+	            true,
+	            "Cantidad de estudios en la fecha " + fecha,
+	            cantidad
+	    );
+
+	    return ResponseEntity.ok(resp);
 	}
 	
-}
+	
+	}
+
+
+
+
