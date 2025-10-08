@@ -79,4 +79,15 @@ public class FacturaServiceImpl implements IFacturaService {
     public boolean existsById(Long id) {
         return facturaRepository.existsById(id);
     }
+
+    @Override
+    public List<Factura> findAllByPacienteId(Long id){
+        return facturaRepository.findAllByPacienteId(id);
+    }
+
+    @Override
+    public Long countByMedioPago(String medioPago) {
+        return facturaRepository.countByMedioPagoNombreIgnoreCase(medioPago);
+    }
+
 }

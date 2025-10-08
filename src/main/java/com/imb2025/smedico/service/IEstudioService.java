@@ -6,6 +6,9 @@ import java.util.List;
 
 public interface IEstudioService {
     public List<Estudio> findAll();
+    public List<Estudio> findAllOrder();
+    public List<Estudio> findByNombre(String q);
+    long countByEspecialidadId(Long especialidadId);
     public Estudio create(Estudio estudio);
     public Estudio update(Long id, Estudio estudio);
     public Estudio findById(Long id);

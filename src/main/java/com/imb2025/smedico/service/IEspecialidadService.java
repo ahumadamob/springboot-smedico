@@ -14,4 +14,6 @@ public interface IEspecialidadService {
     public boolean existsById(Long id);
     public void deleteById(Long id);
     public Especialidad fromDto(EspecialidadRequestDto especialidadRequestDto);
+    public List<Especialidad> findByNombre(String nombre);
+    public long countByDescripcion(String descripcion);
 }

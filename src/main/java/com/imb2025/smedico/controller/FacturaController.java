@@ -65,4 +65,25 @@ public class FacturaController {
         return ResponseEntity.ok(resp);
     }
 
+    @GetMapping("/paciente/{id}")
+    public ResponseEntity<ApiResponseSuccessDto<List<Factura>>> getAllFacturasByPacienteId(@PathVariable Long id){
+        List<Factura> facturas = facturaService.findAllByPacienteId(id);
+        String mensaje;
+        if(facturas.isEmpty()){
+            mensaje = "No hay facturas disponibles";
+        } else {
+            mensaje = "Lista de Facturas obtenidas correctamente";
+        }
+        ApiResponseSuccessDto<List<Factura>> resp =
+                new ApiResponseSuccessDto<>(true, mensaje, facturas);
+        return ResponseEntity.ok(resp);
+    }
+
+    @GetMapping("/count/{medioPago}")
+    public ResponseEntity<ApiResponseSuccessDto<Long>> countFacturasByMedioPago(@PathVariable String medioPago){
+        Long cantidadFacturas = facturaService.countByMedioPago(medioPago);
+        ApiResponseSuccessDto<Long> resp =
+                new ApiResponseSuccessDto<>(true, "Conteo de Facturas pagadas con: " + medioPago, cantidadFacturas);
+        return ResponseEntity.ok(resp);
+    }
 }

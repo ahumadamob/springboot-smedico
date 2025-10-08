@@ -1,9 +1,18 @@
 package com.imb2025.smedico.repository;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.imb2025.smedico.entity.Medico;
+import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.entity.Receta;
 
 public interface RecetaRepository extends JpaRepository<Receta, Long> {
+
+public List<Receta> findByFecha(LocalDate fecha);
+
+long countByFecha(LocalDate fecha);
 
 }

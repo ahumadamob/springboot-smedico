@@ -1,5 +1,6 @@
 package com.imb2025.smedico.service.jpa;
 
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -95,7 +96,15 @@ public class TurnoServiceImpl implements ITurnoService {
     }
 
     
-    
+    @Override
+    public List<Turno> findByFecha(LocalDate fecha) {
+        return repo.findByFecha(fecha);
+    }
+    @Override
+    public long countByFecha(LocalDate fecha) {
+        return repo.countByFecha(fecha);
+    }
+
     
   
 }

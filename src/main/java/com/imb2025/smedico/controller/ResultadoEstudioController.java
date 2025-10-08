@@ -1,8 +1,10 @@
 package com.imb2025.smedico.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
@@ -52,6 +54,7 @@ public class ResultadoEstudioController {
 		
 		return ResponseEntity.ok(resp);
 	}
+
 	
 	
 	@PostMapping("/ResultadoEstudio")
@@ -84,4 +87,40 @@ public class ResultadoEstudioController {
 		return ResponseEntity.ok(resp);	
 		}
 	
-}
+	
+	@GetMapping("/ResultadoEstudio/fecha/{fecha}")
+	public ResponseEntity<ApiResponseSuccessDto<List<ResultadoEstudio>>> getResultadoEstudioPorFecha(@PathVariable("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha){
+			List<ResultadoEstudio> lista = service.findByFecha(fecha);
+			ApiResponseSuccessDto<List<ResultadoEstudio>> resp;
+			
+			 if (lista.isEmpty()) {
+			        resp = new ApiResponseSuccessDto<>(true, "No hay estudios en la fecha " + fecha, lista);
+			    } else {
+			        resp = new ApiResponseSuccessDto<>(true, "Lista de estudios en la fecha " + fecha, lista);
+			    }
+			 
+			 return ResponseEntity.ok(resp);
+	
+		}
+	
+	@GetMapping("/ResultadoEstudio/count/{fecha}")
+	public ResponseEntity<ApiResponseSuccessDto<Long>> countResultadoEstudioByFecha(
+	        @PathVariable("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
+		
+		long cantidad = service.countByFecha(fecha);
+		
+		ApiResponseSuccessDto<Long> resp = new ApiResponseSuccessDto<>(
+	            true,
+	            "Cantidad de estudios en la fecha " + fecha,
+	            cantidad
+	    );
+
+	    return ResponseEntity.ok(resp);
+	}
+	
+	
+	}
+
+
+
+

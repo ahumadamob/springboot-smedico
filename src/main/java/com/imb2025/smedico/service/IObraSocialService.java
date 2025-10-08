@@ -1,7 +1,7 @@
 package com.imb2025.smedico.service;
 
 import com.imb2025.smedico.dto.ObraSocialRequestDto;
-import com.imb2025.smedico.entity.ObraSocial;
+import com.imb2025.smedico.dto.ObraSocialResponseDto;
 
 import java.util.List;
 
@@ -13,29 +13,27 @@ public interface IObraSocialService {
     /**
      * Obtiene todas las obras sociales registradas.
      */
-    List<ObraSocial> findAll();
+    List<ObraSocialResponseDto> findAll();
 
     /**
      * Crea una nueva obra social.
-     * @param obraSocial entidad a crear
-     * @return la entidad creada
-     * @throws Exception si ocurre algún error durante la creación
+     * @param obraSocial datos recibidos desde la petición HTTP
+     * @return DTO con la obra social creada
      */
-    ObraSocial create(ObraSocial obraSocial) throws Exception;
+    ObraSocialResponseDto create(ObraSocialRequestDto obraSocial);
 
     /**
      * Actualiza una obra social existente.
      * @param id ID de la obra social a actualizar
-     * @param obraSocial datos nuevos
-     * @return la entidad actualizada
-     * @throws Exception si ocurre un error durante la actualización
+     * @param obraSocial datos nuevos recibidos desde la petición HTTP
+     * @return DTO con la obra social actualizada
      */
-    ObraSocial update(Long id, ObraSocial obraSocial) throws Exception;
+    ObraSocialResponseDto update(Long id, ObraSocialRequestDto obraSocial);
 
     /**
      * Busca una obra social por ID.
      */
-    ObraSocial findById(Long id);
+    ObraSocialResponseDto findById(Long id);
 
     /**
      * Verifica si existe una obra social por ID.
@@ -47,11 +45,4 @@ public interface IObraSocialService {
      */
     void deleteById(Long id);
 
-    /**
-     * Convierte un DTO en una entidad ObraSocial.
-     * @param obraSocialRequestDto DTO de entrada
-     * @return entidad construida
-     * @throws Exception si los datos son inválidos
-     */
-    ObraSocial fromDto(ObraSocialRequestDto obraSocialRequestDto) throws Exception;
 }

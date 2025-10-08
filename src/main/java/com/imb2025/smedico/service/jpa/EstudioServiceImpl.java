@@ -93,4 +93,16 @@ public class EstudioServiceImpl implements IEstudioService {
 
         return estudio;
     }
+
+    @Override public List<Estudio> findAllOrder() {
+        return repoEstudio.findAllByOrderByNombreAsc();
+    }
+
+    @Override public List<Estudio> findByNombre(String q) {
+        return repoEstudio.findByNombreContainingIgnoreCase(q);
+    }
+
+    @Override public long countByEspecialidadId(Long especialidadId) {
+        return repoEstudio.countByEspecialidad_Id(especialidadId);
+    }
 }

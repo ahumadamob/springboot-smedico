@@ -5,11 +5,12 @@ import com.imb2025.smedico.entity.Consulta;
 import java.util.List;
 
 public interface IConsultaService {
-    public List<Consulta> findAll();
-    public Consulta create(Consulta consulta);
-    public Consulta update(Long id, Consulta consulta);
-    public Consulta findById(Long id);
-    public boolean existsById(Long id);
-    public void deleteById(Long id);
-    public Consulta fromDto(ConsultaRequestDto consultaRequestDto);
+    List<Consulta> findAll();
+    Consulta findById(Long id);
+
+    Consulta createFromDto(ConsultaRequestDto dto);
+    Consulta updateFromDto(Long id, ConsultaRequestDto dto);
+    void deleteById(Long id);
+
+    boolean existsById(Long id);
 }
