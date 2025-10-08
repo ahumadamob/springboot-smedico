@@ -128,7 +128,7 @@ public class ConsultaServiceImpl implements IConsultaService {
         if (pacienteId == null)
             throw new IllegalArgumentException("Debe indicar el id del paciente");
 
-        return consultaRepository.countByPaciente_Id(pacienteId);
+        return consultaRepository.countByTurno_Paciente_Id(pacienteId);
     }
 
 }

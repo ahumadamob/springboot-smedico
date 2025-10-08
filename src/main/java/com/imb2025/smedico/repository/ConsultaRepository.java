@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.imb2025.smedico.entity.Consulta;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
 
@@ -15,5 +14,5 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
 
     Page<Consulta> findByFechaBetween(LocalDate desde, LocalDate hasta, Pageable pageable);
    
-    long countByPaciente_Id(Long pacienteId);
+    long countByTurno_Paciente_Id(Long pacienteId);
 }
