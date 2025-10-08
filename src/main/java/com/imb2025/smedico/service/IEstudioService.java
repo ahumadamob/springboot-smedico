@@ -6,10 +6,13 @@ import java.util.List;
 
 public interface IEstudioService {
     public List<Estudio> findAll();
-    public Estudio create(Estudio estudio) throws Exception;
-    public Estudio update(Long id, Estudio estudio) throws Exception;
+    public List<Estudio> findAllOrder();
+    public List<Estudio> findByNombre(String q);
+    long countByEspecialidadId(Long especialidadId);
+    public Estudio create(Estudio estudio);
+    public Estudio update(Long id, Estudio estudio);
     public Estudio findById(Long id);
     public boolean existsById(Long id);
     public void deleteById(Long id);
-    public Estudio fromDto(EstudioRequestDto estudioRequestDto) throws Exception;
+    public Estudio fromDto(EstudioRequestDto estudioRequestDto);
 }

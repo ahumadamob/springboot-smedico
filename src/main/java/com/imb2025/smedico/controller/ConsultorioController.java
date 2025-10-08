@@ -42,31 +42,22 @@ public class ConsultorioController {
 		ApiResponseSuccessDto<Consultorio> respuesta = new ApiResponseSuccessDto<>(true, "Consultorio encontrado correctamente", consultorio);
 		return ResponseEntity.ok(respuesta);
     }
-		
+	    
 	//Buscar lista - GET 
     @GetMapping("/consultorio")
     public ResponseEntity<ApiResponseSuccessDto<List<Consultorio>>> findAllConsultorio() {
     	List<Consultorio> consultorio = servicio.findAll();
-    	ApiResponseSuccessDto<List<Consultorio>> respuesta;
-    	if(consultorio.isEmpty()) {
-    		respuesta = new ApiResponseSuccessDto<>(true, "El consultorio no existe", consultorio);
-    	}else {
-    		respuesta = new ApiResponseSuccessDto<>(true, "Consultorios", consultorio);
-    	}
+    	ApiResponseSuccessDto<List<Consultorio>> respuesta = new ApiResponseSuccessDto<>(true, consultorio.isEmpty() ? "No hay lista de consultorios para mostrar" : "Lista de consultorios: ", consultorio);
     	return ResponseEntity.ok(respuesta);
     }
-   
-    
+       
     //Eliminar por ID - DELETE
     @DeleteMapping("/consultorio/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
-        Consultorio consultorio = servicio.findById(id);
-        if (consultorio == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Consultorio " + id.toString() + " no encontrado");
-        }
+    public ResponseEntity<ApiResponseSuccessDto<String>> delete(@PathVariable("id") Long id) {
         servicio.deleteById(id);
-        return ResponseEntity.ok("Consultorio " + id.toString() + " eliminado correctamente. ");
+        ApiResponseSuccessDto<String> respuesta = 
+        		new ApiResponseSuccessDto<>(true, "Consultorio eliminado", "ID: " + id);
+        return ResponseEntity.ok(respuesta);
     }
     
        

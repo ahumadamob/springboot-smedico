@@ -1,4 +1,5 @@
 package com.imb2025.smedico.service.jpa;
+
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 
 import java.util.List;
@@ -29,13 +30,7 @@ public class EstadoTurnoServiceImpl implements IEstadoTurnoService {
     public EstadoTurno findById(Long id) {
         return estadoTurnoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                    "EstadoTurno no encontrado con id " + id));
-    }
-
-
-    @Override
-    public boolean existsById(Long id) {
-        return estadoTurnoRepository.existsById(id);
+                        "EstadoTurno no encontrado con id " + id));
     }
 
     @Override
@@ -44,18 +39,17 @@ public class EstadoTurnoServiceImpl implements IEstadoTurnoService {
     }
 
     @Override
-    public EstadoTurno update(Long id, EstadoTurno estadoTurno) {
-        Optional<EstadoTurno> existente = estadoTurnoRepository.findById(id);
-        if (existente.isPresent()) {
-            EstadoTurno actualizado = existente.get();
-            actualizado.setNombre(estadoTurno.getNombre());
-            return estadoTurnoRepository.save(actualizado);
-        }
-        throw new RuntimeException("EstadoTurno con id " + id + " no existe");
+    public EstadoTurno update(Long id, EstadoTurno estadoTurno) throws ResourceNotFoundException {
+        EstadoTurno existente = findById(id); // Reutilizamos findById, que ya maneja la excepción
+        existente.setNombre(estadoTurno.getNombre());
+        return estadoTurnoRepository.save(existente);
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Long id) throws ResourceNotFoundException {
+        if (!estadoTurnoRepository.existsById(id)) {
+            throw new ResourceNotFoundException("EstadoTurno no encontrado con id " + id);
+        }
         estadoTurnoRepository.deleteById(id);
     }
 

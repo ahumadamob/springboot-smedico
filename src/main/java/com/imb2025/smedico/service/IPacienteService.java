@@ -6,6 +6,10 @@ import java.util.List;
 
 public interface IPacienteService {
     public List<Paciente> findAll();
+    public List<Paciente> findAllOrder();
+    public List<Paciente> findByDni(String dni);
+    public List<Paciente> findByDomainEmail(String domain);
+    public Long countBy();
     public Paciente create(Paciente paciente);
     public Paciente update(Long id, Paciente paciente);
     public Paciente findById(Long id);
