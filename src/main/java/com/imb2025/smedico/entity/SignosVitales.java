@@ -1,19 +1,12 @@
 package com.imb2025.smedico.entity;
 
 import java.time.LocalDateTime;
-
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class SignosVitales {
+public class SignosVitales extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     // fecha y hora completa
     private LocalDateTime fechaHora;
@@ -35,10 +28,9 @@ public class SignosVitales {
 
     public SignosVitales() {}
 
-    public SignosVitales(Long id, LocalDateTime fechaHora, Double peso, Double altura, Double imc, Double temperatura,
+    public SignosVitales(LocalDateTime fechaHora, Double peso, Double altura, Double imc, Double temperatura,
             Integer frecuenciaCardiaca, Integer presionSistolica, Integer presionDiastolica, Integer saturacionO2,
             String observaciones, Consulta consulta) {
-        this.id = id;
         this.fechaHora = fechaHora;
         this.peso = peso;
         this.altura = altura;
@@ -53,8 +45,6 @@ public class SignosVitales {
     }
 
     // getters y setters (nombres en camelCase)
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
     public LocalDateTime getFechaHora() { return fechaHora; }
     public void setFechaHora(LocalDateTime fechaHora) { this.fechaHora = fechaHora; }
