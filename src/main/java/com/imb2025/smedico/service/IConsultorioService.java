@@ -11,5 +11,7 @@ public interface IConsultorioService {
     public Consultorio findById(Long id);
     public boolean existsById(Long id);
     public void deleteById(Long id);
+    public Consultorio findByNombre(String nombre);
+    public List<Consultorio> findByUbicacion(String ubicacion);
     public Consultorio fromDto(ConsultorioRequestDto consultorioRequestDto) throws Exception;
 }
