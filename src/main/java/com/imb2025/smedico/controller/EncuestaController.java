@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.imb2025.smedico.controller.EncuestaController.EncuestaOut;
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.EncuestaRequestDto;
 import com.imb2025.smedico.entity.Encuesta;
@@ -49,13 +48,11 @@ public class EncuestaController {
         public String getComentario() { return comentario; }
     }
 
-    /* ================== Helpers ================== */
-
     private EncuestaOut toOut(Encuesta e) {
         return new EncuestaOut(
                 e.getId(),
-                (e.getPaciente() != null ? e.getPaciente().getId() : null),
-                (e.getConsulta() != null ? e.getConsulta().getId() : null),
+                e.getPaciente() != null ? e.getPaciente().getId() : null,
+                e.getConsulta() != null ? e.getConsulta().getId() : null,
                 e.getPuntaje(),
                 e.getComentario()
         );
@@ -80,7 +77,6 @@ public class EncuestaController {
 
     @PostMapping
     public ResponseEntity<ApiResponseSuccessDto<EncuestaOut>> create(@Valid @RequestBody EncuestaRequestDto body) {
-        // Service mapea internamente el DTO a entidad (fromDto) y persiste
         Encuesta creada = service.create(service.fromDto(body));
         return ResponseEntity
                 .created(URI.create("/api/encuestas/" + creada.getId()))
@@ -104,24 +100,19 @@ public class EncuestaController {
 
     /* ============ TP07: métodos “mágicos” expuestos ============ */
 
-    // Filtrar encuestas con puntaje >= n
     @GetMapping("/min-puntaje/{n}")
-    public ResponseEntity<ApiResponseSuccessDto<List<Object>>> findByPuntajeMin(@PathVariable int n) {
-        List<Object> data = service.findByPuntajeGreaterThanEqual(n)
+    public ResponseEntity<ApiResponseSuccessDto<List<EncuestaOut>>> findByPuntajeMin(@PathVariable int n) {
+        List<EncuestaOut> data = service.findByPuntajeGreaterThanEqual(n)
                 .stream()
                 .map(this::toOut)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Encuestas con puntaje >= " + n, data));
     }
 
-    // Contar encuestas por consulta
     @GetMapping("/consulta/{consultaId}/count")
     public ResponseEntity<ApiResponseSuccessDto<Long>> countByConsulta(@PathVariable Long consultaId) {
         long count = service.countByConsulta(consultaId);
         return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Total por consulta " + consultaId, count));
     }
-
-	private <R> R toOut(EncuestaOut encuestaout1) {
-		return null;
-	}
 }
+

@@ -78,7 +78,6 @@ public class EncuestaServiceImpl implements IEncuestaService {
         return encuestaRepo.existsById(id);
     }
 
-    // ---- Mapper interno (desde DTO) ----
     @Override
     @Transactional(readOnly = true)
     public Encuesta fromDto(EncuestaRequestDto dto) {
@@ -98,7 +97,7 @@ public class EncuestaServiceImpl implements IEncuestaService {
         return e;
     }
 
-    // ---- TP07: métodos “mágicos” delegando al repo ----
+    // TP07: delegan a “métodos mágicos” del repo
     @Override
     @Transactional(readOnly = true)
     public List<Encuesta> findByPuntajeGreaterThanEqual(int puntajeMin) {
