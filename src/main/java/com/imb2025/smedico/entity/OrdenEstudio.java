@@ -1,18 +1,14 @@
 package com.imb2025.smedico.entity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 
 @Entity
-public class OrdenEstudio {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class OrdenEstudio extends BaseEntity {
+
 
     private LocalDate fecha;
 
@@ -30,17 +26,14 @@ public class OrdenEstudio {
 
     public OrdenEstudio() {}
 
-    public OrdenEstudio(Long id, LocalDate fecha, Medico medico, Paciente paciente, Estudio estudio) {
-        this.id = id;
+    public OrdenEstudio(LocalDate fecha, Medico medico, Paciente paciente, Estudio estudio) {
         this.fecha = fecha;
         this.medico = medico;
         this.paciente = paciente;
         this.estudio = estudio;
     }
 
-    public Long getId() {
-        return id;
-    }
+ 
 
     public LocalDate getFecha() {
         return fecha;
@@ -58,9 +51,7 @@ public class OrdenEstudio {
         return estudio;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+
 
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
