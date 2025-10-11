@@ -74,18 +74,6 @@ public class HorarioAtencionServiceImpl implements IHorarioAtencionService {
     }
 
     @Override
-    public HorarioAtencion fromDto(HorarioAtencionRequestDto dto) throws Exception {
-        HorarioAtencion horario = new HorarioAtencion();
-        Medico medico = new Medico();
-        medico.setId(dto.getMedicoId());
-        horario.setMedico(medico);
-        horario.setDiaSemana(dto.getDiaSemana());
-        horario.setHoraInicio(dto.getHoraInicio());
-        horario.setHoraFin(dto.getHoraFin());
-        return horario;
-    }
-
-    @Override
     public boolean existsById(Long id) {
         try {
             return repository.existsById(id);
