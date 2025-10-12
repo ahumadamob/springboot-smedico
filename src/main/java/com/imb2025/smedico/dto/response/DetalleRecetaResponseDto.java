@@ -1,30 +1,62 @@
 package com.imb2025.smedico.dto.response;
 
+import com.imb2025.smedico.entity.Receta;
+import com.imb2025.smedico.entity.Medicamento;
+
 public class DetalleRecetaResponseDto {
 
     private Long id;
-    private Long recetaId;
-    private Long medicamentoId;
+    private Receta receta;            
+    private Medicamento medicamento; 
     private String dosis;
     private String frecuencia;
     private Integer version;
 
-    // Getters y Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public Long getRecetaId() { return recetaId; }
-    public void setRecetaId(Long recetaId) { this.recetaId = recetaId; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Long getMedicamentoId() { return medicamentoId; }
-    public void setMedicamentoId(Long medicamentoId) { this.medicamentoId = medicamentoId; }
+    public Receta getReceta() {
+        return receta;
+    }
 
-    public String getDosis() { return dosis; }
-    public void setDosis(String dosis) { this.dosis = dosis; }
+    public void setReceta(Receta receta) {
+        this.receta = receta;
+    }
 
-    public String getFrecuencia() { return frecuencia; }
-    public void setFrecuencia(String frecuencia) { this.frecuencia = frecuencia; }
+    public Medicamento getMedicamento() {
+        return medicamento;
+    }
 
-    public Integer getVersion() { return version; }
-    public void setVersion(Integer version) { this.version = version; }
+    public void setMedicamento(Medicamento medicamento) {
+        this.medicamento = medicamento;
+    }
+
+    public String getDosis() {
+        return dosis;
+    }
+
+    public void setDosis(String dosis) {
+        this.dosis = dosis;
+    }
+
+    public String getFrecuencia() {
+        return frecuencia;
+    }
+
+    public void setFrecuencia(String frecuencia) {
+        this.frecuencia = frecuencia;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
 }
