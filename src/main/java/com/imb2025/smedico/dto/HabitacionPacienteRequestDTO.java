@@ -1,0 +1,78 @@
+package com.imb2025.smedico.dto;
+
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+public class HabitacionPacienteRequestDTO {
+
+    @NotNull(message = "El número de habitación no puede ser nulo")
+    @Min(value = 1, message = "El número de habitación debe ser mayor a 0")
+    private Integer numeroHabitacion;
+
+    @NotNull(message = "El piso no puede ser nulo")
+    private Integer piso;
+
+    @NotBlank(message = "El sector no puede estar vacío")
+    @Size(min = 2, max = 50, message = "El sector debe tener entre 2 y 50 caracteres")
+    private String sector;
+
+    @NotNull(message = "Debe especificarse la cantidad de camas disponibles")
+    @Min(value = 0, message = "La cantidad de camas no puede ser negativa")
+    private Integer camasDisponibles;
+
+    @Size(max = 200, message = "La descripción puede tener hasta 200 caracteres")
+    private String descripcion;
+
+    public HabitacionPacienteRequestDTO() {}
+
+    public HabitacionPacienteRequestDTO(Integer numeroHabitacion, Integer piso, String sector, Integer camasDisponibles, String descripcion) {
+        this.numeroHabitacion = numeroHabitacion;
+        this.piso = piso;
+        this.sector = sector;
+        this.camasDisponibles = camasDisponibles;
+        this.descripcion = descripcion;
+    }
+
+    // Getters y Setters
+    public Integer getNumeroHabitacion() {
+        return numeroHabitacion;
+    }
+
+    public void setNumeroHabitacion(Integer numeroHabitacion) {
+        this.numeroHabitacion = numeroHabitacion;
+    }
+
+    public Integer getPiso() {
+        return piso;
+    }
+
+    public void setPiso(Integer piso) {
+        this.piso = piso;
+    }
+
+    public String getSector() {
+        return sector;
+    }
+
+    public void setSector(String sector) {
+        this.sector = sector;
+    }
+
+    public Integer getCamasDisponibles() {
+        return camasDisponibles;
+    }
+
+    public void setCamasDisponibles(Integer camasDisponibles) {
+        this.camasDisponibles = camasDisponibles;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+}

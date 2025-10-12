@@ -32,6 +32,38 @@ public class PacienteController {
         resp.setMessage(pacientes.isEmpty() ? "No hay pacientes registrados" : "Lista de pacientes");
         return ResponseEntity.ok(resp);
     }
+    
+    // Listar todos los pacientes
+    @GetMapping("/porapellido")
+    public ResponseEntity<ApiResponseSuccessDto<List<Paciente>>> getAllPacientesOrdenados() {
+        List<Paciente> pacientes = pacienteService.findAllOrder();
+        ApiResponseSuccessDto<List<Paciente>> resp = new ApiResponseSuccessDto<>();
+        resp.setSuccess(true);
+        resp.setData(pacientes);
+        resp.setMessage(pacientes.isEmpty() ? "No hay pacientes registrados" : "Lista de pacientes");
+        return ResponseEntity.ok(resp);
+    } 
+    
+    @GetMapping("/dni/{numeroDni}")
+    public ResponseEntity<ApiResponseSuccessDto<List<Paciente>>> getPacienteByDni(@PathVariable String numeroDni) {
+        List<Paciente> pacientes = pacienteService.findByDni(numeroDni);
+        ApiResponseSuccessDto<List<Paciente>> resp = new ApiResponseSuccessDto<>();
+        resp.setSuccess(true);
+        resp.setData(pacientes);
+        resp.setMessage(pacientes.isEmpty() ? "No hay pacientes registrados" : "Lista de pacientes");
+        return ResponseEntity.ok(resp);
+    }
+    
+    @GetMapping("/domain/{domainValue}")
+    public ResponseEntity<ApiResponseSuccessDto<List<Paciente>>> getPacienteByDomainEmial(@PathVariable String domainValue) {
+        List<Paciente> pacientes = pacienteService.findByDomainEmail(domainValue);
+        ApiResponseSuccessDto<List<Paciente>> resp = new ApiResponseSuccessDto<>();
+        resp.setSuccess(true);
+        resp.setData(pacientes);
+        resp.setMessage(pacientes.isEmpty() ? "No hay pacientes registrados" : "Lista de pacientes");
+        return ResponseEntity.ok(resp);
+    }    
+    
 
     // Obtener paciente por ID
     @GetMapping("/{id}")
@@ -41,6 +73,16 @@ public class PacienteController {
         ApiResponseSuccessDto<Paciente> resp = new ApiResponseSuccessDto<>();
         resp.setSuccess(true);
         resp.setData(paciente);
+        resp.setMessage("Paciente encontrado correctamente");
+
+        return ResponseEntity.ok(resp);
+    }
+    
+    @GetMapping("/cantidad")
+    public ResponseEntity<ApiResponseSuccessDto<Long>> getCountPacientes() {
+        ApiResponseSuccessDto<Long> resp = new ApiResponseSuccessDto<>();
+        resp.setSuccess(true);
+        resp.setData(pacienteService.countBy());
         resp.setMessage("Paciente encontrado correctamente");
 
         return ResponseEntity.ok(resp);
