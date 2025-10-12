@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.imb2025.smedico.dto.AsistenteRequestDto;
+import com.imb2025.smedico.dto.request.AsistenteRequestDto;
 import com.imb2025.smedico.entity.Asistente;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.AsistenteRepository;
@@ -65,17 +65,6 @@ public class AsistenteServiceImpl implements IAsistenteService {
                     "No se puede eliminar. Asistente con id " + id + " no existe.");
         }
         repo.deleteById(id);
-    }
-
-    @Override
-    public Asistente fromDto(AsistenteRequestDto dto) {
-        Asistente asistente = new Asistente();
-        asistente.setApellido(dto.getApellido());
-        asistente.setNombre(dto.getNombre());
-        asistente.setEmail(dto.getEmail());
-        asistente.setTelefono(dto.getTelefono());
-        asistente.setDni(dto.getDni());
-        return asistente;
     }
     
  // Métodos mágicos
