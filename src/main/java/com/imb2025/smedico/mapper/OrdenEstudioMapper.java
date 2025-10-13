@@ -50,15 +50,18 @@ public class OrdenEstudioMapper {
     public OrdenEstudioResponseDto toDto(OrdenEstudio orden) {
 
         OrdenEstudioResponseDto dto = new OrdenEstudioResponseDto();
-        
-        dto.setEstudioId(orden.getEstudio().getId()); 
-        dto.setFecha(orden.getFecha());
-        dto.setMedicoId(orden.getMedico().getId());   
-        dto.setPacienteId(orden.getPaciente().getId());
+        dto.setId(orden.getId());
         dto.setVersion(orden.getVersion());
+        dto.setFecha(orden.getFecha());
+
+        
+        dto.setEstudio(orden.getEstudio());
+        dto.setMedico(orden.getMedico());
+        dto.setPaciente(orden.getPaciente());
 
         return dto;
     }
+
     
 }
 

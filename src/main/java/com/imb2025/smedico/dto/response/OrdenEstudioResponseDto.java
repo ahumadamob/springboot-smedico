@@ -3,33 +3,45 @@ package com.imb2025.smedico.dto.response;
 import java.time.LocalDate;
 
 import com.imb2025.smedico.entity.Estudio;
+import com.imb2025.smedico.entity.Medico;
+import com.imb2025.smedico.entity.Paciente;
 
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotNull;
 
 public class OrdenEstudioResponseDto {
 	
 		private Long id;
 	    private Long version;
-
-	     @FutureOrPresent(message = "La fecha debe ser hoy o una fecha futura")
 	    private LocalDate fecha;
-	    
-	    @NotNull(message="El campo medicoId es obligatorio")
-	    private Long medicoId;
+	    private Paciente paciente;
+	    private Medico medico;
+	   	private Estudio estudio;
 
-	    @NotNull(message="El campo pacienteId es obligatorio")
-	    private Long pacienteId;
-
-
-		@NotNull(message="El campo estudioId es obligatorio")
-	    private Long estudioId;
-	    
 	    
 
-	
 
+	public Paciente getPaciente() {
+			return paciente;
+		}
 
+		public void setPaciente(Paciente paciente) {
+			this.paciente = paciente;
+		}
+
+		public Medico getMedico() {
+			return medico;
+		}
+
+		public void setMedico(Medico medico) {
+			this.medico = medico;
+		}
+
+		public Estudio getEstudio() {
+			return estudio;
+		}
+
+		public void setEstudio(Estudio estudio) {
+			this.estudio = estudio;
+		}
 
 	public Long getId() {
 		return id;
@@ -55,31 +67,8 @@ public class OrdenEstudioResponseDto {
 		this.fecha = fecha;
 	}
 
-	public Long getMedicoId() {
-		return medicoId;
-	}
 
 
-	public Long getPacienteId() {
-		return pacienteId;
-	}
-
-
-	public Long getEstudioId() {
-		return estudioId;
-	}
-	
-	public void setMedicoId(Long medicoId) {
-	    this.medicoId = medicoId;
-	}
-
-    public void setPacienteId(Long pacienteId) {
-		this.pacienteId = pacienteId;
-	}
-
-	public void setEstudioId(Long estudioId) {
-		this.estudioId = estudioId;
-	}
 
    
 
