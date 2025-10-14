@@ -1,19 +1,17 @@
 package com.imb2025.smedico.service;
 
-import com.imb2025.smedico.dto.TurnoRequestDto;
-import com.imb2025.smedico.entity.Turno;
-
+import com.imb2025.smedico.dto.request.TurnoRequestDto.TurnoRequestDto;
+import com.imb2025.smedico.dto.response.TurnoResponseDto.TurnoResponseDto;
 import java.time.LocalDate;
 import java.util.List;
 
 public interface ITurnoService {
-    List<Turno> findAll();
-    Turno create(Turno turno);
-    Turno update(Long id, Turno turno);
-    Turno findById(Long id);
+    List<TurnoResponseDto> findAll();
+    TurnoResponseDto create(TurnoRequestDto dto);
+    TurnoResponseDto update(Long id, TurnoRequestDto dto);
+    TurnoResponseDto findById(Long id);
     boolean existsById(Long id);
     void deleteById(Long id);
-    Turno fromDto(TurnoRequestDto turnoRequestDto);
-    List<Turno> findByFecha(LocalDate fecha);
+    List<TurnoResponseDto> findByFecha(LocalDate fecha);
     long countByFecha(LocalDate fecha);
 }

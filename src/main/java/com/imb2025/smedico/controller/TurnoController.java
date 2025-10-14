@@ -7,102 +7,68 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
-import com.imb2025.smedico.dto.TurnoRequestDto;
-import com.imb2025.smedico.entity.Turno;
+import com.imb2025.smedico.dto.request.TurnoRequestDto.TurnoRequestDto;
+import com.imb2025.smedico.dto.response.TurnoResponseDto.TurnoResponseDto;
 import com.imb2025.smedico.service.ITurnoService;
 
 import jakarta.validation.Valid;
 
 @RestController
+@RequestMapping("/turno")
 public class TurnoController {
 
     @Autowired
     private ITurnoService service;
-    
 
-  
-    @GetMapping("/turno")
-    public ResponseEntity<ApiResponseSuccessDto<List<Turno>>> findAllTurnos() {
-        List<Turno> lista = service.findAll();
-        ApiResponseSuccessDto<List<Turno>> resp =
-                new ApiResponseSuccessDto<>(true, "Lista de turnos", lista);
-        return ResponseEntity.ok(resp);
+    @GetMapping
+    public ResponseEntity<ApiResponseSuccessDto<List<TurnoResponseDto>>> findAllTurnos() {
+        List<TurnoResponseDto> lista = service.findAll();
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Lista de turnos", lista));
     }
 
-    // GET - Obtener turno por ID
-    @GetMapping("/turno/{idturno}")
-    public ResponseEntity<ApiResponseSuccessDto<Turno>> findTurnoById(@PathVariable("idturno") Long id) {
-        Turno turno = service.findById(id); 
-        ApiResponseSuccessDto<Turno> resp =
-                new ApiResponseSuccessDto<>(true, "Turno encontrado", turno);
-        return ResponseEntity.ok(resp);
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponseSuccessDto<TurnoResponseDto>> findTurnoById(@PathVariable Long id) {
+        TurnoResponseDto dto = service.findById(id);
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Turno encontrado", dto));
     }
 
-    // POST - Crear turno
-    @PostMapping("/turno")
-    public ResponseEntity<ApiResponseSuccessDto<Turno>>create(@Valid @RequestBody TurnoRequestDto dto) throws Exception {
-        Turno turno = service.create(service.fromDto(dto));
-        ApiResponseSuccessDto<Turno> resp = new ApiResponseSuccessDto<>(true,"Turno creado exitosamente",turno);
-        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
-    }
- 
- // PUT - Actualizar turno
-    @PutMapping("/turno/{idturno}") 
-    public ResponseEntity<ApiResponseSuccessDto<Turno>> update(
-            @PathVariable("idturno") Long idturno,
-            @Valid @RequestBody TurnoRequestDto dto) throws Exception {
-
-        Turno turno = service.fromDto(dto);
-        Turno actualizado = service.update(idturno, turno);
-
-        ApiResponseSuccessDto<Turno> resp = new ApiResponseSuccessDto<>(true, "Turno actualizado correctamente", actualizado);
-        return ResponseEntity.ok(resp);
+    @PostMapping
+    public ResponseEntity<ApiResponseSuccessDto<TurnoResponseDto>> create(@Valid @RequestBody TurnoRequestDto dto) {
+        TurnoResponseDto respDto = service.create(dto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ApiResponseSuccessDto<>(true, "Turno creado", respDto));
     }
 
-    @DeleteMapping("/turno/{idturno}")
-    public ResponseEntity<ApiResponseSuccessDto<Void>> deleteTurno(@PathVariable("idturno") Long id) {
-        service.deleteById(id); 
-        ApiResponseSuccessDto<Void> resp =
-                new ApiResponseSuccessDto<>(true, "Turno " + id + " eliminado correctamente", null);
-        return ResponseEntity.ok(resp);
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponseSuccessDto<TurnoResponseDto>> update(
+            @PathVariable Long id,
+            @Valid @RequestBody TurnoRequestDto dto) {
+
+        TurnoResponseDto respDto = service.update(id, dto);
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Turno actualizado", respDto));
     }
 
-   
-    // --- Buscar turnos por fecha (GET /turno/fecha/{fecha})
-    @GetMapping("/turno/fecha/{fecha}")
-    public ResponseEntity<ApiResponseSuccessDto<List<Turno>>> getTurnofindByFecha(
-    @PathVariable("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
-        List<Turno> lista = service.findByFecha(fecha);
-        ApiResponseSuccessDto<List<Turno>> resp = new ApiResponseSuccessDto<>(
-            true,
-            lista.isEmpty() ? "No hay turnos para la fecha indicada" : "Turnos por fecha",
-            lista
-        );
-        return ResponseEntity.ok(resp);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponseSuccessDto<Void>> deleteTurno(@PathVariable Long id) {
+        service.deleteById(id);
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Turno eliminado correctamente", null));
     }
-    // --- Contar turnos por fecha (GET /turno/count?fecha=yyyy-MM-dd)
-    @GetMapping("/turno/count")
-    public ResponseEntity<ApiResponseSuccessDto<Long>> countTurnoByFecha(
-    @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
+
+    @GetMapping("/fecha/{fecha}")
+    public ResponseEntity<ApiResponseSuccessDto<List<TurnoResponseDto>>> getTurnosByFecha(
+            @PathVariable("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
+        List<TurnoResponseDto> lista = service.findByFecha(fecha);
+        String msg = lista.isEmpty() ? "No hay turnos para la fecha indicada" : "Turnos por fecha";
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, msg, lista));
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<ApiResponseSuccessDto<Long>> countTurnosByFecha(
+            @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
         long total = service.countByFecha(fecha);
-        ApiResponseSuccessDto<Long> resp = new ApiResponseSuccessDto<>(
-            true,
-            "Cantidad de turnos en fecha " + fecha.toString(),
-            total
-        );
-        return ResponseEntity.ok(resp);
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Cantidad de turnos en fecha " + fecha, total));
     }
-  
- }
-
-    
+}
