@@ -1,91 +1,65 @@
 package com.imb2025.smedico.service.jpa;
 
-import java.util.List;
-
-import com.imb2025.smedico.dto.DetalleFacturaRequestDto;
+import com.imb2025.smedico.dto.request.DetalleFacturaRequestDto;
+import com.imb2025.smedico.dto.response.DetalleFacturaResponseDto;
 import com.imb2025.smedico.entity.DetalleFactura;
 import com.imb2025.smedico.entity.Factura;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
+import com.imb2025.smedico.mapper.DetalleFacturaMapper;
 import com.imb2025.smedico.repository.DetalleFacturaRepository;
 import com.imb2025.smedico.repository.FacturaRepository;
 import com.imb2025.smedico.service.IDetalleFacturaService;
-import java.math.BigDecimal;
-
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DetalleFacturaServiceImpl implements IDetalleFacturaService {
 
     private final DetalleFacturaRepository repo;
-    private final FacturaRepository repoFactura;
+    private final FacturaRepository facturaRepo;
 
-    // ✅ Inyección por constructor (más claro y seguro)
-    public DetalleFacturaServiceImpl(DetalleFacturaRepository repo, FacturaRepository repoFactura) {
+    public DetalleFacturaServiceImpl(DetalleFacturaRepository repo, FacturaRepository facturaRepo) {
         this.repo = repo;
-        this.repoFactura = repoFactura;
+        this.facturaRepo = facturaRepo;
     }
 
     @Override
-    public List<DetalleFactura> findAll() {
-        return repo.findAll();
+    public List<DetalleFacturaResponseDto> findAll() {
+        return repo.findAll().stream()
+                .map(DetalleFacturaMapper::toResponseDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public DetalleFactura findById(Long id) {
-        return repo.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException(
-                "DetalleFactura no encontrada con id " + id));
+    public DetalleFacturaResponseDto findById(Long id) {
+        DetalleFactura detalle = repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("DetalleFactura no encontrada con id " + id));
+        return DetalleFacturaMapper.toResponseDto(detalle);
     }
 
     @Override
-    public boolean existsById(Long id) {
-        return repo.existsById(id);
+    public DetalleFacturaResponseDto create(DetalleFacturaRequestDto dto) {
+        Factura factura = facturaRepo.findById(dto.getFacturaId())
+                .orElseThrow(() -> new ResourceNotFoundException("Factura no encontrada con id " + dto.getFacturaId()));
+        DetalleFactura detalle = DetalleFacturaMapper.fromDto(dto, factura);
+        DetalleFactura guardado = repo.save(detalle);
+        return DetalleFacturaMapper.toResponseDto(guardado);
     }
 
     @Override
-    public DetalleFactura create(DetalleFactura detalleFactura) {
-        return repo.save(detalleFactura);
-    }
-
-    @Override
-    public DetalleFactura update(Long id, DetalleFactura detalleFactura) {
-        if (!repo.existsById(id)) {
-            throw new ResourceNotFoundException("DetalleFactura no encontrada con id " + id);
-        }
-        detalleFactura.setId(id);
-        return repo.save(detalleFactura);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        if (!repo.existsById(id)) {
-            throw new ResourceNotFoundException("DetalleFactura no encontrada con id " + id);
-        }
-        repo.deleteById(id);
-    }
-    
-    @Override
-    public DetalleFactura fromDto(DetalleFacturaRequestDto dto) {
-        Factura factura = repoFactura.findById(dto.getFacturaId())
-            .orElseThrow(() -> new ResourceNotFoundException(
-                "Factura no encontrada con id " + dto.getFacturaId()));
-
-        DetalleFactura detalleFactura = new DetalleFactura();
-        detalleFactura.setDescripcion(dto.getDescripcion());
-        detalleFactura.setImporte(BigDecimal.valueOf(dto.getImporte()));
-        detalleFactura.setFactura(factura);
-
-        return detalleFactura;
-    }
-
-    @Override
-    public List<DetalleFactura> findByDescripcion(String descripcion) {
-        return repo.findByDescripcionContainingIgnoreCase(descripcion);
-    }
-
-    @Override
-    public long countByFacturaId(Long facturaId) {
-        return repo.countByFactura_Id(facturaId);
+    public DetalleFacturaResponseDto update(Long id, DetalleFacturaRequestDto dto) {
+        DetalleFactura existente = repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("DetalleFactura no encontrada con id " + id));
+        Factura factura = facturaRepo.findById(dto.getFacturaId())
+                .orElseThrow(() -> new ResourceNotFoundException("Factura no encontrada con id " + dto.getFacturaId()));
+        existente.setDescripcion(dto.getDescripcion());
+        existente.setImporte(dto.getImporte() != null ? BigDecimal.valueOf(dto.getImporte()) : null);
+        existente.setFactura(factura);
+        DetalleFactura actualizado = repo.save(existente);
+        return DetalleFacturaMapper.toResponseDto(actualizado);
     }
 }
 

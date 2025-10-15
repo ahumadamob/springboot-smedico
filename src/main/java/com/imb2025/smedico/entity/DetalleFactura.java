@@ -23,6 +23,10 @@ public class DetalleFactura {
     @JsonIgnore 
     private Factura factura;
 
+    @Version
+    @Column(nullable = false)
+    private Integer version;
+
     // 🔹 Constructores
     public DetalleFactura() {}
 
@@ -61,6 +65,9 @@ public class DetalleFactura {
     public void setFactura(Factura factura) {
         this.factura = factura;
     }
+
+    public Integer getVersion() { return version; }
+    public void setVersion(Integer version) { this.version = version; }
 
     // 🔹 equals y hashCode basados en id
     @Override
