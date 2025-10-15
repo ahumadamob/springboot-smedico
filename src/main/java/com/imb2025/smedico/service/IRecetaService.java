@@ -1,6 +1,6 @@
 package com.imb2025.smedico.service;
 
-import com.imb2025.smedico.dto.RecetaRequestDto;
+import com.imb2025.smedico.dto.request.RecetaRequestDto;
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.entity.Receta;
@@ -15,7 +15,6 @@ public interface IRecetaService {
     public Receta findById(Long id);
     public boolean existsById(Long id);
     public void deleteById(Long id);
-    public Receta fromDto(RecetaRequestDto recetaRequestDto);
 	public List<Receta> findByFecha(LocalDate fecha);
 	long countByFecha(LocalDate fecha);
 }	

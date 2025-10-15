@@ -1,6 +1,6 @@
 package com.imb2025.smedico.service.jpa;
 
-import com.imb2025.smedico.dto.RecetaRequestDto;
+import com.imb2025.smedico.dto.request.RecetaRequestDto;
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.entity.Receta;
@@ -68,32 +68,7 @@ public class RecetaServiceImpl implements IRecetaService {
         repo.deleteById(id);
     }
 
-    @Override
-    public Receta fromDto(RecetaRequestDto dto) {
-        if (dto.getMedicoId() == null) {
-            throw new IllegalArgumentException("El ID del médico no puede ser nulo");
-        }
-        if (dto.getPacienteId() == null) {
-            throw new IllegalArgumentException("El ID del paciente no puede ser nulo");
-        }
 
-        Medico medico = medicoRepository.findById(dto.getMedicoId())
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Médico no encontrado con ID: " + dto.getMedicoId()));
-
-        Paciente paciente = pacienteRepository.findById(dto.getPacienteId())
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Paciente no encontrado con ID: " + dto.getPacienteId()));
-
-        Receta receta = new Receta();
-        receta.setFecha(dto.getFecha());
-        receta.setMedico(medico);
-        receta.setObservaciones(dto.getObservaciones());
-        receta.setPaciente(paciente);
-
-        return receta;
-    }
-    
     @Override
     public List<Receta> findByFecha(LocalDate fecha) {
         return repo.findByFecha(fecha);

@@ -9,10 +9,8 @@ import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 
 @Entity
-public class Receta {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Receta extends BaseEntity{
+
 
     @Column(nullable = false)
     private LocalDate fecha;
@@ -32,19 +30,11 @@ public class Receta {
 
     public Receta() {}
 
-    public Receta(Long id, LocalDate fecha, String observaciones, Medico medico, Paciente paciente) {
-        this.id = id;
+    public Receta( LocalDate fecha, String observaciones, Medico medico, Paciente paciente) {
         this.fecha = fecha;
         this.observaciones = observaciones;
         this.medico = medico;
         this.paciente = paciente;
-    }
-
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public LocalDate getFecha() {
