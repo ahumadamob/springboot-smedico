@@ -42,7 +42,28 @@ public class ConsultorioController {
 		ApiResponseSuccessDto<Consultorio> respuesta = new ApiResponseSuccessDto<>(true, "Consultorio encontrado correctamente", consultorio);
 		return ResponseEntity.ok(respuesta);
     }
-		
+    
+    //Buscar por nombre
+    @GetMapping("/consultorio/nombre/{nombre}")
+    public ResponseEntity<ApiResponseSuccessDto<Consultorio>> findByNombre(@PathVariable String nombre){
+    	Consultorio consultorio = servicio.findByNombre(nombre);
+    	ApiResponseSuccessDto<Consultorio> respuesta = new ApiResponseSuccessDto<>(true, "Consultorio encontrado correctamente", consultorio);
+    	return ResponseEntity.ok(respuesta);
+    }
+	
+    //Buscar por ubicación
+    @GetMapping("/consultorio/ubicacion/{ubicacion}")
+    public ResponseEntity<ApiResponseSuccessDto<List<Consultorio>>> findByUbicacion(@PathVariable String ubicacion){
+    	List<Consultorio> consultorio = servicio.findByUbicacion(ubicacion);
+    	ApiResponseSuccessDto<List<Consultorio>> respuesta;
+    	if(consultorio.isEmpty()) {
+    		respuesta = new ApiResponseSuccessDto<>(true, "No existe consultorio en esa ubicación", consultorio);
+    	}else {
+    		respuesta = new ApiResponseSuccessDto<>(true, "Consultorios", consultorio);
+    	}
+    	return ResponseEntity.ok(respuesta);
+    }
+    
 	//Buscar lista - GET 
     @GetMapping("/consultorio")
     public ResponseEntity<ApiResponseSuccessDto<List<Consultorio>>> findAllConsultorio() {
@@ -56,7 +77,6 @@ public class ConsultorioController {
     	return ResponseEntity.ok(respuesta);
     }
    
-    
     //Eliminar por ID - DELETE
     @DeleteMapping("/consultorio/{id}")
     public ResponseEntity<String> delete(@PathVariable("id") Long id) {
@@ -69,7 +89,6 @@ public class ConsultorioController {
         return ResponseEntity.ok("Consultorio " + id.toString() + " eliminado correctamente. ");
     }
     
-       
     //Actualizar consultorio - PUT
     @PutMapping("/consultorio/{id}")
     public ResponseEntity<ApiResponseSuccessDto<Consultorio>> update(@PathVariable("id") Long id, @Valid @RequestBody ConsultorioRequestDto consultorioRequestDto) throws Exception{
@@ -77,8 +96,5 @@ public class ConsultorioController {
     	Consultorio actualizar = servicio.update(id, consultorio);
     	ApiResponseSuccessDto<Consultorio> respuesta = new ApiResponseSuccessDto<>(true, "Consultorio actualizado", actualizar);
     	return ResponseEntity.ok(respuesta);
-       
-    }
-    
-    
+    }  
 }

@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.imb2025.smedico.dto.MedioPagoRequestDto;
 import com.imb2025.smedico.entity.MedioPago;
+import com.imb2025.smedico.entity.MedioPago.TipoPago;
 import com.imb2025.smedico.service.IMedioPagoService;
-import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 
 import jakarta.validation.Valid;
 
@@ -33,20 +33,19 @@ public class MedioPagoController {
 	public MedioPagoController(IMedioPagoService service) {
 	    this.service = service;
 	}
-
+	
     @GetMapping
     public ResponseEntity<ApiResponseSuccessDto<List<MedioPago>>> findAllMedioPago() {
     	List<MedioPago> lista = service.findAll();
+    	
+        String mensaje = lista.isEmpty()
+            ? "No hay registro de medios de pago"
+            : "Todos los registros de medios de pago";            
 
-    	ApiResponseSuccessDto<List<MedioPago>> response; 
+        ApiResponseSuccessDto<List<MedioPago>> response =
+            new ApiResponseSuccessDto<>(true, mensaje, lista);    
+        return ResponseEntity.ok(response);
 
-    	if (lista.isEmpty()) {
-    		response = new ApiResponseSuccessDto<>(true,"No hay registro de medios de pago",lista);
-    		
-        }else {
-        	response = new ApiResponseSuccessDto<>(true,"Todos los registros de medios de pago",lista);
-    	}
-    	return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{idmediopago}")
@@ -54,11 +53,10 @@ public class MedioPagoController {
             MedioPago medioPago = service.findById(id); 
             ApiResponseSuccessDto<MedioPago> response = new ApiResponseSuccessDto<>(true, "Medio de pago de id "+ id + " encontrado", medioPago);
             return ResponseEntity.ok(response);
-    }
+    } 
 
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<MedioPago>> createMedioPago(@RequestBody MedioPagoRequestDto mediopagoRequestDto) throws Exception { 
-
+    public ResponseEntity<ApiResponseSuccessDto<MedioPago>> createMedioPago(@Valid @RequestBody MedioPagoRequestDto mediopagoRequestDto) throws Exception {
             MedioPago medioPago = service.fromDto(mediopagoRequestDto);
             MedioPago creado = service.create(medioPago);
             ApiResponseSuccessDto<MedioPago> response = new ApiResponseSuccessDto<>(true, "Medio de pago creado exitosamente!", medioPago);
@@ -66,8 +64,7 @@ public class MedioPagoController {
     } 
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<MedioPago>> updateMedioPago(@PathVariable Long id, @RequestBody MedioPagoRequestDto mediopagoDto) throws Exception { 
-
+    public ResponseEntity<ApiResponseSuccessDto<MedioPago>> updateMedioPago(@PathVariable Long id,@Valid @RequestBody MedioPagoRequestDto mediopagoDto) throws Exception {
             MedioPago medioPago = service.fromDto(mediopagoDto);
             MedioPago actualizado = service.update(id, medioPago); 
             ApiResponseSuccessDto<MedioPago> response = new ApiResponseSuccessDto<>(true,"Medio de pago actualizado exitosamente!", actualizado);
@@ -80,11 +77,23 @@ public class MedioPagoController {
             ApiResponseSuccessDto<String> response = new ApiResponseSuccessDto<>(true, "Medio de pago eliminado exitosamente!", "id: "+ id);
             return ResponseEntity.ok(response);
     }
-
-
-    @ExceptionHandler(Exception.class) 
-    public ResponseEntity<String> handleException(Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    
+    //a
+    @GetMapping("/tipo/{tipo}")
+    public ResponseEntity<ApiResponseSuccessDto<List<MedioPago>>> findByTipo(@PathVariable String tipo) {
+        TipoPago tipoEnum = TipoPago.valueOf(tipo.toUpperCase());
+        List<MedioPago> lista = service.findByTipo(tipoEnum);
+        String mensaje = lista.isEmpty() ? "No se encontraron medios de pago del tipo " + tipo : "Medios de pago del tipo " + tipo;
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, mensaje, lista));
     }
+
+    //a
+    @GetMapping("/count/{nombre}")
+    public ResponseEntity<ApiResponseSuccessDto<Long>> countByNombre(@PathVariable String nombre) {
+        Long cantidad = service.countByNombre(nombre);
+        String mensaje = "Cantidad de medios de pago con nombre '" + nombre + "': " + cantidad;
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, mensaje, cantidad));
+    }
+
 
 }  

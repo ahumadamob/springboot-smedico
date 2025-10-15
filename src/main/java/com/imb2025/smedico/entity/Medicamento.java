@@ -1,5 +1,6 @@
 package com.imb2025.smedico.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,8 +11,14 @@ public class Medicamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @Column(nullable = false, length = 100)
     private String nombre;
+    
+    @Column(nullable = false, length = 50)
     private String presentacion;
+    
+    @Column(nullable = true, length = 100)
     private String dosisSugerida;
 
     public Medicamento() {}

@@ -1,7 +1,6 @@
 package com.imb2025.smedico.service.jpa;
 
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.imb2025.smedico.entity.Consultorio;
@@ -31,7 +30,6 @@ public class ConsultorioServiceImpl implements IConsultorioService {
 				        "Consultorio no encontrado con id " + id));			
 	 }
 
-
     @Override
     public boolean existsById(Long id) {
          return repository.existsById(id);
@@ -43,13 +41,22 @@ public class ConsultorioServiceImpl implements IConsultorioService {
 	    return repository.findAll();
 	}
 	
+	//Buscar por nombre
+	@Override
+	public Consultorio findByNombre(String nombre) {
+		return repository.findByNombre(nombre);
+	}
+	
+	//Buscar por ubicación
+	@Override
+	public List<Consultorio> findByUbicacion(String ubicacion){
+		return repository.findByUbicacion(ubicacion);
+	}
+	
 	// Eliminar por ID
     @Override
     public void deleteById(Long id) {
-    	if(!repository.existsById(id)) {
-    		throw new IllegalArgumentException("El consultorio que desea eliminar no existe");
-    	}
-        repository.deleteById(id);
+    	repository.deleteById(id);
     }
     
     //Actualizar 
@@ -82,10 +89,5 @@ public class ConsultorioServiceImpl implements IConsultorioService {
     	consultorio.setPiso(dto.getPiso());
     	
     	return consultorio;
-	}
-
-	
-
-	
-	
+	}	
 }
