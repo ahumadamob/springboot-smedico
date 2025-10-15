@@ -1,27 +1,33 @@
 package com.imb2025.smedico.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
+/**
+ * Entidad que representa una obra social en el sistema.
+ */
 @Entity
 @Table(name = "obrasocial")
 public class ObraSocial {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, length = 100, unique = true)
     private String nombre;
+
+    @Column(length = 20)
     private String telefono;
+
+    @Column(length = 150)
     private String direccion;
+
+    @Column(length = 100)
     private String cobertura;
 
     public ObraSocial() {}
 
-    public ObraSocial(Long id, String nombre, String telefono, String direccion, String cobertura) {
-        this.id = id;
+    public ObraSocial(String nombre, String telefono, String direccion, String cobertura) {
         this.nombre = nombre;
         this.telefono = telefono;
         this.direccion = direccion;
@@ -32,6 +38,10 @@ public class ObraSocial {
         return id;
     }
 
+    /**
+     * Setter del ID.
+     * Nota: generalmente no se utiliza ya que el ID es autogenerado por la base de datos.
+     */
     public void setId(Long id) {
         this.id = id;
     }
@@ -39,7 +49,6 @@ public class ObraSocial {
     public String getNombre() {
         return nombre;
     }
-
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
@@ -47,7 +56,6 @@ public class ObraSocial {
     public String getTelefono() {
         return telefono;
     }
-
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
@@ -55,7 +63,6 @@ public class ObraSocial {
     public String getDireccion() {
         return direccion;
     }
-
     public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
@@ -63,8 +70,9 @@ public class ObraSocial {
     public String getCobertura() {
         return cobertura;
     }
-
     public void setCobertura(String cobertura) {
         this.cobertura = cobertura;
     }
 }
+
+

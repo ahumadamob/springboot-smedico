@@ -7,9 +7,11 @@ import java.util.List;
 public interface IFacturaService {
     public List<Factura> findAll();
     public Factura create(Factura factura);
-    public Factura update(Long id, Factura factura) throws Exception;
+    public Factura update(Long id, Factura factura);
     public Factura findById(Long id);
     public boolean existsById(Long id);
-    public void deleteById(Long id) throws Exception;
-    public Factura fromDto(FacturaRequestDto facturaRequestDto) throws Exception;
+    public void deleteById(Long id);
+    public Factura fromDto(FacturaRequestDto facturaRequestDto);
+    public List<Factura> findAllByPacienteId(Long id);
+    public Long countByMedioPago(String medioPago);
 }
