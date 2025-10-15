@@ -6,12 +6,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.imb2025.smedico.dto.request.EspecialidadRequestDto;
 import com.imb2025.smedico.entity.Especialidad;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.EspecialidadRepository;
 import com.imb2025.smedico.service.IEspecialidadService;
-
-import com.imb2025.smedico.dto.EspecialidadRequestDto;
 
 @Service
 public class EspecialidadServiceImpl implements IEspecialidadService{
@@ -49,13 +48,7 @@ public class EspecialidadServiceImpl implements IEspecialidadService{
 	    especialidad.setId(id);
 	    return repo.save(especialidad);
 	}
-	public Especialidad fromDto(EspecialidadRequestDto dto) {
 	
-		    Especialidad especialidad = new Especialidad();
-		    especialidad.setNombre(dto.getNombre());
-		    especialidad.setDescripcion(dto.getDescripcion());
-		    return especialidad;
-	}
 
 	@Override
 	public void deleteById(Long id) {
