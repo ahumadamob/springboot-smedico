@@ -5,11 +5,24 @@ import com.imb2025.smedico.entity.DetalleReceta;
 import java.util.List;
 
 public interface IDetalleRecetaService {
-    public List<DetalleReceta> findAll();
-    public DetalleReceta create(DetalleReceta detalleReceta);
-    public DetalleReceta update(Long id, DetalleReceta detalleReceta);
-    public DetalleReceta findById(Long id);
-    public boolean existsById(Long id);
-    public void deleteById(Long id);
-    public DetalleReceta fromDto(DetalleRecetaRequestDto detalleRecetaRequestDto);
+
+    List<DetalleReceta> findAll();
+
+    DetalleReceta create(DetalleReceta detalleReceta);
+
+    DetalleReceta update(Long id, DetalleReceta detalleReceta);
+
+    DetalleReceta findById(Long id);
+
+    boolean existsById(Long id);
+
+    void deleteById(Long id);
+
+    DetalleReceta fromDto(DetalleRecetaRequestDto detalleRecetaRequestDto);
+
+    
+    List<DetalleReceta> findByRecetaId(Long recetaId);
+
+
+    Long countByMedicamentoId(Long medicamentoId);
 }
