@@ -1,20 +1,20 @@
 package com.imb2025.smedico.dto;
 
+import com.imb2025.smedico.entity.Estudio;
+
 public class EstudioResponseDto {
 
     private Long id;
     private String nombre;
     private String descripcion;
-    private String especialidadNombre;
+    private Long especialidadId;
     private String resultadoDescripcion;
 
-    public EstudioResponseDto(com.imb2025.smedico.entity.Estudio estudio) {
+    public EstudioResponseDto(Estudio estudio) {
         this.id = estudio.getId();
         this.nombre = estudio.getNombre();
         this.descripcion = estudio.getDescripcion();
-        this.especialidadNombre = (estudio.getEspecialidad() != null)
-                ? estudio.getEspecialidad().getNombre()
-                : null;
+        this.especialidadId = estudio.getEspecialidad();
         this.resultadoDescripcion = (estudio.getResultadoEstudio() != null)
                 ? estudio.getResultadoEstudio().getObservaciones()
                 : null;
@@ -31,8 +31,8 @@ public class EstudioResponseDto {
     public String getDescripcion() { return descripcion; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
-    public String getEspecialidadNombre() { return especialidadNombre; }
-    public void setEspecialidadNombre(String especialidadNombre) { this.especialidadNombre = especialidadNombre; }
+    public Long getEspecialidadId() { return especialidadId; }
+    public void setEspecialidadId(Long especialidadId) { this.especialidadId = especialidadId; }
 
     public String getResultadoDescripcion() { return resultadoDescripcion; }
     public void setResultadoDescripcion(String resultadoDescripcion) { this.resultadoDescripcion = resultadoDescripcion; }

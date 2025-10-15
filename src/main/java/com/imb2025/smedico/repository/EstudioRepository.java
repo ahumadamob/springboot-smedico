@@ -8,5 +8,5 @@ import com.imb2025.smedico.entity.Estudio;
 public interface EstudioRepository extends JpaRepository<Estudio, Long> {
 	List<Estudio> findAllByOrderByNombreAsc();
 	List<Estudio> findByNombreContainingIgnoreCase(String nombre);
-	long countByEspecialidad_Id(Long especialidadId);
+	long countByEspecialidadId(Long especialidadId);
 }
