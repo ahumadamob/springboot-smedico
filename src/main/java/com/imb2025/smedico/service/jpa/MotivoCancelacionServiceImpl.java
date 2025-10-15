@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.imb2025.smedico.dto.MotivoCancelacionRequestDto;
+import com.imb2025.smedico.dto.request.MotivoCancelacionRequestDto;
 import com.imb2025.smedico.entity.MotivoCancelacion;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.MotivoCancelacionRepository;
@@ -55,14 +55,6 @@ public class MotivoCancelacionServiceImpl implements IMotivoCancelacionService {
             throw new ResourceNotFoundException("MotivoCancelacion con ID " + id + " no existe");
         }
         repo.deleteById(id);
-    }
-
-    @Override
-    public MotivoCancelacion fromDto(MotivoCancelacionRequestDto dto) {
-        MotivoCancelacion motivoCancelacion = new MotivoCancelacion();
-        motivoCancelacion.setNombre(dto.getNombre());
-        motivoCancelacion.setDescripcion(dto.getDescripcion());
-        return motivoCancelacion;
     }
     
     @Override

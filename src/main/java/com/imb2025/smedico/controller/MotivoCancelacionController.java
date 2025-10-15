@@ -1,5 +1,6 @@
 package com.imb2025.smedico.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
-import com.imb2025.smedico.dto.MotivoCancelacionRequestDto;
+import com.imb2025.smedico.dto.request.MotivoCancelacionRequestDto;
+import com.imb2025.smedico.dto.response.MotivoCancelacionResponseDto;
 import com.imb2025.smedico.entity.MotivoCancelacion;
+import com.imb2025.smedico.mapper.MotivoCancelacionMapper;
 import com.imb2025.smedico.service.IMotivoCancelacionService;
 
 import jakarta.validation.Valid;
@@ -29,37 +32,49 @@ public class MotivoCancelacionController {
         private IMotivoCancelacionService service;
 
         @GetMapping
-        public ResponseEntity<ApiResponseSuccessDto<List<MotivoCancelacion>>> findAllMotivoCancelacion() {
+        public ResponseEntity<ApiResponseSuccessDto<List<MotivoCancelacionResponseDto>>> findAllMotivoCancelacion() {
                 List<MotivoCancelacion> lista = service.findAll();
-                ApiResponseSuccessDto<List<MotivoCancelacion>> resp = new ApiResponseSuccessDto<>(true,
-                                lista.isEmpty() ? "No hay motivos de cancelación disponibles"
+                List<MotivoCancelacionResponseDto> listaResponse = new ArrayList<MotivoCancelacionResponseDto>();
+                MotivoCancelacionMapper mapper = new MotivoCancelacionMapper();
+                
+                for(MotivoCancelacion m: lista) {
+                	MotivoCancelacionResponseDto dto = new MotivoCancelacionResponseDto();
+                	dto = mapper.toDto(m);
+                	listaResponse.add(dto);
+                }
+                
+                ApiResponseSuccessDto<List<MotivoCancelacionResponseDto>> resp = new ApiResponseSuccessDto<>(true,
+                                listaResponse.isEmpty() ? "No hay motivos de cancelación disponibles"
                                                 : "Lista de motivos de cancelación",
-                                lista);
+                                listaResponse);
                 return ResponseEntity.ok(resp);
         }
 
         @GetMapping("/{id}")
-        public ResponseEntity<ApiResponseSuccessDto<MotivoCancelacion>> findMotivoCancelacionById(
+        public ResponseEntity<ApiResponseSuccessDto<MotivoCancelacionResponseDto>> findMotivoCancelacionById(
                         @PathVariable("id") Long id) {
                 MotivoCancelacion motivoCancelacion = service.findById(id);
-                ApiResponseSuccessDto<MotivoCancelacion> resp = new ApiResponseSuccessDto<>(true,
-                                "Motivo de cancelación encontrado", motivoCancelacion);
+                MotivoCancelacionMapper mapper = new MotivoCancelacionMapper();
+                MotivoCancelacionResponseDto dto = new MotivoCancelacionResponseDto();
+                dto = mapper.toDto(motivoCancelacion);
+                ApiResponseSuccessDto<MotivoCancelacionResponseDto> resp = new ApiResponseSuccessDto<>(true,
+                                "Motivo de cancelación encontrado", dto);
                 return ResponseEntity.ok(resp);
         }
 
         @PostMapping
-        public ResponseEntity<ApiResponseSuccessDto<MotivoCancelacion>> create(
-                        @Valid @RequestBody MotivoCancelacionRequestDto dto) {
-                MotivoCancelacion motivoCancelacion = service.create(service.fromDto(dto));
+        public ResponseEntity<ApiResponseSuccessDto<MotivoCancelacion>> create(@Valid @RequestBody MotivoCancelacionRequestDto dto) {
+        		MotivoCancelacionMapper mapper = new MotivoCancelacionMapper();
+                MotivoCancelacion motivoCancelacion = service.create(mapper.fromDto(dto));
                 ApiResponseSuccessDto<MotivoCancelacion> resp = new ApiResponseSuccessDto<>(true,
                                 "Motivo de cancelación creado correctamente", motivoCancelacion);
                 return ResponseEntity.status(HttpStatus.CREATED).body(resp);
         }
 
         @PutMapping("/{id}")
-        public ResponseEntity<ApiResponseSuccessDto<MotivoCancelacion>> update(@PathVariable("id") Long id,
-                        @Valid @RequestBody MotivoCancelacionRequestDto dto) {
-                MotivoCancelacion motivoEntity = service.fromDto(dto);
+        public ResponseEntity<ApiResponseSuccessDto<MotivoCancelacion>> update(@PathVariable("id") Long id,@Valid @RequestBody MotivoCancelacionRequestDto dto) {
+        		MotivoCancelacionMapper mapper = new MotivoCancelacionMapper();
+                MotivoCancelacion motivoEntity = mapper.fromDto(dto);
                 MotivoCancelacion actualizado = service.update(id, motivoEntity);
                 ApiResponseSuccessDto<MotivoCancelacion> resp = new ApiResponseSuccessDto<>(true,
                                 "Motivo de cancelación actualizado correctamente", actualizado);
