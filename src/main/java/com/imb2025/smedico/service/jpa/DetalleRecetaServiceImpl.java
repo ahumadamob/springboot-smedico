@@ -1,8 +1,9 @@
 package com.imb2025.smedico.service.jpa;
 
-import com.imb2025.smedico.dto.DetalleRecetaRequestDto;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
-
+import com.imb2025.smedico.dto.request.DetalleRecetaRequestDto;
+import com.imb2025.smedico.dto.response.DetalleRecetaResponseDto;
+import com.imb2025.smedico.dto.mapper.DetalleRecetaMapper;
 import com.imb2025.smedico.entity.DetalleReceta;
 import com.imb2025.smedico.entity.Medicamento;
 import com.imb2025.smedico.entity.Receta;
@@ -28,43 +29,60 @@ public class DetalleRecetaServiceImpl implements IDetalleRecetaService {
     @Autowired
     private final MedicamentoRepository medicamentoRepository;
 
-    public DetalleRecetaServiceImpl(DetalleRecetaRepository repository,
-                                    RecetaRepository recetaRepository,
-                                    MedicamentoRepository medicamentoRepository) {
+    public DetalleRecetaServiceImpl(DetalleRecetaRepository repository, RecetaRepository recetaRepository, MedicamentoRepository medicamentoRepository) {
         this.repository = repository;
         this.recetaRepository = recetaRepository;
         this.medicamentoRepository = medicamentoRepository;
     }
 
     @Override
-    public List<DetalleReceta> findAll() {
-        return repository.findAll();
+    public List<DetalleRecetaResponseDto> findAll() {
+        return repository.findAll().stream()
+                .map(DetalleRecetaMapper::toResponseDto)
+                .toList();
     }
 
     @Override
-    public DetalleReceta findById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "DetalleReceta no encontrada con id " + id));
+    public DetalleRecetaResponseDto findById(Long id) {
+        DetalleReceta detalle = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("DetalleReceta no encontrada con id " + id));
+        return DetalleRecetaMapper.toResponseDto(detalle);
+    }
+
+    @Override
+    public DetalleRecetaResponseDto create(DetalleRecetaRequestDto dto) {
+        // RequestDto → Entidad usando Mapper
+        DetalleReceta detalle = DetalleRecetaMapper.fromDto(dto);
+
+        // Validar y asociar Receta y Medicamento
+        detalle.setReceta(recetaRepository.findById(dto.getRecetaId())
+                .orElseThrow(() -> new IllegalArgumentException("Receta no encontrada con ID: " + dto.getRecetaId())));
+        detalle.setMedicamento(medicamentoRepository.findById(dto.getMedicamentoId())
+                .orElseThrow(() -> new IllegalArgumentException("Medicamento no encontrado con ID: " + dto.getMedicamentoId())));
+
+        DetalleReceta saved = repository.save(detalle);
+        return DetalleRecetaMapper.toResponseDto(saved);
+    }
+
+    @Override
+    public DetalleRecetaResponseDto update(Long id, DetalleRecetaRequestDto dto) {
+        DetalleReceta detalle = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("DetalleReceta no encontrada con id " + id));
+
+        detalle.setReceta(recetaRepository.findById(dto.getRecetaId())
+                .orElseThrow(() -> new IllegalArgumentException("Receta no encontrada con ID: " + dto.getRecetaId())));
+        detalle.setMedicamento(medicamentoRepository.findById(dto.getMedicamentoId())
+                .orElseThrow(() -> new IllegalArgumentException("Medicamento no encontrado con ID: " + dto.getMedicamentoId())));
+        detalle.setDosis(dto.getDosis());
+        detalle.setFrecuencia(dto.getFrecuencia());
+
+        DetalleReceta updated = repository.save(detalle);
+        return DetalleRecetaMapper.toResponseDto(updated);
     }
 
     @Override
     public boolean existsById(Long id) {
         return repository.existsById(id);
-    }
-
-    @Override
-    public DetalleReceta create(DetalleReceta detalleReceta) {
-        return repository.save(detalleReceta);
-    }
-
-    @Override
-    public DetalleReceta update(Long id, DetalleReceta detalleReceta) {
-        if (!repository.existsById(id)) {
-            throw new ResourceNotFoundException("DetalleReceta no encontrada con id " + id);
-        }
-        detalleReceta.setId(id);
-        return repository.save(detalleReceta);
     }
 
     @Override
@@ -74,31 +92,5 @@ public class DetalleRecetaServiceImpl implements IDetalleRecetaService {
         }
         repository.deleteById(id);
     }
-
-    @Override
-    public DetalleReceta fromDto(DetalleRecetaRequestDto dto) {
-        Receta receta = recetaRepository.findById(dto.getRecetaId())
-                .orElseThrow(() -> new IllegalArgumentException("Receta no encontrada con ID: " + dto.getRecetaId()));
-        Medicamento medicamento = medicamentoRepository.findById(dto.getMedicamentoId())
-                .orElseThrow(() -> new IllegalArgumentException("Medicamento no encontrado con ID: " + dto.getMedicamentoId()));
-
-        DetalleReceta detalle = new DetalleReceta();
-        detalle.setReceta(receta);
-        detalle.setMedicamento(medicamento);
-        detalle.setDosis(dto.getDosis());
-        detalle.setFrecuencia(dto.getFrecuencia());
-        return detalle;
-    }
-
-    
-    @Override
-    public List<DetalleReceta> findByRecetaId(Long recetaId) {
-        return repository.findByRecetaId(recetaId);
-    }
-
-  
-    @Override
-    public Long countByMedicamentoId(Long medicamentoId) {
-        return repository.countByMedicamentoId(medicamentoId);
-    }
 }
+
