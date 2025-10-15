@@ -45,7 +45,7 @@ public class MedicoController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<Medico>> create(@Valid @RequestBody MedicoRequestDto dto) {
+    public ResponseEntity<ApiResponseSuccessDto<Medico>> create(@Valid @RequestBody MedicoRequestDto dto) throws Exception {
         Medico medico = service.fromDto(dto);
         Medico creado = service.create(medico);
         ApiResponseSuccessDto<Medico> resp =
@@ -54,9 +54,8 @@ public class MedicoController {
     }
 
     @PutMapping("/{idmedico}")
-    public ResponseEntity<ApiResponseSuccessDto<Medico>> update(
-            @PathVariable("idmedico") Long id,
-            @Valid @RequestBody MedicoRequestDto dto) {
+    public ResponseEntity<ApiResponseSuccessDto<Medico>> update(@PathVariable("idmedico") Long id,
+    		@Valid @RequestBody MedicoRequestDto dto) throws Exception {
         Medico medico = service.fromDto(dto);
         medico.setId(id);
         Medico actualizado = service.update(id, medico);
@@ -72,6 +71,28 @@ public class MedicoController {
                 new ApiResponseSuccessDto<>(true, "Médico eliminado correctamente", "Id: " + id);
         return ResponseEntity.ok(resp);
     }
+    
+ 
+    @GetMapping("/apellido/{apellido}")
+    public ResponseEntity<ApiResponseSuccessDto<List<Medico>>> findByApellido(
+            @PathVariable String apellido) {
+        List<Medico> lista = service.findByApellido(apellido);
+        ApiResponseSuccessDto<List<Medico>> resp =
+                new ApiResponseSuccessDto<>(true, "Médicos con apellido: " + apellido, lista);
+        return ResponseEntity.ok(resp);
+    }
+
+
+    @GetMapping("/count/especialidad/{nombre}")
+    public ResponseEntity<ApiResponseSuccessDto<Long>> countByEspecialidad(
+            @PathVariable("nombre") String nombreEspecialidad) {
+        Long cantidad = service.countByEspecialidad(nombreEspecialidad);
+        ApiResponseSuccessDto<Long> resp =
+                new ApiResponseSuccessDto<>(true, "Cantidad de médicos en la especialidad: " + nombreEspecialidad, cantidad);
+        return ResponseEntity.ok(resp);
+    }
+
+
   
    
 }

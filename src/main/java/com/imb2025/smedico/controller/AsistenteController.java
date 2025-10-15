@@ -128,4 +128,36 @@ public class AsistenteController {
         );
         return ResponseEntity.ok(resp);
     }
+    
+
+    @GetMapping("/apellido/{apellido}")
+    public ResponseEntity<ApiResponseSuccessDto<List<AsistenteRequestDto>>> findByApellido(@PathVariable String apellido) {
+        List<Asistente> lista = service.findByApellido(apellido);
+
+        List<AsistenteRequestDto> dtoList = lista.stream().map(a -> new AsistenteRequestDto(
+                a.getApellido(), a.getNombre(), a.getEmail(), a.getTelefono(), a.getDni()
+        )).toList();
+
+        String mensaje = lista.isEmpty() ? "No se encontraron asistentes con apellido " + apellido
+                                         : "Asistentes con apellido " + apellido;
+
+        ApiResponseSuccessDto<List<AsistenteRequestDto>> resp = new ApiResponseSuccessDto<>(
+                true, mensaje, dtoList
+        );
+        return ResponseEntity.ok(resp);
+    }
+
+
+    @GetMapping("/count/{nombre}")
+    public ResponseEntity<ApiResponseSuccessDto<Long>> countByNombre(@PathVariable String nombre) {
+        Long cantidad = service.countByNombre(nombre);
+
+        String mensaje = "Cantidad de asistentes con nombre " + nombre + ": " + cantidad;
+
+        ApiResponseSuccessDto<Long> resp = new ApiResponseSuccessDto<>(
+                true, mensaje, cantidad
+        );
+        return ResponseEntity.ok(resp);
+    }
+
 }
