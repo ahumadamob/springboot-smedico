@@ -1,4 +1,4 @@
-package com.imb2025.smedico.dto;
+package com.imb2025.smedico.dto.request;
 
 import jakarta.validation.constraints.*;
 

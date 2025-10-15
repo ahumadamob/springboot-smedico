@@ -1,9 +1,6 @@
 package com.imb2025.smedico.service.jpa;
 
-import com.imb2025.smedico.dto.FacturaRequestDto;
 import com.imb2025.smedico.entity.Factura;
-import com.imb2025.smedico.entity.MedioPago;
-import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.FacturaRepository;
 import com.imb2025.smedico.repository.MedioPagoRepository;
@@ -19,11 +16,6 @@ public class FacturaServiceImpl implements IFacturaService {
     @Autowired
     private FacturaRepository facturaRepository;
 
-    @Autowired
-    private PacienteRepository pacienteRepository;
-
-    @Autowired
-    private MedioPagoRepository medioPagoRepository;
 
     @Override
     public List<Factura> findAll() {
@@ -57,22 +49,6 @@ public class FacturaServiceImpl implements IFacturaService {
         Factura existente = facturaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Factura con ID: " + id + " no encontrada"));
         facturaRepository.deleteById(id);
-    }
-
-    @Override
-    public Factura fromDto(FacturaRequestDto requestDTO) {
-        Paciente paciente = pacienteRepository.findById(requestDTO.getPacienteId())
-                .orElseThrow(() -> new ResourceNotFoundException("No se encontró ningún paciente con el id: " + requestDTO.getPacienteId()));
-        MedioPago medioPago = medioPagoRepository.findById(requestDTO.getMedioPagoId())
-                .orElseThrow(() -> new ResourceNotFoundException("No se encontró ningún medio de pago con el id: " + requestDTO.getMedioPagoId()));
-
-        Factura factura = new Factura();
-        factura.setFecha(requestDTO.getFecha());
-        factura.setMedioPago(medioPago);
-        factura.setMonto(requestDTO.getMonto());
-        factura.setPaciente(paciente);
-        
-        return factura;
     }
 
     @Override
