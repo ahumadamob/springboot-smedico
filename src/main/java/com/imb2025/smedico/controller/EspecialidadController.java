@@ -1,5 +1,6 @@
 package com.imb2025.smedico.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
-import com.imb2025.smedico.dto.EspecialidadRequestDto;
+import com.imb2025.smedico.dto.request.EspecialidadRequestDto;
+import com.imb2025.smedico.dto.response.EspecialidadResponseDto;
 import com.imb2025.smedico.entity.Especialidad;
+import com.imb2025.smedico.mapper.EspecialidadMapper;
 import com.imb2025.smedico.service.IEspecialidadService;
 
 import jakarta.validation.Valid;
@@ -27,25 +30,36 @@ public class EspecialidadController {
 
         @Autowired
         private IEspecialidadService service;
+               
 
         @GetMapping
-        public ResponseEntity<ApiResponseSuccessDto<List<Especialidad>>> findAllEspecialidad() {
-                List<Especialidad> especialidad = service.findAll();
-                ApiResponseSuccessDto<List<Especialidad>> resp;
-                if (especialidad.isEmpty()) {
-                        resp = new ApiResponseSuccessDto<>(true, "No hay especialidades disponibles", especialidad);
+        public ResponseEntity<ApiResponseSuccessDto<List<EspecialidadResponseDto>>> findAllEspecialidad() {        		
+                List<Especialidad> lista = service.findAll();
+                List<EspecialidadResponseDto> listaResponse = new ArrayList<EspecialidadResponseDto>();
+                EspecialidadMapper mapper = new EspecialidadMapper();
+                for(Especialidad e: lista) {
+                	EspecialidadResponseDto dto = new EspecialidadResponseDto();
+                	dto = mapper.toDto(e);
+                	listaResponse.add(dto);
+                }
+                
+                ApiResponseSuccessDto<List<EspecialidadResponseDto>> resp;
+                if (lista.isEmpty()) {
+                        resp = new ApiResponseSuccessDto<>(true, "No hay especialidades disponibles", listaResponse);
                 } else {
-                        resp = new ApiResponseSuccessDto<>(true, "Lista de especialidades", especialidad);
+                        resp = new ApiResponseSuccessDto<>(true, "Lista de especialidades", listaResponse);
                 }
                 return ResponseEntity.ok(resp);
         }
 
         @GetMapping("/{idespecialidad}")
-        public ResponseEntity<ApiResponseSuccessDto<Especialidad>> findEspecialidadById(
-                        @PathVariable("idespecialidad") Long id) {
+        public ResponseEntity<ApiResponseSuccessDto<EspecialidadResponseDto>> findEspecialidadById(@PathVariable("idespecialidad") Long id) {
                 Especialidad especialidad = service.findById(id);
-                ApiResponseSuccessDto<Especialidad> resp = new ApiResponseSuccessDto<>(true, "Especialidad encontrada",
-                                especialidad);
+                EspecialidadMapper mapper = new EspecialidadMapper();
+                EspecialidadResponseDto dto = new EspecialidadResponseDto();
+                dto= mapper.toDto(especialidad);
+                ApiResponseSuccessDto<EspecialidadResponseDto> resp = new ApiResponseSuccessDto<>(true, "Especialidad encontrada",
+                                dto);
                 return ResponseEntity.ok(resp);
         }
 
@@ -68,9 +82,10 @@ public class EspecialidadController {
         }
 
         @PostMapping
-        public ResponseEntity<ApiResponseSuccessDto<Especialidad>> create(
-                        @Valid @RequestBody EspecialidadRequestDto dto) {
-                Especialidad especialidad = service.create(service.fromDto(dto));
+        public ResponseEntity<ApiResponseSuccessDto<Especialidad>> create(@Valid @RequestBody EspecialidadRequestDto dto) {
+        		
+        		EspecialidadMapper mapper = new EspecialidadMapper();
+                Especialidad especialidad = mapper.fromDto(dto);
                 ApiResponseSuccessDto<Especialidad> resp = new ApiResponseSuccessDto<>(true,
                                 "Especialidad creada correctamente", especialidad);
                 return ResponseEntity.status(HttpStatus.CREATED).body(resp);
@@ -79,7 +94,8 @@ public class EspecialidadController {
         @PutMapping("/{idespecialidad}")
         public ResponseEntity<ApiResponseSuccessDto<Especialidad>> update(@Valid @RequestBody EspecialidadRequestDto dto,
                         @PathVariable("idespecialidad") Long id) {
-                Especialidad especialidadEntity = service.fromDto(dto);
+        		EspecialidadMapper mapper = new EspecialidadMapper();
+        		Especialidad especialidadEntity = mapper.fromDto(dto);
                 Especialidad actualizado = service.update(id, especialidadEntity);
                 ApiResponseSuccessDto<Especialidad> resp = new ApiResponseSuccessDto<>(true,
                                 "Especialidad actualizada correctamente", actualizado);
