@@ -1,6 +1,6 @@
 package com.imb2025.smedico.service;
 
-import com.imb2025.smedico.dto.OrdenEstudioRequestDto;
+
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.entity.OrdenEstudio;
 
@@ -30,7 +30,5 @@ public interface IOrdenEstudioService {
     // Elimina una orden por ID
     void deleteById(Long id);
 
-    // Convierte un DTO de request a entidad
-    OrdenEstudio fromDto(OrdenEstudioRequestDto ordenEstudioRequestDto) throws Exception;
 
 }
