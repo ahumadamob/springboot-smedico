@@ -20,15 +20,17 @@ import java.util.List;
 public class DetalleRecetaServiceImpl implements IDetalleRecetaService {
 
     @Autowired
-	private final DetalleRecetaRepository repository;
-    
+    private final DetalleRecetaRepository repository;
+
     @Autowired
     private final RecetaRepository recetaRepository;
-    
+
     @Autowired
     private final MedicamentoRepository medicamentoRepository;
 
-    public DetalleRecetaServiceImpl(DetalleRecetaRepository repository, RecetaRepository recetaRepository, MedicamentoRepository medicamentoRepository) {
+    public DetalleRecetaServiceImpl(DetalleRecetaRepository repository,
+                                    RecetaRepository recetaRepository,
+                                    MedicamentoRepository medicamentoRepository) {
         this.repository = repository;
         this.recetaRepository = recetaRepository;
         this.medicamentoRepository = medicamentoRepository;
@@ -43,9 +45,8 @@ public class DetalleRecetaServiceImpl implements IDetalleRecetaService {
     public DetalleReceta findById(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                    "DetalleReceta no encontrada con id " + id));
+                        "DetalleReceta no encontrada con id " + id));
     }
-
 
     @Override
     public boolean existsById(Long id) {
@@ -66,7 +67,6 @@ public class DetalleRecetaServiceImpl implements IDetalleRecetaService {
         return repository.save(detalleReceta);
     }
 
-
     @Override
     public void deleteById(Long id) {
         if (!repository.existsById(id)) {
@@ -75,13 +75,12 @@ public class DetalleRecetaServiceImpl implements IDetalleRecetaService {
         repository.deleteById(id);
     }
 
-
     @Override
     public DetalleReceta fromDto(DetalleRecetaRequestDto dto) {
         Receta receta = recetaRepository.findById(dto.getRecetaId())
-            .orElseThrow(() -> new IllegalArgumentException("Receta no encontrada con ID: " + dto.getRecetaId()));
+                .orElseThrow(() -> new IllegalArgumentException("Receta no encontrada con ID: " + dto.getRecetaId()));
         Medicamento medicamento = medicamentoRepository.findById(dto.getMedicamentoId())
-            .orElseThrow(() -> new IllegalArgumentException("Medicamento no encontrado con ID: " + dto.getMedicamentoId()));
+                .orElseThrow(() -> new IllegalArgumentException("Medicamento no encontrado con ID: " + dto.getMedicamentoId()));
 
         DetalleReceta detalle = new DetalleReceta();
         detalle.setReceta(receta);
@@ -89,5 +88,17 @@ public class DetalleRecetaServiceImpl implements IDetalleRecetaService {
         detalle.setDosis(dto.getDosis());
         detalle.setFrecuencia(dto.getFrecuencia());
         return detalle;
+    }
+
+    
+    @Override
+    public List<DetalleReceta> findByRecetaId(Long recetaId) {
+        return repository.findByRecetaId(recetaId);
+    }
+
+  
+    @Override
+    public Long countByMedicamentoId(Long medicamentoId) {
+        return repository.countByMedicamentoId(medicamentoId);
     }
 }

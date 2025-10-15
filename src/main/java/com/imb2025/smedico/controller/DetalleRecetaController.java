@@ -19,7 +19,33 @@ public class DetalleRecetaController {
     @Autowired
     private IDetalleRecetaService service;
 
-    // Listar todas las DetalleRecetas
+   
+    @GetMapping("/receta/{recetaId}")
+    public ResponseEntity<ApiResponseSuccessDto<List<DetalleReceta>>> findByRecetaId(@PathVariable Long recetaId) {
+        List<DetalleReceta> detalles = service.findByRecetaId(recetaId);
+
+        ApiResponseSuccessDto<List<DetalleReceta>> resp = new ApiResponseSuccessDto<>();
+        resp.setSuccess(true);
+        resp.setData(detalles);
+        resp.setMessage("Detalles filtrados por recetaId obtenidos con éxito");
+
+        return ResponseEntity.ok(resp);
+    }
+
+
+    @GetMapping("/count/medicamento/{medicamentoId}")
+    public ResponseEntity<ApiResponseSuccessDto<Long>> countByMedicamentoId(@PathVariable Long medicamentoId) {
+        Long cantidad = service.countByMedicamentoId(medicamentoId);
+
+        ApiResponseSuccessDto<Long> resp = new ApiResponseSuccessDto<>();
+        resp.setSuccess(true);
+        resp.setData(cantidad);
+        resp.setMessage("Cantidad de detalles para el medicamento obtenida con éxito");
+
+        return ResponseEntity.ok(resp);
+    }
+
+   
     @GetMapping
     public ResponseEntity<ApiResponseSuccessDto<List<DetalleReceta>>> findAll() {
         List<DetalleReceta> lista = service.findAll();
@@ -32,7 +58,7 @@ public class DetalleRecetaController {
         return ResponseEntity.ok(resp);
     }
 
-    // Obtener DetalleReceta por ID
+    
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<DetalleReceta>> findById(@PathVariable Long id) {
         DetalleReceta detalle = service.findById(id);
@@ -44,9 +70,9 @@ public class DetalleRecetaController {
 
         return ResponseEntity.ok(resp);
     }
+    
 
-    // Crear nueva DetalleReceta
-    @PostMapping
+       @PostMapping
     public ResponseEntity<ApiResponseSuccessDto<DetalleReceta>> save(@RequestBody DetalleRecetaRequestDto dto) {
         DetalleReceta nueva = service.create(service.fromDto(dto));
 
@@ -58,7 +84,7 @@ public class DetalleRecetaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 
-    // Actualizar DetalleReceta
+    
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<DetalleReceta>> update(@PathVariable Long id, @RequestBody DetalleRecetaRequestDto dto) {
         DetalleReceta entidad = service.fromDto(dto);
@@ -72,7 +98,7 @@ public class DetalleRecetaController {
         return ResponseEntity.ok(resp);
     }
 
-    // Eliminar DetalleReceta
+   
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<Void>> deleteById(@PathVariable Long id) {
         service.deleteById(id);
@@ -85,4 +111,3 @@ public class DetalleRecetaController {
         return ResponseEntity.ok(resp);
     }
 }
-
