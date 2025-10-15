@@ -8,8 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.imb2025.smedico.dto.AfiliacionRequestDto;
-import com.imb2025.smedico.dto.AfiliacionResponseDto;
+import com.imb2025.dto.mapper.AfiliacionMapper;
+import com.imb2025.smedico.dto.request.AfiliacionRequestDto;    // <-- paquete request correcto
+import com.imb2025.smedico.dto.response.AfiliacionResponseDto; // <-- paquete response correcto
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.entity.Afiliacion;
 import com.imb2025.smedico.service.IAfiliacionService;
@@ -32,7 +33,7 @@ public class AfiliacionController {
         }
 
         List<AfiliacionResponseDto> dtos = lista.stream()
-                .map(this::toResponseDto)
+                .map(AfiliacionMapper::toResponseDto)   // <-- usa el Mapper (incluye version)
                 .collect(Collectors.toList());
 
         ApiResponseSuccessDto<List<AfiliacionResponseDto>> resp =
@@ -44,7 +45,7 @@ public class AfiliacionController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<AfiliacionResponseDto>> getAfiliacionById(@PathVariable Long id) {
         Afiliacion afiliacion = service.findById(id);
-        AfiliacionResponseDto dto = toResponseDto(afiliacion);
+        AfiliacionResponseDto dto = AfiliacionMapper.toResponseDto(afiliacion); // <-- usa Mapper
 
         ApiResponseSuccessDto<AfiliacionResponseDto> resp =
                 new ApiResponseSuccessDto<>(true, "Afiliación encontrada", dto);
@@ -56,10 +57,10 @@ public class AfiliacionController {
     public ResponseEntity<ApiResponseSuccessDto<AfiliacionResponseDto>> createAfiliacion(
             @Valid @RequestBody AfiliacionRequestDto dto) {
 
-        Afiliacion afiliacion = service.fromDto(dto);
-        Afiliacion creada = service.create(afiliacion);
+        // Ahora el service recibe el DTO (regla 4.1 ya cumplida en el service)
+        Afiliacion creada = service.create(dto);
 
-        AfiliacionResponseDto respDto = toResponseDto(creada);
+        AfiliacionResponseDto respDto = AfiliacionMapper.toResponseDto(creada); // incluye version
 
         ApiResponseSuccessDto<AfiliacionResponseDto> resp =
                 new ApiResponseSuccessDto<>(true, "Afiliación creada con éxito", respDto);
@@ -72,10 +73,10 @@ public class AfiliacionController {
             @PathVariable Long id,
             @Valid @RequestBody AfiliacionRequestDto dto) {
 
-        Afiliacion afiliacion = service.fromDto(dto);
-        Afiliacion actualizada = service.update(id, afiliacion);
+        // Ahora el service recibe el DTO
+        Afiliacion actualizada = service.update(id, dto);
 
-        AfiliacionResponseDto respDto = toResponseDto(actualizada);
+        AfiliacionResponseDto respDto = AfiliacionMapper.toResponseDto(actualizada); // incluye version
 
         ApiResponseSuccessDto<AfiliacionResponseDto> resp =
                 new ApiResponseSuccessDto<>(true, "Afiliación actualizada con éxito", respDto);
@@ -105,10 +106,13 @@ public class AfiliacionController {
 
         List<Afiliacion> lista = service.findByIdGreaterThan(minId);
         if (lista == null || lista.isEmpty()) {
-            return ResponseEntity.noContent().build(); // 204 si no hay resultados
+            return ResponseEntity.noContent().build();
         }
 
-        List<AfiliacionResponseDto> dtos = lista.stream().map(this::toResponseDto).collect(Collectors.toList());
+        List<AfiliacionResponseDto> dtos = lista.stream()
+                .map(AfiliacionMapper::toResponseDto)   // <-- usa Mapper
+                .collect(Collectors.toList());
+
         ApiResponseSuccessDto<List<AfiliacionResponseDto>> resp =
                 new ApiResponseSuccessDto<>(true, "Listado filtrado por minId=" + minId, dtos);
         return ResponseEntity.ok(resp);
@@ -130,17 +134,5 @@ public class AfiliacionController {
         ApiResponseSuccessDto<Long> resp =
                 new ApiResponseSuccessDto<>(true, "Cantidad de afiliaciones con id > " + minId, count);
         return ResponseEntity.ok(resp);
-    }
-
-    // 🔹 Mapper interno: Entity -> ResponseDto
-    private AfiliacionResponseDto toResponseDto(Afiliacion afiliacion) {
-        return new AfiliacionResponseDto(
-                afiliacion.getId(),
-                afiliacion.getNumeroAfiliado(),
-                afiliacion.getFechaVigenciaDesde(),
-                afiliacion.getFechaHasta(),
-                afiliacion.getPaciente() != null ? afiliacion.getPaciente().getId() : null,
-                afiliacion.getObra() != null ? afiliacion.getObra().getId() : null
-        );
     }
 }

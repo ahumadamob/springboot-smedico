@@ -7,7 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.imb2025.smedico.dto.AfiliacionRequestDto;
+import com.imb2025.dto.mapper.AfiliacionMapper;
+import com.imb2025.smedico.dto.request.AfiliacionRequestDto; // <-- package correcto
 import com.imb2025.smedico.entity.Afiliacion;
 import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.entity.ObraSocial;
@@ -33,33 +34,74 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
         this.obraSocialRepository = obraSocialRepository;
     }
 
+    // -------- Lecturas --------
     @Override
+    @Transactional(readOnly = true)
     public List<Afiliacion> findAll() {
         return afiliacionRepository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Afiliacion findById(Long id) {
         return afiliacionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Afiliación no encontrada con id " + id));
     }
 
     @Override
-    public Afiliacion create(Afiliacion afiliacion) {
-        validarFechas(afiliacion);
+    @Transactional(readOnly = true)
+    public boolean existsById(Long id) {
+        return afiliacionRepository.existsById(id);
+    }
+
+    // -------- Escrituras (usan DTO) --------
+    @Override
+    public Afiliacion create(AfiliacionRequestDto dto) {
+        validarFechasDto(dto);
+
+        if (dto.getIdpaciente() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "idpaciente es requerido");
+        }
+        if (dto.getIdobra() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "idobra es requerido");
+        }
+
+        Paciente paciente = pacienteRepository.findById(dto.getIdpaciente())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Paciente no encontrado con id " + dto.getIdpaciente()));
+        ObraSocial obra = obraSocialRepository.findById(dto.getIdobra())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Obra social no encontrada con id " + dto.getIdobra()));
+
+        Afiliacion afiliacion = AfiliacionMapper.fromDto(dto, paciente, obra);
         return afiliacionRepository.save(afiliacion);
     }
 
     @Override
-    public Afiliacion update(Long id, Afiliacion afiliacion) {
+    public Afiliacion update(Long id, AfiliacionRequestDto dto) {
         Afiliacion existente = findById(id); // valida existencia
-        validarFechas(afiliacion);
+        validarFechasDto(dto);
 
-        existente.setNumeroAfiliado(afiliacion.getNumeroAfiliado());
-        existente.setFechaVigenciaDesde(afiliacion.getFechaVigenciaDesde());
-        existente.setFechaHasta(afiliacion.getFechaHasta());
-        existente.setPaciente(afiliacion.getPaciente());
-        existente.setObra(afiliacion.getObra());
+        if (dto.getIdpaciente() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "idpaciente es requerido");
+        }
+        if (dto.getIdobra() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "idobra es requerido");
+        }
+
+        Paciente paciente = pacienteRepository.findById(dto.getIdpaciente())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Paciente no encontrado con id " + dto.getIdpaciente()));
+        ObraSocial obra = obraSocialRepository.findById(dto.getIdobra())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Obra social no encontrada con id " + dto.getIdobra()));
+
+        // Si agregaste AfiliacionMapper.updateFromDto(...), podés usarlo aquí.
+        existente.setNumeroAfiliado(dto.getNumeroAfiliado());
+        existente.setFechaVigenciaDesde(dto.getFechaVigenciaDesde());
+        existente.setFechaHasta(dto.getFechaHasta());
+        existente.setPaciente(paciente);
+        existente.setObra(obra); // <-- si tu entidad usa setObra(...), cambialo aquí
 
         return afiliacionRepository.save(existente);
     }
@@ -70,72 +112,35 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
         afiliacionRepository.delete(existente);
     }
 
+    // -------- Métodos "mágicos" / query methods --------
     @Override
-    public Afiliacion fromDto(AfiliacionRequestDto dto) {
-        // Validación de coherencia de fechas
-        if (dto.getFechaHasta() != null && dto.getFechaVigenciaDesde() != null &&
-            dto.getFechaHasta().isBefore(dto.getFechaVigenciaDesde())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                "La fecha de vigencia hasta no puede ser anterior a la fecha desde");
-        }
-
-        Afiliacion afiliacion = new Afiliacion();
-        afiliacion.setNumeroAfiliado(dto.getNumeroAfiliado());
-        afiliacion.setFechaVigenciaDesde(dto.getFechaVigenciaDesde());
-        afiliacion.setFechaHasta(dto.getFechaHasta());
-
-        // Buscar Paciente por repositorio (si el dto trae idpaciente)
-        if (dto.getIdpaciente() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "idpaciente es requerido");
-        }
-        Paciente paciente = pacienteRepository.findById(dto.getIdpaciente())
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Paciente no encontrado con id " + dto.getIdpaciente()));
-        afiliacion.setPaciente(paciente);
-
-        // Buscar ObraSocial por repositorio (si el dto trae idobra)
-        if (dto.getIdobra() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "idobra es requerido");
-        }
-        ObraSocial obra = obraSocialRepository.findById(dto.getIdobra())
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Obra social no encontrada con id " + dto.getIdobra()));
-        afiliacion.setObra(obra);
-
-        return afiliacion;
-    }
-
-    @Override
-    public boolean existsById(Long id) {
-        return afiliacionRepository.existsById(id);
-    }
-
-    // ---- Implementación de los métodos "mágicos" ----
-    @Override
+    @Transactional(readOnly = true)
     public List<Afiliacion> findByIdGreaterThan(Long idMin) {
         if (idMin == null || idMin < 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "minId debe ser >= 0");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "idMin debe ser >= 0");
         }
         return afiliacionRepository.findByIdGreaterThan(idMin);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public long countByIdGreaterThan(Long idMin) {
         if (idMin == null || idMin < 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "minId debe ser >= 0");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "idMin debe ser >= 0");
         }
         return afiliacionRepository.countByIdGreaterThan(idMin);
     }
 
-    // ---- método privado para validar coherencia de fechas ----
-    private void validarFechas(Afiliacion afiliacion) {
-        if (afiliacion.getFechaVigenciaDesde() == null) {
+    // -------- Validaciones privadas --------
+    private void validarFechasDto(AfiliacionRequestDto dto) {
+        if (dto.getFechaVigenciaDesde() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "fechaVigenciaDesde es requerida");
         }
-        if (afiliacion.getFechaHasta() != null &&
-            afiliacion.getFechaHasta().isBefore(afiliacion.getFechaVigenciaDesde())) {
+        if (dto.getFechaHasta() != null &&
+            dto.getFechaVigenciaDesde() != null &&
+            dto.getFechaHasta().isBefore(dto.getFechaVigenciaDesde())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                "El rango de fechas es inválido");
+                    "La fecha de vigencia hasta no puede ser anterior a la fecha desde");
         }
     }
 }

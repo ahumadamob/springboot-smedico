@@ -1,4 +1,4 @@
-package com.imb2025.smedico.dto;
+package com.imb2025.smedico.dto.response;
 
 import java.time.LocalDate;
 
@@ -7,21 +7,23 @@ public class AfiliacionResponseDto {
     private Long numeroAfiliado;
     private LocalDate fechaVigenciaDesde;
     private LocalDate fechaHasta;
-    private Long idPaciente;
-    private Long idObra;
+    private Long idPaciente;  
+    private Long idObra;     
+    private Long version;     
+    public AfiliacionResponseDto() {}
 
     public AfiliacionResponseDto(Long id, Long numeroAfiliado,
                                  LocalDate fechaVigenciaDesde, LocalDate fechaHasta,
-                                 Long idPaciente, Long idObra) {
+                                 Long idPaciente, Long idObra, Long version) {
         this.id = id;
         this.numeroAfiliado = numeroAfiliado;
         this.fechaVigenciaDesde = fechaVigenciaDesde;
         this.fechaHasta = fechaHasta;
         this.idPaciente = idPaciente;
         this.idObra = idObra;
+        this.version = version;
     }
 
-    // Getters y setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -39,4 +41,7 @@ public class AfiliacionResponseDto {
 
     public Long getIdObra() { return idObra; }
     public void setIdObra(Long idObra) { this.idObra = idObra; }
+
+    public Long getVersion() { return version; }
+    public void setVersion(Long version) { this.version = version; }
 }
