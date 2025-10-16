@@ -3,7 +3,7 @@ package com.imb2025.smedico.service;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
-import com.imb2025.smedico.dto.MedioPagoRequestDto;
+import com.imb2025.smedico.dto.request.MedioPagoRequestDto;
 import com.imb2025.smedico.entity.MedioPago;
 import com.imb2025.smedico.entity.MedioPago.TipoPago;
 

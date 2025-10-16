@@ -2,8 +2,7 @@ package com.imb2025.smedico.entity;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;//a    para evitar potencial recursión al serializar facturas
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,22 +14,22 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class MedioPago {
+public class MedioPago extends BaseEntity { //a extends
 
-	@Id
+	/*@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long id;*/
 	
-	@Column(nullable = false, length = 30) //m   no null y longitud max (30) en BD para sincronizar con la validación DTO
+	@Column(nullable = false, length = 30) 
 	private String nombre;
 	
 	@Enumerated(EnumType.STRING)
-    @Column(nullable = false) //a   no null en BD para garantizar integridad
+    @Column(nullable = false) 
 	private TipoPago tipo;
 	
-	@JsonIgnore //a    se busca evitar recursividad infinita: evitaincluir la lista de facturas en serialización JSON
+	@JsonIgnore 
 	@OneToMany(mappedBy = "medioPago")
-    private List<Factura> facturas; // nos relacionamos con Factura
+    private List<Factura> facturas; 
 	
 	
 	public List<Factura> getFacturas() {

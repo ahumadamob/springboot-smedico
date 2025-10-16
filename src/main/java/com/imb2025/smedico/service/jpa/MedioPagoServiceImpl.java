@@ -1,6 +1,6 @@
 package com.imb2025.smedico.service.jpa;
 
-import com.imb2025.smedico.dto.MedioPagoRequestDto;
+//import com.imb2025.smedico.dto.MedioPagoRequestDto;
 import com.imb2025.smedico.entity.MedioPago;
 import com.imb2025.smedico.entity.MedioPago.TipoPago;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
@@ -54,13 +54,13 @@ public class MedioPagoServiceImpl implements IMedioPagoService {
 		repo.deleteById(id);
 	}
 
-    @Override
+    /*@Override
     public MedioPago fromDto(MedioPagoRequestDto dto) {
     	MedioPago medioPago = new MedioPago();
     	medioPago.setNombre(dto.getNombre());
     	medioPago.setTipo(dto.getTipo());     
     	return medioPago; 
-    }
+    }*/
     
     //a
     @Override
