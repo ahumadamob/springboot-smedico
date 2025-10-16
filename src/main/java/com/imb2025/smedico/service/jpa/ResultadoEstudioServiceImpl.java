@@ -1,6 +1,6 @@
 package com.imb2025.smedico.service.jpa;
 
-import com.imb2025.smedico.dto.ResultadoEstudioRequestDto;
+import com.imb2025.smedico.dto.request.ResultadoEstudioRequestDto;
 import com.imb2025.smedico.entity.Estudio;
 import com.imb2025.smedico.entity.OrdenEstudio;
 import com.imb2025.smedico.entity.ResultadoEstudio;
@@ -73,34 +73,18 @@ public class ResultadoEstudioServiceImpl implements IResultadoEstudioService {
                 throw new ResourceNotFoundException("No existe el Resultado del Estudio con ID: " + id);
         }
 
-	@Override
-        public ResultadoEstudio fromDto(ResultadoEstudioRequestDto requestDto) {
-            OrdenEstudio ordenEstudio = ordenEstudioRepository.findById(requestDto.getOrdenEstudioId())
-                .orElseThrow(() -> new ResourceNotFoundException("Orden de Estudio NO encontrado con ID " + requestDto.getOrdenEstudioId()));
-
-            Estudio estudio = estudioRepository.findById(requestDto.getEstudioId())
-                .orElseThrow(() -> new ResourceNotFoundException("Estudio NO encontrado con ID " + requestDto.getEstudioId()));
-
-            ResultadoEstudio resultado = new ResultadoEstudio();
-            resultado.setOrdenEstudio(ordenEstudio);
-            resultado.setEstudio(estudio);
-            resultado.setResultado(requestDto.getResultado());
-            resultado.setFecha(requestDto.getFecha());
-            resultado.setFechaCarga(requestDto.getFechaCarga());
-            resultado.setObservaciones(requestDto.getObservaciones());
-            return resultado;
-        }
+	
 
 	@Override
-	public List<ResultadoEstudio> findByFecha(LocalDate fecha) {
+	public List<ResultadoEstudio> findByFechaCarga(LocalDate fechaCarga) {
 
-		return repo.findByFecha(fecha);
+		return repo.findByFechaCarga(fechaCarga);
 	}
 
 	@Override
-	public long countByFecha(LocalDate fecha) {
+	public long countByFechaCarga(LocalDate fechaCarga) {
 		
-		return repo.countByFecha(fecha);
+		return repo.countByFechaCarga(fechaCarga);
 	}
 	
 }

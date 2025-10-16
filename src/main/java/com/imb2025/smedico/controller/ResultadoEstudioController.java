@@ -1,6 +1,7 @@
 package com.imb2025.smedico.controller;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
-import com.imb2025.smedico.dto.ResultadoEstudioRequestDto;
+import com.imb2025.smedico.dto.request.ResultadoEstudioRequestDto;
+import com.imb2025.smedico.dto.response.ResultadoEstudioResponseDto;
 import com.imb2025.smedico.entity.ResultadoEstudio;
+import com.imb2025.smedico.mapper.ResultadoEstudioMapper;
 import com.imb2025.smedico.service.IResultadoEstudioService;
 
 import jakarta.validation.Valid;
@@ -30,27 +33,40 @@ public class ResultadoEstudioController {
 	@Autowired
 	private IResultadoEstudioService service;
 	
+	
 	@GetMapping("/ResultadoEstudio")
-	public ResponseEntity<ApiResponseSuccessDto<List<ResultadoEstudio>>>findAll(){
+	public ResponseEntity<ApiResponseSuccessDto<List<ResultadoEstudioResponseDto>>>findAll(){
 		List<ResultadoEstudio> resultadoEstudio = service.findAll();
-		ApiResponseSuccessDto<List<ResultadoEstudio>> resp;
+		List<ResultadoEstudioResponseDto> listaResponse = new ArrayList<ResultadoEstudioResponseDto>();
+		ResultadoEstudioMapper mapper = new ResultadoEstudioMapper();
+		for(ResultadoEstudio r: resultadoEstudio) {
+			ResultadoEstudioResponseDto dto = new ResultadoEstudioResponseDto();
+			dto = mapper.toDto(r);
+			listaResponse.add(dto);
+		}
+				
+		ApiResponseSuccessDto<List<ResultadoEstudioResponseDto>> resp;
 		
 		if(resultadoEstudio.isEmpty()) {
 			
-			resp = new ApiResponseSuccessDto<>(true,"No hay Estudios disponibles",resultadoEstudio);
+			resp = new ApiResponseSuccessDto<>(true,"No hay Estudios disponibles",listaResponse);
         }else {
-            resp = new ApiResponseSuccessDto<>(true,"Lista de Estudios",resultadoEstudio);
+            resp = new ApiResponseSuccessDto<>(true,"Lista de Estudios",listaResponse);
 	}
 		return ResponseEntity.ok(resp);
 	}
 	
 	
 	@GetMapping("/ResultadoEstudio/{idResultadoEstudio}")
-	public ResponseEntity<ApiResponseSuccessDto<ResultadoEstudio>> findById(@PathVariable("idResultadoEstudio") long id) {
+	public ResponseEntity<ApiResponseSuccessDto<ResultadoEstudioResponseDto>> findById(@PathVariable("idResultadoEstudio") long id) {
 
 		ResultadoEstudio resultadoEstudio = service.findById(id);
-		ApiResponseSuccessDto<ResultadoEstudio> resp =
-				new ApiResponseSuccessDto<>(true,"Estudio encontrado",resultadoEstudio);
+		ResultadoEstudioMapper mapper = new ResultadoEstudioMapper();
+		ResultadoEstudioResponseDto dto = new ResultadoEstudioResponseDto();
+		dto = mapper.toDto(resultadoEstudio);
+		
+		ApiResponseSuccessDto<ResultadoEstudioResponseDto> resp =
+				new ApiResponseSuccessDto<>(true,"Estudio encontrado",dto);
 		
 		return ResponseEntity.ok(resp);
 	}
@@ -59,8 +75,8 @@ public class ResultadoEstudioController {
 	
 	@PostMapping("/ResultadoEstudio")
 	public ResponseEntity<ApiResponseSuccessDto<ResultadoEstudio>> createResultadoEstudio(@Valid @RequestBody ResultadoEstudioRequestDto requestDto) {
-		
-		ResultadoEstudio resultadoEstudio = service.create(service.fromDto(requestDto));
+		ResultadoEstudioMapper mapper = new ResultadoEstudioMapper();
+		ResultadoEstudio resultadoEstudio = mapper.fromDto(requestDto);
 		ApiResponseSuccessDto<ResultadoEstudio> resp =
 				new ApiResponseSuccessDto<>(true,"Estudio creado correctamente",resultadoEstudio);
 		return ResponseEntity.status(HttpStatus.CREATED).body(resp);
@@ -71,7 +87,8 @@ public class ResultadoEstudioController {
 	@PutMapping ("/ResultadoEstudio/{id}")
 	public ResponseEntity<ApiResponseSuccessDto<ResultadoEstudio>>  updateResultadoEstudio(@PathVariable Long id,
 		@Valid @RequestBody ResultadoEstudioRequestDto requestDto) {
-		ResultadoEstudio resultadoEstudioEntity = service.fromDto(requestDto);
+		ResultadoEstudioMapper mapper = new ResultadoEstudioMapper();
+		ResultadoEstudio resultadoEstudioEntity = mapper.fromDto(requestDto);
 		ResultadoEstudio actualizado = service.update(id, resultadoEstudioEntity);
 		ApiResponseSuccessDto<ResultadoEstudio> resp =
 				new ApiResponseSuccessDto<>(true,"Estudio actualizado correctamente",actualizado);
@@ -89,14 +106,14 @@ public class ResultadoEstudioController {
 	
 	
 	@GetMapping("/ResultadoEstudio/fecha/{fecha}")
-	public ResponseEntity<ApiResponseSuccessDto<List<ResultadoEstudio>>> getResultadoEstudioPorFecha(@PathVariable("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha){
-			List<ResultadoEstudio> lista = service.findByFecha(fecha);
+	public ResponseEntity<ApiResponseSuccessDto<List<ResultadoEstudio>>> getResultadoEstudioPorFecha(@PathVariable("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaCarga){
+			List<ResultadoEstudio> lista = service.findByFechaCarga(fechaCarga);
 			ApiResponseSuccessDto<List<ResultadoEstudio>> resp;
 			
 			 if (lista.isEmpty()) {
-			        resp = new ApiResponseSuccessDto<>(true, "No hay estudios en la fecha " + fecha, lista);
+			        resp = new ApiResponseSuccessDto<>(true, "No hay estudios en la fecha " + fechaCarga, lista);
 			    } else {
-			        resp = new ApiResponseSuccessDto<>(true, "Lista de estudios en la fecha " + fecha, lista);
+			        resp = new ApiResponseSuccessDto<>(true, "Lista de estudios en la fecha " + fechaCarga, lista);
 			    }
 			 
 			 return ResponseEntity.ok(resp);
@@ -105,13 +122,13 @@ public class ResultadoEstudioController {
 	
 	@GetMapping("/ResultadoEstudio/count/{fecha}")
 	public ResponseEntity<ApiResponseSuccessDto<Long>> countResultadoEstudioByFecha(
-	        @PathVariable("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
+	        @PathVariable("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaCarga) {
 		
-		long cantidad = service.countByFecha(fecha);
+		long cantidad = service.countByFechaCarga(fechaCarga);
 		
 		ApiResponseSuccessDto<Long> resp = new ApiResponseSuccessDto<>(
 	            true,
-	            "Cantidad de estudios en la fecha " + fecha,
+	            "Cantidad de estudios en la fecha " + fechaCarga,
 	            cantidad
 	    );
 

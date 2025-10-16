@@ -10,8 +10,8 @@ import com.imb2025.smedico.entity.ResultadoEstudio;
 
 public interface ResultadoEstudioRepository extends JpaRepository<ResultadoEstudio, Long> {
 	
-	List<ResultadoEstudio> findByFecha(LocalDate fecha);
+	List<ResultadoEstudio> findByFechaCarga(LocalDate fechaCarga);
 	
-	long countByFecha(LocalDate fecha);
+	long countByFechaCarga(LocalDate fechaCarga);
 
 }
