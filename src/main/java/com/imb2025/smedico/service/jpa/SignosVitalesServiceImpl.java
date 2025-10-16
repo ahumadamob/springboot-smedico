@@ -1,18 +1,19 @@
 package com.imb2025.smedico.service.jpa;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.imb2025.smedico.dto.SignosVitalesRequestDto;
+import com.imb2025.smedico.entity.Consulta;
 import com.imb2025.smedico.entity.SignosVitales;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.SignosVitalesRepository;
 import com.imb2025.smedico.service.IConsultaService;
 import com.imb2025.smedico.service.ISignosVitalesService;
-
-import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class SignosVitalesServiceImpl implements ISignosVitalesService {
@@ -58,6 +59,18 @@ public void deleteById(Long id) {
     signos.deleteById(id);
 }
 
+@Override
+public List<SignosVitales> findByFechas(LocalDate inicio, LocalDate fin) {
+	LocalDateTime empieza = inicio.atStartOfDay();
+    LocalDateTime termina = fin.atTime(LocalTime.MAX);
+    return signos.findByFechaHoraBetween(empieza, termina);
+}
+
+@Override
+public Long countByConsulta(Long idConsulta) {
+	Consulta consulta = consultaService.findById(idConsulta);
+    return signos.countByConsulta(consulta);
+}
 
     @Override
     public SignosVitales fromDto(SignosVitalesRequestDto dto) {
@@ -101,4 +114,5 @@ public void deleteById(Long id) {
                 idConsulta
         );
     }
+
 }

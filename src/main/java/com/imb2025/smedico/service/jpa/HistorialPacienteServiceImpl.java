@@ -33,6 +33,16 @@ public class HistorialPacienteServiceImpl implements IHistorialPacienteService {
             .orElseThrow(() -> new ResourceNotFoundException(
                 "HistorialPaciente no encontrado con id " + id));
     }
+    
+    @Override
+    public List<HistorialPaciente> findByEvento(String evento) {
+        return repo.findByEvento(evento);
+    }
+
+    @Override
+    public Long countByFecha(java.time.LocalDate fecha) {
+        return repo.countByFecha(fecha);
+    }
 
     @Override
     public void deleteById(Long id) {

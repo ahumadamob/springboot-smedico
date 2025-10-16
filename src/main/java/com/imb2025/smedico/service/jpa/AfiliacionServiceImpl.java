@@ -2,10 +2,10 @@ package com.imb2025.smedico.service.jpa;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.imb2025.smedico.dto.AfiliacionRequestDto;
 import com.imb2025.smedico.entity.Afiliacion;
@@ -18,16 +18,20 @@ import com.imb2025.smedico.repository.ObraSocialRepository;
 import com.imb2025.smedico.service.IAfiliacionService;
 
 @Service
+@Transactional
 public class AfiliacionServiceImpl implements IAfiliacionService {
 
-    @Autowired
-    private AfiliacionRepository afiliacionRepository;
+    private final AfiliacionRepository afiliacionRepository;
+    private final PacienteRepository pacienteRepository;
+    private final ObraSocialRepository obraSocialRepository;
 
-    @Autowired
-    private PacienteRepository pacienteRepository;
-
-    @Autowired
-    private ObraSocialRepository obraSocialRepository;
+    public AfiliacionServiceImpl(AfiliacionRepository afiliacionRepository,
+                                 PacienteRepository pacienteRepository,
+                                 ObraSocialRepository obraSocialRepository) {
+        this.afiliacionRepository = afiliacionRepository;
+        this.pacienteRepository = pacienteRepository;
+        this.obraSocialRepository = obraSocialRepository;
+    }
 
     @Override
     public List<Afiliacion> findAll() {
@@ -80,13 +84,19 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
         afiliacion.setFechaVigenciaDesde(dto.getFechaVigenciaDesde());
         afiliacion.setFechaHasta(dto.getFechaHasta());
 
-        // Buscar Paciente por repositorio
+        // Buscar Paciente por repositorio (si el dto trae idpaciente)
+        if (dto.getIdpaciente() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "idpaciente es requerido");
+        }
         Paciente paciente = pacienteRepository.findById(dto.getIdpaciente())
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Paciente no encontrado con id " + dto.getIdpaciente()));
         afiliacion.setPaciente(paciente);
 
-        // Buscar ObraSocial por repositorio
+        // Buscar ObraSocial por repositorio (si el dto trae idobra)
+        if (dto.getIdobra() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "idobra es requerido");
+        }
         ObraSocial obra = obraSocialRepository.findById(dto.getIdobra())
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Obra social no encontrada con id " + dto.getIdobra()));
@@ -100,8 +110,28 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
         return afiliacionRepository.existsById(id);
     }
 
+    // ---- Implementación de los métodos "mágicos" ----
+    @Override
+    public List<Afiliacion> findByIdGreaterThan(Long idMin) {
+        if (idMin == null || idMin < 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "minId debe ser >= 0");
+        }
+        return afiliacionRepository.findByIdGreaterThan(idMin);
+    }
+
+    @Override
+    public long countByIdGreaterThan(Long idMin) {
+        if (idMin == null || idMin < 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "minId debe ser >= 0");
+        }
+        return afiliacionRepository.countByIdGreaterThan(idMin);
+    }
+
     // ---- método privado para validar coherencia de fechas ----
     private void validarFechas(Afiliacion afiliacion) {
+        if (afiliacion.getFechaVigenciaDesde() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "fechaVigenciaDesde es requerida");
+        }
         if (afiliacion.getFechaHasta() != null &&
             afiliacion.getFechaHasta().isBefore(afiliacion.getFechaVigenciaDesde())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,

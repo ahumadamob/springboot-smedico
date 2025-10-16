@@ -1,6 +1,6 @@
 package com.imb2025.smedico.service;
 
-import com.imb2025.smedico.dto.ConsultaRequestDto;
+import com.imb2025.smedico.dto.request.ConsultaRequestDto;
 import com.imb2025.smedico.entity.Consulta;
 import java.time.LocalDate;                 // 👈 usa LocalDate
 import java.util.List;

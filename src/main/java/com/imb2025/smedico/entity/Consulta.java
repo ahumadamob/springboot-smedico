@@ -7,7 +7,9 @@ import java.time.LocalDate;
 public class Consulta {
 
 	
-	
+	   @Version                      
+	    @Column(name = "version")
+	    private Integer version;   
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,12 +21,19 @@ public class Consulta {
     @JoinColumn(name = "turno_id", nullable = false, unique = true)
     private Turno turno;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "paciente_id", nullable = false)
+    private Paciente paciente;
+
     @Column(name = "duracion_min", nullable = false)
     private int duracionMin;
 
     @Column(length = 500)
     private String comentarios;
 
+    // getters/setters
+    public Integer getVersion() { return version; }
+    public void setVersion(Integer version) { this.version = version; }
     public Consulta() {}
 
     public Consulta(Long id, LocalDate fecha, Turno turno, int duracionMin, String comentarios) {

@@ -9,11 +9,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
-
+    Page<Consulta> findByFechaBetween(LocalDate desde, LocalDate hasta, Pageable pageable);
     boolean existsByTurno_Id(Long turnoId);
     boolean existsByTurno_IdAndIdNot(Long turnoId, Long id);
-
-    Page<Consulta> findByFechaBetween(LocalDate desde, LocalDate hasta, Pageable pageable);
-   
-    long countByPaciente_Id(Long pacienteId);
+    long countByTurno_Paciente_Id(Long pacienteId);
 }
+
+

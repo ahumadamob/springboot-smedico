@@ -12,4 +12,6 @@ public interface IMotivoCancelacionService {
     public boolean existsById(Long id);
     public void deleteById(Long id);
     public MotivoCancelacion fromDto(MotivoCancelacionRequestDto motivoCancelacionRequestDto);
+	public List<MotivoCancelacion> findByNombre(String nombre);
+	public long countByDescripcion(String descripcion);
 }

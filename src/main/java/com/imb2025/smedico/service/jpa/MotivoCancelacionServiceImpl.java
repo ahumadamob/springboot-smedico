@@ -64,4 +64,14 @@ public class MotivoCancelacionServiceImpl implements IMotivoCancelacionService {
         motivoCancelacion.setDescripcion(dto.getDescripcion());
         return motivoCancelacion;
     }
+    
+    @Override
+    public List<MotivoCancelacion> findByNombre(String nombre) {
+        return repo.findByNombreContainingIgnoreCase(nombre);
+    }
+
+    @Override
+    public long countByDescripcion(String descripcion) {
+        return repo.countByDescripcion(descripcion);
+    }
 }
