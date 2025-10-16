@@ -15,10 +15,6 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class MedioPago extends BaseEntity { //a extends
-
-	/*@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;*/
 	
 	@Column(nullable = false, length = 30) 
 	private String nombre;
@@ -39,16 +35,6 @@ public class MedioPago extends BaseEntity { //a extends
 
 	public void setFacturas(List<Factura> facturas) {
 		this.facturas = facturas;
-	}
-	
-	
-	public Long getId() {
-		return id;
-	}
-
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 
