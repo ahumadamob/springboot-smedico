@@ -8,13 +8,17 @@ public class EstudioResponseDto {
     private String nombre;
     private String descripcion;
     private Long especialidadId;
+    private String especialidadNombre;
+
     private String resultadoDescripcion;
 
     public EstudioResponseDto(Estudio estudio) {
         this.id = estudio.getId();
         this.nombre = estudio.getNombre();
         this.descripcion = estudio.getDescripcion();
-        this.especialidadId = estudio.getEspecialidad();
+        this.especialidadId = (estudio.getEspecialidad() != null) ? estudio.getEspecialidad().getId() : null;
+        this.especialidadNombre = (estudio.getEspecialidad() != null) ? estudio.getEspecialidad().getNombre() : null;
+
         this.resultadoDescripcion = (estudio.getResultadoEstudio() != null)
                 ? estudio.getResultadoEstudio().getObservaciones()
                 : null;
@@ -33,6 +37,9 @@ public class EstudioResponseDto {
 
     public Long getEspecialidadId() { return especialidadId; }
     public void setEspecialidadId(Long especialidadId) { this.especialidadId = especialidadId; }
+
+    public String getEspecialidadNombre() { return especialidadNombre; }
+    public void setEspecialidadNombre(String especialidadNombre) { this.especialidadNombre = especialidadNombre; }
 
     public String getResultadoDescripcion() { return resultadoDescripcion; }
     public void setResultadoDescripcion(String resultadoDescripcion) { this.resultadoDescripcion = resultadoDescripcion; }

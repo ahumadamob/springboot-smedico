@@ -12,8 +12,9 @@ public class Estudio extends BaseEntity {
     @Column(length = 500, nullable = false)
     private String descripcion;
 
-    @Column(name = "especialidad_id", nullable = false)
-    private Long especialidadId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "especialidad_id", nullable = false)
+    private Especialidad especialidad;
 
     @OneToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "resultado_estudio_id", unique = true)
@@ -22,10 +23,10 @@ public class Estudio extends BaseEntity {
     public Estudio() {}
 
     public Estudio(String nombre, String descripcion,
-                   Long especialidadId, ResultadoEstudio resultadoEstudio) {
+                   Especialidad especialidad, ResultadoEstudio resultadoEstudio) {
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.especialidadId = especialidadId;
+        this.especialidad = especialidad;
         this.resultadoEstudio = resultadoEstudio;
     }
 
@@ -35,8 +36,8 @@ public class Estudio extends BaseEntity {
     public String getDescripcion() { return descripcion; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
-    public Long getEspecialidad() { return especialidadId; }
-    public void setEspecialidad(Long especialidadId) { this.especialidadId = especialidadId; }
+    public Especialidad getEspecialidad() { return especialidad; }
+    public void setEspecialidad(Especialidad especialidad) { this.especialidad = especialidad; }
 
     public ResultadoEstudio getResultadoEstudio() { return resultadoEstudio; }
     public void setResultadoEstudio(ResultadoEstudio resultadoEstudio) { this.resultadoEstudio = resultadoEstudio; }
