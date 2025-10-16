@@ -1,6 +1,6 @@
 package com.imb2025.smedico.service;
 
-import com.imb2025.smedico.dto.EstadoTurnoRequestDto;
+import com.imb2025.smedico.dto.request.EstadoTurnoRequestDto;
 import com.imb2025.smedico.entity.EstadoTurno;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 
@@ -16,11 +16,9 @@ public interface IEstadoTurnoService {
     EstadoTurno update(Long id, EstadoTurno estadoTurno) throws ResourceNotFoundException;
     void deleteById(Long id) throws ResourceNotFoundException;
 
-    // Mapeo
-    EstadoTurno fromDto(EstadoTurnoRequestDto dto);
+    // Mapeo (LÓGICA ELIMINADA DEL CONTRATO DEL SERVICIO - PUNTO 4.1)
+    // EstadoTurno fromDto(EstadoTurnoRequestDto dto); 
 
-  
-    // TP07: Métodos de Filtro y Conteo
     
 
     /**
@@ -32,8 +30,7 @@ public interface IEstadoTurnoService {
 
     /**
       Cuenta la cantidad de EstadosTurno con un nombre específico 
-      @param nombre El nombre exacto a contar.
-      @return El número de coincidencias.
+     
      */
     long countByNombre(String nombre);
 }

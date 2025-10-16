@@ -1,13 +1,14 @@
 package com.imb2025.smedico.service.jpa;
 
 import com.imb2025.smedico.exception.ResourceNotFoundException;
+import com.imb2025.smedico.mapper.EstadoTurnoMapper; // Nuevo import del Mapper
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.imb2025.smedico.dto.EstadoTurnoRequestDto;
+import com.imb2025.smedico.dto.request.EstadoTurnoRequestDto;
 import com.imb2025.smedico.entity.EstadoTurno;
 import com.imb2025.smedico.repository.EstadoTurnoRepository;
 import com.imb2025.smedico.service.IEstadoTurnoService;
@@ -16,9 +17,12 @@ import com.imb2025.smedico.service.IEstadoTurnoService;
 public class EstadoTurnoServiceImpl implements IEstadoTurnoService {
 
     private final EstadoTurnoRepository estadoTurnoRepository;
+    private final EstadoTurnoMapper mapper; // Inyectamos el Mapper
 
-    public EstadoTurnoServiceImpl(EstadoTurnoRepository estadoTurnoRepository) {
+    // Inyección de dependencias por constructor
+    public EstadoTurnoServiceImpl(EstadoTurnoRepository estadoTurnoRepository, EstadoTurnoMapper mapper) {
         this.estadoTurnoRepository = estadoTurnoRepository;
+        this.mapper = mapper;
     }
 
     @Override
@@ -67,32 +71,30 @@ public class EstadoTurnoServiceImpl implements IEstadoTurnoService {
         Optional<EstadoTurno> existente = estadoTurnoRepository.findById(id);
         if (existente.isPresent()) {
             EstadoTurno actualizado = existente.get();
+            
+            // Asignamos la nueva versión del nombre
             actualizado.setNombre(estadoTurno.getNombre());
+            
+            // Nota importante para TP08: El campo 'version' DEBE ser asignado 
+            // a la entidad antes de guardar para el control de concurrencia.
+            // Esto se hace en el Controller antes de llamar al update, si es necesario.
+            
             return estadoTurnoRepository.save(actualizado);
         }
-        // Cambio aquí: Usamos ResourceNotFoundException en lugar de RuntimeException
+        // MEJORA: Usamos ResourceNotFoundException
         throw new ResourceNotFoundException("EstadoTurno con id " + id + " no existe");
     }
 
     @Override
     public void deleteById(Long id) {
-        // Cambio aquí: Primero verificamos si existe y lanzamos la excepción si no lo hace
+        // Mejoramos la lógica de borrado con manejo de excepción
         if (!estadoTurnoRepository.existsById(id)) {
             throw new ResourceNotFoundException("EstadoTurno con id " + id + " no existe y no puede ser eliminado");
         }
         estadoTurnoRepository.deleteById(id);
     }
 
-    @Override
-    public EstadoTurno fromDto(EstadoTurnoRequestDto dto) {
-        EstadoTurno estadoTurno = new EstadoTurno();
-        
-        // Si el DTO tiene ID (para una actualización o referencia), lo establecemos
-        if (dto.getId() != null) {
-            estadoTurno.setId(dto.getId()); 
-        }
-        
-        estadoTurno.setNombre(dto.getNombre());
-        return estadoTurno;
-    }
+    // ELIMINADO: Ya no existe en la interfaz
+    // @Override
+    // public EstadoTurno fromDto(EstadoTurnoRequestDto dto) { ... }
 }
