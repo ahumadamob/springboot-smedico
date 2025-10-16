@@ -69,11 +69,13 @@ public class HistorialPacienteServiceImpl implements IHistorialPacienteService {
         Paciente paciente = repoPaciente.findById(dto.getPacienteId())
                 .orElseThrow(() -> new ResourceNotFoundException("Paciente no encontrado " + dto.getPacienteId()));
 
-        HistorialPaciente actualizado = HistorialPacienteMapper.fromDto(dto, paciente);
-        actualizado.setId(existente.getId());
-        return repo.save(actualizado);
-    }
+        existente.setEvento(dto.getEvento());
+        existente.setFecha(dto.getFecha());
+        existente.setObservacion(dto.getObservacion());
+        existente.setPaciente(paciente);
 
+        return repo.save(existente);
+    }
     @Override
     public boolean existsById(Long id) {
         return repo.existsById(id);

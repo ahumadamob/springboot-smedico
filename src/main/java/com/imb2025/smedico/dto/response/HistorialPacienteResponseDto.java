@@ -9,11 +9,11 @@ public class HistorialPacienteResponseDto {
     private String evento;
     private LocalDate fecha;
     private String observacion;
-    private Integer version;
+    private Long version;
 
     public HistorialPacienteResponseDto() {}
 
-    public HistorialPacienteResponseDto(Long id, Long pacienteId, String evento, LocalDate fecha, String observacion, Integer version) {
+    public HistorialPacienteResponseDto(Long id, Long pacienteId, String evento, LocalDate fecha, String observacion, Long version) {
         this.id = id;
         this.pacienteId = pacienteId;
         this.evento = evento;
@@ -58,10 +58,10 @@ public class HistorialPacienteResponseDto {
         this.observacion = observacion;
     }
 
-    public Integer getVersion() {
+    public Long getVersion() {
         return version;
     }
-    public void setVersion(Integer version) {
+    public void setVersion(Long version) {
         this.version = version;
     }
 }
