@@ -53,14 +53,6 @@ public class MedioPagoServiceImpl implements IMedioPagoService {
 	public void deleteById(Long id) {
 		repo.deleteById(id);
 	}
-
-    /*@Override
-    public MedioPago fromDto(MedioPagoRequestDto dto) {
-    	MedioPago medioPago = new MedioPago();
-    	medioPago.setNombre(dto.getNombre());
-    	medioPago.setTipo(dto.getTipo());     
-    	return medioPago; 
-    }*/
     
     //a
     @Override
