@@ -2,15 +2,10 @@ package com.imb2025.smedico.entity;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "detalle_factura") // Nombre explícito de la tabla
-public class DetalleFactura {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class DetalleFactura extends BaseEntity {
 
     @Column(nullable = false, length = 255) // Restricciones explícitas
     private String descripcion;
@@ -20,7 +15,6 @@ public class DetalleFactura {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false) // Lazy loading y obligatorio
     @JoinColumn(name = "factura_id", nullable = false)
-    @JsonIgnore 
     private Factura factura;
 
     @Version
@@ -31,20 +25,13 @@ public class DetalleFactura {
     public DetalleFactura() {}
 
     public DetalleFactura(Long id, String descripcion, BigDecimal importe, Factura factura) {
-        this.id = id;
+        super(id);
         this.descripcion = descripcion;
         this.importe = importe;
         this.factura = factura;
     }
 
     // 🔹 Getters y Setters
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getDescripcion() {
         return descripcion;
     }
@@ -75,7 +62,7 @@ public class DetalleFactura {
         if (this == o) return true;
         if (!(o instanceof DetalleFactura)) return false;
         DetalleFactura that = (DetalleFactura) o;
-        return id != null && id.equals(that.id);
+        return getId() != null && getId().equals(that.getId());
     }
 
     @Override
