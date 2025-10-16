@@ -6,7 +6,7 @@ import com.imb2025.smedico.entity.MedioPago;
 
 public class MedioPagoMapper {
 	
-	public MedioPago fromDto(MedioPagoRequestDto dto) {
+		public MedioPago fromDto(MedioPagoRequestDto dto) {
         MedioPago medioPago = new MedioPago();
         medioPago.setNombre(dto.getNombre());
         medioPago.setTipo(dto.getTipo());
@@ -14,13 +14,12 @@ public class MedioPagoMapper {
     }
 
 	public MedioPagoResponseDto toResponseDto(MedioPago mediopago) {
-	    MedioPagoResponseDto dto = new MedioPagoResponseDto();
-	    dto.setNombre(mediopago.getNombre());
-	    dto.setTipo(mediopago.getTipo()); // ← como enum
-	    dto.setVersion(mediopago.getVersion());
-	    return dto;
+	    MedioPagoResponseDto dtoResponse = new MedioPagoResponseDto();
+	    dtoResponse.setId(mediopago.getId());
+	    dtoResponse.setNombre(mediopago.getNombre());
+	    dtoResponse.setTipo(mediopago.getTipo()); // ← como enum
+	    dtoResponse.setVersion(mediopago.getVersion());
+	    return dtoResponse;
 	}
-
-	
 
 }
