@@ -4,11 +4,9 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "encuestas")
-public class Encuesta {
+public class Encuesta extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    
 
     @Column(length = 500)
     private String comentario;
@@ -16,7 +14,14 @@ public class Encuesta {
     @Column(nullable = false)
     private int puntaje;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    public String getComentario() {
+		return comentario;
+	}
+
+	public void setComentario(String comentario) {
+		this.comentario = comentario;
+	}
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "paciente_id", nullable = false)
     private Paciente paciente;
 
@@ -26,20 +31,15 @@ public class Encuesta {
 
     public Encuesta() { }
 
-    public Encuesta(Long id, Paciente paciente, Consulta consulta, int puntaje, String comentario) {
-        this.id = id;
+    public Encuesta( Paciente paciente, Consulta consulta, int puntaje, String comentario) {
+       
         this.paciente = paciente;
         this.consulta = consulta;
         this.puntaje = puntaje;
         this.comentario = comentario;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getComentario() { return comentario; }
-    public void setComentario(String comentario) { this.comentario = comentario; }
-
+ 
     public int getPuntaje() { return puntaje; }
     public void setPuntaje(int puntaje) { this.puntaje = puntaje; }
 

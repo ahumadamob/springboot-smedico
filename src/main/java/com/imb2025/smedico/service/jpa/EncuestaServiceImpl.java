@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.imb2025.smedico.dto.EncuestaRequestDto;
+import com.imb2025.smedico.dto.request.EncuestaRequestDto;
 import com.imb2025.smedico.entity.Consulta;
 import com.imb2025.smedico.entity.Encuesta;
 import com.imb2025.smedico.entity.Paciente;
@@ -78,28 +78,9 @@ public class EncuestaServiceImpl implements IEncuestaService {
         return encuestaRepo.existsById(id);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public Encuesta fromDto(EncuestaRequestDto dto) {
-        Paciente paciente = pacienteRepo.findById(dto.getPacienteId())
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Paciente no encontrado con id " + dto.getPacienteId()));
+    
 
-        Consulta consulta = consultaRepo.findById(dto.getConsultaId())
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Consulta no encontrada con id " + dto.getConsultaId()));
-
-        Encuesta e = new Encuesta();
-        e.setPaciente(paciente);
-        e.setConsulta(consulta);
-        e.setPuntaje(dto.getPuntaje());
-        e.setComentario(dto.getComentario());
-        return e;
-    }
-
-    // TP07: delegan a “métodos mágicos” del repo
-    @Override
-    @Transactional(readOnly = true)
+    
     public List<Encuesta> findByPuntajeGreaterThanEqual(int puntajeMin) {
         return encuestaRepo.findByPuntajeGreaterThanEqual(puntajeMin);
     }

@@ -1,6 +1,7 @@
 package com.imb2025.smedico.controller;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,8 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
-import com.imb2025.smedico.dto.EncuestaRequestDto;
+import com.imb2025.smedico.dto.request.EncuestaRequestDto;
+import com.imb2025.smedico.dto.response.EncuestaResponseDto;
 import com.imb2025.smedico.entity.Encuesta;
+import com.imb2025.smedico.mapper.EncuestaMapper;
 import com.imb2025.smedico.service.IEncuestaService;
 
 @RestController
@@ -20,76 +23,46 @@ import com.imb2025.smedico.service.IEncuestaService;
 public class EncuestaController {
 
     private final IEncuestaService service;
+    private final EncuestaMapper mapper;
 
-    public EncuestaController(IEncuestaService service) {
+    public EncuestaController(IEncuestaService service, EncuestaMapper mapper) {
         this.service = service;
+        this.mapper = mapper;
     }
-
-    /** DTO de salida local (simple) */
-    public static class EncuestaOut {
-        private Long id;
-        private Long pacienteId;
-        private Long consultaId;
-        private Integer puntaje;
-        private String comentario;
-
-        public EncuestaOut(Long id, Long pacienteId, Long consultaId, Integer puntaje, String comentario) {
-            this.id = id;
-            this.pacienteId = pacienteId;
-            this.consultaId = consultaId;
-            this.puntaje = puntaje;
-            this.comentario = comentario;
-        }
-
-        public Long getId() { return id; }
-        public Long getPacienteId() { return pacienteId; }
-        public Long getConsultaId() { return consultaId; }
-        public Integer getPuntaje() { return puntaje; }
-        public String getComentario() { return comentario; }
-    }
-
-    private EncuestaOut toOut(Encuesta e) {
-        return new EncuestaOut(
-                e.getId(),
-                e.getPaciente() != null ? e.getPaciente().getId() : null,
-                e.getConsulta() != null ? e.getConsulta().getId() : null,
-                e.getPuntaje(),
-                e.getComentario()
-        );
-    }
-
-    /* ================== CRUD ================== */
 
     @GetMapping
-    public ResponseEntity<ApiResponseSuccessDto<List<EncuestaOut>>> findAll() {
-        List<EncuestaOut> data = service.findAll()
-                .stream()
-                .map(this::toOut)
-                .collect(Collectors.toList());
+    public ResponseEntity<ApiResponseSuccessDto<List<EncuestaResponseDto>>> findAll() {
+        List<Encuesta> lista = service.findAll();
+        List<EncuestaResponseDto> data = new ArrayList<>(lista.size());
+        for (Encuesta e : lista) data.add(mapper.toDto(e));
         return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Listado de encuestas", data));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<EncuestaOut>> findById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponseSuccessDto<EncuestaResponseDto>> findById(@PathVariable Long id) {
         Encuesta e = service.findById(id);
-        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Encuesta encontrada", toOut(e)));
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Encuesta encontrada", mapper.toDto(e)));
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<EncuestaOut>> create(@Valid @RequestBody EncuestaRequestDto body) {
-        Encuesta creada = service.create(service.fromDto(body));
+    public ResponseEntity<ApiResponseSuccessDto<EncuestaResponseDto>> create(
+            @Valid @RequestBody EncuestaRequestDto body
+    ) {
+        Encuesta entrada = mapper.fromDto(body);
+        Encuesta creada = service.create(entrada);
         return ResponseEntity
                 .created(URI.create("/api/encuestas/" + creada.getId()))
-                .body(new ApiResponseSuccessDto<>(true, "Encuesta creada", toOut(creada)));
+                .body(new ApiResponseSuccessDto<>(true, "Encuesta creada", mapper.toDto(creada)));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<EncuestaOut>> update(
+    public ResponseEntity<ApiResponseSuccessDto<EncuestaResponseDto>> update(
             @PathVariable Long id,
             @Valid @RequestBody EncuestaRequestDto body
     ) {
-        Encuesta actualizada = service.update(id, service.fromDto(body));
-        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Encuesta actualizada", toOut(actualizada)));
+        Encuesta entrada = mapper.fromDto(body);
+        Encuesta actualizada = service.update(id, entrada);
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Encuesta actualizada", mapper.toDto(actualizada)));
     }
 
     @DeleteMapping("/{id}")
@@ -98,13 +71,11 @@ public class EncuestaController {
         service.deleteById(id);
     }
 
-    /* ============ TP07: métodos “mágicos” expuestos ============ */
-
     @GetMapping("/min-puntaje/{n}")
-    public ResponseEntity<ApiResponseSuccessDto<List<EncuestaOut>>> findByPuntajeMin(@PathVariable int n) {
-        List<EncuestaOut> data = service.findByPuntajeGreaterThanEqual(n)
+    public ResponseEntity<ApiResponseSuccessDto<List<EncuestaResponseDto>>> findByPuntajeMin(@PathVariable int n) {
+        List<EncuestaResponseDto> data = service.findByPuntajeGreaterThanEqual(n)
                 .stream()
-                .map(this::toOut)
+                .map(mapper::toDto)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Encuestas con puntaje >= " + n, data));
     }
@@ -115,4 +86,3 @@ public class EncuestaController {
         return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Total por consulta " + consultaId, count));
     }
 }
-
