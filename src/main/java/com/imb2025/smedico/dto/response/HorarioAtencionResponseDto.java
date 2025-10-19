@@ -1,22 +1,21 @@
-package com.imb2025.smedico.dto;
+package com.imb2025.smedico.dto.response;
 
-public class HorarioAtencionResponseDTO {
+public class HorarioAtencionResponseDto {
 
     private Long id;
-    private Long medicoId;
     private String diaSemana;
     private String horaInicio;
     private String horaFin;
+    private Integer version;
 
-    public HorarioAtencionResponseDTO() {
-    }
+    public HorarioAtencionResponseDto() {}
 
-    public HorarioAtencionResponseDTO(Long id, Long medicoId, String diaSemana, String horaInicio, String horaFin) {
+    public HorarioAtencionResponseDto(Long id, String diaSemana, String horaInicio, String horaFin, Integer version) {
         this.id = id;
-        this.medicoId = medicoId;
         this.diaSemana = diaSemana;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
+        this.version = version;
     }
 
     public Long getId() {
@@ -25,14 +24,6 @@ public class HorarioAtencionResponseDTO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getMedicoId() {
-        return medicoId;
-    }
-
-    public void setMedicoId(Long medicoId) {
-        this.medicoId = medicoId;
     }
 
     public String getDiaSemana() {
@@ -57,5 +48,13 @@ public class HorarioAtencionResponseDTO {
 
     public void setHoraFin(String horaFin) {
         this.horaFin = horaFin;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }
