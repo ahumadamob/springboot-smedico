@@ -7,7 +7,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.imb2025.smedico.dto.SignosVitalesRequestDto;
+
+import com.imb2025.smedico.dto.mapper.SignosVitalesMapper;
+import com.imb2025.smedico.dto.request.SignosVitalesRequestDto;
 import com.imb2025.smedico.entity.Consulta;
 import com.imb2025.smedico.entity.SignosVitales;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
@@ -23,6 +25,8 @@ public class SignosVitalesServiceImpl implements ISignosVitalesService {
 
     @Autowired
     private IConsultaService consultaService;
+    
+    SignosVitalesMapper mapper = new SignosVitalesMapper();
 
     @Override
     public List<SignosVitales> findAll() {
@@ -36,16 +40,19 @@ public class SignosVitalesServiceImpl implements ISignosVitalesService {
     }
 
     @Override
-    public SignosVitales create(SignosVitales signosVitales) {
-        return signos.save(signosVitales);
+    public SignosVitales create(SignosVitalesRequestDto dto) {
+    	Consulta con = consultaService.findById(dto.getIdConsulta());
+        return signos.save(mapper.fromDto(dto, con));
     }
 
    @Override
-public SignosVitales update(Long id, SignosVitales signosVitales) {
+public SignosVitales update(Long id, SignosVitalesRequestDto dto) {
     if (!signos.existsById(id)) {
         throw new ResourceNotFoundException(
                 "No se puede actualizar. Los Signos Vitales con ID " + id + " no existen.");
     }
+    Consulta con = consultaService.findById(dto.getIdConsulta());
+    SignosVitales signosVitales = mapper.fromDto(dto, con);
     signosVitales.setId(id);
     return signos.save(signosVitales);
 }
@@ -73,46 +80,8 @@ public Long countByConsulta(Long idConsulta) {
 }
 
     @Override
-    public SignosVitales fromDto(SignosVitalesRequestDto dto) {
-        SignosVitales s = new SignosVitales();
-        s.setFechaHora(dto.getFechaHora());
-        s.setPeso(dto.getPeso());
-        s.setAltura(dto.getAltura());
-        s.setImc(dto.getImc());
-        s.setTemperatura(dto.getTemperatura());
-        s.setFrecuenciaCardiaca(dto.getFrecuenciaCardiaca());
-        s.setPresionSistolica(dto.getPresionSistolica());
-        s.setPresionDiastolica(dto.getPresionDiastolica());
-        s.setSaturacionO2(dto.getSaturacionO2());
-        s.setObservaciones(dto.getObservaciones());
-        if (dto.getIdConsulta() != null) {
-            s.setConsulta(consultaService.findById(dto.getIdConsulta()));
-        }
-        return s;
-    }
-
-    @Override
     public boolean existsById(Long id) {
         return signos.existsById(id);
-    }
-
-    @Override
-    public SignosVitalesRequestDto toDto(SignosVitales s) {
-        if (s == null) return null;
-        Long idConsulta = s.getConsulta() != null ? s.getConsulta().getId() : null;
-        return new SignosVitalesRequestDto(
-                s.getFechaHora(),
-                s.getPeso(),
-                s.getAltura(),
-                s.getImc(),
-                s.getTemperatura(),
-                s.getFrecuenciaCardiaca(),
-                s.getPresionSistolica(),
-                s.getPresionDiastolica(),
-                s.getSaturacionO2(),
-                s.getObservaciones(),
-                idConsulta
-        );
     }
 
 }

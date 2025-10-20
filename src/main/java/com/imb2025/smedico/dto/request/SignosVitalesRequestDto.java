@@ -1,10 +1,9 @@
-package com.imb2025.smedico.dto;
+package com.imb2025.smedico.dto.request;
 
 import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
-import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 
