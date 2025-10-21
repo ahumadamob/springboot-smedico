@@ -31,8 +31,8 @@ public class DetalleRecetaMapper {
     public static DetalleRecetaResponseDto toResponseDto(DetalleReceta detalle) {
         DetalleRecetaResponseDto dto = new DetalleRecetaResponseDto();
         dto.setId(detalle.getId());
-        dto.setRecetaId(detalle.getReceta().getId());
-        dto.setMedicamentoId(detalle.getMedicamento().getId());
+        dto.setReceta(detalle.getReceta());
+        dto.setMedicamento(detalle.getMedicamento());
         dto.setDosis(detalle.getDosis());
         dto.setFrecuencia(detalle.getFrecuencia());
         dto.setVersion(detalle.getVersion());

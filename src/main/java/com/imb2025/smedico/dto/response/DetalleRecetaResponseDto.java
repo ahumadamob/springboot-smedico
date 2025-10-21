@@ -10,7 +10,7 @@ public class DetalleRecetaResponseDto {
     private Medicamento medicamento; 
     private String dosis;
     private String frecuencia;
-    private Integer version;
+    private Long version;
 
     public Long getId() {
         return id;
@@ -52,11 +52,11 @@ public class DetalleRecetaResponseDto {
         this.frecuencia = frecuencia;
     }
 
-    public Integer getVersion() {
+    public Long getVersion() {
         return version;
     }
 
-    public void setVersion(Integer version) {
+    public void setVersion(Long version) {
         this.version = version;
     }
 }
