@@ -1,6 +1,6 @@
 package com.imb2025.smedico.service.jpa;
 
-import com.imb2025.smedico.dto.HorarioAtencionRequestDto;
+import com.imb2025.smedico.dto.request.HorarioAtencionRequestDto;
 import com.imb2025.smedico.entity.HorarioAtencion;
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
@@ -79,6 +79,24 @@ public class HorarioAtencionServiceImpl implements IHorarioAtencionService {
             return repository.existsById(id);
         } catch (Exception e) {
             throw new RuntimeException("Error al verificar existencia: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<HorarioAtencion> findByActivoTrue() {
+        try {
+            return repository.findByActivoTrue();
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener horarios activos: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<HorarioAtencion> findByActivoFalse() {
+        try {
+            return repository.findByActivoFalse();
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener horarios inactivos: " + e.getMessage());
         }
     }
 }

@@ -22,15 +22,17 @@ public class HorarioAtencion {
     private String diaSemana;
     private String horaInicio;
     private String horaFin;
+    private Boolean activo;
 
     public HorarioAtencion() {}
 
-    public HorarioAtencion(Long id, Medico medico, String diaSemana, String horaInicio, String horaFin) {
+    public HorarioAtencion(Long id, Medico medico, String diaSemana, String horaInicio, String horaFin, Boolean activo) {
         this.id = id;
         this.medico = medico;
         this.diaSemana = diaSemana;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
+        this.activo = activo;
     }
 
     public Long getId() {
@@ -67,6 +69,14 @@ public class HorarioAtencion {
 
     public void setHoraFin(String horaFin) {
         this.horaFin = horaFin;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 
     public void setId(Long id) {

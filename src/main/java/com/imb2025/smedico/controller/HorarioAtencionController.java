@@ -81,6 +81,24 @@ public class HorarioAtencionController {
         }
     }
 
+    @GetMapping("/activos")
+    public ResponseEntity<List<HorarioAtencionResponseDto>> getHorariosActivos() {
+        List<HorarioAtencion> horarios = horarioAtencionService.findByActivoTrue();
+        List<HorarioAtencionResponseDto> response = horarios.stream()
+                .map(mapper::toResponseDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/inactivos")
+    public ResponseEntity<List<HorarioAtencionResponseDto>> getHorariosInactivos() {
+        List<HorarioAtencion> horarios = horarioAtencionService.findByActivoFalse();
+        List<HorarioAtencionResponseDto> response = horarios.stream()
+                .map(mapper::toResponseDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(response);
+    }
+
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<String> handleNotFoundException(ResourceNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());

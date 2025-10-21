@@ -33,6 +33,7 @@ public class HorarioAtencionMapper {
         horarioEntity.setDiaSemana(requestDTO.getDiaSemana());
         horarioEntity.setHoraInicio(requestDTO.getHoraInicio());
         horarioEntity.setHoraFin(requestDTO.getHoraFin());
+        horarioEntity.setActivo(requestDTO.getActivo());
         return horarioEntity;
     }
 
@@ -42,6 +43,7 @@ public class HorarioAtencionMapper {
         responseDTO.setDiaSemana(horarioEntity.getDiaSemana());
         responseDTO.setHoraInicio(horarioEntity.getHoraInicio());
         responseDTO.setHoraFin(horarioEntity.getHoraFin());
+        responseDTO.setActivo(horarioEntity.getActivo());
         responseDTO.setVersion(1); // Asumiendo versión inicial
         return responseDTO;
     }

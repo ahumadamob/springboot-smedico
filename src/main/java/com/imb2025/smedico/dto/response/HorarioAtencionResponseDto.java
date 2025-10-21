@@ -6,15 +6,17 @@ public class HorarioAtencionResponseDto {
     private String diaSemana;
     private String horaInicio;
     private String horaFin;
+    private Boolean activo;
     private Integer version;
 
     public HorarioAtencionResponseDto() {}
 
-    public HorarioAtencionResponseDto(Long id, String diaSemana, String horaInicio, String horaFin, Integer version) {
+    public HorarioAtencionResponseDto(Long id, String diaSemana, String horaInicio, String horaFin, Boolean activo, Integer version) {
         this.id = id;
         this.diaSemana = diaSemana;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
+        this.activo = activo;
         this.version = version;
     }
 
@@ -48,6 +50,14 @@ public class HorarioAtencionResponseDto {
 
     public void setHoraFin(String horaFin) {
         this.horaFin = horaFin;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 
     public Integer getVersion() {
