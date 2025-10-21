@@ -39,10 +39,14 @@ public interface IObraSocialService {
      * Verifica si existe una obra social por ID.
      */
     boolean existsById(Long id);
+    
+    long countByCobertura(String cobertura);
 
     /**
      * Elimina una obra social por ID.
      */
     void deleteById(Long id);
+    ObraSocialResponseDto findByNombre(String nombre);
+
 
 }

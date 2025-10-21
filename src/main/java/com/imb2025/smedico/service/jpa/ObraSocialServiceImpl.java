@@ -42,7 +42,6 @@ public class ObraSocialServiceImpl implements IObraSocialService {
     public ObraSocialResponseDto create(ObraSocialRequestDto dto) {
         if (repository.existsByNombre(dto.getNombre())) {
             throw new IllegalArgumentException("Ya existe una obra social con ese nombre.");
-            // ✅ Cambio: se elimina "throws Exception" → usamos excepción específica
         }
         ObraSocial nueva = fromDto(dto);
         ObraSocial guardada = repository.save(nueva);
@@ -55,9 +54,9 @@ public class ObraSocialServiceImpl implements IObraSocialService {
             throw new ResourceNotFoundException("No existe la obra social con ID: " + id);
         }
         ObraSocial entidad = fromDto(dto);
-        entidad.setId(id); // ✅ El id se setea aquí, no en el controller
+        entidad.setId(id);
         ObraSocial actualizada = repository.save(entidad);
-        return toDto(actualizada); // ✅ Devuelve DTO
+        return toDto(actualizada);
     }
 
     @Override
@@ -72,6 +71,20 @@ public class ObraSocialServiceImpl implements IObraSocialService {
     @Override
     public boolean existsById(Long id) {
         return repository.existsById(id);
+    }
+
+    // ✅ Nuevo método mágico: contar por cobertura
+    @Override
+    public long countByCobertura(String cobertura) {
+        return repository.countByCobertura(cobertura);
+    }
+
+    // ✅ Nuevo método mágico: buscar por nombre
+    @Override
+    public ObraSocialResponseDto findByNombre(String nombre) {
+        ObraSocial obraSocial = repository.findByNombre(nombre)
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró obra social con nombre: " + nombre));
+        return toDto(obraSocial);
     }
 
     // ✅ Métodos auxiliares privados de conversión
@@ -95,6 +108,7 @@ public class ObraSocialServiceImpl implements IObraSocialService {
     }
 
 }
+
 
 
 
