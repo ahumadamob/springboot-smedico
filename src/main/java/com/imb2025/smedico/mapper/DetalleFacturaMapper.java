@@ -23,7 +23,8 @@ public class DetalleFacturaMapper {
             entidad.getDescripcion(),
             entidad.getImporte(),
             entidad.getFactura() != null ? entidad.getFactura().getId() : null,
-            entidad.getVersion()
+            entidad.getVersion() != null ? entidad.getVersion().intValue() : null 
         );
     }
 }
+

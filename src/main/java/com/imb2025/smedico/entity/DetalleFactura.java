@@ -4,28 +4,23 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "detalle_factura") // Nombre explícito de la tabla
+@Table(name = "detalle_factura")
 public class DetalleFactura extends BaseEntity {
 
-    @Column(nullable = false, length = 255) // Restricciones explícitas
+    @Column(nullable = false, length = 255)
     private String descripcion;
 
-    @Column(nullable = false, precision = 10, scale = 2) // BigDecimal para dinero
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal importe;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false) // Lazy loading y obligatorio
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "factura_id", nullable = false)
     private Factura factura;
-
-    @Version
-    @Column(nullable = false)
-    private Integer version;
 
     // 🔹 Constructores
     public DetalleFactura() {}
 
-    public DetalleFactura(Long id, String descripcion, BigDecimal importe, Factura factura) {
-        super(id);
+    public DetalleFactura(String descripcion, BigDecimal importe, Factura factura) {
         this.descripcion = descripcion;
         this.importe = importe;
         this.factura = factura;
@@ -35,6 +30,7 @@ public class DetalleFactura extends BaseEntity {
     public String getDescripcion() {
         return descripcion;
     }
+
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
@@ -42,6 +38,7 @@ public class DetalleFactura extends BaseEntity {
     public BigDecimal getImporte() {
         return importe;
     }
+
     public void setImporte(BigDecimal importe) {
         this.importe = importe;
     }
@@ -49,12 +46,10 @@ public class DetalleFactura extends BaseEntity {
     public Factura getFactura() {
         return factura;
     }
+
     public void setFactura(Factura factura) {
         this.factura = factura;
     }
-
-    public Integer getVersion() { return version; }
-    public void setVersion(Integer version) { this.version = version; }
 
     // 🔹 equals y hashCode basados en id
     @Override
