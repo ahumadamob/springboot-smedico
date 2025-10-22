@@ -1,11 +1,11 @@
 package com.imb2025.smedico.controller;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,13 +13,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.imb2025.smedico.entity.Consultorio;
+import com.imb2025.smedico.mapper.ConsultorioMapper;
 import com.imb2025.smedico.service.IConsultorioService;
-
 import jakarta.validation.Valid;
-
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
-import com.imb2025.smedico.dto.ConsultorioRequestDto;
-
+import com.imb2025.smedico.dto.request.ConsultorioRequestDto;
+import com.imb2025.smedico.dto.response.ConsultorioResponseDto;
 
 @RestController
 public class ConsultorioController {
@@ -27,13 +26,31 @@ public class ConsultorioController {
 	@Autowired
 	private IConsultorioService servicio;
 	
+	@Autowired
+	private ConsultorioMapper mapper;
+	
 	//Crear Consultorio - POST
 	@PostMapping("/consultorio")
-	public ResponseEntity<ApiResponseSuccessDto<Consultorio>> create(@Valid @RequestBody ConsultorioRequestDto consultorioRequestDto) throws Exception{
-		Consultorio consultorio = servicio.create(servicio.fromDto(consultorioRequestDto));
-		ApiResponseSuccessDto<Consultorio> respuesta = new ApiResponseSuccessDto<>(true, "Consultorio creado correctamente", consultorio);
-		return ResponseEntity.status(HttpStatus.CREATED).body(respuesta);
+	public ResponseEntity<ApiResponseSuccessDto<ConsultorioResponseDto>> create(
+	        @Valid @RequestBody ConsultorioRequestDto consultorioRequestDto) throws Exception {
+
+	    // Verificar duplicado
+	    Optional<Consultorio> existente = servicio.findByIdentificadorLegibleIgnoreCase(
+	            consultorioRequestDto.getIdentificadorLegible());
+
+	    if (existente.isPresent()) {
+	        throw new IllegalArgumentException("El identificadorLegible ya existe");
+	    }
+
+	    // Crear consultorio y devolver respuesta
+	    ConsultorioResponseDto creado = servicio.crearConsultorio(consultorioRequestDto);
+
+	    ApiResponseSuccessDto<ConsultorioResponseDto> respuesta =
+	            new ApiResponseSuccessDto<>(true, "Consultorio creado correctamente", creado);
+
+	    return ResponseEntity.status(HttpStatus.CREATED).body(respuesta);
 	}
+
 	
 	//Buscar por ID - GET (por ID)
     @GetMapping("/consultorio/{id}")
@@ -80,13 +97,8 @@ public class ConsultorioController {
     //Eliminar por ID - DELETE
     @DeleteMapping("/consultorio/{id}")
     public ResponseEntity<String> delete(@PathVariable("id") Long id) {
-        Consultorio consultorio = servicio.findById(id);
-        if (consultorio == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Consultorio " + id.toString() + " no encontrado");
-        }
-        servicio.deleteById(id);
-        return ResponseEntity.ok("Consultorio " + id.toString() + " eliminado correctamente. ");
+    	servicio.deleteById(id);
+        return ResponseEntity.ok("Consultorio " + id + " eliminado correctamente.");
     }
     
     //Actualizar consultorio - PUT

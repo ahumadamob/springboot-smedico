@@ -1,26 +1,28 @@
 package com.imb2025.smedico.service.jpa;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.imb2025.smedico.dto.request.ConsultorioRequestDto;
+import com.imb2025.smedico.dto.response.ConsultorioResponseDto;
 import com.imb2025.smedico.entity.Consultorio;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
+import com.imb2025.smedico.mapper.ConsultorioMapper;
 import com.imb2025.smedico.repository.ConsultorioRepository;
 import com.imb2025.smedico.service.IConsultorioService;
-import com.imb2025.smedico.dto.ConsultorioRequestDto;
-
 
 @Service
 public class ConsultorioServiceImpl implements IConsultorioService {
 
 	@Autowired
 	private ConsultorioRepository repository;
+	private ConsultorioMapper mapper;
 	
-	//Crear y guardar nuevo repositorio
-	@Override
-	public Consultorio create(Consultorio consultorio) {
-		return repository.save(consultorio);
-	}
+	public ConsultorioServiceImpl(ConsultorioRepository repository, ConsultorioMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
+    }
 	
 	//Buscar por id
 	 @Override
@@ -90,4 +92,27 @@ public class ConsultorioServiceImpl implements IConsultorioService {
     	
     	return consultorio;
 	}	
+    
+    @Override
+    public ConsultorioResponseDto crearConsultorio(ConsultorioRequestDto dto) {
+        // Verificar duplicado
+        repository.findByIdentificadorLegibleIgnoreCase(dto.getIdentificadorLegible())
+                .ifPresent(c -> {
+                    throw new IllegalArgumentException("El identificadorLegible ya existe");
+                });
+
+        Consultorio consultorio = mapper.fromDto(dto);
+        Consultorio guardado = repository.save(consultorio);
+
+        return mapper.toResponseDto(guardado);
+    }
+
+	@Override
+	public Optional<Consultorio> findByIdentificadorLegibleIgnoreCase(String identificadorLegible) {
+		// TODO Auto-generated method stub
+		 return repository.findByIdentificadorLegibleIgnoreCase(identificadorLegible);
+	}
+	
+	
+
 }

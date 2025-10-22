@@ -1,4 +1,4 @@
-package com.imb2025.smedico.dto;
+package com.imb2025.smedico.dto.request;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -16,13 +16,16 @@ public class ConsultorioRequestDto {
     @NotNull(message = "El campo piso es obligatorio")
     @Min(value = 0, message = "El número de piso debe ser mayor o igual a 0")
     private int piso;
+    @NotBlank(message = "El identificadorLegible es obligatorio")
+    private String identificadorLegible;
 
     public ConsultorioRequestDto() {}
 
-    public ConsultorioRequestDto(String nombre, String ubicacion, int piso) {
+    public ConsultorioRequestDto(String nombre, String ubicacion, int piso, String identificadorLegible) {
         this.nombre = nombre;
         this.ubicacion = ubicacion;
         this.piso = piso;
+        this.identificadorLegible = identificadorLegible;
     }
 
     public String getNombre() {
@@ -48,4 +51,12 @@ public class ConsultorioRequestDto {
     public void setPiso(int piso) {
         this.piso = piso;
     }
+
+	public String getIdentificadorLegible() {
+		return identificadorLegible;
+	}
+	
+	public void setIdentificadorLegible(String identificadorLegible) {
+	        this.identificadorLegible = identificadorLegible;
+	}
 }
