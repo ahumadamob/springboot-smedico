@@ -136,6 +136,37 @@ public class ResultadoEstudioController {
 	}
 	
 	
+	@GetMapping("/ResultadoEstudio/True")
+	public ResponseEntity<ApiResponseSuccessDto<List<ResultadoEstudioResponseDto>>> listarTrue() {
+		
+		List<ResultadoEstudio> resultados = service.listarTrue();
+		ResultadoEstudioMapper mapper = new ResultadoEstudioMapper();
+		List<ResultadoEstudioResponseDto> dto = new ArrayList<>();
+		
+		for(ResultadoEstudio re : resultados) {
+			
+			dto.add(mapper.toDto(re));
+		}
+		
+		return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Resultados con AtributoBooleano:  True", dto));
+	}
+	
+	@GetMapping("/ResultadoEstudio/False")
+	public ResponseEntity<ApiResponseSuccessDto<List<ResultadoEstudioResponseDto>>> listarFalse() {
+		
+		List<ResultadoEstudio> resultados = service.listarFalse();
+		ResultadoEstudioMapper mapper = new ResultadoEstudioMapper();
+		List<ResultadoEstudioResponseDto> dto = new ArrayList<>();
+		
+		for(ResultadoEstudio re : resultados) {
+			
+			dto.add(mapper.toDto(re));
+		}
+		
+		return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Resultados con AtributoBooleano:  False", dto));
+	}
+	
+	
 	}
 
 

@@ -1,8 +1,7 @@
 package com.imb2025.smedico.service.jpa;
 
-import com.imb2025.smedico.dto.request.ResultadoEstudioRequestDto;
-import com.imb2025.smedico.entity.Estudio;
-import com.imb2025.smedico.entity.OrdenEstudio;
+
+
 import com.imb2025.smedico.entity.ResultadoEstudio;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.EstudioRepository;
@@ -85,6 +84,14 @@ public class ResultadoEstudioServiceImpl implements IResultadoEstudioService {
 	public long countByFechaCarga(LocalDate fechaCarga) {
 		
 		return repo.countByFechaCarga(fechaCarga);
+	}
+	
+	public List<ResultadoEstudio> listarTrue(){
+		return repo.findByAtributoBooleanoTrue();
+	}
+	
+	public List<ResultadoEstudio> listarFalse(){
+		return repo.findByAtributoBooleanoFalse();
 	}
 	
 }

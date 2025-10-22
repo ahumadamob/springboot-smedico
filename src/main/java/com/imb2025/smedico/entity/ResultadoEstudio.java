@@ -19,21 +19,22 @@ public class ResultadoEstudio extends BaseEntity {
     private Long resultado;    
     private LocalDate fechaCarga;
     private String observaciones;
+    private Boolean atributoBooleano;
 
     public ResultadoEstudio() {}
 
     public ResultadoEstudio(OrdenEstudio ordenEstudio, Estudio estudio, Long resultado,
-                             LocalDate fechaCarga, String observaciones) {
+                             LocalDate fechaCarga, String observaciones, Boolean atributoBooleano) {
        
         this.ordenEstudio = ordenEstudio;
         this.estudio = estudio;
         this.resultado = resultado;       
         this.fechaCarga = fechaCarga;
         this.observaciones = observaciones;
+        this.atributoBooleano = atributoBooleano;
     }
 
-
-    public OrdenEstudio getOrdenEstudio() {
+	public OrdenEstudio getOrdenEstudio() {
         return ordenEstudio;
     }
 
@@ -74,4 +75,14 @@ public class ResultadoEstudio extends BaseEntity {
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
+
+	public Boolean getAtributoBooleano() {
+		return atributoBooleano;
+	}
+
+	public void setAtributoBooleano(Boolean atributoBooleano) {
+		this.atributoBooleano = atributoBooleano;
+	}
+    
+    
 }

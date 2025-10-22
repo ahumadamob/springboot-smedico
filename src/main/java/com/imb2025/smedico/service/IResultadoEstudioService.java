@@ -17,4 +17,8 @@ public interface IResultadoEstudioService {
     
     public List<ResultadoEstudio> findByFechaCarga(LocalDate fechaCarga);
 	public long countByFechaCarga(LocalDate fechaCarga);
+	public List<ResultadoEstudio> listarTrue();
+	public List<ResultadoEstudio> listarFalse();
+	
+	
 }

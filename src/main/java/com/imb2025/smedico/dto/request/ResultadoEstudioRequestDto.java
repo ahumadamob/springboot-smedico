@@ -26,16 +26,19 @@ public class ResultadoEstudioRequestDto {
     private LocalDate fechaCarga;
 	@Size(min = 5, message = "Las observaciones no pueden tener menos de 5 caracteres")
     private String observaciones;
+	
+	private Boolean atributoBooleano;
 
         public ResultadoEstudioRequestDto() {}
 
         public ResultadoEstudioRequestDto(
-                long ordenEstudioId, long estudioId, long resultado, LocalDate fechaCarga, String observaciones) {
+                long ordenEstudioId, long estudioId, long resultado, LocalDate fechaCarga, String observaciones, Boolean atributoBooleano) {
                 this.ordenEstudioId = ordenEstudioId;
                 this.estudioId = estudioId;
                 this.resultado = resultado;
                 this.fechaCarga = fechaCarga;
                 this.observaciones = observaciones;
+                this.atributoBooleano = atributoBooleano;
         }
 
 	public long getOrdenEstudioId() {
@@ -79,6 +82,15 @@ public class ResultadoEstudioRequestDto {
 	public void setEstudioId(long estudioId) {
 		this.estudioId = estudioId;
 	}
+
+	public Boolean getAtributoBooleano() {
+		return atributoBooleano;
+	}
+
+	public void setAtributoBooleano(Boolean atributoBooleano) {
+		this.atributoBooleano = atributoBooleano;
+	}
+	
 	
 }
 

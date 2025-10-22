@@ -18,6 +18,7 @@ public class ResultadoEstudioResponseDto {
     
     private Long id;    
     private Long version;
+    private Boolean atributoBooleano;
 	
     
     
@@ -63,6 +64,12 @@ public class ResultadoEstudioResponseDto {
 	}
 	public void setVersion(Long version) {
 		this.version = version;
+	}
+	public Boolean getAtributoBooleano() {
+		return atributoBooleano;
+	}
+	public void setAtributoBooleano(Boolean atributoBooleano) {
+		this.atributoBooleano = atributoBooleano;
 	}
     
     

@@ -33,6 +33,8 @@ public class ResultadoEstudioMapper {
         resultado.setResultado(requestDto.getResultado());
         resultado.setFechaCarga(requestDto.getFechaCarga());
         resultado.setObservaciones(requestDto.getObservaciones());
+        
+        resultado.setAtributoBooleano(requestDto.getAtributoBooleano());
         return resultado;
     }
     
@@ -48,6 +50,7 @@ public class ResultadoEstudioMapper {
     	dto.setResultado(resultadoEstudio.getResultado());
     	dto.setVersion(resultadoEstudio.getVersion());
     	
+    	dto.setAtributoBooleano(resultadoEstudio.getAtributoBooleano());
     	return dto;
     }
 	

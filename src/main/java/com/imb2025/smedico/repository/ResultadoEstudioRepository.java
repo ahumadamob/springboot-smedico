@@ -13,5 +13,8 @@ public interface ResultadoEstudioRepository extends JpaRepository<ResultadoEstud
 	List<ResultadoEstudio> findByFechaCarga(LocalDate fechaCarga);
 	
 	long countByFechaCarga(LocalDate fechaCarga);
+	
+	List<ResultadoEstudio> findByAtributoBooleanoTrue();
+	List<ResultadoEstudio> findByAtributoBooleanoFalse();
 
 }
