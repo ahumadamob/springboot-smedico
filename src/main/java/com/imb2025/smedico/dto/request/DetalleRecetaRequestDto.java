@@ -19,6 +19,9 @@ public class DetalleRecetaRequestDto {
     @NotNull(message = "La frecuencia no puede ser nula")
     private String frecuencia;
 
+    @NotNull(message ="El estado es obligatorio")
+    private boolean controlado;
+
     // Getters y Setters
     public Long getRecetaId() {
         return recetaId;
@@ -51,6 +54,12 @@ public class DetalleRecetaRequestDto {
     public void setFrecuencia(String frecuencia) {
         this.frecuencia = frecuencia;
     }
+
+    public boolean isControlado() {
+        return controlado;
+    }
+
+    public void setControlado(boolean controlado) {
+        this.controlado = controlado;
+    }
 }
-
-

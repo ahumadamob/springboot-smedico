@@ -28,13 +28,18 @@ public class DetalleReceta extends BaseEntity {
     @Column(nullable = false)
     private String frecuencia;
 
+    
+    @Column(nullable = false)
+    private boolean controlado;
+
     public DetalleReceta() {}
 
-    public DetalleReceta(Receta receta, Medicamento medicamento, String dosis, String frecuencia) {
+    public DetalleReceta(Receta receta, Medicamento medicamento, String dosis, String frecuencia, boolean controlado) {
         this.receta = receta;
         this.medicamento = medicamento;
         this.dosis = dosis;
         this.frecuencia = frecuencia;
+        this.controlado = controlado;
     }
 
     public Receta getReceta() {
@@ -67,5 +72,14 @@ public class DetalleReceta extends BaseEntity {
 
     public void setFrecuencia(String frecuencia) {
         this.frecuencia = frecuencia;
+    }
+
+   
+    public boolean isControlado() {
+        return controlado;
+    }
+
+    public void setControlado(boolean controlado) {
+        this.controlado = controlado;
     }
 }

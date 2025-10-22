@@ -11,6 +11,8 @@ public class DetalleRecetaResponseDto {
     private String dosis;
     private String frecuencia;
     private Long version;
+    private boolean controlado;
+
 
     public Long getId() {
         return id;
@@ -58,5 +60,13 @@ public class DetalleRecetaResponseDto {
 
     public void setVersion(Long version) {
         this.version = version;
+    }
+
+    public boolean isControlado() {
+        return controlado;
+    }
+
+    public void setControlado(boolean controlado) {
+        this.controlado = controlado;
     }
 }
