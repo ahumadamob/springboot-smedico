@@ -9,6 +9,7 @@ public class AsistenteResponseDto {
     private String nombre;
     private Long dni;
     private String email;
+    private Boolean esSupervisor;
     
 	public Long getId() {
 		return id;
@@ -46,6 +47,13 @@ public class AsistenteResponseDto {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-    
-    
+
+    public Boolean getEsSupervisor() {
+        return esSupervisor;
+    }
+
+    public void setEsSupervisor(Boolean esSupervisor) {
+        this.esSupervisor = esSupervisor;
+    }
+
 }

@@ -12,5 +12,7 @@ public interface AsistenteRepository extends JpaRepository<Asistente, Long> {
 	List<Asistente> findByApellido(String apellido);
 	
 	long countByNombre(String nombre);
-	
+
+    List<Asistente> findByEsSupervisorTrue();
+    List<Asistente> findByEsSupervisorFalse();
 }

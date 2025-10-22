@@ -13,8 +13,10 @@ public interface IAsistenteService {
     public void deleteById(Long id);
 
     
- // Métodos mágicos
+    // Métodos mágicos
     List<Asistente> findByApellido(String apellido);
     Long countByNombre(String nombre);
+    List<Asistente> findSupervisores();
+    List<Asistente> findNoSupervisores();
 
 }

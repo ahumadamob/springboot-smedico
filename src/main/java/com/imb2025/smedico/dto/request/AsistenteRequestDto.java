@@ -29,16 +29,20 @@ public class AsistenteRequestDto {
     @NotNull(message = "El DNI no puede ser nulo")
     @Positive(message = "El DNI debe ser un número positivo")
     private Long dni;
+    
+    @NotNull(message = "El campo esSupervisor no puede ser nulo")
+    private Boolean esSupervisor;
 
     public AsistenteRequestDto() {
     }
 
-    public AsistenteRequestDto(String apellido, String nombre, String email, String telefono, Long dni) {
+    public AsistenteRequestDto(String apellido, String nombre, String email, String telefono, Long dni, Boolean esSupervisor) {
         this.apellido = apellido;
         this.nombre = nombre;
         this.email = email;
         this.telefono = telefono;
         this.dni = dni;
+        this.esSupervisor = esSupervisor; 
     }
 
     public String getApellido() {
@@ -79,5 +83,13 @@ public class AsistenteRequestDto {
 
     public void setDni(Long dni) {
         this.dni = dni;
+    }
+    
+    public Boolean getEsSupervisor() {
+        return esSupervisor;
+    }
+
+    public void setEsSupervisor(Boolean esSupervisor) {
+        this.esSupervisor = esSupervisor;
     }
 }

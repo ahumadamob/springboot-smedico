@@ -3,7 +3,7 @@ package com.imb2025.smedico.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "asistentes") // Nombre explícito para la tabla
+@Table(name = "asistentes")
 public class Asistente extends BaseEntity{
 
 
@@ -22,16 +22,20 @@ public class Asistente extends BaseEntity{
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
+    @Column(nullable = false)
+    private Boolean esSupervisor;
+
     // Constructores
     public Asistente() {
     }
 
-    public Asistente( String apellido, String nombre, String telefono, Long dni, String email) {
+    public Asistente( String apellido, String nombre, String telefono, Long dni, String email, Boolean esSupervisor) {
         this.apellido = apellido;
         this.nombre = nombre;
         this.telefono = telefono;
         this.dni = dni;
         this.email = email;
+        this.esSupervisor = esSupervisor;
     }
 
     // Getters y Setters
@@ -71,7 +75,14 @@ public class Asistente extends BaseEntity{
         this.email = email;
     }
 
-    // toString() útil para depuración y logs
+    public Boolean getEsSupervisor() {
+        return esSupervisor;
+    }
+
+    public void setEsSupervisor(Boolean esSupervisor) {
+        this.esSupervisor = esSupervisor;
+    }
+
     @Override
     public String toString() {
         return "Asistente{" +
@@ -80,6 +91,7 @@ public class Asistente extends BaseEntity{
                 ", telefono='" + telefono + '\'' +
                 ", dni=" + dni +
                 ", email='" + email + '\'' +
+                ", esSupervisor=" + esSupervisor +
                 '}';
     }
 }

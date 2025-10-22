@@ -13,6 +13,7 @@ public class AsistenteMapper {
         asistente.setEmail(dto.getEmail());
         asistente.setTelefono(dto.getTelefono());
         asistente.setDni(dto.getDni());
+        asistente.setEsSupervisor(dto.getEsSupervisor());
         return asistente;
     }
     
@@ -25,7 +26,8 @@ public class AsistenteMapper {
     	dto.setId(asistente.getId());
     	dto.setNombre(asistente.getNombre());
     	dto.setVersion(asistente.getVersion());
-    	
+        dto.setEsSupervisor(asistente.getEsSupervisor());
+   	
     	return dto;
     }
 }

@@ -1,9 +1,12 @@
 package com.imb2025.smedico.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult; 
 import org.springframework.web.bind.annotation.*;
 
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
@@ -23,6 +26,16 @@ public class AsistenteController {
     private IAsistenteService service;
 
     private AsistenteMapper mapper = new AsistenteMapper();
+
+    private ResponseEntity<Object> handleValidationErrors(BindingResult result) {
+        List<String> errores = result.getFieldErrors().stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+            java.util.Collections.singletonMap("errors", errores)
+        );
+    }
 
     @GetMapping
     public ResponseEntity<ApiResponseSuccessDto<List<AsistenteResponseDto>>> findAll() {
@@ -55,8 +68,13 @@ public class AsistenteController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<AsistenteResponseDto>> create(
-            @Valid @RequestBody AsistenteRequestDto dto) {
+    public ResponseEntity<?> create( 
+            @Valid @RequestBody AsistenteRequestDto dto,
+            BindingResult result) { 
+
+        if (result.hasErrors()) {
+            return handleValidationErrors(result); 
+        }
 
         Asistente asistente = mapper.fromDto(dto);
         Asistente creado = service.create(asistente);
@@ -71,9 +89,14 @@ public class AsistenteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<AsistenteResponseDto>> update(
+    public ResponseEntity<?> update( 
             @PathVariable Long id,
-            @Valid @RequestBody AsistenteRequestDto dto) {
+            @Valid @RequestBody AsistenteRequestDto dto,
+            BindingResult result) { 
+
+        if (result.hasErrors()) {
+            return handleValidationErrors(result);
+        }
 
         Asistente asistente = mapper.fromDto(dto);
         Asistente actualizado = service.update(id, asistente);
@@ -124,6 +147,40 @@ public class AsistenteController {
 
         ApiResponseSuccessDto<Long> resp = new ApiResponseSuccessDto<>(
                 true, mensaje, cantidad
+        );
+        return ResponseEntity.ok(resp);
+    }
+    
+    @GetMapping("/supervisores") 
+    public ResponseEntity<ApiResponseSuccessDto<List<AsistenteResponseDto>>> findSupervisores() {
+        List<Asistente> lista = service.findSupervisores();
+
+        List<AsistenteResponseDto> dtoList = lista.stream()
+                .map(mapper::toDto)
+                .toList();
+
+        String mensaje = lista.isEmpty() ? "No se encontraron asistentes supervisores"
+                                         : "Listado de asistentes supervisores obtenido con éxito";
+
+        ApiResponseSuccessDto<List<AsistenteResponseDto>> resp = new ApiResponseSuccessDto<>(
+                true, mensaje, dtoList
+        );
+        return ResponseEntity.ok(resp);
+    }
+
+    @GetMapping("/no-supervisores") 
+    public ResponseEntity<ApiResponseSuccessDto<List<AsistenteResponseDto>>> findNoSupervisores() {
+        List<Asistente> lista = service.findNoSupervisores();
+
+        List<AsistenteResponseDto> dtoList = lista.stream()
+                .map(mapper::toDto)
+                .toList();
+        
+        String mensaje = lista.isEmpty() ? "No se encontraron asistentes no supervisores"
+                                         : "Listado de asistentes no supervisores obtenido con éxito";
+
+        ApiResponseSuccessDto<List<AsistenteResponseDto>> resp = new ApiResponseSuccessDto<>(
+                true, mensaje, dtoList
         );
         return ResponseEntity.ok(resp);
     }

@@ -11,10 +11,6 @@ import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.AsistenteRepository;
 import com.imb2025.smedico.service.IAsistenteService;
 
-/**
- * Implementación de {@link IAsistenteService} usando JPA.
- * Maneja la lógica de negocio para la entidad {@link Asistente}.
- */
 @Service
 public class AsistenteServiceImpl implements IAsistenteService {
 
@@ -55,6 +51,8 @@ public class AsistenteServiceImpl implements IAsistenteService {
         existente.setTelefono(asistente.getTelefono());
         existente.setDni(asistente.getDni());
 
+        existente.setEsSupervisor(asistente.getEsSupervisor());
+
         return repo.save(existente);
     }
 
@@ -66,8 +64,8 @@ public class AsistenteServiceImpl implements IAsistenteService {
         }
         repo.deleteById(id);
     }
-    
- // Métodos mágicos
+     
+    // Métodos mágicos
     @Override
     public List<Asistente> findByApellido(String apellido) {
         return repo.findByApellido(apellido);
@@ -77,4 +75,15 @@ public class AsistenteServiceImpl implements IAsistenteService {
     public Long countByNombre(String nombre) {
         return repo.countByNombre(nombre);
     }
+
+    @Override
+    public List<Asistente> findSupervisores() {
+        return repo.findByEsSupervisorTrue();
+    }
+
+    @Override
+    public List<Asistente> findNoSupervisores() {
+        return repo.findByEsSupervisorFalse();
+    }
+
 }
