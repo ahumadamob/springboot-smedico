@@ -25,15 +25,22 @@ public class ObraSocial {
     @Column(length = 100)
     private String cobertura;
 
+    // 🔹 Nuevo atributo booleano para identificar si la obra social está activa o no
+    @Column(nullable = false)
+    private boolean activa;
+
+    // 🔸 Constructores
     public ObraSocial() {}
 
-    public ObraSocial(String nombre, String telefono, String direccion, String cobertura) {
+    public ObraSocial(String nombre, String telefono, String direccion, String cobertura, boolean activa) {
         this.nombre = nombre;
         this.telefono = telefono;
         this.direccion = direccion;
         this.cobertura = cobertura;
+        this.activa = activa;
     }
 
+    // 🔸 Getters y Setters
     public Long getId() {
         return id;
     }
@@ -73,6 +80,14 @@ public class ObraSocial {
     public void setCobertura(String cobertura) {
         this.cobertura = cobertura;
     }
+
+    public boolean isActiva() {
+        return activa;
+    }
+    public void setActiva(boolean activa) {
+        this.activa = activa;
+    }
 }
+
 
 

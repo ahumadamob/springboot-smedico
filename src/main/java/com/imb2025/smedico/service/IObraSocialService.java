@@ -1,7 +1,7 @@
 package com.imb2025.smedico.service;
 
-import com.imb2025.smedico.dto.ObraSocialRequestDto;
-import com.imb2025.smedico.dto.ObraSocialResponseDto;
+import com.imb2025.smedico.dto.request.ObraSocialRequestDto;
+import com.imb2025.smedico.dto.response.ObraSocialResponseDto;
 
 import java.util.List;
 

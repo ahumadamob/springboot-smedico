@@ -1,13 +1,20 @@
-package com.imb2025.smedico.dto;
+package com.imb2025.smedico.dto.response;
 
 public class ObraSocialResponseDto {
+
     private Long id;
     private String nombre;
     private String telefono;
     private String direccion;
     private String cobertura;
 
-    // Getters y setters
+    // 🔹 Nuevo campo: indica si la obra social está activa
+    private boolean activa;
+
+    // 🔹 Nuevo campo: versión del registro (placeholder, se puede setear manualmente en el mapper)
+    private int version;
+
+    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -42,6 +49,21 @@ public class ObraSocialResponseDto {
     public void setCobertura(String cobertura) {
         this.cobertura = cobertura;
     }
+
+    public boolean isActiva() {
+        return activa;
+    }
+    public void setActiva(boolean activa) {
+        this.activa = activa;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+    public void setVersion(int version) {
+        this.version = version;
+    }
 }
+
 
 

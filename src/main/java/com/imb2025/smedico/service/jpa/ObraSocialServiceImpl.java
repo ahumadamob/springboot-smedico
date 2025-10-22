@@ -7,12 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import com.imb2025.smedico.dto.ObraSocialRequestDto;
-import com.imb2025.smedico.dto.ObraSocialResponseDto;
+import com.imb2025.smedico.dto.request.ObraSocialRequestDto;
+import com.imb2025.smedico.dto.response.ObraSocialResponseDto;
 import com.imb2025.smedico.entity.ObraSocial;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.ObraSocialRepository;
 import com.imb2025.smedico.service.IObraSocialService;
+import com.imb2025.smedico.mapper.ObraSocialMapper; // ✅ IMPORT CORRECTO
 
 /**
  * Implementación de IObraSocialService utilizando JPA.
@@ -27,7 +28,7 @@ public class ObraSocialServiceImpl implements IObraSocialService {
     public List<ObraSocialResponseDto> findAll() {
         return repository.findAll()
                 .stream()
-                .map(this::toDto) // ✅ Se convierte la entidad a DTO de respuesta
+                .map(ObraSocialMapper::toResponseDto) // ✅ Mapper corregido
                 .collect(Collectors.toList());
     }
 
@@ -35,18 +36,17 @@ public class ObraSocialServiceImpl implements IObraSocialService {
     public ObraSocialResponseDto findById(Long id) {
         ObraSocial obraSocial = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Entidad no encontrada con id " + id));
-        return toDto(obraSocial); // ✅ Devuelve DTO
+        return ObraSocialMapper.toResponseDto(obraSocial);
     }
 
     @Override
     public ObraSocialResponseDto create(ObraSocialRequestDto dto) {
         if (repository.existsByNombre(dto.getNombre())) {
             throw new IllegalArgumentException("Ya existe una obra social con ese nombre.");
-            // ✅ Cambio: se elimina "throws Exception" → usamos excepción específica
         }
-        ObraSocial nueva = fromDto(dto);
+        ObraSocial nueva = ObraSocialMapper.fromDto(dto); // ✅ Mapper corregido
         ObraSocial guardada = repository.save(nueva);
-        return toDto(guardada); // ✅ Devuelve DTO
+        return ObraSocialMapper.toResponseDto(guardada);
     }
 
     @Override
@@ -54,10 +54,10 @@ public class ObraSocialServiceImpl implements IObraSocialService {
         if (!repository.existsById(id)) {
             throw new ResourceNotFoundException("No existe la obra social con ID: " + id);
         }
-        ObraSocial entidad = fromDto(dto);
-        entidad.setId(id); // ✅ El id se setea aquí, no en el controller
+        ObraSocial entidad = ObraSocialMapper.fromDto(dto); // ✅ Mapper corregido
+        entidad.setId(id);
         ObraSocial actualizada = repository.save(entidad);
-        return toDto(actualizada); // ✅ Devuelve DTO
+        return ObraSocialMapper.toResponseDto(actualizada);
     }
 
     @Override
@@ -73,28 +73,9 @@ public class ObraSocialServiceImpl implements IObraSocialService {
     public boolean existsById(Long id) {
         return repository.existsById(id);
     }
-
-    // ✅ Métodos auxiliares privados de conversión
-    private ObraSocial fromDto(ObraSocialRequestDto dto) {
-        return new ObraSocial(
-            dto.getNombre(),
-            dto.getTelefono(),
-            dto.getDireccion(),
-            dto.getCobertura()
-        );
-    }
-
-    private ObraSocialResponseDto toDto(ObraSocial entity) {
-        ObraSocialResponseDto dto = new ObraSocialResponseDto();
-        dto.setId(entity.getId());
-        dto.setNombre(entity.getNombre());
-        dto.setTelefono(entity.getTelefono());
-        dto.setDireccion(entity.getDireccion());
-        dto.setCobertura(entity.getCobertura());
-        return dto;
-    }
-
 }
+
+
 
 
 

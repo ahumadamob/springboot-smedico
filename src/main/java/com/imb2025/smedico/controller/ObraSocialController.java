@@ -2,16 +2,13 @@ package com.imb2025.smedico.controller;
 
 import com.imb2025.smedico.service.IObraSocialService;
 import jakarta.validation.Valid;
-
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
-import com.imb2025.smedico.dto.ObraSocialRequestDto;
-import com.imb2025.smedico.dto.ObraSocialResponseDto; // ✅ Cambio 1: se importa el DTO de respuesta
-
+import com.imb2025.smedico.dto.request.ObraSocialRequestDto;
+import com.imb2025.smedico.dto.response.ObraSocialResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.*;
 
 @RestController
@@ -22,28 +19,22 @@ public class ObraSocialController {
     private IObraSocialService service;
 
     @GetMapping
-    public ResponseEntity<ApiResponseSuccessDto<List<ObraSocialResponseDto>>> getAll() { 
-     
-        List<ObraSocialResponseDto> obras = service.findAll(); 
-        // ✅ Cambio 1: el service ya debe devolver DTOs, no entidades
+    public ResponseEntity<ApiResponseSuccessDto<List<ObraSocialResponseDto>>> getAll() {
+        List<ObraSocialResponseDto> obras = service.findAll();
 
         ApiResponseSuccessDto<List<ObraSocialResponseDto>> response = new ApiResponseSuccessDto<>();
         response.setSuccess(true);
         response.setData(obras);
-        response.setMessage(obras.isEmpty() 
-                ? "Sin datos: no hay obras sociales registradas." 
+        response.setMessage(obras.isEmpty()
+                ? "Sin datos: no hay obras sociales registradas."
                 : "Listado obtenido correctamente.");
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<ObraSocialResponseDto>> getObraSocialById(
-            @PathVariable Long id) { 
-        // ✅ Cambio 2: ya no se hace null-check aquí ni se arma error en el controlador
-        //    El service lanza ResourceNotFoundException y GlobalExceptionHandler lo maneja
-
-        ObraSocialResponseDto encontrada = service.findById(id); 
-        // ✅ Cambio 1: devuelve DTO, no entidad
+            @PathVariable Long id) {
+        ObraSocialResponseDto encontrada = service.findById(id);
 
         ApiResponseSuccessDto<ObraSocialResponseDto> resp = new ApiResponseSuccessDto<>();
         resp.setSuccess(true);
@@ -54,11 +45,9 @@ public class ObraSocialController {
 
     @PostMapping
     public ResponseEntity<ApiResponseSuccessDto<ObraSocialResponseDto>> createObraSocial(
-            @Valid @RequestBody ObraSocialRequestDto dto) { 
-        // ✅ Cambio 3: @Valid se aplica sobre el @RequestBody, no sobre PathVariable
+            @Valid @RequestBody ObraSocialRequestDto dto) {
 
-        ObraSocialResponseDto nueva = service.create(dto); 
-        // ✅ Cambio 1: se trabaja con DTOs, no entidades
+        ObraSocialResponseDto nueva = service.create(dto);
 
         ApiResponseSuccessDto<ObraSocialResponseDto> response = new ApiResponseSuccessDto<>();
         response.setSuccess(true);
@@ -70,10 +59,9 @@ public class ObraSocialController {
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<ObraSocialResponseDto>> updateObraSocial(
             @PathVariable Long id,
-            @Valid @RequestBody ObraSocialRequestDto dto) { 
-   
-        ObraSocialResponseDto actualizada = service.update(id, dto); 
-        // ✅ Cambio 1: devuelve DTO, no entidad
+            @Valid @RequestBody ObraSocialRequestDto dto) {
+
+        ObraSocialResponseDto actualizada = service.update(id, dto);
 
         ApiResponseSuccessDto<ObraSocialResponseDto> response = new ApiResponseSuccessDto<>();
         response.setSuccess(true);
@@ -84,17 +72,15 @@ public class ObraSocialController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<Void>> delete(@PathVariable Long id) {
-        // ✅ Cambio 2: ya no se hace null-check ni se arma error en el controller
-        //    El service lanza ResourceNotFoundException y GlobalExceptionHandler lo maneja
-
         service.deleteById(id);
 
         ApiResponseSuccessDto<Void> response = new ApiResponseSuccessDto<>();
         response.setSuccess(true);
         response.setData(null);
-        response.setMessage("Obra social eliminada correctamente");
+        response.setMessage("Obra social eliminada correctamente.");
         return ResponseEntity.ok(response);
     }
 }
+
 
 
