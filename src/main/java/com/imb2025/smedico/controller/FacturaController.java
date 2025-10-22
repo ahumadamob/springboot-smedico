@@ -111,4 +111,49 @@ public class FacturaController {
                 new ApiResponseSuccessDto<>(true, "Conteo de Facturas pagadas con: " + medioPago, cantidadFacturas);
         return ResponseEntity.ok(resp);
     }
+
+    @GetMapping("/pagadas")
+    public ResponseEntity<ApiResponseSuccessDto<List<FacturaResponseDto>>> getFacturasPagadas(){
+        List<Factura> facturas = facturaService.findByIsPagadaTrue();
+        List<FacturaResponseDto> facturasResponseDtos = new ArrayList<>();
+        FacturaMapper facturaMapper = new FacturaMapper();
+
+        for (Factura f: facturas){
+            FacturaResponseDto facturaResponseDto = facturaMapper.facturaToDto(f);
+            facturasResponseDtos.add(facturaResponseDto);
+        }
+
+        String mensaje;
+        if(facturasResponseDtos.isEmpty()){
+            mensaje = "No hay facturas disponibles";
+        } else {
+            mensaje = "Lista de Facturas obtenidas correctamente";
+        }
+        ApiResponseSuccessDto<List<FacturaResponseDto>> resp =
+                new ApiResponseSuccessDto<>(true, mensaje, facturasResponseDtos);
+        return ResponseEntity.ok(resp);
+    }
+
+    @GetMapping("/no-pagadas")
+    public ResponseEntity<ApiResponseSuccessDto<List<FacturaResponseDto>>> getFacturasNoPagadas(){
+        List<Factura> facturas = facturaService.findByIsPagadaFalse();
+        List<FacturaResponseDto> facturasResponseDtos = new ArrayList<>();
+        FacturaMapper facturaMapper = new FacturaMapper();
+
+        for (Factura f: facturas){
+            FacturaResponseDto facturaResponseDto = facturaMapper.facturaToDto(f);
+            facturasResponseDtos.add(facturaResponseDto);
+        }
+
+        String mensaje;
+        if(facturasResponseDtos.isEmpty()){
+            mensaje = "No hay facturas disponibles";
+        } else {
+            mensaje = "Lista de Facturas obtenidas correctamente";
+        }
+        ApiResponseSuccessDto<List<FacturaResponseDto>> resp =
+                new ApiResponseSuccessDto<>(true, mensaje, facturasResponseDtos);
+        return ResponseEntity.ok(resp);
+    }
+
 }

@@ -23,13 +23,17 @@ public class FacturaRequestDto {
     @Positive(message = "El id del medio de pago debe ser un número positivo")
     private Long medioPagoId;
 
+    @NotNull(message = "El estado del pago es obligatorio")
+    private Boolean isPagada;
+
     public FacturaRequestDto() {}
 
-    public FacturaRequestDto(LocalDate fecha, Long pacienteId, Double monto, Long medioPagoId) {
+    public FacturaRequestDto(LocalDate fecha, Long pacienteId, Double monto, Long medioPagoId, Boolean isPagada) {
         this.fecha = fecha;
         this.pacienteId = pacienteId;
         this.monto = monto;
         this.medioPagoId = medioPagoId;
+        this.isPagada = isPagada;
     }
 
     public LocalDate getFecha() {
@@ -62,5 +66,13 @@ public class FacturaRequestDto {
 
     public void setMedioPagoId(Long medioPagoId) {
         this.medioPagoId = medioPagoId;
+    }
+
+    public Boolean getPagada() {
+        return isPagada;
+    }
+
+    public void setPagada(Boolean pagada) {
+        isPagada = pagada;
     }
 }

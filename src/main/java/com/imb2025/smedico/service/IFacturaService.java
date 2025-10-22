@@ -12,4 +12,6 @@ public interface IFacturaService {
     public void deleteById(Long id);
     public List<Factura> findAllByPacienteId(Long id);
     public Long countByMedioPago(String medioPago);
+    public List<Factura> findByIsPagadaTrue();
+    public List<Factura> findByIsPagadaFalse();
 }

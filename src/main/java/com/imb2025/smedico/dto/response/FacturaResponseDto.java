@@ -20,6 +20,8 @@ public class FacturaResponseDto {
 
     private MedioPago medioPago;
 
+    private Boolean isPagada;
+
     public Long getId() {
         return id;
     }
@@ -66,5 +68,13 @@ public class FacturaResponseDto {
 
     public void setMedioPago(MedioPago medioPago) {
         this.medioPago = medioPago;
+    }
+
+    public Boolean getPagada() {
+        return isPagada;
+    }
+
+    public void setPagada(Boolean pagada) {
+        isPagada = pagada;
     }
 }
