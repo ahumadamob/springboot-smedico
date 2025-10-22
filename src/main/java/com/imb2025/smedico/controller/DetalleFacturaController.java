@@ -96,4 +96,28 @@ public class DetalleFacturaController {
         detalleFacturaService.deleteById(id);
         return buildResponse("DetalleFactura eliminada correctamente", null, HttpStatus.OK);
     }
+
+    @Operation(summary = "Busca detalles de factura por descripción")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Búsqueda realizada correctamente"),
+        @ApiResponse(responseCode = "400", description = "Parámetro de búsqueda inválido")
+    })
+    @GetMapping("/buscar")
+    public ResponseEntity<ApiResponseSuccessDto<List<DetalleFactura>>> buscarPorDescripcion(
+            @RequestParam String descripcion) {
+        List<DetalleFactura> lista = detalleFacturaService.findByDescripcion(descripcion);
+        return buildResponse("Resultados de búsqueda", lista, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Cuenta la cantidad de detalles para una factura")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Cantidad obtenida correctamente"),
+        @ApiResponse(responseCode = "404", description = "Factura no encontrada")
+    })
+    @GetMapping("/count")
+    public ResponseEntity<ApiResponseSuccessDto<Long>> contarPorFactura(
+            @RequestParam Long facturaId) {
+        long count = detalleFacturaService.countByFacturaId(facturaId);
+        return buildResponse("Cantidad de detalles para la factura", count, HttpStatus.OK);
+    }
 }

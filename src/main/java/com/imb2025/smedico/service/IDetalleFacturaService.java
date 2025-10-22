@@ -12,4 +12,6 @@ public interface IDetalleFacturaService {
     boolean existsById(Long id);
     void deleteById(Long id);
     DetalleFactura fromDto(DetalleFacturaRequestDto dto);
+    List<DetalleFactura> findByDescripcion(String descripcion);
+    long countByFacturaId(Long facturaId);
 }

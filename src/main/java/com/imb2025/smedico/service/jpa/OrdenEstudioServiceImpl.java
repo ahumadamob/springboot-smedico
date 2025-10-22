@@ -5,7 +5,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.imb2025.smedico.dto.OrdenEstudioRequestDto;
+
+import com.imb2025.smedico.dto.request.OrdenEstudioRequestDto;
 import com.imb2025.smedico.entity.Estudio;
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.entity.OrdenEstudio;
@@ -71,26 +72,7 @@ public class OrdenEstudioServiceImpl implements IOrdenEstudioService{
         }
     }
     
- 
 
-    @Override
-    public OrdenEstudio fromDto(OrdenEstudioRequestDto dto) {
-        Medico medico = medicoRepository.findById(dto.getMedicoId())
-                .orElseThrow(() -> new ResourceNotFoundException("Médico no encontrado con ID " + dto.getMedicoId()));
-
-        Paciente paciente = pacienteRepository.findById(dto.getPacienteId())
-                .orElseThrow(() -> new ResourceNotFoundException("Paciente no encontrado con ID " + dto.getPacienteId()));
-
-        Estudio estudio = estudioRepository.findById(dto.getEstudioId())
-                .orElseThrow(() -> new ResourceNotFoundException("Estudio no encontrado con ID " + dto.getEstudioId()));
-
-        OrdenEstudio ordenEstudio = new OrdenEstudio();
-        ordenEstudio.setEstudio(estudio);
-        ordenEstudio.setFecha(dto.getFecha());
-        ordenEstudio.setMedico(medico);
-        ordenEstudio.setPaciente(paciente);
-        return ordenEstudio;
-    }
     
  
 	@Override

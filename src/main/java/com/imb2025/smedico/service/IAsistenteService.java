@@ -1,6 +1,6 @@
 package com.imb2025.smedico.service;
 
-import com.imb2025.smedico.dto.AsistenteRequestDto;
+import com.imb2025.smedico.dto.request.AsistenteRequestDto;
 import com.imb2025.smedico.entity.Asistente;
 import java.util.List;
 
@@ -11,7 +11,7 @@ public interface IAsistenteService {
     public Asistente findById(Long id);
     public boolean existsById(Long id);
     public void deleteById(Long id);
-    public Asistente fromDto(AsistenteRequestDto asistenteRequestDto);
+
     
  // Métodos mágicos
     List<Asistente> findByApellido(String apellido);

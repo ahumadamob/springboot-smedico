@@ -1,29 +1,39 @@
-package com.imb2025.smedico.entity;
+package com.imb2025.smedico.dto.response;
 
-import jakarta.persistence.Entity;
+import com.imb2025.smedico.entity.MedioPago;
+import com.imb2025.smedico.entity.Paciente;
 import jakarta.persistence.ManyToOne;
+
 import java.time.LocalDate;
 
-@Entity
-public class Factura extends BaseEntity{
+public class FacturaResponseDto {
+
+    private Long id;
+
+    private Long version;
 
     private LocalDate fecha;
 
-    @ManyToOne
     private Paciente paciente;
 
     private Double monto;
 
-    @ManyToOne
     private MedioPago medioPago;
 
-    public Factura() {}
+    public Long getId() {
+        return id;
+    }
 
-    public Factura(LocalDate fecha, Paciente paciente, Double monto, MedioPago medioPago) {
-        this.fecha = fecha;
-        this.paciente = paciente;
-        this.monto = monto;
-        this.medioPago = medioPago;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public LocalDate getFecha() {

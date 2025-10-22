@@ -1,7 +1,3 @@
-
-
-
-
 package com.imb2025.smedico.service.jpa;
 
 import java.util.List;
@@ -80,6 +76,16 @@ public class DetalleFacturaServiceImpl implements IDetalleFacturaService {
         detalleFactura.setFactura(factura);
 
         return detalleFactura;
+    }
+
+    @Override
+    public List<DetalleFactura> findByDescripcion(String descripcion) {
+        return repo.findByDescripcionContainingIgnoreCase(descripcion);
+    }
+
+    @Override
+    public long countByFacturaId(Long facturaId) {
+        return repo.countByFactura_Id(facturaId);
     }
 }
 

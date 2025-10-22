@@ -8,16 +8,16 @@ import com.imb2025.smedico.entity.Encuesta;
 public interface IEncuestaService {
 
     List<Encuesta> findAll();
-
     Encuesta findById(Long id);
 
     Encuesta create(Encuesta encuesta);
-
     Encuesta update(Long id, Encuesta encuesta);
+    void deleteById(Long id);
+    boolean existsById(Long id);
 
     Encuesta fromDto(EncuestaRequestDto dto);
 
-    void deleteById(Long id);
-
-    boolean existsById(Long id);
+    // TP07
+    List<Encuesta> findByPuntajeGreaterThanEqual(int puntajeMin);
+    long countByConsulta(Long consultaId);
 }

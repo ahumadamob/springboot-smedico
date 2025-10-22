@@ -1,6 +1,7 @@
 package com.imb2025.smedico.controller;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,11 @@ import com.imb2025.smedico.service.IRecetaService;
 import jakarta.validation.Valid;
 
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
-import com.imb2025.smedico.dto.RecetaRequestDto;
+import com.imb2025.smedico.dto.request.RecetaRequestDto;
+import com.imb2025.smedico.dto.response.RecetaResponseDto;
 import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.entity.Receta;
+import com.imb2025.smedico.mapper.RecetaMapper;
 
 @RestController
 public class RecetaController {
@@ -32,28 +35,41 @@ public class RecetaController {
 	private IRecetaService service;
 	
 	@GetMapping("/receta")
-    public ResponseEntity<ApiResponseSuccessDto<List<Receta>>> findAllReceta() {
+    public ResponseEntity<ApiResponseSuccessDto<List<RecetaResponseDto>>> findAllReceta() {
         List<Receta> lista = service.findAll();
-        ApiResponseSuccessDto<List<Receta>> resp;
+        List <RecetaResponseDto> listaReponse = new  ArrayList<RecetaResponseDto>();
+		RecetaMapper mapper = new RecetaMapper();
+        for(Receta m: lista) {
+        	RecetaResponseDto dto = new RecetaResponseDto();
+        	dto = mapper.toDto(m);
+        	listaReponse.add(dto);
+        }
+        
+        ApiResponseSuccessDto<List<RecetaResponseDto>> resp;
+
         if (lista.isEmpty()) {
-            resp = new ApiResponseSuccessDto<>(true,"No hay recetas disponibles",lista);
+            resp = new ApiResponseSuccessDto<>(true,"No hay recetas disponibles",listaReponse);
         } else {
-            resp = new ApiResponseSuccessDto<>(true,"Lista de recetas",lista);
+            resp = new ApiResponseSuccessDto<>(true,"Lista de recetas",listaReponse);
         }
         return ResponseEntity.ok(resp);       
     }
 	
 	@GetMapping("/receta/{id}")
-	public ResponseEntity<ApiResponseSuccessDto<Receta>> findById(@PathVariable("id") Long id) {
+	public ResponseEntity<ApiResponseSuccessDto<RecetaResponseDto>> findById(@PathVariable("id") Long id) {
 		Receta receta = service.findById(id);
-		ApiResponseSuccessDto<Receta> resp =
-				new ApiResponseSuccessDto<>(true,"Receta encontrada",receta);
+		RecetaMapper mapper = new RecetaMapper();
+		RecetaResponseDto dto = new RecetaResponseDto();
+		dto = mapper.toDto(receta);
+		ApiResponseSuccessDto<RecetaResponseDto> resp =
+				new ApiResponseSuccessDto<>(true,"Receta encontrada", dto);
 		return ResponseEntity.ok(resp);
 	}
 	
 	@PostMapping("/receta")
 	public ResponseEntity<ApiResponseSuccessDto<Receta>> create(@Valid @RequestBody RecetaRequestDto recetaRequestDto) {
-        Receta receta = service.create(service.fromDto(recetaRequestDto));
+		RecetaMapper mapper = new RecetaMapper();
+        Receta receta = service.create(mapper.fromDto(recetaRequestDto));
         ApiResponseSuccessDto<Receta> resp =
 				new ApiResponseSuccessDto<>(true,"Receta creada correctamente",receta);
         return ResponseEntity.status(HttpStatus.CREATED).body(resp);
@@ -61,7 +77,8 @@ public class RecetaController {
 	
 	@PutMapping("/receta/{id}")
 	public ResponseEntity<ApiResponseSuccessDto<Receta>> update(@PathVariable("id") Long id,@Valid @RequestBody RecetaRequestDto recetaRequestDto) {
-        Receta recetaEntity = service.fromDto(recetaRequestDto);
+		RecetaMapper mapper = new RecetaMapper();
+		Receta recetaEntity = mapper.fromDto(recetaRequestDto);
         Receta actualizado = service.update(id, recetaEntity);
 		ApiResponseSuccessDto<Receta> resp =
 				new ApiResponseSuccessDto<>(true,"Receta actualizada",actualizado);

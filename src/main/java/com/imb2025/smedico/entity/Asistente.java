@@ -4,11 +4,8 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "asistentes") // Nombre explícito para la tabla
-public class Asistente {
+public class Asistente extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @Column(nullable = false, length = 50)
     private String apellido;
@@ -29,8 +26,7 @@ public class Asistente {
     public Asistente() {
     }
 
-    public Asistente(Long id, String apellido, String nombre, String telefono, Long dni, String email) {
-        this.id = id;
+    public Asistente( String apellido, String nombre, String telefono, Long dni, String email) {
         this.apellido = apellido;
         this.nombre = nombre;
         this.telefono = telefono;
@@ -39,12 +35,6 @@ public class Asistente {
     }
 
     // Getters y Setters
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getApellido() {
         return apellido;
@@ -85,7 +75,6 @@ public class Asistente {
     @Override
     public String toString() {
         return "Asistente{" +
-                "id=" + id +
                 ", apellido='" + apellido + '\'' +
                 ", nombre='" + nombre + '\'' +
                 ", telefono='" + telefono + '\'' +
