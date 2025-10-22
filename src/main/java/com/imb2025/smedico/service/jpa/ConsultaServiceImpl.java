@@ -44,31 +44,32 @@ public class ConsultaServiceImpl implements IConsultaService {
         return consultaRepository.existsById(id);
     }
 
-    // ============================================================
-    // ✅ createFromDto usando el Mapper
-    // ============================================================
+    // ✅ createFromDto con validación de identificadorLegible duplicado
     @Override
     @Transactional
     public Consulta createFromDto(ConsultaRequestDto dto) {
-        // 1️⃣ Validar Turno existente
+        // 1️⃣ Validar identificadorLegible duplicado
+        if (consultaRepository.findByIdentificadorLegibleIgnoreCase(dto.getIdentificadorLegible()).isPresent()) {
+            throw new IllegalArgumentException("identificadorLegible duplicado");
+        }
+
+        // 2️⃣ Validar Turno existente
         Turno turno = turnoRepository.findById(dto.getTurnoId())
                 .orElseThrow(() -> new ResourceNotFoundException("Turno no encontrado con id " + dto.getTurnoId()));
 
-        // 2️⃣ Validar unicidad (un Turno = una Consulta)
+        // 3️⃣ Validar unicidad (un Turno = una Consulta)
         if (consultaRepository.existsByTurno_Id(dto.getTurnoId())) {
             throw new IllegalArgumentException("El turno ya está asignado a otra consulta");
         }
 
-        // 3️⃣ Crear la entidad desde el mapper
+        // 4️⃣ Crear la entidad desde el mapper
         Consulta nueva = ConsultaMapper.fromDto(dto, turno);
 
-        // 4️⃣ Guardar
+        // 5️⃣ Guardar
         return consultaRepository.save(nueva);
     }
 
-    // ============================================================
     // ✅ updateFromDto usando el Mapper
-    // ============================================================
     @Override
     @Transactional
     public Consulta updateFromDto(Long id, ConsultaRequestDto dto) {

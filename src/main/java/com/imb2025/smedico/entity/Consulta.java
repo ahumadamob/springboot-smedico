@@ -1,18 +1,11 @@
 package com.imb2025.smedico.entity;
+
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "consulta")
-public class Consulta {
-
-	
-	   @Version                      
-	    @Column(name = "version")
-	    private Integer version;   
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Consulta extends BaseEntity {
 
     @Column(nullable = false)
     private LocalDate fecha;
@@ -21,41 +14,69 @@ public class Consulta {
     @JoinColumn(name = "turno_id", nullable = false, unique = true)
     private Turno turno;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "paciente_id", nullable = false)
-    private Paciente paciente;
-
     @Column(name = "duracion_min", nullable = false)
-    private int duracionMin;
+    private Integer duracionMin;
 
     @Column(length = 500)
     private String comentarios;
 
-    // getters/setters
-    public Integer getVersion() { return version; }
-    public void setVersion(Integer version) { this.version = version; }
+    @Column(name = "fecha_vigencia")
+    private LocalDate fechaVigencia;
+
+    // ✅ NUEVO: Identificador legible (NO único en schema)
+    @Column(name = "identificador_legible", nullable = false)
+    private String identificadorLegible;
+
+    // Constructores
     public Consulta() {}
 
-    public Consulta(Long id, LocalDate fecha, Turno turno, int duracionMin, String comentarios) {
-        this.id = id;
-        this.fecha = fecha;
-        this.turno = turno;
-        this.duracionMin = duracionMin;
-        this.comentarios = comentarios;
+    // Getters y Setters
+    public LocalDate getFecha() { 
+        return fecha; 
+    }
+    
+    public void setFecha(LocalDate fecha) { 
+        this.fecha = fecha; 
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Turno getTurno() { 
+        return turno; 
+    }
+    
+    public void setTurno(Turno turno) { 
+        this.turno = turno; 
+    }
 
-    public LocalDate getFecha() { return fecha; }
-    public void setFecha(LocalDate fecha) { this.fecha = fecha; }
+    public Integer getDuracionMin() { 
+        return duracionMin; 
+    }
+    
+    public void setDuracionMin(Integer duracionMin) { 
+        this.duracionMin = duracionMin; 
+    }
 
-    public Turno getTurno() { return turno; }
-    public void setTurno(Turno turno) { this.turno = turno; }
+    public String getComentarios() { 
+        return comentarios; 
+    }
+    
+    public void setComentarios(String comentarios) { 
+        this.comentarios = comentarios; 
+    }
 
-    public int getDuracionMin() { return duracionMin; }
-    public void setDuracionMin(int duracionMin) { this.duracionMin = duracionMin; }
+    public LocalDate getFechaVigencia() { 
+        return fechaVigencia; 
+    }
+    
+    public void setFechaVigencia(LocalDate fechaVigencia) { 
+        this.fechaVigencia = fechaVigencia; 
+    }
 
-    public String getComentarios() { return comentarios; }
-    public void setComentarios(String comentarios) { this.comentarios = comentarios; }
+    // ✅ NUEVO: Getter y Setter para identificadorLegible
+    public String getIdentificadorLegible() {
+        return identificadorLegible;
+    }
+
+    public void setIdentificadorLegible(String identificadorLegible) {
+        this.identificadorLegible = identificadorLegible;
+    }
 }

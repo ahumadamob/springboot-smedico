@@ -1,22 +1,28 @@
 package com.imb2025.smedico.controller;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
+import com.imb2025.smedico.dto.mapper.ConsultaMapper;
 import com.imb2025.smedico.dto.request.ConsultaRequestDto;
 import com.imb2025.smedico.dto.response.ConsultaResponseDto;
 import com.imb2025.smedico.entity.Consulta;
 import com.imb2025.smedico.service.IConsultaService;
+
 import jakarta.validation.Valid;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
+
 @RestController
 @RequestMapping("/consulta")
 public class ConsultaController {
@@ -24,24 +30,12 @@ public class ConsultaController {
     @Autowired
     private IConsultaService consultaService;
 
-    // ---------- Mapper privado ----------
-    private ConsultaResponseDto toResponseDto(Consulta c) {
-        return new ConsultaResponseDto(
-            c.getId(),
-            c.getFecha(),
-            c.getDuracionMin(),
-            c.getComentarios(),
-            c.getTurno() != null ? c.getTurno().getId() : null,
-            c.getVersion()   // usa null si aún no tienes @Version
-        );
-    }
-
-    // ---------- Listado ----------
+    // ✅ Listado
     @GetMapping
     public ResponseEntity<ApiResponseSuccessDto<List<ConsultaResponseDto>>> findAll() {
         List<Consulta> lista = consultaService.findAll();
         List<ConsultaResponseDto> data = lista.stream()
-                .map(this::toResponseDto)
+                .map(ConsultaMapper::toResponseDto)  // ✅ Usa el mapper estático
                 .collect(Collectors.toList());
 
         var resp = new ApiResponseSuccessDto<List<ConsultaResponseDto>>();
@@ -51,19 +45,19 @@ public class ConsultaController {
         return ResponseEntity.ok(resp);
     }
 
-    // ---------- Detalle por ID ----------
+    // ✅ Detalle por ID
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<ConsultaResponseDto>> getById(@PathVariable Long id) {
         Consulta c = consultaService.findById(id);
 
         var resp = new ApiResponseSuccessDto<ConsultaResponseDto>();
         resp.setSuccess(true);
-        resp.setData(toResponseDto(c));
+        resp.setData(ConsultaMapper.toResponseDto(c));  // ✅ Usa el mapper estático
         resp.setMessage("Consulta encontrada");
         return ResponseEntity.ok(resp);
     }
 
-    // ---------- Crear ----------
+    // ✅ Crear
     @PostMapping
     public ResponseEntity<ApiResponseSuccessDto<ConsultaResponseDto>> create(
             @Valid @RequestBody ConsultaRequestDto dto) {
@@ -71,12 +65,12 @@ public class ConsultaController {
 
         var resp = new ApiResponseSuccessDto<ConsultaResponseDto>();
         resp.setSuccess(true);
-        resp.setData(toResponseDto(creada));
+        resp.setData(ConsultaMapper.toResponseDto(creada));  // ✅ Usa el mapper estático
         resp.setMessage("Consulta creada");
         return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 
-    // ---------- Actualizar ----------
+    // ✅ Actualizar
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<ConsultaResponseDto>> update(
             @PathVariable Long id,
@@ -86,12 +80,12 @@ public class ConsultaController {
 
         var resp = new ApiResponseSuccessDto<ConsultaResponseDto>();
         resp.setSuccess(true);
-        resp.setData(toResponseDto(actualizada));
+        resp.setData(ConsultaMapper.toResponseDto(actualizada));  // ✅ Usa el mapper estático
         resp.setMessage("Consulta actualizada");
         return ResponseEntity.ok(resp);
     }
 
-    // ---------- Eliminar ----------
+    // ✅ Eliminar
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<Void>> delete(@PathVariable Long id) {
         consultaService.deleteById(id);
@@ -103,15 +97,15 @@ public class ConsultaController {
         return ResponseEntity.ok(resp);
     }
 
-    // ---------- Filtro por fecha ----------
+    // ✅ Filtro por fecha
     @GetMapping("/filtro-fecha")
     public ResponseEntity<ApiResponseSuccessDto<List<ConsultaResponseDto>>> filtrarPorFecha(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate desde,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate hasta,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
-            @RequestParam(defaultValue = "fecha,desc") String sort
-    ) {
+            @RequestParam(defaultValue = "fecha,desc") String sort) {
+        
         String[] parts = sort.split(",", 2);
         Sort s = (parts.length == 2 && "asc".equalsIgnoreCase(parts[1]))
                 ? Sort.by(parts[0]).ascending()
@@ -121,7 +115,7 @@ public class ConsultaController {
         Page<Consulta> pageResult = consultaService.findByFechaBetween(desde, hasta, pageable);
 
         List<ConsultaResponseDto> data = pageResult.getContent().stream()
-                .map(this::toResponseDto)
+                .map(ConsultaMapper::toResponseDto)  // ✅ Usa el mapper estático
                 .collect(Collectors.toList());
 
         var resp = new ApiResponseSuccessDto<List<ConsultaResponseDto>>();
@@ -131,7 +125,7 @@ public class ConsultaController {
         return ResponseEntity.ok(resp);
     }
 
-    // ---------- Conteo por paciente ----------
+    // ✅ Conteo por paciente
     @GetMapping("/count")
     public ResponseEntity<ApiResponseSuccessDto<Long>> contarPorPaciente(@RequestParam Long pacienteId) {
         long total = consultaService.countByPacienteId(pacienteId);
@@ -143,5 +137,3 @@ public class ConsultaController {
         return ResponseEntity.ok(resp);
     }
 }
-
-
