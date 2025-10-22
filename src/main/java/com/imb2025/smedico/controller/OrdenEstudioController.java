@@ -1,13 +1,12 @@
 package com.imb2025.smedico.controller;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.request.OrdenEstudioRequestDto;
 import com.imb2025.smedico.dto.response.OrdenEstudioResponseDto;
@@ -19,119 +18,107 @@ import com.imb2025.smedico.service.IOrdenEstudioService;
 
 import jakarta.validation.Valid;
 
-
 @RestController
 @RequestMapping("/ordenestudio")
 public class OrdenEstudioController {
 
-    @Autowired
-    private IOrdenEstudioService service;
-    
-    @Autowired
-    private MedicoRepository medicoRepository;
-    
+    private final IOrdenEstudioService service;
+    private final MedicoRepository medicoRepository;
+    private final OrdenEstudioMapper mapper; // ✅ Inyectar el mapper
 
+    // Constructor con inyección de dependencias
+    public OrdenEstudioController(IOrdenEstudioService service, 
+                                  MedicoRepository medicoRepository,
+                                  OrdenEstudioMapper mapper) {
+        this.service = service;
+        this.medicoRepository = medicoRepository;
+        this.mapper = mapper; // ✅ Inyectar
+    }
 
     // GET - Obtener todas las órdenes de estudio
     @GetMapping
     public ResponseEntity<ApiResponseSuccessDto<List<OrdenEstudioResponseDto>>> findAllOrdenEstudio() {
         List<OrdenEstudio> ordenes = service.findAll();
-        List<OrdenEstudioResponseDto> listaResponse = new ArrayList<OrdenEstudioResponseDto>();
-    	OrdenEstudioMapper mapper=new OrdenEstudioMapper();
-
-        for(OrdenEstudio o: ordenes){
-        	OrdenEstudioResponseDto dto = new OrdenEstudioResponseDto();
-         	dto=mapper.toDto(o);
-         	listaResponse.add(dto);
-         	
-        }
+        List<OrdenEstudioResponseDto> listaResponse = mapper.toResponseDtoList(ordenes);
         
-        String message;
-        if (ordenes.size() == 0) {
-            message = "No hay órdenes de estudio disponibles";
-        } else {
-            message = "Lista de órdenes de estudio";
-        }
-
-        ApiResponseSuccessDto<List<OrdenEstudioResponseDto>> resp =
-                new ApiResponseSuccessDto<>(true, message, listaResponse);
-
-        return ResponseEntity.ok(resp);
+        String message = ordenes.isEmpty() ? "No hay órdenes de estudio disponibles" : "Lista de órdenes de estudio";
+        
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, message, listaResponse));
     }
 
     // GET - Obtener una orden de estudio por ID
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<OrdenEstudioResponseDto>> findOrdenEstudioById(@PathVariable("id") Long id) {
- 
+    public ResponseEntity<ApiResponseSuccessDto<OrdenEstudioResponseDto>> findOrdenEstudioById(@PathVariable Long id) {
         OrdenEstudio orden = service.findById(id);
-        OrdenEstudioMapper mapper=new OrdenEstudioMapper();
-    	OrdenEstudioResponseDto dto= new OrdenEstudioResponseDto();
-        dto=mapper.toDto(orden); 
-        ApiResponseSuccessDto<OrdenEstudioResponseDto> resp =
-                new ApiResponseSuccessDto<>(true, "Orden de Estudio encontrada", dto);
-        return ResponseEntity.ok(resp);
+        OrdenEstudioResponseDto dto = mapper.toDto(orden);
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Orden de Estudio encontrada", dto));
     }
 
-
- // GET - Obtener órdenes de estudio por fecha
+    // GET - Obtener órdenes de estudio por fecha
     @GetMapping("/fecha/{fecha}")
-    public ResponseEntity<ApiResponseSuccessDto<List<OrdenEstudio>>> findOrdenEstudioByFecha(@PathVariable LocalDate fecha) {
+    public ResponseEntity<ApiResponseSuccessDto<List<OrdenEstudioResponseDto>>> findOrdenEstudioByFecha(@PathVariable LocalDate fecha) {
         List<OrdenEstudio> ordenes = service.findByFecha(fecha);
-        ApiResponseSuccessDto<List<OrdenEstudio>> resp = new ApiResponseSuccessDto<>(true, "Órdenes encontradas", ordenes);
-        return ResponseEntity.ok(resp);
+        List<OrdenEstudioResponseDto> listaResponse = mapper.toResponseDtoList(ordenes);
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Órdenes encontradas", listaResponse));
     }
 
     // GET - Obtener la cantidad de órdenes por médico
     @GetMapping("/medico/{idMedico}/count")
     public ResponseEntity<ApiResponseSuccessDto<Long>> countByMedico(@PathVariable Long idMedico) {
         Medico medico = medicoRepository.findById(idMedico)
-            .orElseThrow(() -> new RuntimeException("Médico no encontrado"));
-
+                .orElseThrow(() -> new RuntimeException("Médico no encontrado"));
         long cantidad = service.countByMedico(medico);
-        ApiResponseSuccessDto<Long> resp = new ApiResponseSuccessDto<>(true, "Cantidad encontrada", cantidad);
-        return ResponseEntity.ok(resp);
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Cantidad encontrada", cantidad));
     }
 
+    // GET - Órdenes vigentes
+    @GetMapping("/recurso/vigentes")
+    public ResponseEntity<ApiResponseSuccessDto<List<OrdenEstudioResponseDto>>> getVigentes() {
+        List<OrdenEstudio> ordenes = service.findByVigentes(LocalDate.now());
+        List<OrdenEstudioResponseDto> lista = mapper.toResponseDtoList(ordenes);
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Órdenes de estudio vigentes", lista));
+    }
 
+    // GET - Órdenes vencidas
+    @GetMapping("/recurso/vencidos")
+    public ResponseEntity<ApiResponseSuccessDto<List<OrdenEstudioResponseDto>>> getVencidos() {
+        List<OrdenEstudio> ordenes = service.findByVencidos(LocalDate.now());
+        List<OrdenEstudioResponseDto> lista = mapper.toResponseDtoList(ordenes);
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Órdenes de estudio vencidas", lista));
+    }
 
     // POST - Crear una nueva orden de estudio
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<OrdenEstudio>> createOrdenEstudio(@Valid @RequestBody OrdenEstudioRequestDto dto) throws Exception {
-          
-    	
-    	OrdenEstudioMapper mapper=new OrdenEstudioMapper();
-    	
-    	OrdenEstudio orden = mapper.fromDto(dto);
-        ApiResponseSuccessDto<OrdenEstudio> resp =
-                new ApiResponseSuccessDto<>(true, "Orden de Estudio creada correctamente", orden);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
+    public ResponseEntity<ApiResponseSuccessDto<OrdenEstudioResponseDto>> createOrdenEstudio(
+            @Valid @RequestBody OrdenEstudioRequestDto dto) throws Exception {
+        
+        OrdenEstudio orden = mapper.fromDto(dto);
+        OrdenEstudio ordenGuardada = service.create(orden);
+        OrdenEstudioResponseDto responseDto = mapper.toDto(ordenGuardada);
+        
+        ApiResponseSuccessDto<OrdenEstudioResponseDto> response = 
+            new ApiResponseSuccessDto<>(true, "Orden de Estudio creada correctamente", responseDto);
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     // PUT - Actualizar una orden de estudio
     @PutMapping("/{id}")
-
-    public ResponseEntity<ApiResponseSuccessDto<OrdenEstudio>> updateOrdenEstudio(@PathVariable("id") Long id,@Valid @RequestBody OrdenEstudioRequestDto dto) throws Exception {
+    public ResponseEntity<ApiResponseSuccessDto<OrdenEstudioResponseDto>> updateOrdenEstudio(
+            @PathVariable Long id, 
+            @Valid @RequestBody OrdenEstudioRequestDto dto) throws Exception {
         
-    	OrdenEstudioMapper mapper=new OrdenEstudioMapper();
-    	OrdenEstudio orden = mapper.fromDto(dto);  
-    	OrdenEstudio ordenActualizada = service.update(id, orden);
-
-
-        ApiResponseSuccessDto<OrdenEstudio> resp =
-                new ApiResponseSuccessDto<>(true, "Orden de Estudio actualizada correctamente", ordenActualizada);
-
-        return ResponseEntity.ok(resp);
+        OrdenEstudio orden = mapper.fromDto(dto);
+        OrdenEstudio ordenActualizada = service.update(id, orden);
+        OrdenEstudioResponseDto responseDto = mapper.toDto(ordenActualizada);
+        
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Orden de Estudio actualizada correctamente", responseDto));
     }
 
     // DELETE - Eliminar una orden de estudio
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<String>> deleteOrdenEstudio(@PathVariable Long id) {
         service.deleteById(id);
-
-        ApiResponseSuccessDto<String> resp =
-                new ApiResponseSuccessDto<>(true, "Orden de Estudio eliminada correctamente", "Id " + id);
-
-        return ResponseEntity.ok(resp);
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Orden de Estudio eliminada correctamente", "Id " + id));
     }
 }
