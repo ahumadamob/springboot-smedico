@@ -11,4 +11,6 @@ public interface MotivoCancelacionRepository extends JpaRepository<MotivoCancela
 	 List<MotivoCancelacion> findByNombreContainingIgnoreCase(String nombre);
 	 
 	 long countByDescripcion(String descripcion);
+	 
+	 long countByEstado(MotivoCancelacion.Estado estado);
 }

@@ -6,10 +6,11 @@ import com.imb2025.smedico.entity.MotivoCancelacion;
 
 public class MotivoCancelacionMapper {
 
-    public MotivoCancelacion fromDto(MotivoCancelacionRequestDto dto) {
+    public MotivoCancelacion fromDto(MotivoCancelacionRequestDto dto) {	
         MotivoCancelacion motivoCancelacion = new MotivoCancelacion();
         motivoCancelacion.setNombre(dto.getNombre());
         motivoCancelacion.setDescripcion(dto.getDescripcion());
+        motivoCancelacion.setEstado(dto.getEstado());
         return motivoCancelacion;
     }
     
@@ -19,7 +20,7 @@ public class MotivoCancelacionMapper {
     	dto.setDescripcion(motivoCancelacion.getDescripcion());
     	dto.setNombre(motivoCancelacion.getNombre());
     	dto.setVersion(motivoCancelacion.getVersion());
-    	
+    	dto.setEstado(motivoCancelacion.getEstado());
     	return dto;
     }
 }

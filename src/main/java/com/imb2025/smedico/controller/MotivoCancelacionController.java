@@ -110,5 +110,30 @@ public class MotivoCancelacionController {
                                 cantidad);
                 return ResponseEntity.ok(resp);
         }
+        
+        @GetMapping("/stats/activos")
+        public ResponseEntity<ApiResponseSuccessDto<Long>> getMotivosActivosCount() {
+            long total = service.countByEstado(MotivoCancelacion.Estado.ACTIVO);
+            ApiResponseSuccessDto<Long> resp = new ApiResponseSuccessDto<>(true,
+                total == 0 
+                    ? "No existen motivos de cancelación activos"
+                    : "Cantidad de motivos de cancelación activos",
+                total
+            );
+            return ResponseEntity.ok(resp);
+        }
+
+        @GetMapping("/stats/inactivos")
+        public ResponseEntity<ApiResponseSuccessDto<Long>> getMotivosInactivosCount() {
+            long total = service.countByEstado(MotivoCancelacion.Estado.INACTIVO);
+            ApiResponseSuccessDto<Long> resp = new ApiResponseSuccessDto<>(true,
+                total == 0 
+                    ? "No existen motivos de cancelación inactivos"
+                    : "Cantidad de motivos de cancelación inactivos",
+                total
+            );
+            return ResponseEntity.ok(resp);
+        }
+
 
 }

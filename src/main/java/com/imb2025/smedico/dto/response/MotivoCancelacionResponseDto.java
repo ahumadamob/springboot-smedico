@@ -1,11 +1,14 @@
 package com.imb2025.smedico.dto.response;
 
+import com.imb2025.smedico.entity.MotivoCancelacion.Estado;
+
 public class MotivoCancelacionResponseDto {
 	
 	private String nombre;
     private String descripcion;
     private Long id;
     private Long version;
+    private Estado estado;
     
 	public String getNombre() {
 		return nombre;
@@ -30,6 +33,12 @@ public class MotivoCancelacionResponseDto {
 	}
 	public void setVersion(Long version) {
 		this.version = version;
+	}
+	public Estado getEstado() {
+		return estado;
+	}
+	public void setEstado(Estado estado) {
+		this.estado = estado;
 	}
     
     

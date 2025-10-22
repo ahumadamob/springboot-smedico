@@ -66,4 +66,9 @@ public class MotivoCancelacionServiceImpl implements IMotivoCancelacionService {
     public long countByDescripcion(String descripcion) {
         return repo.countByDescripcion(descripcion);
     }
+    
+    @Override
+    public long countByEstado(MotivoCancelacion.Estado estado) {
+        return repo.countByEstado(estado);
+    }
 }

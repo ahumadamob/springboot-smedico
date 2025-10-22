@@ -1,6 +1,9 @@
 package com.imb2025.smedico.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -12,6 +15,14 @@ public class MotivoCancelacion extends BaseEntity{
 
     private String nombre;
     private String descripcion;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Estado estado;
+    
+    public enum Estado {
+        ACTIVO,
+        INACTIVO
+    }
 
     public MotivoCancelacion() {}
 
@@ -19,7 +30,6 @@ public class MotivoCancelacion extends BaseEntity{
         this.nombre = nombre;
         this.descripcion = descripcion;
     }
-
 
     public String getNombre() {
         return nombre;
@@ -35,6 +45,14 @@ public class MotivoCancelacion extends BaseEntity{
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+    
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
     }
 
 }

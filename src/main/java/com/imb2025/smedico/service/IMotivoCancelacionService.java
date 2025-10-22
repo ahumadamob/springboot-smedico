@@ -12,4 +12,5 @@ public interface IMotivoCancelacionService {
     public void deleteById(Long id);
 	public List<MotivoCancelacion> findByNombre(String nombre);
 	public long countByDescripcion(String descripcion);
+	public long countByEstado(MotivoCancelacion.Estado estado);
 }
