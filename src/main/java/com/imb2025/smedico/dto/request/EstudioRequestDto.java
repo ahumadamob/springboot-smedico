@@ -21,6 +21,9 @@ public class EstudioRequestDto {
 
     @Positive(message = "El ID del resultado de estudio debe ser un número positivo.")
     private Long resultadoEstudioId;
+    
+    @NotNull(message = "El campo 'habilitado' es obligatorio.")
+    private Boolean habilitado;
 
     public EstudioRequestDto() {}
 
@@ -28,11 +31,13 @@ public class EstudioRequestDto {
             String nombre,
             String descripcion,
             Long especialidadId,
-            Long resultadoEstudioId) {
+            Long resultadoEstudioId,
+            Boolean habilitado) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.especialidadId = especialidadId;
         this.resultadoEstudioId = resultadoEstudioId;
+        this.habilitado = habilitado;
     }
 
     public String getNombre() {
@@ -66,4 +71,7 @@ public class EstudioRequestDto {
     public void setResultadoEstudioId(Long resultadoEstudioId) {
         this.resultadoEstudioId = resultadoEstudioId;
     }
+    
+    public Boolean getHabilitado() { return habilitado; }
+    public void setHabilitado(Boolean habilitado) { this.habilitado = habilitado; }
 }

@@ -42,6 +42,8 @@ public class EstudioMapper {
         estudio.setDescripcion(dto.getDescripcion());
         estudio.setEspecialidad(especialidad);
         estudio.setResultadoEstudio(resultadoEstudio);
+        
+        estudio.setHabilitado(dto.getHabilitado());
         return estudio;
     }
 
@@ -50,6 +52,7 @@ public class EstudioMapper {
         dto.setId(estudio.getId());
         dto.setNombre(estudio.getNombre());
         dto.setDescripcion(estudio.getDescripcion());
+        dto.setHabilitado(estudio.getHabilitado());
         return dto;
     }
 }

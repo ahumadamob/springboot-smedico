@@ -9,4 +9,6 @@ public interface EstudioRepository extends JpaRepository<Estudio, Long> {
 	List<Estudio> findAllByOrderByNombreAsc();
 	List<Estudio> findByNombreContainingIgnoreCase(String nombre);
 	long countByEspecialidadId(Long especialidadId);
+	List<Estudio> findByHabilitadoTrue();
+    List<Estudio> findByHabilitadoFalse();
 }

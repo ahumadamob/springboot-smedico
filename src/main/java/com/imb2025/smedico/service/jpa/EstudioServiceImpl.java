@@ -42,9 +42,7 @@ public class EstudioServiceImpl implements IEstudioService {
 
     @Override
     public Estudio create(Estudio estudio) {
-        // Validaciones mínimas SIN checked exceptions:
         if (estudio.getEspecialidad() == null) {
-            // Si preferís, usá BadRequestException en lugar de IllegalArgumentException
             throw new IllegalArgumentException("Especialidad es obligatoria");
         }
         return repoEstudio.save(estudio);
@@ -59,6 +57,7 @@ public class EstudioServiceImpl implements IEstudioService {
         existente.setDescripcion(estudio.getDescripcion());
         existente.setEspecialidad(estudio.getEspecialidad());
         existente.setResultadoEstudio(estudio.getResultadoEstudio());
+        existente.setHabilitado(estudio.getHabilitado());
 
         return repoEstudio.save(existente);
     }
@@ -73,5 +72,11 @@ public class EstudioServiceImpl implements IEstudioService {
 
     @Override public long countByEspecialidadId(Long especialidadId) {
         return repoEstudio.countByEspecialidadId(especialidadId);
+    }
+    @Override public List<Estudio> findHabilitados() { 
+    	return repoEstudio.findByHabilitadoTrue(); 
+    }
+    @Override public List<Estudio> findDeshabilitados() { 
+    	return repoEstudio.findByHabilitadoFalse();
     }
 }

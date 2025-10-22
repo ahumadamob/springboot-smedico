@@ -9,6 +9,7 @@ public class EstudioResponseDto {
     private String descripcion;
     private Long especialidadId;
     private String especialidadNombre;
+    private Boolean habilitado;
 
     private String resultadoDescripcion;
 
@@ -22,6 +23,7 @@ public class EstudioResponseDto {
         this.resultadoDescripcion = (estudio.getResultadoEstudio() != null)
                 ? estudio.getResultadoEstudio().getObservaciones()
                 : null;
+        this.habilitado = estudio.getHabilitado();
     }
 
     public EstudioResponseDto() {}
@@ -43,4 +45,7 @@ public class EstudioResponseDto {
 
     public String getResultadoDescripcion() { return resultadoDescripcion; }
     public void setResultadoDescripcion(String resultadoDescripcion) { this.resultadoDescripcion = resultadoDescripcion; }
+    
+    public Boolean getHabilitado() { return habilitado; }
+    public void setHabilitado(Boolean habilitado) { this.habilitado = habilitado; }
 }

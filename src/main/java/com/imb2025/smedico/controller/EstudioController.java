@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.EstudioResponseDto;
 import com.imb2025.smedico.dto.request.EstudioRequestDto;
 import com.imb2025.smedico.entity.Estudio;
@@ -36,6 +37,29 @@ public class EstudioController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(dtoList);
     }
+    
+    @GetMapping("/habilitados")
+    public ResponseEntity<ApiResponseSuccessDto<List<EstudioResponseDto>>> listarHabilitados() {
+        var lista = service.findHabilitados();
+        var dto = (lista == null || lista.isEmpty())
+                ? java.util.Collections.<EstudioResponseDto>emptyList()
+                : lista.stream().map(EstudioResponseDto::new).toList();
+
+        var body = new ApiResponseSuccessDto<>(true, "Listado de estudios habilitados", dto);
+        return ResponseEntity.ok(body);
+    }
+
+    @GetMapping("/deshabilitados")
+    public ResponseEntity<ApiResponseSuccessDto<List<EstudioResponseDto>>> listarDeshabilitados() {
+        var lista = service.findDeshabilitados();
+        var dto = (lista == null || lista.isEmpty())
+                ? java.util.Collections.<EstudioResponseDto>emptyList()
+                : lista.stream().map(EstudioResponseDto::new).toList();
+
+        var body = new ApiResponseSuccessDto<>(true, "Listado de estudios deshabilitados", dto);
+        return ResponseEntity.ok(body);
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<EstudioResponseDto> findById(@PathVariable("id") Long id) {

@@ -19,6 +19,9 @@ public class Estudio extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "resultado_estudio_id", unique = true)
     private ResultadoEstudio resultadoEstudio;
+    
+    @Column(nullable = false)
+    private Boolean habilitado = true;
 
     public Estudio() {}
 
@@ -41,4 +44,7 @@ public class Estudio extends BaseEntity {
 
     public ResultadoEstudio getResultadoEstudio() { return resultadoEstudio; }
     public void setResultadoEstudio(ResultadoEstudio resultadoEstudio) { this.resultadoEstudio = resultadoEstudio; }
+    
+    public Boolean getHabilitado() { return habilitado; }
+    public void setHabilitado(Boolean habilitado) { this.habilitado = habilitado; }
 }

@@ -13,4 +13,6 @@ public interface IEstudioService {
     public Estudio findById(Long id);
     public boolean existsById(Long id);
     public void deleteById(Long id);
+    public List<Estudio> findHabilitados();
+    public List<Estudio> findDeshabilitados();
 }
