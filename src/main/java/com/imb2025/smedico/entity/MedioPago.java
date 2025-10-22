@@ -14,7 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class MedioPago extends BaseEntity { //a extends
+public class MedioPago extends BaseEntity {
 
 	/*@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +26,12 @@ public class MedioPago extends BaseEntity { //a extends
 	@Enumerated(EnumType.STRING)
     @Column(nullable = false) 
 	private TipoPago tipo;
+	
+	//a
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Estado estado;
+
 	
 	@JsonIgnore 
 	@OneToMany(mappedBy = "medioPago")
@@ -41,16 +47,6 @@ public class MedioPago extends BaseEntity { //a extends
 		this.facturas = facturas;
 	}
 	
-	
-	public Long getId() {
-		return id;
-	}
-
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 
 	public String getNombre() {
 		return nombre;
@@ -71,11 +67,26 @@ public class MedioPago extends BaseEntity { //a extends
 		this.tipo = tipo;
 	}
 
-
+	//a
+	public Estado getEstado() {
+        return estado;
+    }
+	//a
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
+	
+	
 	public enum TipoPago {
 		TARJETA_CREDITO_DEBITO,
 		MERCADO_PAGO,
 		CANJE_CUPON
 	}
+	
+	public enum Estado { //a
+	    ACTIVO,
+	    INACTIVO
+	}
+
 	
 }

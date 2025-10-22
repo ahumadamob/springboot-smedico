@@ -1,5 +1,6 @@
 package com.imb2025.smedico.dto.response;
 
+import com.imb2025.smedico.entity.MedioPago.Estado;
 import com.imb2025.smedico.entity.MedioPago.TipoPago;
 
 public class MedioPagoResponseDto {
@@ -7,6 +8,7 @@ public class MedioPagoResponseDto {
 	private Long id;
     private Long version;
 	private String nombre;
+	private Estado estado; //a
 	private TipoPago tipo;
     
 
@@ -42,6 +44,13 @@ public class MedioPagoResponseDto {
 	public void setTipo(TipoPago tipo) {
 		this.tipo = tipo;
 	}
-
+	//a
+	public Estado getEstado() {
+		return estado;
+	}
+	//a
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}
     
 }
