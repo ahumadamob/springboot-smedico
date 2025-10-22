@@ -14,6 +14,7 @@ public class DetalleFacturaMapper {
         entidad.setDescripcion(dto.getDescripcion());
         entidad.setImporte(dto.getImporte() != null ? BigDecimal.valueOf(dto.getImporte()) : null);
         entidad.setFactura(factura);
+        entidad.setFechaVigencia(dto.getFechaVigencia());
         return entidad;
     }
 
@@ -23,8 +24,8 @@ public class DetalleFacturaMapper {
             entidad.getDescripcion(),
             entidad.getImporte(),
             entidad.getFactura() != null ? entidad.getFactura().getId() : null,
-            entidad.getVersion() != null ? entidad.getVersion().intValue() : null 
+            entidad.getVersion() != null ? entidad.getVersion().intValue() : null,
+            entidad.getFechaVigencia()
         );
     }
 }
-

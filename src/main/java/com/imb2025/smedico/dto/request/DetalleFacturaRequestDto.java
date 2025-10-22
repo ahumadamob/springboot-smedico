@@ -1,9 +1,7 @@
 package com.imb2025.smedico.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
+import java.time.LocalDate;
 
 public class DetalleFacturaRequestDto {
     @NotBlank(message = "La descripción es obligatoria")
@@ -18,35 +16,27 @@ public class DetalleFacturaRequestDto {
     @Positive(message = "El ID de factura debe ser positivo")
     private Long facturaId;
 
+    @NotNull(message = "La fecha de vigencia es obligatoria")
+    private LocalDate fechaVigencia; // 🔹 nuevo campo
+
     public DetalleFacturaRequestDto() {}
 
-    public DetalleFacturaRequestDto(String descripcion, Double importe, Long facturaId) {
+    public DetalleFacturaRequestDto(String descripcion, Double importe, Long facturaId, LocalDate fechaVigencia) {
         this.descripcion = descripcion;
         this.importe = importe;
         this.facturaId = facturaId;
+        this.fechaVigencia = fechaVigencia;
     }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+    public Double getImporte() { return importe; }
+    public void setImporte(Double importe) { this.importe = importe; }
 
-    public Double getImporte() {
-        return importe;
-    }
+    public Long getFacturaId() { return facturaId; }
+    public void setFacturaId(Long facturaId) { this.facturaId = facturaId; }
 
-    public void setImporte(Double importe) {
-        this.importe = importe;
-    }
-
-    public Long getFacturaId() {
-        return facturaId;
-    }
-
-    public void setFacturaId(Long facturaId) {
-        this.facturaId = facturaId;
-    }
+    public LocalDate getFechaVigencia() { return fechaVigencia; }
+    public void setFechaVigencia(LocalDate fechaVigencia) { this.fechaVigencia = fechaVigencia; }
 }

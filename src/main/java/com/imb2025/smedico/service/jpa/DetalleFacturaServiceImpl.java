@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
-
+import java.time.LocalDate;
 @Service
 public class DetalleFacturaServiceImpl implements IDetalleFacturaService {
 
@@ -61,6 +61,22 @@ public class DetalleFacturaServiceImpl implements IDetalleFacturaService {
         DetalleFactura actualizado = repo.save(existente);
         return DetalleFacturaMapper.toResponseDto(actualizado);
     }
+    @Override
+public List<DetalleFacturaResponseDto> findVigentes() {
+    return repo.findByFechaVigenciaGreaterThanEqual(LocalDate.now())
+            .stream()
+            .map(DetalleFacturaMapper::toResponseDto)
+            .collect(Collectors.toList());
+}
+
+@Override
+public List<DetalleFacturaResponseDto> findVencidos() {
+    return repo.findByFechaVigenciaLessThan(LocalDate.now())
+            .stream()
+            .map(DetalleFacturaMapper::toResponseDto)
+            .collect(Collectors.toList());
+}
+
 }
 
 

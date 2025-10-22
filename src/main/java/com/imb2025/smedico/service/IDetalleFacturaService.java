@@ -9,4 +9,7 @@ public interface IDetalleFacturaService {
     DetalleFacturaResponseDto create(DetalleFacturaRequestDto dto);
     DetalleFacturaResponseDto update(Long id, DetalleFacturaRequestDto dto);
     DetalleFacturaResponseDto findById(Long id);
+    List<DetalleFacturaResponseDto> findVigentes();
+List<DetalleFacturaResponseDto> findVencidos();
+
 }

@@ -82,4 +82,18 @@ public class DetalleFacturaController {
         ApiResponseSuccessDto<DetalleFacturaResponseDto> resp = new ApiResponseSuccessDto<>(true, "DetalleFactura actualizada", actualizado);
         return ResponseEntity.ok(resp);
     }
+    @Operation(summary = "Lista los detalles de factura vigentes (fechaVigencia >= hoy)")
+@GetMapping("/vigentes")
+public ResponseEntity<ApiResponseSuccessDto<List<DetalleFacturaResponseDto>>> getVigentes() {
+    List<DetalleFacturaResponseDto> lista = detalleFacturaService.findVigentes();
+    return buildResponse("Listado de detalles vigentes", lista, HttpStatus.OK);
+}
+
+@Operation(summary = "Lista los detalles de factura vencidos (fechaVigencia < hoy)")
+@GetMapping("/vencidos")
+public ResponseEntity<ApiResponseSuccessDto<List<DetalleFacturaResponseDto>>> getVencidos() {
+    List<DetalleFacturaResponseDto> lista = detalleFacturaService.findVencidos();
+    return buildResponse("Listado de detalles vencidos", lista, HttpStatus.OK);
+}
+
 }

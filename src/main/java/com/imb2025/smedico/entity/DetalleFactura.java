@@ -2,6 +2,7 @@ package com.imb2025.smedico.entity;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "detalle_factura")
@@ -17,41 +18,30 @@ public class DetalleFactura extends BaseEntity {
     @JoinColumn(name = "factura_id", nullable = false)
     private Factura factura;
 
-    // 🔹 Constructores
+    @Column(nullable = false)
+    private LocalDate fechaVigencia; // 🔹 nuevo campo requerido
+
     public DetalleFactura() {}
 
-    public DetalleFactura(String descripcion, BigDecimal importe, Factura factura) {
+    public DetalleFactura(String descripcion, BigDecimal importe, Factura factura, LocalDate fechaVigencia) {
         this.descripcion = descripcion;
         this.importe = importe;
         this.factura = factura;
+        this.fechaVigencia = fechaVigencia;
     }
 
-    // 🔹 Getters y Setters
-    public String getDescripcion() {
-        return descripcion;
-    }
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+    public BigDecimal getImporte() { return importe; }
+    public void setImporte(BigDecimal importe) { this.importe = importe; }
 
-    public BigDecimal getImporte() {
-        return importe;
-    }
+    public Factura getFactura() { return factura; }
+    public void setFactura(Factura factura) { this.factura = factura; }
 
-    public void setImporte(BigDecimal importe) {
-        this.importe = importe;
-    }
+    public LocalDate getFechaVigencia() { return fechaVigencia; }
+    public void setFechaVigencia(LocalDate fechaVigencia) { this.fechaVigencia = fechaVigencia; }
 
-    public Factura getFactura() {
-        return factura;
-    }
-
-    public void setFactura(Factura factura) {
-        this.factura = factura;
-    }
-
-    // 🔹 equals y hashCode basados en id
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -65,3 +55,4 @@ public class DetalleFactura extends BaseEntity {
         return getClass().hashCode();
     }
 }
+
