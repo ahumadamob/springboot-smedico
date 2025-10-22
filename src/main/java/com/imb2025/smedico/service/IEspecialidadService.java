@@ -1,8 +1,6 @@
 package com.imb2025.smedico.service;
 
-import com.imb2025.smedico.dto.request.EspecialidadRequestDto;
 import com.imb2025.smedico.entity.Especialidad;
-import com.imb2025.smedico.exception.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -15,4 +13,6 @@ public interface IEspecialidadService {
     public void deleteById(Long id);
     public List<Especialidad> findByNombre(String nombre);
     public long countByDescripcion(String descripcion);
+    public List<Especialidad> findByListarTrue();
+    public List<Especialidad> findByListarFalse();
 }

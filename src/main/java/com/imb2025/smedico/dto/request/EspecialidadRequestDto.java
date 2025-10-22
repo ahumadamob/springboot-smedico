@@ -11,8 +11,9 @@ public class EspecialidadRequestDto {
 	@NotBlank(message = "La descripción no puede estar vacia")
 	@Size(min = 2, max = 500, message = "La descripcion debe tener mas de 2 y menos de 500 caracteres")
     private String descripcion;
+	private Boolean atributoBooleano;
 
-    public EspecialidadRequestDto() {}
+	public EspecialidadRequestDto() {}
 
     public EspecialidadRequestDto(String nombre, String descripcion) {
         this.nombre = nombre;
@@ -34,4 +35,11 @@ public class EspecialidadRequestDto {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+    public Boolean getAtributoBooleano() {
+		return atributoBooleano;
+	}
+
+	public void setAtributoBooleano(Boolean atributoBooleano) {
+		this.atributoBooleano = atributoBooleano;
+	}
 }

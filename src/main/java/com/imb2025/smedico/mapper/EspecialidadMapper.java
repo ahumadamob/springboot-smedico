@@ -11,6 +11,7 @@ public class EspecialidadMapper {
 	    Especialidad especialidad = new Especialidad();
 	    especialidad.setNombre(dto.getNombre());
 	    especialidad.setDescripcion(dto.getDescripcion());
+	    especialidad.setAtributoBooleano(dto.getAtributoBooleano());
 	    return especialidad;
 }
 	public EspecialidadResponseDto toDto(Especialidad especialidad) {
@@ -18,7 +19,7 @@ public class EspecialidadMapper {
 		dto.setNombre(especialidad.getNombre());
 		dto.setDescripcion(especialidad.getDescripcion());
 		dto.setVersion(especialidad.getVersion());
-		
+		dto.setAtributoBuleano(especialidad.getAtributoBooleano());
 		return dto;
 	}
 

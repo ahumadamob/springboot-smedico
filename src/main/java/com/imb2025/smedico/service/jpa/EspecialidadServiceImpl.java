@@ -68,7 +68,24 @@ public class EspecialidadServiceImpl implements IEspecialidadService{
 	public long countByDescripcion(String descripcion) {
 		return repo.countByDescripcion(descripcion);
 	}
-	
+	public List<Especialidad> listarTrue(){
+		return repo.findByAtributoBooleanoTrue();
+	}
+	public List<Especialidad> listarFalse(){
+		return repo.findByAtributoBooleanoFalse();
+	}
+
+	@Override
+	public List<Especialidad> findByListarTrue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Especialidad> findByListarFalse() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }
 	

@@ -10,13 +10,15 @@ public class Especialidad extends BaseEntity{
     
     private String nombre;
     private String descripcion;
+    private Boolean atributoBooleano = false;
 
-    public Especialidad() {}
+	public Especialidad() {}
 
-    public Especialidad(String nombre, String descripcion) {
+    public Especialidad(String nombre, String descripcion, boolean atributoBooleano) {
         
         this.nombre = nombre;
         this.descripcion = descripcion;
+        this.atributoBooleano = atributoBooleano;
     }
 
    
@@ -32,4 +34,10 @@ public class Especialidad extends BaseEntity{
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+    public Boolean getAtributoBooleano() {
+		return atributoBooleano;
+	}
+public void setAtributoBooleano(Boolean atributoBooleano) {
+		this.atributoBooleano = atributoBooleano;
+	}
 }

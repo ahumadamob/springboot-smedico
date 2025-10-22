@@ -11,4 +11,7 @@ public interface EspecialidadRepository extends JpaRepository<Especialidad, Long
 	List<Especialidad> findByNombre(String nombre); 
 	
 	long countByDescripcion(String descripcion);
+	
+	List<Especialidad> findByAtributoBooleanoTrue();
+	List<Especialidad> findByAtributoBooleanoFalse();
 }

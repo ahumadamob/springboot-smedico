@@ -71,6 +71,52 @@ public class EspecialidadController {
                                 "Especialidades encontradas", lista);
                 return ResponseEntity.ok(resp);
         }
+        
+        @GetMapping("/atributo-true")
+        public ResponseEntity<ApiResponseSuccessDto<List<EspecialidadResponseDto>>> getfindByListarTrue(){
+        		List<Especialidad> especialidades = service.findByListarTrue();
+        		EspecialidadMapper mapper = new EspecialidadMapper();
+        		List<EspecialidadResponseDto> especialidadesDtos = new ArrayList<>();
+        		
+        		for (Especialidad e : especialidades) {
+        			
+        			especialidadesDtos.add(mapper.toDto(e));
+        		}
+        		
+        		 String mensaje;
+        	        if(especialidadesDtos.isEmpty()){
+        	            mensaje = "No hay Especialidades disponibles";
+        	        } else {
+        	            mensaje = "Lista de Especialidades obtenidas correctamente";
+        	        }
+        	        ApiResponseSuccessDto<List<EspecialidadResponseDto>> resp =
+        	                new ApiResponseSuccessDto<>(true, mensaje, especialidadesDtos);
+        		
+        	
+        	     return ResponseEntity.ok(resp);
+        }
+        
+        @GetMapping("/atributo-false")
+        public ResponseEntity<ApiResponseSuccessDto<List<EspecialidadResponseDto>>> getfindByListarFalse(){
+        	List<Especialidad> especialidades = service.findByListarFalse();
+        	EspecialidadMapper mapper = new EspecialidadMapper();
+        	List<EspecialidadResponseDto> especialidadesDtos = new ArrayList<>();
+        	
+        	for(Especialidad e : especialidades) {
+        		
+        		especialidadesDtos.add(mapper.toDto(e));
+        	}
+        	String mensaje;
+	        if(especialidadesDtos.isEmpty()){
+	            mensaje = "No hay Especialidades disponibles";
+	        } else {
+	            mensaje = "Lista de Especialidades obtenidas correctamente";
+	        }
+	        ApiResponseSuccessDto<List<EspecialidadResponseDto>> resp =
+	                new ApiResponseSuccessDto<>(true, mensaje, especialidadesDtos);
+		
+	        return ResponseEntity.ok(resp);
+        	}
 
         @GetMapping("/descripcion/{descripcion}")
         public ResponseEntity<ApiResponseSuccessDto<Long>> getEspecialidadCountByDescripcion(
