@@ -78,6 +78,10 @@ public class RecetaServiceImpl implements IRecetaService {
     public long countByFecha(LocalDate fecha) {
         return repo.countByFecha(fecha);
         }
+   
+    @Override
+    public long countByEstado(Receta.Estado estado) {
+        return repo.countByEstado(estado);
+    }
 
-    
 }

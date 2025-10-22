@@ -2,6 +2,7 @@ package com.imb2025.smedico.mapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Component;
 
 import com.imb2025.smedico.dto.request.RecetaRequestDto;
 import com.imb2025.smedico.dto.response.RecetaResponseDto;
@@ -11,7 +12,7 @@ import com.imb2025.smedico.entity.Receta;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.MedicoRepository;
 import com.imb2025.smedico.repository.PacienteRepository;
-
+@Component
 public class RecetaMapper {
 	@Autowired
 	private MedicoRepository repoMedico;
@@ -32,6 +33,7 @@ public class RecetaMapper {
         receta.setMedico(medico);
         receta.setObservaciones(dto.getObservaciones());
         receta.setPaciente(paciente);
+        receta.setEstado(dto.getEstado());
 
         return receta;
     }
@@ -44,6 +46,7 @@ public class RecetaMapper {
     	dto.setObservaciones(receta.getObservaciones());
     	dto.setPaciente(receta.getPaciente());
     	dto.setVersion(receta.getVersion());
+    	dto.setEstado(receta.getEstado());
     	
     	return dto;
     	

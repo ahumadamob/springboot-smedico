@@ -16,5 +16,6 @@ public interface IRecetaService {
     public boolean existsById(Long id);
     public void deleteById(Long id);
 	public List<Receta> findByFecha(LocalDate fecha);
-	long countByFecha(LocalDate fecha);
+	public long countByFecha(LocalDate fecha);
+	public long countByEstado (Receta.Estado estado);
 }	

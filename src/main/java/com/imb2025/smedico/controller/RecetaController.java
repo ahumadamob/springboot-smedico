@@ -33,6 +33,8 @@ public class RecetaController {
 	
 	@Autowired
 	private IRecetaService service;
+	 @Autowired
+	    private RecetaMapper mapper; 
 	
 	@GetMapping("/receta")
     public ResponseEntity<ApiResponseSuccessDto<List<RecetaResponseDto>>> findAllReceta() {
@@ -58,7 +60,7 @@ public class RecetaController {
 	@GetMapping("/receta/{id}")
 	public ResponseEntity<ApiResponseSuccessDto<RecetaResponseDto>> findById(@PathVariable("id") Long id) {
 		Receta receta = service.findById(id);
-		RecetaMapper mapper = new RecetaMapper();
+		
 		RecetaResponseDto dto = new RecetaResponseDto();
 		dto = mapper.toDto(receta);
 		ApiResponseSuccessDto<RecetaResponseDto> resp =
@@ -68,7 +70,7 @@ public class RecetaController {
 	
 	@PostMapping("/receta")
 	public ResponseEntity<ApiResponseSuccessDto<Receta>> create(@Valid @RequestBody RecetaRequestDto recetaRequestDto) {
-		RecetaMapper mapper = new RecetaMapper();
+	
         Receta receta = service.create(mapper.fromDto(recetaRequestDto));
         ApiResponseSuccessDto<Receta> resp =
 				new ApiResponseSuccessDto<>(true,"Receta creada correctamente",receta);
@@ -77,7 +79,7 @@ public class RecetaController {
 	
 	@PutMapping("/receta/{id}")
 	public ResponseEntity<ApiResponseSuccessDto<Receta>> update(@PathVariable("id") Long id,@Valid @RequestBody RecetaRequestDto recetaRequestDto) {
-		RecetaMapper mapper = new RecetaMapper();
+
 		Receta recetaEntity = mapper.fromDto(recetaRequestDto);
         Receta actualizado = service.update(id, recetaEntity);
 		ApiResponseSuccessDto<Receta> resp =
@@ -110,6 +112,21 @@ public class RecetaController {
     
 	}
 	
+	
+	@GetMapping("/stats/activos")
+	public ResponseEntity<ApiResponseSuccessDto<Long>> countRecetasActivas() {
+	    long cantidad = service.countByEstado(Receta.Estado.ACTIVO);
+	    ApiResponseSuccessDto<Long> resp = new ApiResponseSuccessDto<>(true, cantidad == 0 ? "No hay recetas activas registradas" : "Cantidad de recetas activas encontradas", cantidad);
+	    return ResponseEntity.ok(resp);
+	}
+	
+
+	@GetMapping("/stats/inactivos")
+	public ResponseEntity<ApiResponseSuccessDto<Long>> countRecetasInactivas() {
+	    long cantidad = service.countByEstado(Receta.Estado.INACTIVO);
+	    ApiResponseSuccessDto<Long> resp = new ApiResponseSuccessDto<>(true, cantidad == 0 ? "No hay recetas inactivas registradas" : "Cantidad de recetas inactivas encontradas", cantidad);
+	    return ResponseEntity.ok(resp);
+	}
 
 	
 }

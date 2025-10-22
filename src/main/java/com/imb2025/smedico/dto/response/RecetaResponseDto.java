@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.entity.Paciente;
+import com.imb2025.smedico.entity.Receta.Estado;
 
 
 
@@ -16,10 +17,18 @@ public class RecetaResponseDto {
     
     private Long id;
     private Long version;
+    private Estado estado;
+
     
     
 	public LocalDate getFecha() {
 		return fecha;
+	}
+	public Estado getEstado() {
+		return estado;
+	}
+	public void setEstado(Estado estado) {
+		this.estado = estado;
 	}
 	public void setFecha(LocalDate fecha) {
 		this.fecha = fecha;

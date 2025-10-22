@@ -14,5 +14,8 @@ public interface RecetaRepository extends JpaRepository<Receta, Long> {
 public List<Receta> findByFecha(LocalDate fecha);
 
 long countByFecha(LocalDate fecha);
+long countByEstado(Receta.Estado estado);
+
+
 
 }

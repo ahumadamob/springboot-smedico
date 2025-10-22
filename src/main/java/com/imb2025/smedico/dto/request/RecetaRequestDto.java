@@ -2,6 +2,9 @@ package com.imb2025.smedico.dto.request;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.imb2025.smedico.entity.Receta.Estado;
+
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
@@ -16,21 +19,33 @@ public class RecetaRequestDto {
     private Long medicoId;
     @NotNull(message = "El paciente es obligatorio")
     private Long pacienteId;
+    @JsonProperty("estado")
+    @NotNull(message = "El estado es obligatorio")
+    private Estado estado;
+
 
     public RecetaRequestDto() {}
 
-    public RecetaRequestDto(LocalDate fecha, String observaciones, Long medicoId, Long pacienteId) {
+    public RecetaRequestDto(LocalDate fecha, String observaciones, Long medicoId, Long pacienteId, Estado estado) {
         this.fecha = fecha;
         this.observaciones = observaciones;
         this.medicoId = medicoId;
         this.pacienteId = pacienteId;
+        this.estado = estado;
     }
 
     public LocalDate getFecha() {
         return fecha;
     }
+    public Estado getEstado() {
+		return estado;
+	}
 
-    public void setFecha(LocalDate fecha) {
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}
+
+	public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 
