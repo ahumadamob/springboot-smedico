@@ -15,10 +15,13 @@ public interface IAfiliacionService {
     // Escrituras (usan DTO de request, el mapeo vive en el Mapper)
     Afiliacion create(AfiliacionRequestDto request);
     Afiliacion update(Long id, AfiliacionRequestDto request);
-
     void deleteById(Long id);
 
-    // Métodos “mágicos” / query methods si tu repo los expone
+    // Query methods existentes
     List<Afiliacion> findByIdGreaterThan(Long idMin);
     long countByIdGreaterThan(Long idMin);
+
+    // Ejercicio 1: listados por atributo booleano
+    List<Afiliacion> findByActivaTrue();
+    List<Afiliacion> findByActivaFalse();
 }

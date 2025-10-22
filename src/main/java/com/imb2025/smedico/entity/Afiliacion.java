@@ -16,7 +16,6 @@ public class Afiliacion extends BaseEntity {
     @Column(nullable = false)
     private LocalDate fechaHasta;
 
-
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "paciente_id", nullable = false)
     private Paciente paciente;
@@ -24,6 +23,10 @@ public class Afiliacion extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "obra_id", nullable = false)
     private ObraSocial obra;
+
+    // === Ejercicio 1: atributo booleano ===
+    @Column(nullable = false)
+    private boolean activa = true;
 
     public Afiliacion() {}
 
@@ -38,6 +41,7 @@ public class Afiliacion extends BaseEntity {
         this.paciente = paciente;
         this.obra = obra;
     }
+
     public Long getNumeroAfiliado() { return numeroAfiliado; }
     public void setNumeroAfiliado(Long numeroAfiliado) { this.numeroAfiliado = numeroAfiliado; }
 
@@ -52,4 +56,7 @@ public class Afiliacion extends BaseEntity {
 
     public ObraSocial getObra() { return obra; }
     public void setObra(ObraSocial obra) { this.obra = obra; }
+
+    public boolean isActiva() { return activa; }
+    public void setActiva(boolean activa) { this.activa = activa; }
 }

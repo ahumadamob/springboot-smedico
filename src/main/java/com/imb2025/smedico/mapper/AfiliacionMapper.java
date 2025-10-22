@@ -10,7 +10,7 @@ public final class AfiliacionMapper {
 
     private AfiliacionMapper() {}
 
-    // Construye la entidad a partir del request + asociaciones ya resueltas
+    /** Construye la entidad desde el request + asociaciones ya resueltas */
     public static Afiliacion fromDto(AfiliacionRequestDto dto, Paciente paciente, ObraSocial obra) {
         if (dto == null) return null;
         Afiliacion af = new Afiliacion();
@@ -19,10 +19,22 @@ public final class AfiliacionMapper {
         af.setFechaHasta(dto.getFechaHasta());
         af.setPaciente(paciente);
         af.setObra(obra);
+        af.setActiva(Boolean.TRUE.equals(dto.getActiva())); // Ejercicio 1
         return af;
     }
 
-    // Convierte Entidad -> ResponseDto (incluye version, NO audit)
+    /** Actualiza una entidad existente desde el request (opcional pero recomendado) */
+    public static void updateFromDto(Afiliacion af, AfiliacionRequestDto dto, Paciente paciente, ObraSocial obra) {
+        if (af == null || dto == null) return;
+        af.setNumeroAfiliado(dto.getNumeroAfiliado());
+        af.setFechaVigenciaDesde(dto.getFechaVigenciaDesde());
+        af.setFechaHasta(dto.getFechaHasta());
+        af.setPaciente(paciente);
+        af.setObra(obra);
+        af.setActiva(Boolean.TRUE.equals(dto.getActiva())); // Ejercicio 1
+    }
+
+    /** Convierte Entidad -> ResponseDto (incluye version, NO audit) */
     public static AfiliacionResponseDto toResponseDto(Afiliacion af) {
         if (af == null) return null;
         Long idPac = (af.getPaciente() != null) ? af.getPaciente().getId() : null;
@@ -36,6 +48,7 @@ public final class AfiliacionMapper {
         dto.setIdPaciente(idPac);
         dto.setIdObra(idObra);
         dto.setVersion(af.getVersion());
+        dto.setActiva(af.isActiva()); // Ejercicio 1
         return dto;
     }
 }

@@ -9,8 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.imb2025.dto.mapper.AfiliacionMapper;
-import com.imb2025.smedico.dto.request.AfiliacionRequestDto;    // <-- paquete request correcto
-import com.imb2025.smedico.dto.response.AfiliacionResponseDto; // <-- paquete response correcto
+import com.imb2025.smedico.dto.request.AfiliacionRequestDto;
+import com.imb2025.smedico.dto.response.AfiliacionResponseDto;
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.entity.Afiliacion;
 import com.imb2025.smedico.service.IAfiliacionService;
@@ -25,77 +25,69 @@ public class AfiliacionController {
         this.service = service;
     }
 
+    // === Ejercicio 1: listados por booleano ===
+    @GetMapping("/activas")
+    public ResponseEntity<ApiResponseSuccessDto<List<AfiliacionResponseDto>>> listarActivas() {
+        List<Afiliacion> lista = service.findByActivaTrue();
+        List<AfiliacionResponseDto> dtos = lista.stream()
+                .map(AfiliacionMapper::toResponseDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Afiliaciones activas", dtos));
+    }
+
+    @GetMapping("/inactivas")
+    public ResponseEntity<ApiResponseSuccessDto<List<AfiliacionResponseDto>>> listarInactivas() {
+        List<Afiliacion> lista = service.findByActivaFalse();
+        List<AfiliacionResponseDto> dtos = lista.stream()
+                .map(AfiliacionMapper::toResponseDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Afiliaciones inactivas", dtos));
+    }
+
     @GetMapping
     public ResponseEntity<ApiResponseSuccessDto<List<AfiliacionResponseDto>>> getAllAfiliaciones() {
         List<Afiliacion> lista = service.findAll();
         if (lista == null || lista.isEmpty()) {
-            return ResponseEntity.noContent().build(); // 204 si está vacío
+            return ResponseEntity.noContent().build();
         }
-
         List<AfiliacionResponseDto> dtos = lista.stream()
-                .map(AfiliacionMapper::toResponseDto)   // <-- usa el Mapper (incluye version)
+                .map(AfiliacionMapper::toResponseDto)
                 .collect(Collectors.toList());
-
-        ApiResponseSuccessDto<List<AfiliacionResponseDto>> resp =
-                new ApiResponseSuccessDto<>(true, "Listado de afiliaciones", dtos);
-
-        return ResponseEntity.ok(resp);
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Listado de afiliaciones", dtos));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<AfiliacionResponseDto>> getAfiliacionById(@PathVariable Long id) {
         Afiliacion afiliacion = service.findById(id);
-        AfiliacionResponseDto dto = AfiliacionMapper.toResponseDto(afiliacion); // <-- usa Mapper
-
-        ApiResponseSuccessDto<AfiliacionResponseDto> resp =
-                new ApiResponseSuccessDto<>(true, "Afiliación encontrada", dto);
-
-        return ResponseEntity.ok(resp);
+        AfiliacionResponseDto dto = AfiliacionMapper.toResponseDto(afiliacion);
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Afiliación encontrada", dto));
     }
 
     @PostMapping
     public ResponseEntity<ApiResponseSuccessDto<AfiliacionResponseDto>> createAfiliacion(
             @Valid @RequestBody AfiliacionRequestDto dto) {
-
-        // Ahora el service recibe el DTO (regla 4.1 ya cumplida en el service)
         Afiliacion creada = service.create(dto);
-
-        AfiliacionResponseDto respDto = AfiliacionMapper.toResponseDto(creada); // incluye version
-
-        ApiResponseSuccessDto<AfiliacionResponseDto> resp =
-                new ApiResponseSuccessDto<>(true, "Afiliación creada con éxito", respDto);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
+        AfiliacionResponseDto respDto = AfiliacionMapper.toResponseDto(creada);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ApiResponseSuccessDto<>(true, "Afiliación creada con éxito", respDto));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<AfiliacionResponseDto>> updateAfiliacion(
             @PathVariable Long id,
             @Valid @RequestBody AfiliacionRequestDto dto) {
-
-        // Ahora el service recibe el DTO
         Afiliacion actualizada = service.update(id, dto);
-
-        AfiliacionResponseDto respDto = AfiliacionMapper.toResponseDto(actualizada); // incluye version
-
-        ApiResponseSuccessDto<AfiliacionResponseDto> resp =
-                new ApiResponseSuccessDto<>(true, "Afiliación actualizada con éxito", respDto);
-
-        return ResponseEntity.ok(resp);
+        AfiliacionResponseDto respDto = AfiliacionMapper.toResponseDto(actualizada);
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Afiliación actualizada con éxito", respDto));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<Void>> deleteAfiliacion(@PathVariable Long id) {
         service.deleteById(id);
-        ApiResponseSuccessDto<Void> resp =
-                new ApiResponseSuccessDto<>(true, "Afiliación eliminada con éxito", null);
-        return ResponseEntity.ok(resp);
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Afiliación eliminada con éxito", null));
     }
 
-    /**
-     * Buscar afiliaciones con id > minId
-     * Ej: GET /api/afiliaciones/search?minId=100
-     */
+    // Extras que ya tenías
     @GetMapping("/search")
     public ResponseEntity<?> searchByMinId(@RequestParam(name = "minId", required = true) Long minId) {
         if (minId == null || minId < 0) {
@@ -103,36 +95,25 @@ public class AfiliacionController {
                     new ApiResponseSuccessDto<>(false, "minId debe ser un número >= 0", null);
             return ResponseEntity.badRequest().body(bad);
         }
-
         List<Afiliacion> lista = service.findByIdGreaterThan(minId);
         if (lista == null || lista.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-
         List<AfiliacionResponseDto> dtos = lista.stream()
-                .map(AfiliacionMapper::toResponseDto)   // <-- usa Mapper
+                .map(AfiliacionMapper::toResponseDto)
                 .collect(Collectors.toList());
-
-        ApiResponseSuccessDto<List<AfiliacionResponseDto>> resp =
-                new ApiResponseSuccessDto<>(true, "Listado filtrado por minId=" + minId, dtos);
-        return ResponseEntity.ok(resp);
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Listado filtrado por minId=" + minId, dtos));
     }
 
-    /**
-     * Contar afiliaciones con id > minId
-     * Ej: GET /api/afiliaciones/count?minId=100
-     */
     @GetMapping("/count")
-    public ResponseEntity<ApiResponseSuccessDto<Long>> countByMinId(@RequestParam(name = "minId", required = true) Long minId) {
+    public ResponseEntity<ApiResponseSuccessDto<Long>> countByMinId(
+            @RequestParam(name = "minId", required = true) Long minId) {
         if (minId == null || minId < 0) {
             ApiResponseSuccessDto<Long> bad =
                     new ApiResponseSuccessDto<>(false, "minId debe ser un número >= 0", null);
             return ResponseEntity.badRequest().body(bad);
         }
-
         long count = service.countByIdGreaterThan(minId);
-        ApiResponseSuccessDto<Long> resp =
-                new ApiResponseSuccessDto<>(true, "Cantidad de afiliaciones con id > " + minId, count);
-        return ResponseEntity.ok(resp);
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Cantidad de afiliaciones con id > " + minId, count));
     }
 }

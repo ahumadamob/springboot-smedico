@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.imb2025.dto.mapper.AfiliacionMapper;
-import com.imb2025.smedico.dto.request.AfiliacionRequestDto; // <-- package correcto
+import com.imb2025.smedico.dto.request.AfiliacionRequestDto; // package correcto
 import com.imb2025.smedico.entity.Afiliacion;
 import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.entity.ObraSocial;
@@ -79,8 +79,9 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
 
     @Override
     public Afiliacion update(Long id, AfiliacionRequestDto dto) {
-        Afiliacion existente = findById(id); // valida existencia
         validarFechasDto(dto);
+
+        Afiliacion existente = findById(id); // valida existencia
 
         if (dto.getIdpaciente() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "idpaciente es requerido");
@@ -96,12 +97,8 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Obra social no encontrada con id " + dto.getIdobra()));
 
-        // Si agregaste AfiliacionMapper.updateFromDto(...), podés usarlo aquí.
-        existente.setNumeroAfiliado(dto.getNumeroAfiliado());
-        existente.setFechaVigenciaDesde(dto.getFechaVigenciaDesde());
-        existente.setFechaHasta(dto.getFechaHasta());
-        existente.setPaciente(paciente);
-        existente.setObra(obra); // <-- si tu entidad usa setObra(...), cambialo aquí
+        // Usamos el mapper para NO olvidarnos de 'activa'
+        AfiliacionMapper.updateFromDto(existente, dto, paciente, obra);
 
         return afiliacionRepository.save(existente);
     }
@@ -129,6 +126,19 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "idMin debe ser >= 0");
         }
         return afiliacionRepository.countByIdGreaterThan(idMin);
+    }
+
+    // -------- Ejercicio 1: listados por booleano --------
+    @Override
+    @Transactional(readOnly = true)
+    public List<Afiliacion> findByActivaTrue() {
+        return afiliacionRepository.findByActivaTrue();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Afiliacion> findByActivaFalse() {
+        return afiliacionRepository.findByActivaFalse();
     }
 
     // -------- Validaciones privadas --------

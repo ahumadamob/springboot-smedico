@@ -7,14 +7,21 @@ public class AfiliacionResponseDto {
     private Long numeroAfiliado;
     private LocalDate fechaVigenciaDesde;
     private LocalDate fechaHasta;
-    private Long idPaciente;  
-    private Long idObra;     
-    private Long version;     
+    private Long idPaciente;
+    private Long idObra;
+    private Long version;     // requerido por la consigna
+    private Boolean activa;   // <-- NUEVO: para el Ejercicio 1
+
     public AfiliacionResponseDto() {}
 
-    public AfiliacionResponseDto(Long id, Long numeroAfiliado,
-                                 LocalDate fechaVigenciaDesde, LocalDate fechaHasta,
-                                 Long idPaciente, Long idObra, Long version) {
+    public AfiliacionResponseDto(Long id,
+                                 Long numeroAfiliado,
+                                 LocalDate fechaVigenciaDesde,
+                                 LocalDate fechaHasta,
+                                 Long idPaciente,
+                                 Long idObra,
+                                 Long version,
+                                 Boolean activa) {
         this.id = id;
         this.numeroAfiliado = numeroAfiliado;
         this.fechaVigenciaDesde = fechaVigenciaDesde;
@@ -22,6 +29,7 @@ public class AfiliacionResponseDto {
         this.idPaciente = idPaciente;
         this.idObra = idObra;
         this.version = version;
+        this.activa = activa;
     }
 
     public Long getId() { return id; }
@@ -44,4 +52,7 @@ public class AfiliacionResponseDto {
 
     public Long getVersion() { return version; }
     public void setVersion(Long version) { this.version = version; }
+
+    public Boolean getActiva() { return activa; }
+    public void setActiva(Boolean activa) { this.activa = activa; }
 }

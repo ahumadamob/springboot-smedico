@@ -8,35 +8,44 @@ import java.time.LocalDate;
 
 public class AfiliacionRequestDto {
 
-    @NotNull(message = "El número de afiliado es obligatorio") // CAMBIO
-    @Min(value = 1, message = "El número de afiliado debe ser positivo") // CAMBIO
+    @NotNull(message = "El número de afiliado es obligatorio")
+    @Min(value = 1, message = "El número de afiliado debe ser positivo")
     private Long numeroAfiliado;
 
-    @NotNull(message = "La fecha de vigencia es obligatoria") // CAMBIO
-    @PastOrPresent(message = "La fecha de vigencia desde debe ser pasada o presente") // CAMBIO
+    @NotNull(message = "La fecha de vigencia es obligatoria")
+    @PastOrPresent(message = "La fecha de vigencia desde debe ser pasada o presente")
     private LocalDate fechaVigenciaDesde;
 
-    @NotNull(message = "La fecha de vigencia hasta es obligatoria") // CAMBIO
-    @FutureOrPresent(message = "La fecha de vigencia hasta debe ser presente o futura") // CAMBIO
+    @NotNull(message = "La fecha de vigencia hasta es obligatoria")
+    @FutureOrPresent(message = "La fecha de vigencia hasta debe ser presente o futura")
     private LocalDate fechaHasta;
 
-    @NotNull(message = "El ID del paciente es obligatorio") // CAMBIO
-    @Min(value = 1, message = "El ID del paciente debe ser mayor a 0") // CAMBIO
+    @NotNull(message = "El ID del paciente es obligatorio")
+    @Min(value = 1, message = "El ID del paciente debe ser mayor a 0")
     private Long idpaciente;
 
-    @NotNull(message = "El ID de la obra social es obligatorio") // CAMBIO
-    @Min(value = 1, message = "El ID de la obra debe ser mayor a 0") // CAMBIO
+    @NotNull(message = "El ID de la obra social es obligatorio")
+    @Min(value = 1, message = "El ID de la obra debe ser mayor a 0")
     private Long idobra;
+
+    // Ejercicio 1: nuevo atributo booleano
+    @NotNull(message = "El estado activa es obligatorio")
+    private Boolean activa;
 
     public AfiliacionRequestDto() {}
 
-    public AfiliacionRequestDto(Long numeroAfiliado, LocalDate fechaVigenciaDesde, LocalDate fechaHasta,
-                                Long idpaciente, Long idobra) {
+    public AfiliacionRequestDto(Long numeroAfiliado,
+                                LocalDate fechaVigenciaDesde,
+                                LocalDate fechaHasta,
+                                Long idpaciente,
+                                Long idobra,
+                                Boolean activa) {
         this.numeroAfiliado = numeroAfiliado;
         this.fechaVigenciaDesde = fechaVigenciaDesde;
         this.fechaHasta = fechaHasta;
         this.idpaciente = idpaciente;
         this.idobra = idobra;
+        this.activa = activa;
     }
 
     public Long getNumeroAfiliado() { return numeroAfiliado; }
@@ -53,4 +62,7 @@ public class AfiliacionRequestDto {
 
     public Long getIdobra() { return idobra; }
     public void setIdobra(Long idobra) { this.idobra = idobra; }
+
+    public Boolean getActiva() { return activa; }
+    public void setActiva(Boolean activa) { this.activa = activa; }
 }
