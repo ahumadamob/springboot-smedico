@@ -187,4 +187,39 @@ public class PacienteController {
 
         return ResponseEntity.ok(resp);
     }
+    @GetMapping("/activos")
+    public ResponseEntity<ApiResponseSuccessDto<List<PacienteResponseDto>>> getPacientesActivos() {
+        List<Paciente> lista = service.findActivos();
+        PacienteMapper mapper = new PacienteMapper();
+        List<PacienteResponseDto> listaResponse = new ArrayList<>();
+        for (Paciente p : lista) {
+            listaResponse.add(mapper.toResponseDto(p));
+        }
+
+        ApiResponseSuccessDto<List<PacienteResponseDto>> resp = new ApiResponseSuccessDto<>(
+                true,
+                listaResponse.isEmpty() ? "No hay pacientes activos" : "Lista de pacientes activos",
+                listaResponse
+        );
+
+        return ResponseEntity.ok(resp);
+    }
+
+    @GetMapping("/inactivos")
+    public ResponseEntity<ApiResponseSuccessDto<List<PacienteResponseDto>>> getPacientesInactivos() {
+        List<Paciente> lista = service.findInactivos();
+        PacienteMapper mapper = new PacienteMapper();
+        List<PacienteResponseDto> listaResponse = new ArrayList<>();
+        for (Paciente p : lista) {
+            listaResponse.add(mapper.toResponseDto(p));
+        }
+
+        ApiResponseSuccessDto<List<PacienteResponseDto>> resp = new ApiResponseSuccessDto<>(
+                true,
+                listaResponse.isEmpty() ? "No hay pacientes inactivos" : "Lista de pacientes inactivos",
+                listaResponse
+        );
+
+        return ResponseEntity.ok(resp);
+    }
 }

@@ -15,4 +15,6 @@ public interface IPacienteService {
     public Paciente findById(Long id);
     public boolean existsById(Long id);
     public void deleteById(Long id);
+    public List<Paciente> findActivos();
+    public List<Paciente> findInactivos();
 }

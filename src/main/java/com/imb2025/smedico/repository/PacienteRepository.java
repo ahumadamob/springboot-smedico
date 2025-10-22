@@ -10,6 +10,8 @@ public interface PacienteRepository extends JpaRepository<Paciente, Long> {
 	List<Paciente> findByOrderByApellidoAscNombreAsc();
 	List<Paciente> findByDni(String dni);
 	List<Paciente> findByEmailEndingWith(String domain);
+	List<Paciente> findByActivoTrue();
+	List<Paciente> findByActivoFalse();
 	Long countBy();
 }
 

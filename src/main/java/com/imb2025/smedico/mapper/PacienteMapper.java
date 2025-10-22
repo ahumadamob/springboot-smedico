@@ -15,6 +15,7 @@ public class PacienteMapper {
         paciente.setEmail(dto.getEmail());
         paciente.setFechaNacimiento(dto.getFechaNacimiento());
         paciente.setTelefono(dto.getTelefono());
+        paciente.setActivo(dto.isActivo());
         return paciente;
     }
 
@@ -26,6 +27,7 @@ public class PacienteMapper {
         dto.setDni(paciente.getDni());
         dto.setEmail(paciente.getEmail());
         dto.setVersion(paciente.getVersion()); 
+        dto.setActivo(paciente.isActivo());
         return dto;
     }
 }	

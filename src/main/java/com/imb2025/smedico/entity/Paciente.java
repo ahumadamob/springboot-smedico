@@ -15,19 +15,31 @@ public class Paciente extends BaseEntity {
     private String email;
     private LocalDate fechaNacimiento;
     private String telefono;
+    private boolean activo;
+
 
     public Paciente() {}
 
     public Paciente(String nombre, String apellido, String dni, String email,
-                    LocalDate fechaNacimiento, String telefono) {
+                    LocalDate fechaNacimiento, String telefono,boolean activo) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
         this.email = email;
         this.fechaNacimiento = fechaNacimiento;
         this.telefono = telefono;
+        this.activo = activo;
     }
 
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+    
+    
     public String getNombre() {
         return nombre;
     }

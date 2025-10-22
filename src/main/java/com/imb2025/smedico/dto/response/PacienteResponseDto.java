@@ -10,6 +10,8 @@ public class PacienteResponseDto {
     private String apellido;
     private String dni;
     private String email;
+    private boolean activo;
+    
 	public Long getId() {
 		return id;
 	}
@@ -46,7 +48,10 @@ public class PacienteResponseDto {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-    
-    
+	public boolean isActivo() {
+        return activo;
+    }
+	public void setActivo(boolean activo) { 
+	    this.activo = activo;
+	}
 }

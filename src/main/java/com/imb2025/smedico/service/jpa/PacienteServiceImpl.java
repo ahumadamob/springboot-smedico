@@ -80,4 +80,14 @@ public class PacienteServiceImpl implements IPacienteService {
 	public Long countBy() {
 		return pacienteRepository.countBy();
 	}
+	
+	@Override
+	public List<Paciente> findActivos() {
+	    return pacienteRepository.findByActivoTrue();
+	}
+
+	@Override
+	public List<Paciente> findInactivos() {
+	    return pacienteRepository.findByActivoFalse();
+	}
 }

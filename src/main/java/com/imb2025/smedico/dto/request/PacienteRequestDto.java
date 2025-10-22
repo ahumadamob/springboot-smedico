@@ -26,6 +26,9 @@ public class PacienteRequestDto {
     @NotBlank(message = "El teléfono es obligatorio")
     @Pattern(regexp = "\\+?\\d{7,15}", message = "El teléfono debe ser un número válido (7 a 15 dígitos)")
     private String telefono;
+    
+    @NotNull(message = "El estado activo es obligatorio")
+    private Boolean activo;
 
     public PacienteRequestDto() {}
 
@@ -35,13 +38,15 @@ public class PacienteRequestDto {
             String dni,
             String email,
             LocalDate fechaNacimiento,
-            String telefono) {
+            String telefono,
+            Boolean activo) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
         this.email = email;
         this.fechaNacimiento = fechaNacimiento;
         this.telefono = telefono;
+        this.activo = activo;
     }
 
     public String getNombre() {
@@ -91,7 +96,10 @@ public class PacienteRequestDto {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
+    public Boolean isActivo() { return activo; }
+    public void setActivo(Boolean activo) { this.activo = activo; }
 }
+
 
 
 
