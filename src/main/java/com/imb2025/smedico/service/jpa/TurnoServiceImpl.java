@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.imb2025.smedico.TurnoMapper.TurnoMapper;
 import com.imb2025.smedico.dto.request.TurnoRequestDto.TurnoRequestDto;
 import com.imb2025.smedico.dto.response.TurnoResponseDto.TurnoResponseDto;
 import com.imb2025.smedico.entity.EstadoTurno;
@@ -15,6 +14,7 @@ import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.entity.Turno;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
+import com.imb2025.smedico.mapper.TurnoMapper;
 import com.imb2025.smedico.repository.EstadoTurnoRepository;
 import com.imb2025.smedico.repository.MedicoRepository;
 import com.imb2025.smedico.repository.PacienteRepository;
@@ -106,4 +106,21 @@ public class TurnoServiceImpl implements ITurnoService {
     public long countByFecha(LocalDate fecha) {
         return repo.countByFecha(fecha);
     }
+    
+    public List<TurnoResponseDto> obtenerTurnosVigentes() {
+        return repo.findByFechaVigenciaGreaterThanEqual(LocalDate.now())
+                .stream()
+                .map(TurnoMapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TurnoResponseDto> obtenerTurnosVencidos() {
+        return repo.findByFechaVigenciaLessThan(LocalDate.now())
+                .stream()
+                .map(TurnoMapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    
 }

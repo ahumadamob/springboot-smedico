@@ -3,6 +3,8 @@ package com.imb2025.smedico.dto.request.TurnoRequestDto;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -25,23 +27,37 @@ public class TurnoRequestDto {
     @NotNull(message = "Debe especificar el estado del turno")
     @Positive(message = "Identificador obligatorio y positivo")
     private Long estadoTurnoId;
-
+    
+    @NotNull(message = "La fecha de vigencia es obligatoria")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate fechaVigencia;
+    
     public TurnoRequestDto() {}
 
     public TurnoRequestDto(
-            LocalDate fecha, LocalTime hora, Long pacienteId, Long medicoId, Long estadoTurnoId) {
+            LocalDate fecha, LocalTime hora, Long pacienteId, Long medicoId, Long estadoTurnoId, @NotNull(message = "La fecha de vigencia es obligatoria") LocalDate fechaVigencia) {
         this.fecha = fecha;
         this.hora = hora;
         this.pacienteId = pacienteId;
         this.medicoId = medicoId;
         this.estadoTurnoId = estadoTurnoId;
+        this.fechaVigencia = fechaVigencia; 
+    
     }
 
     public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public LocalDate getFechaVigencia() {
+		return fechaVigencia;
+	}
+
+	public void setFechaVigencia(LocalDate fechaVigencia) {
+		this.fechaVigencia = fechaVigencia;
+	}
+
+	public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 

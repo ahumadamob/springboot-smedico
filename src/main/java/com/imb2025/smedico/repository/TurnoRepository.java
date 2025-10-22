@@ -11,4 +11,7 @@ public interface TurnoRepository extends JpaRepository<Turno, Long> {
 List<Turno> findByFecha(LocalDate fecha); //Enlista turnos por fecha
 
 long countByFecha(LocalDate fecha); //Cuenta turnos en uan fecha específica
+
+List<Turno> findByFechaVigenciaGreaterThanEqual(LocalDate fecha);
+List<Turno> findByFechaVigenciaLessThan(LocalDate fecha);
 }

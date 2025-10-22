@@ -1,5 +1,6 @@
 package com.imb2025.smedico.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
@@ -25,17 +26,21 @@ public class Turno extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "turnos"})
     private EstadoTurno estadoTurno;
+    
+    @Column(nullable = false)
+    private LocalDate fechaVigencia;
 
-    public Turno() {}
+	public Turno() {}
 
     public Turno( LocalDate fecha, LocalTime hora, Paciente paciente, Medico medico,
-                 EstadoTurno estadoTurno) {
+                 EstadoTurno estadoTurno, LocalDate fechaVigencia) {
 
         this.fecha = fecha;
         this.hora = hora;
         this.paciente = paciente;
         this.medico = medico;
         this.estadoTurno = estadoTurno;
+        this.fechaVigencia = fechaVigencia; 
     }
 
 
@@ -78,4 +83,14 @@ public class Turno extends BaseEntity {
     public void setEstadoTurno(EstadoTurno estadoTurno) {
         this.estadoTurno = estadoTurno;
     }
+    
+    public LocalDate getFechaVigencia() {
+		return fechaVigencia;
+	}
+
+	public void setFechaVigencia(LocalDate fechaVigencia) {
+		this.fechaVigencia = fechaVigencia;
+	}
+	
+
 }

@@ -11,12 +11,13 @@ public class TurnoResponseDto {
     private String medicoNombre;
     private String estadoTurnoDescripcion;
     private Integer version;
+    private LocalDate fechaVigencia;
 
     public TurnoResponseDto() {}
 
     public TurnoResponseDto(Long id, LocalDate fecha, LocalTime hora,
                             String pacienteNombre, String medicoNombre,
-                            String estadoTurnoDescripcion, Integer version) {
+                            String estadoTurnoDescripcion, Integer version, LocalDate fechaVigencia) {
         this.id = id;
         this.fecha = fecha;
         this.hora = hora;
@@ -24,7 +25,16 @@ public class TurnoResponseDto {
         this.medicoNombre = medicoNombre;
         this.estadoTurnoDescripcion = estadoTurnoDescripcion;
         this.version = version;
+        this.fechaVigencia = fechaVigencia; 
     }
+
+	public LocalDate getFechaVigencia() {
+		return fechaVigencia;
+	}
+
+	public void setFechaVigencia(LocalDate fechaVigencia) {
+		this.fechaVigencia = fechaVigencia;
+	}
 
 	public Long getId() {
 		return id;

@@ -1,4 +1,4 @@
-package com.imb2025.smedico.TurnoMapper;
+package com.imb2025.smedico.mapper;
 
 import com.imb2025.smedico.dto.request.TurnoRequestDto.TurnoRequestDto;
 import com.imb2025.smedico.dto.response.TurnoResponseDto.TurnoResponseDto;
@@ -20,6 +20,7 @@ public class TurnoMapper {
         turno.setPaciente(paciente);
         turno.setMedico(medico);
         turno.setEstadoTurno(estadoTurno);
+        turno.setFechaVigencia(dto.getFechaVigencia()); 
         return turno;
     }
 
@@ -32,7 +33,7 @@ public class TurnoMapper {
         dto.setPacienteNombre(turno.getPaciente().getNombre());
         dto.setMedicoNombre(turno.getMedico().getNombre());
         dto.setEstadoTurnoDescripcion(turno.getEstadoTurno().getNombre()); // o descripcion si tu entidad tiene ese campo
-      
+        dto.setFechaVigencia(turno.getFechaVigencia());
         return dto;
     }
 
@@ -47,6 +48,7 @@ public class TurnoMapper {
         turno.setPaciente(paciente);
         turno.setMedico(medico);
         turno.setEstadoTurno(estadoTurno);
+        turno.setFechaVigencia(dto.getFechaVigencia());
         // version no se setea, JPA lo maneja automáticamente
     }
 }

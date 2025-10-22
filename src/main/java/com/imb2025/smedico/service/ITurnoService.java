@@ -14,4 +14,6 @@ public interface ITurnoService {
     void deleteById(Long id);
     List<TurnoResponseDto> findByFecha(LocalDate fecha);
     long countByFecha(LocalDate fecha);
+    List<TurnoResponseDto> obtenerTurnosVigentes();
+    List<TurnoResponseDto> obtenerTurnosVencidos();
 }

@@ -71,4 +71,18 @@ public class TurnoController {
         long total = service.countByFecha(fecha);
         return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Cantidad de turnos en fecha " + fecha, total));
     }
+    
+    @GetMapping("/vigentes")
+    public ResponseEntity<List<TurnoResponseDto>> listarVigentes() {
+        List<TurnoResponseDto> lista = service.obtenerTurnosVigentes();
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/vencidos")
+    public ResponseEntity<List<TurnoResponseDto>> listarVencidos() {
+        List<TurnoResponseDto> lista = service.obtenerTurnosVencidos();
+        return ResponseEntity.ok(lista);
+    }
+
+    
 }
