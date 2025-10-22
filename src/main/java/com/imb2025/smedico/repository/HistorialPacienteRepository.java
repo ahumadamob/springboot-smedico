@@ -14,4 +14,8 @@ public interface HistorialPacienteRepository extends JpaRepository<HistorialPaci
 
     // Cuenta cuántos historiales existen en una fecha específica
     Long countByFecha(LocalDate fecha);
+    
+    List<HistorialPaciente> findByFechaVigenciaGreaterThanEqual(LocalDate fecha);
+
+    List<HistorialPaciente> findByFechaVigenciaLessThan(LocalDate fecha);
 }

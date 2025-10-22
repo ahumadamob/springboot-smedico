@@ -91,5 +91,24 @@ public class HistorialPacienteController {
                 new ApiResponseSuccessDto<>(true, "Cantidad de historiales en esa fecha", cantidad);
         return ResponseEntity.ok(resp);
     }
+    
+    @GetMapping("recurso/vigentes")
+    public ResponseEntity<ApiResponseSuccessDto<List<HistorialPacienteResponseDto>>> getVigentes() {
+        List<HistorialPacienteResponseDto> lista =
+                HistorialPacienteMapper.toResponseDtoList(service.findVigentes(java.time.LocalDate.now()));
+        ApiResponseSuccessDto<List<HistorialPacienteResponseDto>> resp =
+                new ApiResponseSuccessDto<>(true, "Historiales vigentes", lista);
+        return ResponseEntity.ok(resp);
+    }
+
+    @GetMapping("recurso/vencidos")
+    public ResponseEntity<ApiResponseSuccessDto<List<HistorialPacienteResponseDto>>> getVencidos() {
+        List<HistorialPacienteResponseDto> lista =
+                HistorialPacienteMapper.toResponseDtoList(service.findVencidos(java.time.LocalDate.now()));
+        ApiResponseSuccessDto<List<HistorialPacienteResponseDto>> resp =
+                new ApiResponseSuccessDto<>(true, "Historiales vencidos", lista);
+        return ResponseEntity.ok(resp);
+    }
+
 
 }

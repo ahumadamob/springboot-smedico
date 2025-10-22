@@ -1,5 +1,6 @@
 package com.imb2025.smedico.service.jpa;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +80,15 @@ public class HistorialPacienteServiceImpl implements IHistorialPacienteService {
     @Override
     public boolean existsById(Long id) {
         return repo.existsById(id);
+    }
+    @Override
+    public List<HistorialPaciente> findVigentes(LocalDate fechaHoy) {
+        return repo.findByFechaVigenciaGreaterThanEqual(fechaHoy);
+    }
+
+    @Override
+    public List<HistorialPaciente> findVencidos(LocalDate fechaHoy) {
+        return repo.findByFechaVigenciaLessThan(fechaHoy);
     }
 
 }

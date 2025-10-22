@@ -23,4 +23,8 @@ public interface IHistorialPacienteService {
     List<HistorialPaciente> findByEvento(String evento);
     
     Long countByFecha(LocalDate fecha);
+    
+    List<HistorialPaciente> findVigentes(LocalDate fechaHoy);
+    
+    List<HistorialPaciente> findVencidos(LocalDate fechaHoy);
 }

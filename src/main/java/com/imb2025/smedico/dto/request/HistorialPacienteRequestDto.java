@@ -15,7 +15,7 @@ public class HistorialPacienteRequestDto {
     private Long pacienteId;
 	
 	@NotBlank(message = "El evento es OBLIGATORIO")
-	@Size(min = 3, max = 100,message= "El evento debe tener entre 3 y 100 caracteres")
+	@Size(min = 3, max = 100, message = "El evento debe tener entre 3 y 100 caracteres")
     private String evento;
 	
 	@NotNull(message = "La fecha es OBLIGATORIA")
@@ -24,15 +24,19 @@ public class HistorialPacienteRequestDto {
 	
 	@Size(max = 255, message = "La observacion no puede superar los 255 caracteres")
     private String observacion;
+	
+	@NotNull(message = "La fecha de vigencia es OBLIGATORIA")
+    private LocalDate fechaVigencia;
 
     public HistorialPacienteRequestDto() {}
 
     public HistorialPacienteRequestDto(
-            Long pacienteId, String evento, LocalDate fecha, String observacion) {
+            Long pacienteId, String evento, LocalDate fecha, String observacion, LocalDate fechaVigencia) {
         this.pacienteId = pacienteId;
         this.evento = evento;
         this.fecha = fecha;
         this.observacion = observacion;
+        this.fechaVigencia = fechaVigencia;
     }
 
     public Long getPacienteId() {
@@ -66,5 +70,12 @@ public class HistorialPacienteRequestDto {
     public void setObservacion(String observacion) {
         this.observacion = observacion;
     }
-}
 
+    public LocalDate getFechaVigencia() {
+        return fechaVigencia;
+    }
+
+    public void setFechaVigencia(LocalDate fechaVigencia) {
+        this.fechaVigencia = fechaVigencia;
+    }
+}
