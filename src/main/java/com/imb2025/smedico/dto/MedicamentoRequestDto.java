@@ -1,6 +1,7 @@
 package com.imb2025.smedico.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class MedicamentoRequestDto {
@@ -14,13 +15,17 @@ public class MedicamentoRequestDto {
         
         @Size(max = 100, message = "Se permiten hasta 100 caracteres")
         private String dosisSugerida;
+        
+        @NotNull(message = "Debe especificar si el medicamento está activo")
+        private Boolean esActivo;
 
         public MedicamentoRequestDto() {}
 
-        public MedicamentoRequestDto(String nombre, String presentacion, String dosisSugerida) {
+        public MedicamentoRequestDto(String nombre, String presentacion, String dosisSugerida, Boolean esActivo) {
                 this.nombre = nombre;
                 this.presentacion = presentacion;
                 this.dosisSugerida = dosisSugerida;
+                this.esActivo = esActivo;
 
         }
 
@@ -48,6 +53,11 @@ public class MedicamentoRequestDto {
 		this.dosisSugerida = dosisSugerida;
 	}
 
-	
+	public Boolean getEsActivo() {
+        return esActivo;
+    }
+    public void setEsActivo(Boolean esActivo) {
+        this.esActivo = esActivo;
+    }	
 
 }

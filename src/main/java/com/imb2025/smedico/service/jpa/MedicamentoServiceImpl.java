@@ -3,6 +3,7 @@ package com.imb2025.smedico.service.jpa;
 import com.imb2025.smedico.dto.MedicamentoRequestDto;
 import com.imb2025.smedico.entity.Medicamento;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
+import com.imb2025.smedico.mapper.MedicamentoMapper;
 import com.imb2025.smedico.repository.MedicamentoRepository;
 import com.imb2025.smedico.service.IMedicamentoService;
 import java.util.List;
@@ -16,6 +17,9 @@ public class MedicamentoServiceImpl implements IMedicamentoService {
 	@Autowired
 	private MedicamentoRepository repoMedic;
 	
+	@Autowired
+    private MedicamentoMapper mapper;
+	
 	@Override
         public List<Medicamento> findAll() {
                 return repoMedic.findAll();
@@ -26,22 +30,23 @@ public class MedicamentoServiceImpl implements IMedicamentoService {
         }
 	
 	@Override
-        public Medicamento create(Medicamento medicamento) {
-                return repoMedic.save(medicamento);
+	public Medicamento create(MedicamentoRequestDto dto) {
+        Medicamento medicamento = mapper.toEntity(dto); // Usamos el mapper
+        return repoMedic.save(medicamento);
         }
 	
 	
 	@Override
-        public Medicamento update(Long id, Medicamento medicamento) {
-			Medicamento medExistente = repoMedic.findById(id)
-		        .orElseThrow(() -> new ResourceNotFoundException("Medicamento con ID " + id + " no existe."));
+	public Medicamento update(Long id, MedicamentoRequestDto dto) {
+		Medicamento medExistente = repoMedic.findById(id)
+	        .orElseThrow(() -> new ResourceNotFoundException("Medicamento con ID " + id + " no existe."));
 		    
-		    medExistente.setNombre(medicamento.getNombre());
-		    medExistente.setDosisSugerida(medicamento.getDosisSugerida());
-		    medExistente.setPresentacion(medicamento.getPresentacion());
-		    return repoMedic.save(medExistente);
-			
-        }
+        // Usamos el mapper para actualizar
+        mapper.updateEntityFromDto(dto, medExistente); 
+		    
+		return repoMedic.save(medExistente);	
+    }
+	
 	
 	@Override
 	public boolean existsById(Long id) {
@@ -57,14 +62,16 @@ public class MedicamentoServiceImpl implements IMedicamentoService {
 		    repoMedic.delete(medicamento);		
 	}
 	
+	
 	@Override
-	public Medicamento fromDto(MedicamentoRequestDto dto) {
-		Medicamento medicamento = new Medicamento();
-	    medicamento.setNombre(dto.getNombre());
-	    medicamento.setDosisSugerida(dto.getDosisSugerida());
-	    medicamento.setPresentacion(dto.getPresentacion());
-	    return medicamento;
-	}
+    public List<Medicamento> findActivos() {
+        return repoMedic.findByEsActivoTrue();
+    }
+
+    @Override
+    public List<Medicamento> findInactivos() {
+        return repoMedic.findByEsActivoFalse();
+    }
 	
 
 }

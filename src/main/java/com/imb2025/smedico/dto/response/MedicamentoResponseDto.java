@@ -1,32 +1,18 @@
-package com.imb2025.smedico.entity;
+package com.imb2025.smedico.dto.response;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+public class MedicamentoResponseDto {
 
-@Entity
-public class Medicamento {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(nullable = false, length = 100)
     private String nombre;
-    
-    @Column(nullable = false, length = 50)
     private String presentacion;
-    
-    @Column(nullable = true, length = 100)
     private String dosisSugerida;
-    
-    @Column(nullable = false)
-    private Boolean esActivo = true; // Por defecto 'true'
+    private Boolean esActivo; // El nuevo atributo
 
-    public Medicamento() {}
+    // Constructores, Getters y Setters...
 
-    public Medicamento(Long id, String nombre, String presentacion, String dosisSugerida, Boolean esActivo) {
+    public MedicamentoResponseDto() {}
+
+    public MedicamentoResponseDto(Long id, String nombre, String presentacion, String dosisSugerida, Boolean esActivo) {
         this.id = id;
         this.nombre = nombre;
         this.presentacion = presentacion;
