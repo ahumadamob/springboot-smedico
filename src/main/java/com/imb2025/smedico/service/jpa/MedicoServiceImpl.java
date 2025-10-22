@@ -74,7 +74,10 @@ public class MedicoServiceImpl implements IMedicoService {
     }
 
    
-
+    @Override
+    public Long countByEstado(Medico.Estado estado) {
+        return repo.countByEstado(estado);
+    }
 
 
 }

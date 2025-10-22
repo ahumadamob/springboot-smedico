@@ -10,5 +10,7 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
 	List<Medico> findByApellido(String Apellido);
 	
 	Long countByEspecialidad_Nombre(String nombreEspecialidad);
+	
+	Long countByEstado(Medico.Estado estado);
 
 }

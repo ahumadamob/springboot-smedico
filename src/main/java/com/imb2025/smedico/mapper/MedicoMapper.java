@@ -26,6 +26,7 @@ public class MedicoMapper {
         medico.setEspecialidad(especialidad);
         medico.setEmail(dto.getEmail());
         medico.setTelefono(dto.getTelefono());
+        medico.setEstado(dto.getEstado());
 
         return medico;
     }
@@ -38,6 +39,7 @@ public class MedicoMapper {
         dto.setMatricula(medico.getMatricula());
         dto.setNombre(medico.getNombre());
         dto.setVersion(medico.getVersion());
+        dto.setEstado(medico.getEstado());
         return dto;
     }
 }

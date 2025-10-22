@@ -11,8 +11,7 @@ public interface IMedicoService {
     public Medico findById(Long id);
     public boolean existsById(Long id);
     public void deleteById(Long id);
-   
-    
     public List <Medico> findByApellido (String Apellido);
     public Long countByEspecialidad (String nombreEspecialidad);
+    public Long countByEstado(Medico.Estado estado);
 }

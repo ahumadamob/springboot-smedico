@@ -1,5 +1,7 @@
 package com.imb2025.smedico.dto.request;
 
+import com.imb2025.smedico.entity.Medico.Estado;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -32,16 +34,20 @@ public class MedicoRequestDto {
     @Pattern(regexp = "^[0-9]{7,15}$", message = "El teléfono debe contener entre 7 y 15 dígitos")
     @Size(min = 7, max = 15, message = "El teléfono debe tener entre 7 y 15 caracteres")
     private String telefono;
+    
+    @NotNull(message = "El estado es obligatorio")
+    private Estado estado;
 
         public MedicoRequestDto() {}
 
-        public MedicoRequestDto(String nombre, String apellido, String matricula, Long especialidadId, String email, String telefono) {
+        public MedicoRequestDto(String nombre, String apellido, String matricula, Long especialidadId, String email, String telefono, Estado estado) {
                 this.nombre = nombre;
                 this.apellido = apellido;
                 this.matricula = matricula;
                 this.especialidadId = especialidadId;
                 this.email = email;
                 this.telefono = telefono;
+                this.estado = estado;
         }
     
 
@@ -81,4 +87,10 @@ public class MedicoRequestDto {
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
 	}
+	public Estado getEstado() { 
+		return estado; 
+	}
+    public void setEstado(Estado estado) { 
+    	this.estado = estado; 
+    }
 }

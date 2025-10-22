@@ -24,40 +24,28 @@ public class MedicoController {
 
     @Autowired
     private IMedicoService service;
-    
-    
+
+    @Autowired
+    private MedicoMapper mapper; 
 
     @GetMapping
     public ResponseEntity<ApiResponseSuccessDto<List<MedicoResponseDto>>> findAllMedicos() {
         List<Medico> lista = service.findAll();
-        List<MedicoResponseDto> listaResponse = new ArrayList<MedicoResponseDto>();
-        MedicoMapper mapper =  new MedicoMapper();
-        
-        for (Medico m: lista) {
-        	MedicoResponseDto dto = new MedicoResponseDto();
-        	dto =  mapper.toDto(m);
-        	listaResponse.add(dto);
+        List<MedicoResponseDto> listaResponse = new ArrayList<>();
+        for (Medico m : lista) {
+            listaResponse.add(mapper.toDto(m)); 
         }
-        
-        ApiResponseSuccessDto<List<MedicoResponseDto>> resp;
-        
-
-        if (lista.isEmpty()) {
-            resp = new ApiResponseSuccessDto<>(true, "No hay médicos disponibles", listaResponse);
-            return ResponseEntity.ok(resp); 
-        } else {
-            resp = new ApiResponseSuccessDto<>(true, "Lista de médicos", listaResponse);
-            return ResponseEntity.ok(resp);
-        }
+        ApiResponseSuccessDto<List<MedicoResponseDto>> resp =
+                new ApiResponseSuccessDto<>(true,
+                        lista.isEmpty() ? "No hay médicos disponibles" : "Lista de médicos",
+                        listaResponse);
+        return ResponseEntity.ok(resp);
     }
 
     @GetMapping("/{idmedico}")
     public ResponseEntity<ApiResponseSuccessDto<MedicoResponseDto>> findById(@PathVariable("idmedico") Long id) {
-    	MedicoMapper mapper =  new MedicoMapper();
         Medico medico = service.findById(id);
-        MedicoResponseDto dto = new MedicoResponseDto();
-        dto=mapper.toDto(medico);
-        
+        MedicoResponseDto dto = mapper.toDto(medico); 
         ApiResponseSuccessDto<MedicoResponseDto> resp =
                 new ApiResponseSuccessDto<>(true, "Médico encontrado", dto);
         return ResponseEntity.ok(resp);
@@ -65,8 +53,7 @@ public class MedicoController {
 
     @PostMapping
     public ResponseEntity<ApiResponseSuccessDto<Medico>> create(@Valid @RequestBody MedicoRequestDto dto) throws Exception {
-    	MedicoMapper mapper =  new MedicoMapper();
-        Medico medico = mapper.fromDto(dto);
+        Medico medico = mapper.fromDto(dto); 
         Medico creado = service.create(medico);
         ApiResponseSuccessDto<Medico> resp =
                 new ApiResponseSuccessDto<>(true, "Médico creado correctamente", creado);
@@ -75,8 +62,7 @@ public class MedicoController {
 
     @PutMapping("/{idmedico}")
     public ResponseEntity<ApiResponseSuccessDto<Medico>> update(@PathVariable("idmedico") Long id,
-    		@Valid @RequestBody MedicoRequestDto dto) throws Exception {
-    	MedicoMapper mapper =  new MedicoMapper();
+                                                                @Valid @RequestBody MedicoRequestDto dto) throws Exception {
         Medico medico = mapper.fromDto(dto);
         medico.setId(id);
         Medico actualizado = service.update(id, medico);
@@ -92,28 +78,36 @@ public class MedicoController {
                 new ApiResponseSuccessDto<>(true, "Médico eliminado correctamente", "Id: " + id);
         return ResponseEntity.ok(resp);
     }
-    
- 
+
     @GetMapping("/apellido/{apellido}")
-    public ResponseEntity<ApiResponseSuccessDto<List<Medico>>> findByApellido(
-            @PathVariable String apellido) {
+    public ResponseEntity<ApiResponseSuccessDto<List<Medico>>> findByApellido(@PathVariable String apellido) {
         List<Medico> lista = service.findByApellido(apellido);
         ApiResponseSuccessDto<List<Medico>> resp =
                 new ApiResponseSuccessDto<>(true, "Médicos con apellido: " + apellido, lista);
         return ResponseEntity.ok(resp);
     }
 
-
     @GetMapping("/count/especialidad/{nombre}")
-    public ResponseEntity<ApiResponseSuccessDto<Long>> countByEspecialidad(
-            @PathVariable("nombre") String nombreEspecialidad) {
+    public ResponseEntity<ApiResponseSuccessDto<Long>> countByEspecialidad(@PathVariable("nombre") String nombreEspecialidad) {
         Long cantidad = service.countByEspecialidad(nombreEspecialidad);
         ApiResponseSuccessDto<Long> resp =
                 new ApiResponseSuccessDto<>(true, "Cantidad de médicos en la especialidad: " + nombreEspecialidad, cantidad);
         return ResponseEntity.ok(resp);
     }
 
+    @GetMapping("/stats/activos")
+    public ResponseEntity<ApiResponseSuccessDto<Long>> countActivos() {
+        Long cantidad = service.countByEstado(Medico.Estado.ACTIVO);
+        ApiResponseSuccessDto<Long> resp =
+                new ApiResponseSuccessDto<>(true, "Cantidad de médicos activos", cantidad);
+        return ResponseEntity.ok(resp);
+    }
 
-  
-   
+    @GetMapping("/stats/inactivos")
+    public ResponseEntity<ApiResponseSuccessDto<Long>> countInactivos() {
+        Long cantidad = service.countByEstado(Medico.Estado.INACTIVO);
+        ApiResponseSuccessDto<Long> resp =
+                new ApiResponseSuccessDto<>(true, "Cantidad de médicos inactivos", cantidad);
+        return ResponseEntity.ok(resp);
+    }
 }

@@ -1,14 +1,20 @@
 package com.imb2025.smedico.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
 
 @Entity
 public class Medico extends BaseEntity {
+
     
 
     private String nombre;
@@ -20,11 +26,23 @@ public class Medico extends BaseEntity {
     private Especialidad especialidad;
     private String email;
     private String telefono;
+    
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Estado estado;
+
+    public enum Estado {
+        ACTIVO,
+        INACTIVO
+    }
+    
+    
 
     public Medico() {}
 
     public Medico( String nombre, String apellido, String matricula, Especialidad especialidad,
-                  String email, String telefono) {
+                  String email, String telefono, Estado estado) {
        
         this.nombre = nombre;
         this.apellido = apellido;
@@ -32,6 +50,7 @@ public class Medico extends BaseEntity {
         this.especialidad = especialidad;
         this.email = email;
         this.telefono = telefono;
+        this.estado = estado;
     }
 
     
@@ -82,5 +101,12 @@ public class Medico extends BaseEntity {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+    
+    public Estado getEstado() {
+        return estado;
+    }
+    public void setEstado(Estado estado) {
+        this.estado = estado;
     }
 }
