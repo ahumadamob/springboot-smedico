@@ -8,20 +8,38 @@ import java.util.List;
 
 public interface IEstadoTurnoService {
 
+    // -------------------------------------------------------------------------
     // Métodos CRUD existentes
+    // -------------------------------------------------------------------------
     List<EstadoTurno> findAll();
     EstadoTurno findById(Long id) throws ResourceNotFoundException;
     boolean existsById(Long id);
     EstadoTurno create(EstadoTurno estadoTurno);
-    EstadoTurno update(Long id, EstadoTurno estadoTurno) throws ResourceNotFoundException;
-    void deleteById(Long id) throws ResourceNotFoundException;
-
-    // Mapeo
-    EstadoTurno fromDto(EstadoTurnoRequestDto dto);
-
-  
-    // TP07: Métodos de Filtro y Conteo
+    EstadoTurno update(Long id, EstadoTurno estadoTurno) throws ResourceNotFoundException; 
+    void deleteById(Long id) throws ResourceNotFoundException; 
     
+    // MÉTODO RESTAURADO: Necesario para que el Controlador compile y funcione SIN el Mapper
+    EstadoTurno fromDto(EstadoTurnoRequestDto dto); 
+
+    // -------------------------------------------------------------------------
+    // EJERCICIO 1: Métodos de Filtro Booleano
+    // -------------------------------------------------------------------------
+
+    /**
+      Busca todos los EstadosTurno donde el atributo esFinal es TRUE.
+      @return Lista de EstadosTurno que son estados finales (ej: Cancelado, Confirmado).
+     */
+    List<EstadoTurno> findFinales();
+
+    /**
+      Busca todos los EstadosTurno donde el atributo esFinal es FALSE.
+      @return Lista de EstadosTurno que están pendientes o en proceso.
+     */
+    List<EstadoTurno> findPendientes();
+  
+    // -------------------------------------------------------------------------
+    // TP07: Métodos de Filtro y Conteo
+    // -------------------------------------------------------------------------
 
     /**
       Filtra la lista de EstadosTurno por subcadena en el nombre 

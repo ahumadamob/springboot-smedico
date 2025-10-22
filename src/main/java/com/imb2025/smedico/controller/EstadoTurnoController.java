@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors; // Necesario para el .collect(Collectors.toList())
+import java.util.stream.Collectors;
 
 import com.imb2025.smedico.dto.EstadoTurnoRequestDto;
 import com.imb2025.smedico.entity.EstadoTurno;
@@ -18,143 +18,183 @@ import jakarta.validation.Valid;
 @RequestMapping("/estado-turno") // Los endpoints definidos comenzarán con "/estado-turno"
 public class EstadoTurnoController {
 
-    private final IEstadoTurnoService estadoTurnoService; // Instanciamos EstadoTurnoS, para la lógica
+    private final IEstadoTurnoService estadoTurnoService;
 
     public EstadoTurnoController(IEstadoTurnoService estadoTurnoService) {
         this.estadoTurnoService = estadoTurnoService;
     }
     
-    // ------------------------------------------------------------------
-    // TP07: Endpoint para Filtrar (findBy...)
-    // URL de ejemplo: GET /estado-turno?filtro=pen
-    // ------------------------------------------------------------------
-
+    // ==================================================================
+    // EJERCICIO 1: Nuevos Endpoints de Filtro Booleano (Rutas Separadas)
+    // ==================================================================
+    
     /**
-     * Endpoint para filtrar EstadosTurno por una subcadena en su nombre.
-     * Se activa cuando la URL incluye el parámetro 'filtro' y NO 'count'.
-     * @param filtro Cadena de texto a buscar en el nombre (case-insensitive).
-     * @return Respuesta estándar con la lista de DTOs que coinciden.
+     * Endpoint para obtener todos los EstadosTurno donde esFinal = TRUE.
+     * Cumple el criterio: NO usa parametrización.
+     * URL: GET /estado-turno/finales
      */
-    @GetMapping(params = {"filtro", "!count"}) // Mapeo: Si está 'filtro' y NO 'count'
-    public ResponseEntity<ApiResponseSuccessDto<List<EstadoTurnoRequestDto>>> findByFiltro(@RequestParam(name = "filtro") String filtro) {
-        // Llama al nuevo método del servicio
-        List<EstadoTurno> estados = estadoTurnoService.findByNombreContaining(filtro);
+    @GetMapping("/finales")
+    public ResponseEntity<ApiResponseSuccessDto<List<EstadoTurnoRequestDto>>> findFinales() {
+        // Llama al método del servicio que usa findByEsFinalTrue()
+        List<EstadoTurno> estados = estadoTurnoService.findFinales();
 
-        // Convierte las entidades filtradas a DTOs
+        // Conversión de Entidad a DTO con todos los campos
         List<EstadoTurnoRequestDto> dtos = estados.stream()
-                // Asegúrate de usar el constructor que acepta ID y Nombre
-                .map(e -> new EstadoTurnoRequestDto(e.getId(), e.getNombre())) 
+                .map(e -> new EstadoTurnoRequestDto(e.getId(), e.getNombre(), e.getVersion(), e.getEsFinal()))
                 .collect(Collectors.toList());
 
         ApiResponseSuccessDto<List<EstadoTurnoRequestDto>> response =
-                new ApiResponseSuccessDto<>(true, 
-                        "Listado de EstadosTurno filtrado por '" + filtro + "' obtenido correctamente.", 
-                        dtos);
+                new ApiResponseSuccessDto<>(true, "Listado de EstadosTurno Finales (esFinal=TRUE) obtenido correctamente.", dtos);
 
         return ResponseEntity.ok(response);
     }
     
-    
-    // TP07: Endpoint para Contar (countBy...)
-    // URL de ejemplo: GET /estado-turno?count=Pendiente
-    
     /**
-      Endpoint para obtener el conteo de EstadosTurno con un nombre específico.
-      Se activa cuando la URL incluye el parámetro 'count' y NO 'filtro'.
-      @param nombre Nombre exacto a contar (case-insensitive).
-      @return Respuesta estándar con el número de coincidencias.
+     * Endpoint para obtener todos los EstadosTurno donde esFinal = FALSE.
+     * Cumple el criterio: NO usa parametrización.
+     * URL: GET /estado-turno/pendientes
      */
-    @GetMapping(params = {"count", "!filtro"}) // Mapeo: Si está 'count' y NO 'filtro'
+    @GetMapping("/pendientes")
+    public ResponseEntity<ApiResponseSuccessDto<List<EstadoTurnoRequestDto>>> findPendientes() {
+        // Llama al método del servicio que usa findByEsFinalFalse()
+        List<EstadoTurno> estados = estadoTurnoService.findPendientes();
+
+        // Conversión de Entidad a DTO con todos los campos
+        List<EstadoTurnoRequestDto> dtos = estados.stream()
+                .map(e -> new EstadoTurnoRequestDto(e.getId(), e.getNombre(), e.getVersion(), e.getEsFinal()))
+                .collect(Collectors.toList());
+
+        ApiResponseSuccessDto<List<EstadoTurnoRequestDto>> response =
+                new ApiResponseSuccessDto<>(true, "Listado de EstadosTurno Pendientes (esFinal=FALSE) obtenido correctamente.", dtos);
+
+        return ResponseEntity.ok(response);
+    }
+
+    // ==================================================================
+    // TP07: Métodos de Filtro y Conteo (Se mantienen en la ruta base con params)
+    // ==================================================================
+
+    /**
+     * Endpoint para filtrar EstadosTurno por una subcadena en su nombre.
+     * URL de ejemplo: GET /estado-turno?filtro=pen
+     */
+    @GetMapping(params = {"filtro", "!count"})
+    public ResponseEntity<ApiResponseSuccessDto<List<EstadoTurnoRequestDto>>> findByFiltro(@RequestParam(name = "filtro") String filtro) {
+        List<EstadoTurno> estados = estadoTurnoService.findByNombreContaining(filtro);
+
+        List<EstadoTurnoRequestDto> dtos = estados.stream()
+                .map(e -> new EstadoTurnoRequestDto(e.getId(), e.getNombre(), e.getVersion(), e.getEsFinal()))
+                .collect(Collectors.toList());
+
+        ApiResponseSuccessDto<List<EstadoTurnoRequestDto>> response =
+                new ApiResponseSuccessDto<>(true, "Listado de EstadosTurno filtrado por '" + filtro + "' obtenido correctamente.", dtos);
+
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Endpoint para obtener el conteo de EstadosTurno con un nombre específico.
+     * URL de ejemplo: GET /estado-turno?count=Pendiente
+     */
+    @GetMapping(params = {"count", "!filtro"})
     public ResponseEntity<ApiResponseSuccessDto<Long>> countByNombre(@RequestParam(name = "count") String nombre) {
-        // Llama al nuevo método del servicio
         long conteo = estadoTurnoService.countByNombre(nombre);
 
         ApiResponseSuccessDto<Long> response =
-                new ApiResponseSuccessDto<>(true, 
-                        "Conteo de EstadosTurno con nombre '" + nombre + "' obtenido correctamente.", 
-                        conteo);
+                new ApiResponseSuccessDto<>(true, "Conteo de EstadosTurno con nombre '" + nombre + "' obtenido correctamente.", conteo);
 
         return ResponseEntity.ok(response);
     }
 
-    // ------------------------------------------------------------------
-    // Métodos CRUD originales
-    // ------------------------------------------------------------------
+    // ==================================================================
+    // Métodos CRUD (Se ajustan para la conversión de DTO con todos los campos)
+    // ==================================================================
 
-    // GET de EstadoTurnoE (Obtener todos los registros por lista)
-    // CRUCIAL: Ahora usa el mapeo `params = {"!filtro", "!count"}`
-    @GetMapping(params = {"!filtro", "!count"}) 
+    /**
+     * GET de EstadoTurnoE (Obtener todos los registros por lista)
+     * Se ejecuta si NO están 'filtro' ni 'count'
+     */
+    @GetMapping(params = {"!filtro", "!count"})
     public ResponseEntity<ApiResponseSuccessDto<List<EstadoTurnoRequestDto>>> getAll() {
         List<EstadoTurno> estados = estadoTurnoService.findAll();
 
-        // Convertimos la lista de entidades a lista de DTOs de respuesta
         List<EstadoTurnoRequestDto> dtos = estados.stream()
-                // Se usa el constructor con ID para las respuestas GET
-                .map(e -> new EstadoTurnoRequestDto(e.getId(), e.getNombre())) 
+                .map(e -> new EstadoTurnoRequestDto(e.getId(), e.getNombre(), e.getVersion(), e.getEsFinal()))
                 .toList();
 
-        // Envolvemos todo en el DTO estándar de éxito
         ApiResponseSuccessDto<List<EstadoTurnoRequestDto>> response =
                 new ApiResponseSuccessDto<>(true, "Listado de EstadosTurno obtenido correctamente", dtos);
 
         return ResponseEntity.ok(response);
     }
 
-    // GET de EstadoTurnoE {id} (Obtener un registro por ID)
+    /**
+     * GET de EstadoTurnoE {id} (Obtener un registro por ID)
+     */
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<EstadoTurnoRequestDto>> getById(@PathVariable Long id) {
-        // Buscamos la entidad, lanzará ResourceNotFoundException si no existe
         EstadoTurno estadoTurno = estadoTurnoService.findById(id);
 
-        // Convertimos la entidad a DTO
-        // Usamos el constructor con ID y Nombre
-        EstadoTurnoRequestDto dto = new EstadoTurnoRequestDto(estadoTurno.getId(), estadoTurno.getNombre());
-        
-        // Armamos la respuesta genérica
+        EstadoTurnoRequestDto dto = new EstadoTurnoRequestDto(estadoTurno.getId(), estadoTurno.getNombre(), estadoTurno.getVersion(), estadoTurno.getEsFinal());
+
         ApiResponseSuccessDto<EstadoTurnoRequestDto> response = new ApiResponseSuccessDto<>(
-            true,       // success
-            "EstadoTurno encontrado",  // mensaje
-            dto         // data
+                true,
+                "EstadoTurno encontrado",
+                dto
         );
 
         return ResponseEntity.ok(response);
     }
 
-
-    // POST de EstadoTurnoE (Crear un nuevo registro)
+    /**
+     * POST de EstadoTurnoE (Crear un nuevo registro)
+     */
     @PostMapping
     public ResponseEntity<ApiResponseSuccessDto<EstadoTurnoRequestDto>> create(
             @Valid @RequestBody EstadoTurnoRequestDto dto) {
 
-        // conversión DTO a entidad
+        // Conversión DTO a entidad (usando el fromDto del servicio, ya que el Mapper no existe en esta rama)
         EstadoTurno entidad = estadoTurnoService.fromDto(dto);
 
         // persistencia
         EstadoTurno creado = estadoTurnoService.create(entidad);
 
-        // DTO de respuesta
-        // Asegúrate de incluir el ID generado en la respuesta
-        EstadoTurnoRequestDto responseDto = new EstadoTurnoRequestDto(creado.getId(), creado.getNombre());
+        // DTO de respuesta con ID, Version y esFinal
+        EstadoTurnoRequestDto responseDto = new EstadoTurnoRequestDto(creado.getId(), creado.getNombre(), creado.getVersion(), creado.getEsFinal());
 
-        // respuesta estándar
         ApiResponseSuccessDto<EstadoTurnoRequestDto> response =
                 new ApiResponseSuccessDto<>(true, "EstadoTurno creado correctamente", responseDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    /**
+     * PUT de EstadoTurnoE (Actualizar un registro)
+     */
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<EstadoTurnoRequestDto>> update(
             @PathVariable Long id,
-            @RequestBody @Valid EstadoTurnoRequestDto dto) { // Agregamos @Valid aquí
+            @RequestBody @Valid EstadoTurnoRequestDto dto) {
 
-        EstadoTurno estadoTurno = estadoTurnoService.fromDto(dto);
-        EstadoTurno actualizado = estadoTurnoService.update(id, estadoTurno);
+        // Conversión DTO a entidad (usando el fromDto del servicio)
+        EstadoTurno entidad = estadoTurnoService.fromDto(dto);
+        
+        // Se asegura que la entidad tenga el ID para el service.update
+        entidad.setId(id);
 
-        // Reutilizamos el mismo DTO para la respuesta
+        // Se usa la versión del DTO para el control de concurrencia optimista
+        if (dto.getVersion() != null) {
+            entidad.setVersion(dto.getVersion());
+        }
+
+        EstadoTurno actualizado = estadoTurnoService.update(id, entidad);
+
+        // DTO de respuesta con la versión actualizada
         EstadoTurnoRequestDto responseDto = new EstadoTurnoRequestDto(
-                actualizado.getId(), // Asegúrate de devolver el ID
-                actualizado.getNombre()
+                actualizado.getId(),
+                actualizado.getNombre(),
+                actualizado.getVersion(),
+                actualizado.getEsFinal()
         );
 
         ApiResponseSuccessDto<EstadoTurnoRequestDto> response =
@@ -163,11 +203,12 @@ public class EstadoTurnoController {
         return ResponseEntity.ok(response);
     }
 
-
-    
+    /**
+     * DELETE de EstadoTurnoE (Eliminar un registro)
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<Void>> delete(@PathVariable Long id) {
-        // Usamos try-catch para manejar la excepción de no encontrado que lanza el servicio
+        // Intentar eliminar, la lógica de chequeo está en el servicio
         try {
             estadoTurnoService.deleteById(id);
             ApiResponseSuccessDto<Void> response = new ApiResponseSuccessDto<>(
@@ -180,12 +221,10 @@ public class EstadoTurnoController {
              // Si el servicio lanza una excepción (ej. ResourceNotFoundException), devuelve 404
              return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ApiResponseSuccessDto<>(
-                            false, 
+                            false,
                             "Error: No se encontró el EstadoTurno con ID: " + id,
                             null
                     ));
         }
     }
-
-
 }

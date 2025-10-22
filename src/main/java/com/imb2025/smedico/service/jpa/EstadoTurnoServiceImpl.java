@@ -17,6 +17,7 @@ public class EstadoTurnoServiceImpl implements IEstadoTurnoService {
 
     private final EstadoTurnoRepository estadoTurnoRepository;
 
+    // Se elimina la inyección del Mapper
     public EstadoTurnoServiceImpl(EstadoTurnoRepository estadoTurnoRepository) {
         this.estadoTurnoRepository = estadoTurnoRepository;
     }
@@ -32,16 +33,32 @@ public class EstadoTurnoServiceImpl implements IEstadoTurnoService {
 
     @Override
     public List<EstadoTurno> findByNombreContaining(String filtro) {
-        // Delega la llamada al Query Method del Repository (case-insensitive)
         return estadoTurnoRepository.findByNombreContainingIgnoreCase(filtro);
     }
 
     @Override
     public long countByNombre(String nombre) {
-        // Delega la llamada al Query Method del Repository (case-insensitive)
         return estadoTurnoRepository.countByNombreIgnoreCase(nombre);
     }
     
+    // ------------------------------------------------------------------
+    // EJERCICIO 1: Implementación de Filtros Booleanos (NUEVO)
+    // ------------------------------------------------------------------
+
+    @Override
+    public List<EstadoTurno> findFinales() {
+        // Llama al Query Method mágico: findByEsFinalTrue()
+        return estadoTurnoRepository.findByEsFinalTrue();
+    }
+
+    @Override
+    public List<EstadoTurno> findPendientes() {
+        // Llama al Query Method mágico: findByEsFinalFalse()
+        return estadoTurnoRepository.findByEsFinalFalse();
+    }
+    
+    // ------------------------------------------------------------------
+    // Métodos CRUD (Restaurados sin lógica del Mapper)
     // ------------------------------------------------------------------
 
     @Override
@@ -62,37 +79,43 @@ public class EstadoTurnoServiceImpl implements IEstadoTurnoService {
         return estadoTurnoRepository.save(estadoTurno);
     }
 
+    // Se restaura la lógica sin el Mapper y añadiendo los campos de TP08/Ejercicio 1
     @Override
     public EstadoTurno update(Long id, EstadoTurno estadoTurno) {
-        Optional<EstadoTurno> existente = estadoTurnoRepository.findById(id);
-        if (existente.isPresent()) {
-            EstadoTurno actualizado = existente.get();
-            actualizado.setNombre(estadoTurno.getNombre());
-            return estadoTurnoRepository.save(actualizado);
+        EstadoTurno existente = findById(id);
+        
+        // El campo 'version' DEBE ser asignado a la entidad por el Controller
+        if (estadoTurno.getVersion() != null) {
+            existente.setVersion(estadoTurno.getVersion());
         }
-        // Cambio aquí: Usamos ResourceNotFoundException en lugar de RuntimeException
-        throw new ResourceNotFoundException("EstadoTurno con id " + id + " no existe");
+        
+        // Asigna los campos de negocio
+        existente.setNombre(estadoTurno.getNombre());
+        if (estadoTurno.getEsFinal() != null) {
+            existente.setEsFinal(estadoTurno.getEsFinal());
+        }
+        
+        return estadoTurnoRepository.save(existente);
     }
 
     @Override
     public void deleteById(Long id) {
-        // Cambio aquí: Primero verificamos si existe y lanzamos la excepción si no lo hace
-        if (!estadoTurnoRepository.existsById(id)) {
-            throw new ResourceNotFoundException("EstadoTurno con id " + id + " no existe y no puede ser eliminado");
-        }
+        findById(id); // Usa la función findById para el chequeo de existencia
         estadoTurnoRepository.deleteById(id);
     }
 
+    // Se restaura el método fromDto (responsable del mapeo temporalmente)
     @Override
     public EstadoTurno fromDto(EstadoTurnoRequestDto dto) {
         EstadoTurno estadoTurno = new EstadoTurno();
         
-        // Si el DTO tiene ID (para una actualización o referencia), lo establecemos
-        if (dto.getId() != null) {
-            estadoTurno.setId(dto.getId()); 
+        // Asignación de campos para la entrada (necesario para el Controller)
+        estadoTurno.setId(dto.getId()); 
+        estadoTurno.setNombre(dto.getNombre());
+        if (dto.getEsFinal() != null) {
+            estadoTurno.setEsFinal(dto.getEsFinal());
         }
         
-        estadoTurno.setNombre(dto.getNombre());
         return estadoTurno;
     }
 }
