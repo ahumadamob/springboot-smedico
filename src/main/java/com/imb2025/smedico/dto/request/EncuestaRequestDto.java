@@ -25,8 +25,19 @@ public class EncuestaRequestDto {
     @NotBlank(message = "El comentario es obligatorio")
     @Size(max = 500, message = "El comentario admite hasta 500 caracteres")
     private String comentario;
+    
+    @jakarta.validation.constraints.NotBlank(message = "estado es requerido")
+    public String estado;
 
-    public EncuestaRequestDto() {}
+    public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+	public EncuestaRequestDto() {}
 
     public EncuestaRequestDto(Long pacienteId, Long consultaId, Integer puntaje, String comentario) {
         this.pacienteId = pacienteId;
@@ -46,4 +57,6 @@ public class EncuestaRequestDto {
 
     public String getComentario() { return comentario; }
     public void setComentario(String comentario) { this.comentario = comentario; }
+
+	
 }

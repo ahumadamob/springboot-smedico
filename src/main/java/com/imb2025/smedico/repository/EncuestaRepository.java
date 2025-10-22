@@ -11,4 +11,7 @@ public interface EncuestaRepository extends JpaRepository<Encuesta, Long> {
 
     // Conteo por relación a Consulta (countBy...)
     long countByConsulta_Id(Long consultaId);
+    
+    //Tp Parcial
+    long countByEstado(Encuesta.Estado estado);
 }

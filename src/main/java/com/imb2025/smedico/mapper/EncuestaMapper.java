@@ -41,10 +41,13 @@ public class EncuestaMapper {
         e.setConsulta(consulta);
         e.setPuntaje(dto.getPuntaje());
         e.setComentario(dto.getComentario());
+        e.setEstado(com.imb2025.smedico.entity.Encuesta.Estado
+                .valueOf(dto.getEstado().trim().toUpperCase()));
+
         return e;
     }
 
-    public EncuestaResponseDto toDto(Encuesta e) {
+    public EncuestaResponseDto toDto(com.imb2025.smedico.entity.Encuesta e) {
         if (e == null) return null;
 
         EncuestaResponseDto dto = new EncuestaResponseDto();
@@ -54,6 +57,9 @@ public class EncuestaMapper {
         dto.setPuntaje(e.getPuntaje());
         dto.setConsultaId(e.getConsulta() != null ? e.getConsulta().getId() : null);
         dto.setPacienteId(e.getPaciente() != null ? e.getPaciente().getId() : null);
+        
+        dto.setEstado(e.getEstado() != null ? e.getEstado().name() : null);
+
         return dto;
     }
 }
