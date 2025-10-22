@@ -1,48 +1,14 @@
-package com.imb2025.smedico.entity;
+package com.imb2025.smedico.dto.response;
 
-import jakarta.persistence.*;
-import java.time.LocalDateTime;
+public class DireccionPacienteResponseDTO {
 
-@Entity
-@Table(name = "direccion_paciente")
-public class DireccionPaciente {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
     private String calle;
-
-    @Column(nullable = false)
     private String numero;
-
-    @Column(nullable = false)
     private String localidad;
-
-    @Column(nullable = false)
     private String provincia;
-
-    // Nuevo campo agregado
-    @Column(name = "identificador_legible", nullable = false)
     private String identificadorLegible;
-
-    @Version
     private Long version;
-
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = createdAt;
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
 
     // Getters y setters
     public Long getId() { return id; }
@@ -65,11 +31,4 @@ public class DireccionPaciente {
 
     public Long getVersion() { return version; }
     public void setVersion(Long version) { this.version = version; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 }
-
