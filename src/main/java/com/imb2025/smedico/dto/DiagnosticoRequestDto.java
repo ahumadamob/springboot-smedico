@@ -1,7 +1,6 @@
 package com.imb2025.smedico.dto;
 
 import java.time.LocalDate;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
@@ -10,7 +9,7 @@ import jakarta.validation.constraints.Size;
 
 public class DiagnosticoRequestDto {
 
-	@NotNull(message = "El id de la consulta es obligatorio")
+    @NotNull(message = "El id de la consulta es obligatorio")
     @Positive(message = "El id de la consulta debe ser un número positivo")
     private Long consultaId;
 
@@ -22,8 +21,7 @@ public class DiagnosticoRequestDto {
     @PastOrPresent(message = "La fecha de diagnóstico no puede ser en el futuro")
     private LocalDate fechaDiagnostico;
 
-    
-    public DiagnosticoRequestDto() {}
+    public DiagnosticoRequestDto() { }
 
     public DiagnosticoRequestDto(Long consultaId, String descripcion, LocalDate fechaDiagnostico) {
         this.consultaId = consultaId;
@@ -31,27 +29,12 @@ public class DiagnosticoRequestDto {
         this.fechaDiagnostico = fechaDiagnostico;
     }
 
-    public Long getConsultaId() {
-        return consultaId;
-    }
+    public Long getConsultaId() { return consultaId; }
+    public void setConsultaId(Long consultaId) { this.consultaId = consultaId; }
 
-    public void setConsultaId(Long consultaId) {
-        this.consultaId = consultaId;
-    }
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public LocalDate getFechaDiagnostico() {
-        return fechaDiagnostico;
-    }
-
-    public void setFechaDiagnostico(LocalDate fechaDiagnostico) {
-        this.fechaDiagnostico = fechaDiagnostico;
-    }
+    public LocalDate getFechaDiagnostico() { return fechaDiagnostico; }
+    public void setFechaDiagnostico(LocalDate fechaDiagnostico) { this.fechaDiagnostico = fechaDiagnostico; }
 }
