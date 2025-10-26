@@ -74,24 +74,25 @@ public class ResultadoEstudioController {
 	
 	
 	@PostMapping("/ResultadoEstudio")
-	public ResponseEntity<ApiResponseSuccessDto<ResultadoEstudio>> createResultadoEstudio(@Valid @RequestBody ResultadoEstudioRequestDto requestDto) {
+	public ResponseEntity<ApiResponseSuccessDto<ResultadoEstudioResponseDto>> createResultadoEstudio(@Valid @RequestBody ResultadoEstudioRequestDto requestDto) {
 		ResultadoEstudioMapper mapper = new ResultadoEstudioMapper();
-		ResultadoEstudio resultadoEstudio = mapper.fromDto(requestDto);
-		ApiResponseSuccessDto<ResultadoEstudio> resp =
-				new ApiResponseSuccessDto<>(true,"Estudio creado correctamente",resultadoEstudio);
+		ResultadoEstudio resultadoEstudio = service.create(mapper.fromDto(requestDto));
+		ResultadoEstudioResponseDto resultadoEstudioResponseDto = mapper.toDto(resultadoEstudio);
+		ApiResponseSuccessDto<ResultadoEstudioResponseDto> resp =
+				new ApiResponseSuccessDto<>(true,"Estudio creado correctamente",resultadoEstudioResponseDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(resp);
 		
 	}
 	
 	
 	@PutMapping ("/ResultadoEstudio/{id}")
-	public ResponseEntity<ApiResponseSuccessDto<ResultadoEstudio>>  updateResultadoEstudio(@PathVariable Long id,
+	public ResponseEntity<ApiResponseSuccessDto<ResultadoEstudioResponseDto>>  updateResultadoEstudio(@PathVariable Long id,
 		@Valid @RequestBody ResultadoEstudioRequestDto requestDto) {
 		ResultadoEstudioMapper mapper = new ResultadoEstudioMapper();
-		ResultadoEstudio resultadoEstudioEntity = mapper.fromDto(requestDto);
-		ResultadoEstudio actualizado = service.update(id, resultadoEstudioEntity);
-		ApiResponseSuccessDto<ResultadoEstudio> resp =
-				new ApiResponseSuccessDto<>(true,"Estudio actualizado correctamente",actualizado);
+		ResultadoEstudio resultadoEstudio = service.update(id, mapper.fromDto(requestDto));
+		ResultadoEstudioResponseDto resultadoEstudioResponseDto = mapper.toDto(resultadoEstudio);
+		ApiResponseSuccessDto<ResultadoEstudioResponseDto> resp =
+				new ApiResponseSuccessDto<>(true,"Estudio actualizado correctamente",resultadoEstudioResponseDto);
 		return ResponseEntity.ok(resp);
 	}
 	
@@ -106,14 +107,24 @@ public class ResultadoEstudioController {
 	
 	
 	@GetMapping("/ResultadoEstudio/fecha/{fecha}")
-	public ResponseEntity<ApiResponseSuccessDto<List<ResultadoEstudio>>> getResultadoEstudioPorFecha(@PathVariable("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaCarga){
+	public ResponseEntity<ApiResponseSuccessDto<List<ResultadoEstudioResponseDto>>> getResultadoEstudioPorFecha(@PathVariable("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaCarga){
 			List<ResultadoEstudio> lista = service.findByFechaCarga(fechaCarga);
-			ApiResponseSuccessDto<List<ResultadoEstudio>> resp;
+						
+			List<ResultadoEstudioResponseDto> listaResponse = new ArrayList<>();
+			ResultadoEstudioMapper mapper = new ResultadoEstudioMapper();
 			
-			 if (lista.isEmpty()) {
-			        resp = new ApiResponseSuccessDto<>(true, "No hay estudios en la fecha " + fechaCarga, lista);
+			for(ResultadoEstudio r: lista) {
+				ResultadoEstudioResponseDto dto = new ResultadoEstudioResponseDto();
+				dto = mapper.toDto(r);
+				listaResponse.add(dto);
+			}
+			
+			ApiResponseSuccessDto<List<ResultadoEstudioResponseDto>> resp;
+			
+			 if (listaResponse.isEmpty()) {
+				 resp = new ApiResponseSuccessDto<>(true, "No hay estudios en la fecha " + fechaCarga, listaResponse);
 			    } else {
-			        resp = new ApiResponseSuccessDto<>(true, "Lista de estudios en la fecha " + fechaCarga, lista);
+			    	resp = new ApiResponseSuccessDto<>(true, "Lista de estudios en la fecha " + fechaCarga, listaResponse);
 			    }
 			 
 			 return ResponseEntity.ok(resp);
