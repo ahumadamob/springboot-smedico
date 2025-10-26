@@ -1,7 +1,7 @@
 package com.imb2025.smedico.service.jpa;
 
 import com.imb2025.smedico.exception.ResourceNotFoundException;
-import com.imb2025.smedico.mapper.EstadoTurnoMapper; // Nuevo import del Mapper
+import com.imb2025.smedico.mapper.EstadoTurnoMapper; // Importamos el Mapper
 
 import java.util.List;
 import java.util.Optional;
@@ -17,9 +17,9 @@ import com.imb2025.smedico.service.IEstadoTurnoService;
 public class EstadoTurnoServiceImpl implements IEstadoTurnoService {
 
     private final EstadoTurnoRepository estadoTurnoRepository;
-    private final EstadoTurnoMapper mapper; // Inyectamos el Mapper
+    private final EstadoTurnoMapper mapper; 
 
-    // Inyección de dependencias por constructor
+    // Constructor con inyección de dependencias
     public EstadoTurnoServiceImpl(EstadoTurnoRepository estadoTurnoRepository, EstadoTurnoMapper mapper) {
         this.estadoTurnoRepository = estadoTurnoRepository;
         this.mapper = mapper;
@@ -36,16 +36,32 @@ public class EstadoTurnoServiceImpl implements IEstadoTurnoService {
 
     @Override
     public List<EstadoTurno> findByNombreContaining(String filtro) {
-        // Delega la llamada al Query Method del Repository (case-insensitive)
         return estadoTurnoRepository.findByNombreContainingIgnoreCase(filtro);
     }
 
     @Override
     public long countByNombre(String nombre) {
-        // Delega la llamada al Query Method del Repository (case-insensitive)
         return estadoTurnoRepository.countByNombreIgnoreCase(nombre);
     }
     
+    // ------------------------------------------------------------------
+    // EJERCICIO 1: Implementación de Filtros Booleanos
+    // ------------------------------------------------------------------
+
+    @Override
+    public List<EstadoTurno> findFinales() {
+        // Llama al Query Method mágico: findByEsFinalTrue()
+        return estadoTurnoRepository.findByEsFinalTrue();
+    }
+
+    @Override
+    public List<EstadoTurno> findPendientes() {
+        // Llama al Query Method mágico: findByEsFinalFalse()
+        return estadoTurnoRepository.findByEsFinalFalse();
+    }
+    
+    // ------------------------------------------------------------------
+    // Métodos CRUD
     // ------------------------------------------------------------------
 
     @Override
@@ -61,6 +77,7 @@ public class EstadoTurnoServiceImpl implements IEstadoTurnoService {
         return estadoTurnoRepository.existsById(id);
     }
 
+    // TP08: El controlador usa mapper.toEntity(dto) y luego llama a create(entidad)
     @Override
     public EstadoTurno create(EstadoTurno estadoTurno) {
         return estadoTurnoRepository.save(estadoTurno);
@@ -68,33 +85,39 @@ public class EstadoTurnoServiceImpl implements IEstadoTurnoService {
 
     @Override
     public EstadoTurno update(Long id, EstadoTurno estadoTurno) {
-        Optional<EstadoTurno> existente = estadoTurnoRepository.findById(id);
-        if (existente.isPresent()) {
-            EstadoTurno actualizado = existente.get();
-            
-            // Asignamos la nueva versión del nombre
-            actualizado.setNombre(estadoTurno.getNombre());
-            
-            // Nota importante para TP08: El campo 'version' DEBE ser asignado 
-            // a la entidad antes de guardar para el control de concurrencia.
-            // Esto se hace en el Controller antes de llamar al update, si es necesario.
-            
-            return estadoTurnoRepository.save(actualizado);
+        // 1. Verifica la existencia
+        EstadoTurno existente = findById(id);
+        
+        // 2. Control de Concurrencia (Asigna la versión que el Controller envió desde el DTO)
+        if (estadoTurno.getVersion() != null) {
+            existente.setVersion(estadoTurno.getVersion());
         }
-        // MEJORA: Usamos ResourceNotFoundException
-        throw new ResourceNotFoundException("EstadoTurno con id " + id + " no existe");
+        
+        // 3. Asigna los campos de negocio
+        existente.setNombre(estadoTurno.getNombre());
+        if (estadoTurno.getEsFinal() != null) {
+            existente.setEsFinal(estadoTurno.getEsFinal());
+        }
+        
+        // La Entidad hereda id, createdAt, updatedAt, version.
+        return estadoTurnoRepository.save(existente);
     }
 
     @Override
     public void deleteById(Long id) {
-        // Mejoramos la lógica de borrado con manejo de excepción
-        if (!estadoTurnoRepository.existsById(id)) {
-            throw new ResourceNotFoundException("EstadoTurno con id " + id + " no existe y no puede ser eliminado");
-        }
+        // Utilizamos findById para delegar el chequeo de existencia y la excepción
+        findById(id); 
         estadoTurnoRepository.deleteById(id);
     }
 
-    // ELIMINADO: Ya no existe en la interfaz
-    // @Override
-    // public EstadoTurno fromDto(EstadoTurnoRequestDto dto) { ... }
+    // ELIMINADO: Se elimina fromDto ya que la responsabilidad de mapeo es del Mapper (TP08)
+    // Se comenta ya que la interfaz ya no lo tiene (pasos anteriores)
+    /*
+    @Override
+    public EstadoTurno fromDto(EstadoTurnoRequestDto dto) {
+        // La implementación ha sido movida a EstadoTurnoMapper.toEntity
+        // Si la interfaz todavía tuviera fromDto, aquí se lanzaría una UnsupportedOperationException
+        return mapper.toEntity(dto);
+    }
+    */
 }

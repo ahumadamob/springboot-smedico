@@ -1,31 +1,43 @@
 package com.imb2025.smedico.dto.response;
 
-import com.imb2025.smedico.entity.EstadoTurno;
 import io.swagger.v3.oas.annotations.media.Schema;
+import com.imb2025.smedico.entity.EstadoTurno; // Se mantiene el import por claridad, aunque el constructor se ha simplificado
 
 /**
- * DTO de respuesta para la entidad EstadoTurno.
- * Contiene los datos necesarios para el cliente, incluyendo el campo 'version'.
+ * DTO de respuesta para la entidad EstadoTurno. Cumple con los requisitos del TP08.
+ * Incluye solo los campos de negocio, el campo 'esFinal' (Ejercicio 1) y el control de concurrencia (version).
+ * Omite campos de auditoría como createdAt y updatedAt (requisito TP08).
  */
 @Schema(description = "DTO de respuesta para el recurso EstadoTurno")
 public class EstadoTurnoResponseDto {
 
     private Long id;
+    
+    @Schema(description = "Nombre descriptivo del estado del turno")
     private String nombre;
-    private Integer version; // Requisito del TP08: Campo de concurrencia
+    
+    @Schema(description = "Indica si el estado es final (true) o pendiente (false) - Ejercicio 1")
+    private Boolean esFinal;
+    
+    // CORRECCIÓN: El tipo debe ser Long para coincidir con la Entidad (@Version Long)
+    @Schema(description = "Versión para control de concurrencia optimista")
+    private Long version; 
 
-    public EstadoTurnoResponseDto() {
-    }
+    // Constructor por defecto
+    public EstadoTurnoResponseDto() {}
 
     /**
      * Constructor utilizado por el Mapper para convertir la entidad a DTO de respuesta.
-     * @param entidad La entidad EstadoTurno.
+     * @param id Identificador de la entidad.
+     * @param nombre Nombre del estado.
+     * @param esFinal Indicador de estado final.
+     * @param version Versión de concurrencia.
      */
-    public EstadoTurnoResponseDto(EstadoTurno entidad) {
-        this.id = entidad.getId();
-        this.nombre = entidad.getNombre();
-        // Asume que la entidad ya tiene getVersion()
-        this.version = entidad.getVersion(); 
+    public EstadoTurnoResponseDto(Long id, String nombre, Boolean esFinal, Long version) {
+        this.id = id;
+        this.nombre = nombre;
+        this.esFinal = esFinal;
+        this.version = version;
     }
 
     // --- Getters ---
@@ -37,11 +49,15 @@ public class EstadoTurnoResponseDto {
         return nombre;
     }
 
-    public Integer getVersion() {
+    public Boolean getEsFinal() {
+        return esFinal;
+    }
+    
+    public Long getVersion() {
         return version;
     }
     
-    // --- Setters (Opcionales, pero buena práctica si se usa Jackson para la deserialización) ---
+    // --- Setters ---
     public void setId(Long id) {
         this.id = id;
     }
@@ -50,7 +66,11 @@ public class EstadoTurnoResponseDto {
         this.nombre = nombre;
     }
     
-    public void setVersion(Integer version) {
+    public void setEsFinal(Boolean esFinal) {
+        this.esFinal = esFinal;
+    }
+    
+    public void setVersion(Long version) {
         this.version = version;
     }
 }
