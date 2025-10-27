@@ -5,7 +5,7 @@ import jakarta.validation.Valid;
 
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.ObraSocialRequestDto;
-import com.imb2025.smedico.dto.ObraSocialResponseDto; // ✅ Cambio 1: se importa el DTO de respuesta
+import com.imb2025.smedico.dto.ObraSocialResponseDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,9 +23,7 @@ public class ObraSocialController {
 
     @GetMapping
     public ResponseEntity<ApiResponseSuccessDto<List<ObraSocialResponseDto>>> getAll() { 
-     
         List<ObraSocialResponseDto> obras = service.findAll(); 
-        // ✅ Cambio 1: el service ya debe devolver DTOs, no entidades
 
         ApiResponseSuccessDto<List<ObraSocialResponseDto>> response = new ApiResponseSuccessDto<>();
         response.setSuccess(true);
@@ -39,11 +37,7 @@ public class ObraSocialController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<ObraSocialResponseDto>> getObraSocialById(
             @PathVariable Long id) { 
-        // ✅ Cambio 2: ya no se hace null-check aquí ni se arma error en el controlador
-        //    El service lanza ResourceNotFoundException y GlobalExceptionHandler lo maneja
-
         ObraSocialResponseDto encontrada = service.findById(id); 
-        // ✅ Cambio 1: devuelve DTO, no entidad
 
         ApiResponseSuccessDto<ObraSocialResponseDto> resp = new ApiResponseSuccessDto<>();
         resp.setSuccess(true);
@@ -55,10 +49,7 @@ public class ObraSocialController {
     @PostMapping
     public ResponseEntity<ApiResponseSuccessDto<ObraSocialResponseDto>> createObraSocial(
             @Valid @RequestBody ObraSocialRequestDto dto) { 
-        // ✅ Cambio 3: @Valid se aplica sobre el @RequestBody, no sobre PathVariable
-
         ObraSocialResponseDto nueva = service.create(dto); 
-        // ✅ Cambio 1: se trabaja con DTOs, no entidades
 
         ApiResponseSuccessDto<ObraSocialResponseDto> response = new ApiResponseSuccessDto<>();
         response.setSuccess(true);
@@ -71,9 +62,7 @@ public class ObraSocialController {
     public ResponseEntity<ApiResponseSuccessDto<ObraSocialResponseDto>> updateObraSocial(
             @PathVariable Long id,
             @Valid @RequestBody ObraSocialRequestDto dto) { 
-   
         ObraSocialResponseDto actualizada = service.update(id, dto); 
-        // ✅ Cambio 1: devuelve DTO, no entidad
 
         ApiResponseSuccessDto<ObraSocialResponseDto> response = new ApiResponseSuccessDto<>();
         response.setSuccess(true);
@@ -84,9 +73,6 @@ public class ObraSocialController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<Void>> delete(@PathVariable Long id) {
-        // ✅ Cambio 2: ya no se hace null-check ni se arma error en el controller
-        //    El service lanza ResourceNotFoundException y GlobalExceptionHandler lo maneja
-
         service.deleteById(id);
 
         ApiResponseSuccessDto<Void> response = new ApiResponseSuccessDto<>();
@@ -95,6 +81,33 @@ public class ObraSocialController {
         response.setMessage("Obra social eliminada correctamente");
         return ResponseEntity.ok(response);
     }
+
+    // 🔹 NUEVO: endpoint para buscar por nombre (findBy...)
+    @GetMapping("/buscar")
+    public ResponseEntity<ApiResponseSuccessDto<ObraSocialResponseDto>> getByNombre(
+            @RequestParam String nombre) {
+        ObraSocialResponseDto encontrada = service.findByNombre(nombre);
+
+        ApiResponseSuccessDto<ObraSocialResponseDto> response = new ApiResponseSuccessDto<>();
+        response.setSuccess(true);
+        response.setData(encontrada);
+        response.setMessage("Obra social encontrada por nombre.");
+        return ResponseEntity.ok(response);
+    }
+
+    // 🔹 NUEVO: endpoint para contar por cobertura (countBy...)
+    @GetMapping("/contar")
+    public ResponseEntity<ApiResponseSuccessDto<Long>> countByCobertura(
+            @RequestParam String cobertura) {
+        long cantidad = service.countByCobertura(cobertura);
+
+        ApiResponseSuccessDto<Long> response = new ApiResponseSuccessDto<>();
+        response.setSuccess(true);
+        response.setData(cantidad);
+        response.setMessage("Cantidad de obras sociales con cobertura '" + cobertura + "'.");
+        return ResponseEntity.ok(response);
+    }
 }
+
 
 
