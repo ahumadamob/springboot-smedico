@@ -6,10 +6,13 @@ import java.util.List;
 
 public interface IMedicamentoService {
     public List<Medicamento> findAll();
-    public Medicamento create(Medicamento medicamento);
-    public Medicamento update(Long id, Medicamento medicamento);
+    public Medicamento create(Medicamento medicamento) throws Exception;
+    public Medicamento update(Long id, Medicamento medicamento) throws Exception;
     public Medicamento findById(Long id);
     public boolean existsById(Long id);
     public void deleteById(Long id);
-    public Medicamento fromDto(MedicamentoRequestDto medicamentoRequestDto);
+    public Medicamento fromDto(MedicamentoRequestDto medicamentoRequestDto) throws Exception;
+    public List<Medicamento> findByNombre(String nombre);
+    
+    public Long countByPresentacion(String presentacion);	
 }

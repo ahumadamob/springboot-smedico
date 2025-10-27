@@ -66,5 +66,15 @@ public class MedicamentoServiceImpl implements IMedicamentoService {
 	    return medicamento;
 	}
 	
+	@Override
+	public List<Medicamento> findByNombre(String nombre) {
+		return repoMedic.findByNombre(nombre);
+	}
+
+	@Override
+	public Long countByPresentacion(String presentacion) {
+		return repoMedic.countByPresentacion(presentacion);
+	}
+	
 
 }

@@ -69,6 +69,21 @@ public class MedicamentoController {
 		return ResponseEntity.ok(resp);
 	}
 
+	@GetMapping("/nombre/{nombre}")
+	public ResponseEntity<ApiResponseSuccessDto<List<Medicamento>>> findByNombre(@PathVariable String nombre) {
+	    List<Medicamento> lista = service.findByNombre(nombre);
+	    String message = lista.isEmpty() ? "No se encontraron medicamentos con ese nombre" : "Medicamentos encontrados";
+	    ApiResponseSuccessDto<List<Medicamento>> resp = new ApiResponseSuccessDto<>(true, message, lista);
+	    return ResponseEntity.ok(resp);
+	}
+
+	@GetMapping("/count/{presentacion}")
+	public ResponseEntity<ApiResponseSuccessDto<Long>> countByPresentacion(@PathVariable String presentacion) {
+	    Long cantidad = service.countByPresentacion(presentacion);
+	    String message = "Cantidad de medicamentos con presentación '" + presentacion + "': " + cantidad;
+	    ApiResponseSuccessDto<Long> resp = new ApiResponseSuccessDto<>(true, message, cantidad);
+	    return ResponseEntity.ok(resp);
+	}
 	
 	
 }
