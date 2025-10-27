@@ -1,89 +1,190 @@
 package com.imb2025.smedico.controller;
 
-import com.imb2025.smedico.dto.ApiResponseSuccessDto;
-import com.imb2025.smedico.dto.PacienteRequestDto;
-import com.imb2025.smedico.entity.Paciente;
-import com.imb2025.smedico.exception.ResourceNotFoundException;
-import com.imb2025.smedico.service.IPacienteService;
-
-import jakarta.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.imb2025.smedico.dto.ApiResponseSuccessDto;
+import com.imb2025.smedico.dto.request.PacienteRequestDto;
+import com.imb2025.smedico.dto.response.PacienteResponseDto;
+import com.imb2025.smedico.entity.Paciente;
+import com.imb2025.smedico.mapper.PacienteMapper;
+import com.imb2025.smedico.service.IPacienteService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/pacientes")
 public class PacienteController {
 
     @Autowired
-    private IPacienteService pacienteService;
+    private IPacienteService service;
 
-    // Listar todos los pacientes
+    // 🔹 Obtener todos los pacientes
     @GetMapping
-    public ResponseEntity<ApiResponseSuccessDto<List<Paciente>>> getAllPacientes() {
-        List<Paciente> pacientes = pacienteService.findAll();
-        ApiResponseSuccessDto<List<Paciente>> resp = new ApiResponseSuccessDto<>();
-        resp.setSuccess(true);
-        resp.setData(pacientes);
-        resp.setMessage(pacientes.isEmpty() ? "No hay pacientes registrados" : "Lista de pacientes");
+    public ResponseEntity<ApiResponseSuccessDto<List<PacienteResponseDto>>> findAllPacientes() {
+        List<Paciente> lista = service.findAll();
+        List<PacienteResponseDto> listaResponse = new ArrayList<>();
+        PacienteMapper mapper = new PacienteMapper();
+
+        for (Paciente p : lista) {
+            PacienteResponseDto dto = mapper.toResponseDto(p);
+            listaResponse.add(dto);
+        }
+
+        ApiResponseSuccessDto<List<PacienteResponseDto>> resp = new ApiResponseSuccessDto<>(
+                true,
+                listaResponse.isEmpty() ? "No hay pacientes registrados" : "Lista de pacientes",
+                listaResponse
+        );
+
         return ResponseEntity.ok(resp);
     }
 
-    // Obtener paciente por ID
+    // 🔹 Obtener paciente por ID
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<Paciente>> getPacienteById(@PathVariable Long id) {
-        Paciente paciente = pacienteService.findById(id); // Lanza ResourceNotFoundException si no existe
+    public ResponseEntity<ApiResponseSuccessDto<PacienteResponseDto>> findPacienteById(@PathVariable("id") Long id) {
+        Paciente paciente = service.findById(id);
+        PacienteMapper mapper = new PacienteMapper();
+        PacienteResponseDto dto = mapper.toResponseDto(paciente);
 
-        ApiResponseSuccessDto<Paciente> resp = new ApiResponseSuccessDto<>();
-        resp.setSuccess(true);
-        resp.setData(paciente);
-        resp.setMessage("Paciente encontrado correctamente");
+        ApiResponseSuccessDto<PacienteResponseDto> resp = new ApiResponseSuccessDto<>(
+                true,
+                "Paciente encontrado correctamente",
+                dto
+        );
 
         return ResponseEntity.ok(resp);
     }
 
-    // Crear paciente
+    // 🔹 Crear paciente
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<Paciente>> createPaciente(
+    public ResponseEntity<ApiResponseSuccessDto<PacienteResponseDto>> create(
             @Valid @RequestBody PacienteRequestDto dto) {
-        Paciente entidad = pacienteService.fromDto(dto);
-        Paciente nuevo = pacienteService.create(entidad);
 
-        ApiResponseSuccessDto<Paciente> resp = new ApiResponseSuccessDto<>();
-        resp.setSuccess(true);
-        resp.setData(nuevo);
-        resp.setMessage("Paciente creado correctamente");
+        PacienteMapper mapper = new PacienteMapper();
+        Paciente entidad = mapper.fromDto(dto);
+        Paciente nuevo = service.create(entidad);
+        PacienteResponseDto responseDto = mapper.toResponseDto(nuevo);
+
+        ApiResponseSuccessDto<PacienteResponseDto> resp = new ApiResponseSuccessDto<>(
+                true,
+                "Paciente creado correctamente",
+                responseDto
+        );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 
+    // 🔹 Actualizar paciente
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePaciente(@PathVariable Long id,@Valid @RequestBody PacienteRequestDto dto) {
-        if (!pacienteService.existsById(id)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Paciente no encontrado con ID: " + id);
-        }
-        try {
-            Paciente entidad = pacienteService.fromDto(dto);
-            Paciente actualizado = pacienteService.update(id, entidad);
-            return ResponseEntity.ok(actualizado);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<ApiResponseSuccessDto<PacienteResponseDto>> update(
+            @PathVariable("id") Long id,
+            @Valid @RequestBody PacienteRequestDto dto) {
+
+        PacienteMapper mapper = new PacienteMapper();
+        Paciente entidad = mapper.fromDto(dto);
+        Paciente actualizado = service.update(id, entidad);
+        PacienteResponseDto responseDto = mapper.toResponseDto(actualizado);
+
+        ApiResponseSuccessDto<PacienteResponseDto> resp = new ApiResponseSuccessDto<>(
+                true,
+                "Paciente actualizado correctamente",
+                responseDto
+        );
+
+        return ResponseEntity.ok(resp);
     }
 
+    // 🔹 Eliminar paciente
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePaciente(@PathVariable Long id) {
-        if (!pacienteService.existsById(id)) {
-            return ResponseEntity.badRequest()
-                    .body("No se puede eliminar: Paciente no encontrado con ID: " + id);
-        }
-        pacienteService.deleteById(id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ApiResponseSuccessDto<String>> deletePaciente(@PathVariable("id") Long id) {
+        service.deleteById(id);
+
+        ApiResponseSuccessDto<String> resp = new ApiResponseSuccessDto<>(
+                true,
+                "Paciente eliminado correctamente",
+                "Id: " + id
+        );
+
+        return ResponseEntity.ok(resp);
     }
 
+    // 🔹 Buscar pacientes ordenados por apellido
+    @GetMapping("/porapellido")
+    public ResponseEntity<ApiResponseSuccessDto<List<PacienteResponseDto>>> getPacientesOrdenados() {
+        List<Paciente> lista = service.findAllOrder();
+        PacienteMapper mapper = new PacienteMapper();
+        List<PacienteResponseDto> listaResponse = new ArrayList<>();
+
+        for (Paciente p : lista) {
+            listaResponse.add(mapper.toResponseDto(p));
+        }
+
+        ApiResponseSuccessDto<List<PacienteResponseDto>> resp = new ApiResponseSuccessDto<>(
+                true,
+                listaResponse.isEmpty() ? "No hay pacientes registrados" : "Lista de pacientes ordenados por apellido",
+                listaResponse
+        );
+
+        return ResponseEntity.ok(resp);
+    }
+
+    // 🔹 Buscar por DNI
+    @GetMapping("/dni/{numeroDni}")
+    public ResponseEntity<ApiResponseSuccessDto<List<PacienteResponseDto>>> getPacienteByDni(@PathVariable String numeroDni) {
+        List<Paciente> lista = service.findByDni(numeroDni);
+        PacienteMapper mapper = new PacienteMapper();
+        List<PacienteResponseDto> listaResponse = new ArrayList<>();
+
+        for (Paciente p : lista) {
+            listaResponse.add(mapper.toResponseDto(p));
+        }
+
+        ApiResponseSuccessDto<List<PacienteResponseDto>> resp = new ApiResponseSuccessDto<>(
+                true,
+                listaResponse.isEmpty() ? "No se encontraron pacientes con ese DNI" : "Pacientes encontrados",
+                listaResponse
+        );
+
+        return ResponseEntity.ok(resp);
+    }
+
+    // 🔹 Buscar por dominio de email
+    @GetMapping("/domain/{domainValue}")
+    public ResponseEntity<ApiResponseSuccessDto<List<PacienteResponseDto>>> getPacienteByDomainEmail(@PathVariable String domainValue) {
+        List<Paciente> lista = service.findByDomainEmail(domainValue);
+        PacienteMapper mapper = new PacienteMapper();
+        List<PacienteResponseDto> listaResponse = new ArrayList<>();
+
+        for (Paciente p : lista) {
+            listaResponse.add(mapper.toResponseDto(p));
+        }
+
+        ApiResponseSuccessDto<List<PacienteResponseDto>> resp = new ApiResponseSuccessDto<>(
+                true,
+                listaResponse.isEmpty() ? "No se encontraron pacientes con ese dominio" : "Pacientes encontrados",
+                listaResponse
+        );
+
+        return ResponseEntity.ok(resp);
+    }
+
+    // 🔹 Contar pacientes
+    @GetMapping("/cantidad")
+    public ResponseEntity<ApiResponseSuccessDto<Long>> getCountPacientes() {
+        long cantidad = service.countBy();
+
+        ApiResponseSuccessDto<Long> resp = new ApiResponseSuccessDto<>(
+                true,
+                cantidad == 0 ? "No hay pacientes registrados" : "Cantidad total de pacientes",
+                cantidad
+        );
+
+        return ResponseEntity.ok(resp);
+    }
 }

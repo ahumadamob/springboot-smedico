@@ -7,10 +7,7 @@ import jakarta.persistence.Id;
 import java.time.LocalDate;
 
 @Entity
-public class Paciente {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Paciente extends BaseEntity {
 
     private String nombre;
     private String apellido;
@@ -21,23 +18,14 @@ public class Paciente {
 
     public Paciente() {}
 
-    public Paciente(Long id, String nombre, String apellido, String dni, String email,
+    public Paciente(String nombre, String apellido, String dni, String email,
                     LocalDate fechaNacimiento, String telefono) {
-        this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
         this.email = email;
         this.fechaNacimiento = fechaNacimiento;
         this.telefono = telefono;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getNombre() {

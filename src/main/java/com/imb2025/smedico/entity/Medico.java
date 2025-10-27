@@ -8,10 +8,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class Medico {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Medico extends BaseEntity {
+    
 
     private String nombre;
     private String apellido;
@@ -25,9 +23,9 @@ public class Medico {
 
     public Medico() {}
 
-    public Medico(Long id, String nombre, String apellido, String matricula, Especialidad especialidad,
+    public Medico( String nombre, String apellido, String matricula, Especialidad especialidad,
                   String email, String telefono) {
-        this.id = id;
+       
         this.nombre = nombre;
         this.apellido = apellido;
         this.matricula = matricula;
@@ -36,13 +34,7 @@ public class Medico {
         this.telefono = telefono;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    
 
     public String getNombre() {
         return nombre;

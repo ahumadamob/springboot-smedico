@@ -1,46 +1,59 @@
 package com.imb2025.smedico.service.jpa;
 
 import com.imb2025.smedico.dto.DiagnosticoRequestDto;
-import com.imb2025.smedico.entity.Consulta;
 import com.imb2025.smedico.entity.Diagnostico;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
-import com.imb2025.smedico.repository.ConsultaRepository;
 import com.imb2025.smedico.repository.DiagnosticoRepository;
 import com.imb2025.smedico.service.IDiagnosticoService;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
 @Service
 public class DiagnosticoServiceImpl implements IDiagnosticoService {
 
-    @Autowired
-    private DiagnosticoRepository repo;
+    private final DiagnosticoRepository repo;
 
-    @Autowired
-    private ConsultaRepository consultaRepository;
+    public DiagnosticoServiceImpl(DiagnosticoRepository repo) {
+        this.repo = repo;
+    }
 
     @Override
     public List<Diagnostico> findAll() {
+        // No debería lanzar excepción; si la lista está vacía, el controller decide qué devolver
         return repo.findAll();
     }
 
     @Override
     public Diagnostico findById(Long id) {
         return repo.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException(
-                "Diagnóstico no encontrado con id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Diagnóstico no encontrado con id " + id));
     }
 
-
+    @Transactional
     @Override
     public Diagnostico create(Diagnostico diagnostico) {
+        // save inserta si id == null
         return repo.save(diagnostico);
     }
 
+    @Transactional
+    @Override
+    public Diagnostico update(Long id, Diagnostico diagnostico) {
+        if (!repo.existsById(id)) {
+            throw new ResourceNotFoundException("No se puede actualizar. Diagnóstico no encontrado con id " + id);
+        }
+        diagnostico.setId(id);
+        return repo.save(diagnostico);
+    }
+
+    @Transactional
     @Override
     public void deleteById(Long id) {
         if (!repo.existsById(id)) {
-            throw new ResourceNotFoundException("Diagnóstico con ID " + id + " no encontrado.");
+            throw new ResourceNotFoundException("No se puede eliminar. Diagnóstico no encontrado con id " + id);
         }
         repo.deleteById(id);
     }
@@ -50,31 +63,12 @@ public class DiagnosticoServiceImpl implements IDiagnosticoService {
         return repo.existsById(id);
     }
 
-    public Diagnostico fromDto(DiagnosticoRequestDto dto) {
-        Diagnostico diagnostico = new Diagnostico();
-        diagnostico.setDescripcion(dto.getDescripcion());
-        diagnostico.setFechaDiagnostico(dto.getFechaDiagnostico());
-
-        Consulta consulta = consultaRepository.findById(dto.getConsultaId())
-            .orElseThrow(() -> new ResourceNotFoundException(
-                    "Consulta no encontrada con id " + dto.getConsultaId()));
-
-        diagnostico.setConsulta(consulta);
-
-        return diagnostico;
-    }
-
-
     @Override
-    public Diagnostico update(Long id, Diagnostico diagnostico) {
-        Diagnostico existente = repo.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException(
-                    "Diagnóstico no encontrado con id " + id));
-
-        existente.setDescripcion(diagnostico.getDescripcion());
-        existente.setFechaDiagnostico(diagnostico.getFechaDiagnostico());
-        existente.setConsulta(diagnostico.getConsulta());
-
-        return repo.save(existente);
+    public Diagnostico fromDto(DiagnosticoRequestDto dto) {
+        Diagnostico d = new Diagnostico();
+        d.setConsultaId(dto.getConsultaId());
+        d.setDescripcion(dto.getDescripcion());
+        d.setFechaDiagnostico(dto.getFechaDiagnostico());
+        return d;
     }
 }

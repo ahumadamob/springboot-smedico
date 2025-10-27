@@ -12,4 +12,8 @@ public interface IHorarioAtencionService {
     public boolean existsById(Long id);
     public void deleteById(Long id);
     public HorarioAtencion fromDto(HorarioAtencionRequestDto horarioAtencionRequestDto) throws Exception;
+    
+    // Métodos mágicos del TP07
+    public List<HorarioAtencion> findHorariosByDia(String diaSemana);
+    public long countHorariosByMedico(Long medicoId);
 }

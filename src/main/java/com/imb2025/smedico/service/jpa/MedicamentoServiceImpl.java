@@ -26,22 +26,21 @@ public class MedicamentoServiceImpl implements IMedicamentoService {
         }
 	
 	@Override
-        public Medicamento create(Medicamento medicamento) throws Exception {
+        public Medicamento create(Medicamento medicamento) {
                 return repoMedic.save(medicamento);
         }
 	
 	
 	@Override
-        public Medicamento update(Long id, Medicamento medicamento) throws Exception {
-            if (!repoMedic.existsById(id)) {
-                throw new Exception("El medicamento con ID " + id + " no existe.");
-            }
-
-            Medicamento medExistente = repoMedic.findById(id).get();
-            medExistente.setNombre(medicamento.getNombre());
-            medExistente.setDosisSugerida(medicamento.getDosisSugerida());
-            medExistente.setPresentacion(medicamento.getPresentacion());
-            return repoMedic.save(medExistente);
+        public Medicamento update(Long id, Medicamento medicamento) {
+			Medicamento medExistente = repoMedic.findById(id)
+		        .orElseThrow(() -> new ResourceNotFoundException("Medicamento con ID " + id + " no existe."));
+		    
+		    medExistente.setNombre(medicamento.getNombre());
+		    medExistente.setDosisSugerida(medicamento.getDosisSugerida());
+		    medExistente.setPresentacion(medicamento.getPresentacion());
+		    return repoMedic.save(medExistente);
+			
         }
 	
 	@Override
@@ -52,31 +51,19 @@ public class MedicamentoServiceImpl implements IMedicamentoService {
 	
 	@Override
 	public void deleteById(Long id) {
-		if(!repoMedic.existsById(id)) {
-			throw new IllegalArgumentException("El Medicamento con ID: "+ id +" no existe.");
-		}
-		repoMedic.deleteById(id);		
+		Medicamento medicamento = repoMedic.findById(id)
+		        .orElseThrow(() -> new ResourceNotFoundException("El Medicamento con ID " + id + " no existe."));
+
+		    repoMedic.delete(medicamento);		
 	}
 	
 	@Override
-	public Medicamento fromDto(MedicamentoRequestDto dto) throws Exception {
-		if (dto.getNombre() == null || dto.getNombre().isBlank()) {
-            throw new IllegalArgumentException("El nombre no puede estar nulo o vacío");
-        }
-		if (dto.getDosisSugerida() == null || dto.getDosisSugerida().isBlank()) {
-            throw new IllegalArgumentException("El nombre no puede estar nulo o vacío");
-        }
-		if (dto.getPresentacion() == null || dto.getPresentacion().isBlank()) {
-            throw new IllegalArgumentException("El nombre no puede estar nulo o vacío");
-        }
-		
+	public Medicamento fromDto(MedicamentoRequestDto dto) {
 		Medicamento medicamento = new Medicamento();
-		
-		medicamento.setNombre(dto.getNombre());
-		medicamento.setDosisSugerida(dto.getDosisSugerida());
-		medicamento.setPresentacion(dto.getPresentacion());
-	    
-		return medicamento;
+	    medicamento.setNombre(dto.getNombre());
+	    medicamento.setDosisSugerida(dto.getDosisSugerida());
+	    medicamento.setPresentacion(dto.getPresentacion());
+	    return medicamento;
 	}
 	
 	@Override

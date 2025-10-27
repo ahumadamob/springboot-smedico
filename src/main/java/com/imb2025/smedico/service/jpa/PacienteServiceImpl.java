@@ -1,6 +1,6 @@
 package com.imb2025.smedico.service.jpa;
 
-import com.imb2025.smedico.dto.PacienteRequestDto;
+import com.imb2025.smedico.dto.request.PacienteRequestDto;
 import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.PacienteRepository;
@@ -60,15 +60,24 @@ public class PacienteServiceImpl implements IPacienteService {
         pacienteRepository.delete(existente);
     }
 
-    @Override
-    public Paciente fromDto(PacienteRequestDto dto) {
-        Paciente paciente = new Paciente();
-        paciente.setNombre(dto.getNombre());
-        paciente.setApellido(dto.getApellido());
-        paciente.setDni(dto.getDni());
-        paciente.setEmail(dto.getEmail());
-        paciente.setFechaNacimiento(dto.getFechaNacimiento());
-        paciente.setTelefono(dto.getTelefono());
-        return paciente;
-    }
+
+	@Override
+	public List<Paciente> findAllOrder() {
+		return pacienteRepository.findByOrderByApellidoAscNombreAsc();
+	}
+
+	@Override
+	public List<Paciente> findByDni(String dni) {
+		return pacienteRepository.findByDni(dni);
+	}
+
+	@Override
+	public List<Paciente> findByDomainEmail(String domain) {
+		return pacienteRepository.findByEmailEndingWith(domain);
+	}
+
+	@Override
+	public Long countBy() {
+		return pacienteRepository.countBy();
+	}
 }
