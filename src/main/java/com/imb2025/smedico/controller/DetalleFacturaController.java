@@ -3,7 +3,12 @@ package com.imb2025.smedico.controller;
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.request.DetalleFacturaRequestDto;
 import com.imb2025.smedico.dto.response.DetalleFacturaResponseDto;
+import com.imb2025.smedico.entity.DetalleFactura;
+import com.imb2025.smedico.entity.Factura;
+import com.imb2025.smedico.mapper.DetalleFacturaMapper;
+import com.imb2025.smedico.repository.FacturaRepository;
 import com.imb2025.smedico.service.IDetalleFacturaService;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,15 +20,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/detallefacturas")
 public class DetalleFacturaController {
 
     private final IDetalleFacturaService detalleFacturaService;
+    private final FacturaRepository facturaRepository;
 
-    public DetalleFacturaController(IDetalleFacturaService detalleFacturaService) {
+    public DetalleFacturaController(IDetalleFacturaService detalleFacturaService, FacturaRepository facturaRepository) {
         this.detalleFacturaService = detalleFacturaService;
+        this.facturaRepository = facturaRepository;
     }
 
     // Método auxiliar para crear respuestas estándar
@@ -40,7 +48,10 @@ public class DetalleFacturaController {
     })
     @GetMapping
     public ResponseEntity<ApiResponseSuccessDto<List<DetalleFacturaResponseDto>>> findAll() {
-        List<DetalleFacturaResponseDto> lista = detalleFacturaService.findAll();
+        List<DetalleFactura> entidades = detalleFacturaService.findAll();
+        List<DetalleFacturaResponseDto> lista = entidades.stream()
+                .map(DetalleFacturaMapper::toResponseDto)
+                .collect(Collectors.toList());
         return buildResponse("Listado de detalles de factura", lista, HttpStatus.OK);
     }
 
@@ -51,7 +62,8 @@ public class DetalleFacturaController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<DetalleFacturaResponseDto>> findById(@PathVariable Long id) {
-        DetalleFacturaResponseDto detalle = detalleFacturaService.findById(id);
+        DetalleFactura entidad = detalleFacturaService.findById(id);
+        DetalleFacturaResponseDto detalle = DetalleFacturaMapper.toResponseDto(entidad);
         ApiResponseSuccessDto<DetalleFacturaResponseDto> resp = new ApiResponseSuccessDto<>(true, "DetalleFactura encontrada", detalle);
         return ResponseEntity.ok(resp);
     }
@@ -64,9 +76,14 @@ public class DetalleFacturaController {
     @PostMapping
     public ResponseEntity<ApiResponseSuccessDto<DetalleFacturaResponseDto>> create(
             @Valid @RequestBody DetalleFacturaRequestDto dto) {
-        DetalleFacturaResponseDto creado = detalleFacturaService.create(dto);
-        ApiResponseSuccessDto<DetalleFacturaResponseDto> resp = new ApiResponseSuccessDto<>(true, "DetalleFactura creada", creado);
-        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
+    // Mapear DTO -> Entidad
+    Factura factura = facturaRepository.findById(dto.getFacturaId())
+        .orElseThrow(() -> new ResourceNotFoundException("Factura no encontrada con id " + dto.getFacturaId()));
+    DetalleFactura entidad = DetalleFacturaMapper.fromDto(dto, factura);
+    DetalleFactura creadoEntidad = detalleFacturaService.save(entidad);
+    DetalleFacturaResponseDto creado = DetalleFacturaMapper.toResponseDto(creadoEntidad);
+    ApiResponseSuccessDto<DetalleFacturaResponseDto> resp = new ApiResponseSuccessDto<>(true, "DetalleFactura creada", creado);
+    return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 
     @Operation(summary = "Actualiza un detalle de factura existente por ID")
@@ -78,7 +95,12 @@ public class DetalleFacturaController {
     public ResponseEntity<ApiResponseSuccessDto<DetalleFacturaResponseDto>> update(
             @PathVariable Long id,
             @Valid @RequestBody DetalleFacturaRequestDto dto) {
-        DetalleFacturaResponseDto actualizado = detalleFacturaService.update(id, dto);
+        Factura factura = facturaRepository.findById(dto.getFacturaId())
+                .orElseThrow(() -> new ResourceNotFoundException("Factura no encontrada con id " + dto.getFacturaId()));
+        DetalleFactura entidad = DetalleFacturaMapper.fromDto(dto, factura);
+        entidad.setId(id);
+        DetalleFactura actualizadoEntidad = detalleFacturaService.save(entidad);
+        DetalleFacturaResponseDto actualizado = DetalleFacturaMapper.toResponseDto(actualizadoEntidad);
         ApiResponseSuccessDto<DetalleFacturaResponseDto> resp = new ApiResponseSuccessDto<>(true, "DetalleFactura actualizada", actualizado);
         return ResponseEntity.ok(resp);
     }
