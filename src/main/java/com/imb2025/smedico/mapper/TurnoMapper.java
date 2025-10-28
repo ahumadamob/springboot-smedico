@@ -1,4 +1,4 @@
-package com.imb2025.smedico.TurnoMapper;
+package com.imb2025.smedico.mapper;
 
 import com.imb2025.smedico.dto.request.TurnoRequestDto.TurnoRequestDto;
 import com.imb2025.smedico.dto.response.TurnoResponseDto.TurnoResponseDto;

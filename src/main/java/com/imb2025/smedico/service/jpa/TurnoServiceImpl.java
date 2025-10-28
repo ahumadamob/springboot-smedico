@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.imb2025.smedico.TurnoMapper.TurnoMapper;
+import com.imb2025.smedico.mapper.TurnoMapper;
 import com.imb2025.smedico.dto.request.TurnoRequestDto.TurnoRequestDto;
 import com.imb2025.smedico.dto.response.TurnoResponseDto.TurnoResponseDto;
 import com.imb2025.smedico.entity.EstadoTurno;
