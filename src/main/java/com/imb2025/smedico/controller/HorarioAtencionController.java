@@ -14,7 +14,6 @@ import com.imb2025.smedico.mapper.HorarioAtencionMapper;
 import com.imb2025.smedico.entity.HorarioAtencion;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.service.IHorarioAtencionService;
-import com.imb2025.smedico.service.IMedicoService;
 
 @RestController
 @RequestMapping("/horarioAtencion")
@@ -22,9 +21,6 @@ public class HorarioAtencionController {
 
     @Autowired
     private IHorarioAtencionService horarioAtencionService;
-
-    @Autowired
-    private IMedicoService medicoService;
 
     @Autowired
     private HorarioAtencionMapper mapper;

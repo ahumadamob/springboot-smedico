@@ -1,19 +1,13 @@
 package com.imb2025.smedico.entity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "horario_atencion")
-public class HorarioAtencion {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class HorarioAtencion extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "medico_id", referencedColumnName = "id")
@@ -26,15 +20,11 @@ public class HorarioAtencion {
     public HorarioAtencion() {}
 
     public HorarioAtencion(Long id, Medico medico, String diaSemana, String horaInicio, String horaFin) {
-        this.id = id;
+        super(id);
         this.medico = medico;
         this.diaSemana = diaSemana;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public Medico getMedico() {
@@ -67,9 +57,5 @@ public class HorarioAtencion {
 
     public void setHoraFin(String horaFin) {
         this.horaFin = horaFin;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 }

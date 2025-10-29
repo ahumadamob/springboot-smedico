@@ -1,8 +1,6 @@
 package com.imb2025.smedico.service.jpa;
 
-import com.imb2025.smedico.dto.HorarioAtencionRequestDto;
 import com.imb2025.smedico.entity.HorarioAtencion;
-import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.HorarioAtencionRepository;
 import com.imb2025.smedico.service.IHorarioAtencionService;
