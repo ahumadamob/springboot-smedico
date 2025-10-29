@@ -4,26 +4,22 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
-public class MotivoCancelacion {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Table(name = "motivo_cancelacion")
+public class MotivoCancelacion extends BaseEntity{
+
     private String nombre;
     private String descripcion;
 
     public MotivoCancelacion() {}
 
-    public MotivoCancelacion(Long id, String nombre, String descripcion) {
-        this.id = id;
+    public MotivoCancelacion(String nombre, String descripcion) {
         this.nombre = nombre;
         this.descripcion = descripcion;
     }
 
-    public Long getId() {
-        return id;
-    }
 
     public String getNombre() {
         return nombre;
@@ -41,7 +37,4 @@ public class MotivoCancelacion {
         this.descripcion = descripcion;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

@@ -4,12 +4,15 @@ import com.imb2025.smedico.dto.ResultadoEstudioRequestDto;
 import com.imb2025.smedico.entity.Estudio;
 import com.imb2025.smedico.entity.OrdenEstudio;
 import com.imb2025.smedico.entity.ResultadoEstudio;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.EstudioRepository;
 import com.imb2025.smedico.repository.OrdenEstudioRepository;
 import com.imb2025.smedico.repository.ResultadoEstudioRepository;
 import com.imb2025.smedico.service.IResultadoEstudioService;
+
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,9 +38,9 @@ public class ResultadoEstudioServiceImpl implements IResultadoEstudioService {
 	@Override
         public ResultadoEstudio findById(Long id) {
 
-                Optional<ResultadoEstudio> opt = repo.findById(id);
-                return opt.orElse(null);
-
+		return repo.findById(id)
+			    .orElseThrow(() -> new ResourceNotFoundException(
+			        "Entidad no encontrada con id " + id));
 
         }
 
@@ -49,7 +52,7 @@ public class ResultadoEstudioServiceImpl implements IResultadoEstudioService {
         @Override
         public void deleteById(Long id) {
                 if(!repo.existsById(id)) {
-                        throw new IllegalArgumentException("No se puede eliminar. No existe un resultadoEstudio con ID: "+ id);
+                        throw new ResourceNotFoundException("No se puede eliminar. No existe un resultadoEstudio con ID: "+ id);
                 }
                 repo.deleteById(id);
 
@@ -57,49 +60,47 @@ public class ResultadoEstudioServiceImpl implements IResultadoEstudioService {
 	
 
 	@Override
-	public ResultadoEstudio create(ResultadoEstudio resultadoEstudio) {
-		System.out.println("ResultadoEstudio Guardado: " + resultadoEstudio);	
+	public ResultadoEstudio create(ResultadoEstudio resultadoEstudio) {	
 		return repo.save(resultadoEstudio);
 	}
 
 	@Override
-        public ResultadoEstudio update(Long id, ResultadoEstudio resultadoEstudio) throws Exception {
+        public ResultadoEstudio update(Long id, ResultadoEstudio resultadoEstudio) {
                 if (repo.existsById(id)) {
                         resultadoEstudio.setId(id);
                         return repo.save(resultadoEstudio);
                 }
-                throw new Exception("No existe el Resultado del Estudio con ID: " + id);
+                throw new ResourceNotFoundException("No existe el Resultado del Estudio con ID: " + id);
         }
 
 	@Override
-	public ResultadoEstudio fromDto(ResultadoEstudioRequestDto requestDto) throws Exception {
-	    OrdenEstudio ordenEstudio = ordenEstudioRepository.findById(requestDto.getOrdenEstudioId())
-	        .orElseThrow(() -> new Exception("Orden de Estudio NO encontrado con ID " + requestDto.getOrdenEstudioId()));
-	    
-	    Estudio estudio = estudioRepository.findById(requestDto.getOrdenEstudioId())
-	    	.orElseThrow(() -> new Exception("Estudio NO encontrado con ID " + requestDto.getEstudioId()));
-	    
-	    ResultadoEstudio resultado = new ResultadoEstudio();
-	    resultado.setEstudio(estudio);
-	    resultado.setFechaCarga(null);
-	    resultado.setObservaciones(null);
-	    resultado.setOrdenEstudio(ordenEstudio);	    
-	    return resultado;
+        public ResultadoEstudio fromDto(ResultadoEstudioRequestDto requestDto) {
+            OrdenEstudio ordenEstudio = ordenEstudioRepository.findById(requestDto.getOrdenEstudioId())
+                .orElseThrow(() -> new ResourceNotFoundException("Orden de Estudio NO encontrado con ID " + requestDto.getOrdenEstudioId()));
 
+            Estudio estudio = estudioRepository.findById(requestDto.getEstudioId())
+                .orElseThrow(() -> new ResourceNotFoundException("Estudio NO encontrado con ID " + requestDto.getEstudioId()));
+
+            ResultadoEstudio resultado = new ResultadoEstudio();
+            resultado.setOrdenEstudio(ordenEstudio);
+            resultado.setEstudio(estudio);
+            resultado.setResultado(requestDto.getResultado());
+            resultado.setFecha(requestDto.getFecha());
+            resultado.setFechaCarga(requestDto.getFechaCarga());
+            resultado.setObservaciones(requestDto.getObservaciones());
+            return resultado;
+        }
+
+	@Override
+	public List<ResultadoEstudio> findByFecha(LocalDate fecha) {
+
+		return repo.findByFecha(fecha);
 	}
 
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	@Override
+	public long countByFecha(LocalDate fecha) {
+		
+		return repo.countByFecha(fecha);
+	}
 	
 }

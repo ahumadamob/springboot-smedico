@@ -1,35 +1,36 @@
 package com.imb2025.smedico.entity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
-public class Turno {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Turno extends BaseEntity {
+
     private LocalDate fecha;
     private LocalTime hora;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Paciente paciente;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Medico medico;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "turnos"})
     private EstadoTurno estadoTurno;
 
     public Turno() {}
 
-    public Turno(Long id, LocalDate fecha, LocalTime hora, Paciente paciente, Medico medico,
+    public Turno( LocalDate fecha, LocalTime hora, Paciente paciente, Medico medico,
                  EstadoTurno estadoTurno) {
-        this.id = id;
+
         this.fecha = fecha;
         this.hora = hora;
         this.paciente = paciente;
@@ -37,13 +38,6 @@ public class Turno {
         this.estadoTurno = estadoTurno;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public LocalDate getFecha() {
         return fecha;

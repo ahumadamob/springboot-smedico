@@ -1,6 +1,8 @@
 package com.imb2025.smedico.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -8,17 +10,27 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 public class HistorialPaciente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "pacienteId")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "pacienteId", nullable = false)
+    @JsonIgnore
     private Paciente paciente;
+    
+    @Column(nullable = false, length = 100)
     private String evento;
+    
+    @Column(nullable = false)
     private LocalDate fecha;
+    
+    @Column(length = 255)
     private String observacion;
 
     public HistorialPaciente() {}
@@ -30,6 +42,12 @@ public class HistorialPaciente {
         this.observacion = observacion;
         this.paciente = paciente;
     }
+    
+    @JsonProperty("pacienteId")
+    public Long getPacienteId() {
+        return paciente != null ? paciente.getId() : null;
+    }
+
 
     public Long getId() {
         return id;

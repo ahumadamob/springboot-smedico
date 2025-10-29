@@ -12,4 +12,7 @@ public interface IMedicamentoService {
     public boolean existsById(Long id);
     public void deleteById(Long id);
     public Medicamento fromDto(MedicamentoRequestDto medicamentoRequestDto) throws Exception;
+    public List<Medicamento> findByNombre(String nombre);
+    
+    public Long countByPresentacion(String presentacion);	
 }
