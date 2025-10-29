@@ -1,4 +1,4 @@
-package com.imb2025.smedico.dto;
+package com.imb2025.smedico.dto.request;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,24 +20,20 @@ public class ResultadoEstudioRequestDto {
 	private Long estudioId;
 	@NotNull(message = "El resultado es obligatorio")
 	private Long resultado;
-        @NotNull(message = "La fecha es obligatoria")
-        @PastOrPresent(message = "La fecha no puede ser futura")
-        private LocalDate fecha;
 
-        @NotNull(message = "La hora es obligatoria")
-        @PastOrPresent(message = "La hora no puede ser futura")
-        private LocalTime fechaCarga;
+    @NotNull(message = "La hora es obligatoria")
+    @PastOrPresent(message = "La hora no puede ser futura")
+    private LocalDate fechaCarga;
 	@Size(min = 5, message = "Las observaciones no pueden tener menos de 5 caracteres")
     private String observaciones;
 
         public ResultadoEstudioRequestDto() {}
 
         public ResultadoEstudioRequestDto(
-                long ordenEstudioId, long estudioId, long resultado, LocalDate fecha, LocalTime fechaCarga, String observaciones) {
+                long ordenEstudioId, long estudioId, long resultado, LocalDate fechaCarga, String observaciones) {
                 this.ordenEstudioId = ordenEstudioId;
                 this.estudioId = estudioId;
                 this.resultado = resultado;
-                this.fecha = fecha;
                 this.fechaCarga = fechaCarga;
                 this.observaciones = observaciones;
         }
@@ -58,19 +54,13 @@ public class ResultadoEstudioRequestDto {
                 this.resultado = resultado;
         }
 
-        public LocalDate getFecha() {
-                return fecha;
-        }
+        
 
-        public void setFecha(LocalDate fecha) {
-                this.fecha = fecha;
-        }
-
-        public LocalTime getFechaCarga() {
+        public LocalDate getFechaCarga() {
                 return fechaCarga;
         }
 
-        public void setFechaCarga(LocalTime fechaCarga) {
+        public void setFechaCarga(LocalDate fechaCarga) {
                 this.fechaCarga = fechaCarga;
         }
 

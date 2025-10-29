@@ -1,20 +1,14 @@
 package com.imb2025.smedico.entity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Entity
-public class ResultadoEstudio {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class ResultadoEstudio extends BaseEntity {
+   
 
     @ManyToOne
     @JoinColumn(name = "ordenEstudioID")
@@ -22,31 +16,22 @@ public class ResultadoEstudio {
 
     @OneToOne(mappedBy = "resultadoEstudio")
     private Estudio estudio;
-    private Long resultado;
-    private LocalDate fecha;
-    private LocalTime fechaCarga;
+    private Long resultado;    
+    private LocalDate fechaCarga;
     private String observaciones;
 
     public ResultadoEstudio() {}
 
-    public ResultadoEstudio(long id, OrdenEstudio ordenEstudio, Estudio estudio, Long resultado, LocalDate fecha,
-                             LocalTime fechaCarga, String observaciones) {
-        this.id = id;
+    public ResultadoEstudio(OrdenEstudio ordenEstudio, Estudio estudio, Long resultado,
+                             LocalDate fechaCarga, String observaciones) {
+       
         this.ordenEstudio = ordenEstudio;
         this.estudio = estudio;
-        this.resultado = resultado;
-        this.fecha = fecha;
+        this.resultado = resultado;       
         this.fechaCarga = fechaCarga;
         this.observaciones = observaciones;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public OrdenEstudio getOrdenEstudio() {
         return ordenEstudio;
@@ -73,19 +58,12 @@ public class ResultadoEstudio {
         this.resultado = resultado;
     }
 
-    public LocalDate getFecha() {
-        return fecha;
-    }
 
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
-    }
-
-    public LocalTime getFechaCarga() {
+    public LocalDate getFechaCarga() {
         return fechaCarga;
     }
 
-    public void setFechaCarga(LocalTime fechaCarga) {
+    public void setFechaCarga(LocalDate fechaCarga) {
         this.fechaCarga = fechaCarga;
     }
 
