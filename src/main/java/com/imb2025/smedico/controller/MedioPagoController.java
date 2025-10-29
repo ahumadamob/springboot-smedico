@@ -67,7 +67,7 @@ public class MedioPagoController {
 
 
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<MedioPago>> createMedioPago(@Valid @RequestBody MedioPagoRequestDto mediopagoRequestDto) {
+    public ResponseEntity<ApiResponseSuccessDto<MedioPagoResponseDto>> createMedioPago(@Valid @RequestBody MedioPagoRequestDto mediopagoRequestDto) { //corregido
     	MedioPagoMapper mapper = new MedioPagoMapper();
 		MedioPago creado = service.create(mapper.fromDto(dto));
         MedioPagoResponseDto responseDto = mapper.toResponseDto(creado);
@@ -77,7 +77,7 @@ public class MedioPagoController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<MedioPago>> updateMedioPago(@PathVariable Long id,@Valid @RequestBody MedioPagoRequestDto mediopagoDto) {
+    public ResponseEntity<ApiResponseSuccessDto<MedioPagoResponseDto>> updateMedioPago(@PathVariable Long id,@Valid @RequestBody MedioPagoRequestDto mediopagoDto) { //corregido
     	MedioPagoMapper mapper = new MedioPagoMapper();
         MedioPago medioPago = mapper.fromDto(dto);
         medioPago.setId(id); 
@@ -96,7 +96,7 @@ public class MedioPagoController {
     
     
     @GetMapping("/tipo/{tipo}")
-    public ResponseEntity<ApiResponseSuccessDto<List<MedioPago>>> findByTipo(@PathVariable String tipo) {
+    public ResponseEntity<ApiResponseSuccessDto<List<MedioPagoResponseDto>>> findByTipo(@PathVariable String tipo) { //corregido
         TipoPago tipoEnum = TipoPago.valueOf(tipo.toUpperCase());
         List<MedioPago> lista = service.findByTipo(tipoEnum);
 		List<MedioPagoResponseDto> listaResponseDto = new ArrayList<>();//a
