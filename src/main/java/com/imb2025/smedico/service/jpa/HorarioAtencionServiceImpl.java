@@ -1,8 +1,6 @@
 package com.imb2025.smedico.service.jpa;
 
-import com.imb2025.smedico.dto.HorarioAtencionRequestDto;
 import com.imb2025.smedico.entity.HorarioAtencion;
-import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.HorarioAtencionRepository;
 import com.imb2025.smedico.service.IHorarioAtencionService;
@@ -71,18 +69,6 @@ public class HorarioAtencionServiceImpl implements IHorarioAtencionService {
         } catch (Exception e) {
             throw new RuntimeException("Error al eliminar el horario: " + e.getMessage());
         }
-    }
-
-    @Override
-    public HorarioAtencion fromDto(HorarioAtencionRequestDto dto) throws Exception {
-        HorarioAtencion horario = new HorarioAtencion();
-        Medico medico = new Medico();
-        medico.setId(dto.getMedicoId());
-        horario.setMedico(medico);
-        horario.setDiaSemana(dto.getDiaSemana());
-        horario.setHoraInicio(dto.getHoraInicio());
-        horario.setHoraFin(dto.getHoraFin());
-        return horario;
     }
 
     @Override
