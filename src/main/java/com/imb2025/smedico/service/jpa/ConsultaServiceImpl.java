@@ -44,52 +44,36 @@ public class ConsultaServiceImpl implements IConsultaService {
         return consultaRepository.existsById(id);
     }
 
-    // ✅ createFromDto con validación de identificadorLegible duplicado
     @Override
     @Transactional
     public Consulta createFromDto(ConsultaRequestDto dto) {
-        // 1️⃣ Validar identificadorLegible duplicado
-        if (consultaRepository.findByIdentificadorLegibleIgnoreCase(dto.getIdentificadorLegible()).isPresent()) {
-            throw new IllegalArgumentException("identificadorLegible duplicado");
-        }
-
-        // 2️⃣ Validar Turno existente
         Turno turno = turnoRepository.findById(dto.getTurnoId())
-                .orElseThrow(() -> new ResourceNotFoundException("Turno no encontrado con id " + dto.getTurnoId()));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Turno no encontrado con id " + dto.getTurnoId()));
 
-        // 3️⃣ Validar unicidad (un Turno = una Consulta)
         if (consultaRepository.existsByTurno_Id(dto.getTurnoId())) {
             throw new IllegalArgumentException("El turno ya está asignado a otra consulta");
         }
 
-        // 4️⃣ Crear la entidad desde el mapper
         Consulta nueva = ConsultaMapper.fromDto(dto, turno);
-
-        // 5️⃣ Guardar
         return consultaRepository.save(nueva);
     }
 
-    // ✅ updateFromDto usando el Mapper
     @Override
     @Transactional
     public Consulta updateFromDto(Long id, ConsultaRequestDto dto) {
-        // 1️⃣ Verificar existencia de la consulta
         Consulta existente = consultaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Consulta no encontrada con id " + id));
 
-        // 2️⃣ Validar Turno
         Turno turno = turnoRepository.findById(dto.getTurnoId())
-                .orElseThrow(() -> new ResourceNotFoundException("Turno no encontrado con id " + dto.getTurnoId()));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Turno no encontrado con id " + dto.getTurnoId()));
 
-        // 3️⃣ Validar unicidad (el turno no puede estar en otra consulta)
         if (consultaRepository.existsByTurno_IdAndIdNot(dto.getTurnoId(), id)) {
             throw new IllegalArgumentException("El turno ya está asignado a otra consulta");
         }
 
-        // 4️⃣ Actualizar la entidad existente usando el mapper
         ConsultaMapper.copyFromDto(dto, turno, existente);
-
-        // 5️⃣ Guardar cambios
         return consultaRepository.save(existente);
     }
 

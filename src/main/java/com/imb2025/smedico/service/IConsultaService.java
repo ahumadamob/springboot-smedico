@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface IConsultaService {
 
+	
     List<Consulta> findAll();
     Consulta findById(Long id);
     Consulta createFromDto(ConsultaRequestDto dto);

@@ -3,34 +3,24 @@ package com.imb2025.smedico.dto.response;
 import java.time.LocalDate;
 
 public class ConsultaResponseDto {
+	   private Long id;
+	    private LocalDate fecha;
+	    private Integer duracionMin;
+	    private String comentarios;
+	    private Long turnoId;
+	    private Long version;
 
-    private Long id;
-    private LocalDate fecha;
-    private Integer duracionMin;
-    private String comentarios;
-    private Long turnoId;
-    private Long version;
-    private LocalDate fechaVigencia;
-    
-    // ✅ NUEVO: Identificador legible
-    private String identificadorLegible;
+	    public ConsultaResponseDto() {}
 
-    // Constructor vacío
-    public ConsultaResponseDto() {}
-
-    // Constructor completo
-    public ConsultaResponseDto(Long id, LocalDate fecha, Integer duracionMin, 
-                              String comentarios, Long turnoId, Long version, 
-                              LocalDate fechaVigencia, String identificadorLegible) {
-        this.id = id;
-        this.fecha = fecha;
-        this.duracionMin = duracionMin;
-        this.comentarios = comentarios;
-        this.turnoId = turnoId;
-        this.version = version;
-        this.fechaVigencia = fechaVigencia;
-        this.identificadorLegible = identificadorLegible;
-    }
+	    public ConsultaResponseDto(Long id, LocalDate fecha, Integer duracionMin,
+	                               String comentarios, Long turnoId, Long version) {
+	        this.id = id;
+	        this.fecha = fecha;
+	        this.duracionMin = duracionMin;
+	        this.comentarios = comentarios;
+	        this.turnoId = turnoId;
+	        this.version = version;
+	    }
 
     // Getters y Setters
     public Long getId() { return id; }
@@ -51,10 +41,5 @@ public class ConsultaResponseDto {
     public Long getVersion() { return version; }
     public void setVersion(Long version) { this.version = version; }
 
-    public LocalDate getFechaVigencia() { return fechaVigencia; }
-    public void setFechaVigencia(LocalDate fechaVigencia) { this.fechaVigencia = fechaVigencia; }
-
-    // ✅ NUEVO: Getter y Setter para identificadorLegible
-    public String getIdentificadorLegible() { return identificadorLegible; }
-    public void setIdentificadorLegible(String identificadorLegible) { this.identificadorLegible = identificadorLegible; }
+    
 }
