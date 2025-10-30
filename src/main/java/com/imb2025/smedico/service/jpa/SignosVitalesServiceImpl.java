@@ -40,22 +40,40 @@ public class SignosVitalesServiceImpl implements ISignosVitalesService {
     }
 
     @Override
-    public SignosVitales create(SignosVitalesRequestDto dto) {
-    	Consulta con = consultaService.findById(dto.getIdConsulta());
-        return signos.save(mapper.fromDto(dto, con));
+     public SignosVitales create(SignosVitales dto) {
+    	dto.setConsulta(consultaService.findById(dto.getConsulta().getId()));
+        return signos.save(dto);
     }
 
    @Override
-public SignosVitales update(Long id, SignosVitalesRequestDto dto) {
-    if (!signos.existsById(id)) {
-        throw new ResourceNotFoundException(
-                "No se puede actualizar. Los Signos Vitales con ID " + id + " no existen.");
+public SignosVitales update(Long id, SignosVitales dto) {
+       
+        SignosVitales existente = signos.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException(
+                "No se puede actualizar. Los Signos Vitales con ID " + id + " no existen."));
+
+       
+        if (dto.getConsulta() == null || dto.getConsulta().getId() == null) {
+            throw new ResourceNotFoundException("Debe incluir un ID de consulta válido para actualizar los signos vitales.");
+        }
+        Consulta consulta = consultaService.findById(dto.getConsulta().getId());
+
+       
+        existente.setFechaHora(dto.getFechaHora());
+        existente.setPeso(dto.getPeso());
+        existente.setAltura(dto.getAltura());
+        existente.setImc(dto.getImc());
+        existente.setTemperatura(dto.getTemperatura());
+        existente.setFrecuenciaCardiaca(dto.getFrecuenciaCardiaca());
+        existente.setPresionSistolica(dto.getPresionSistolica());
+        existente.setPresionDiastolica(dto.getPresionDiastolica());
+        existente.setSaturacionO2(dto.getSaturacionO2());
+        existente.setObservaciones(dto.getObservaciones());
+        existente.setConsulta(consulta);
+
+       
+        return signos.save(existente);
     }
-    Consulta con = consultaService.findById(dto.getIdConsulta());
-    SignosVitales signosVitales = mapper.fromDto(dto, con);
-    signosVitales.setId(id);
-    return signos.save(signosVitales);
-}
 
 @Override
 public void deleteById(Long id) {
