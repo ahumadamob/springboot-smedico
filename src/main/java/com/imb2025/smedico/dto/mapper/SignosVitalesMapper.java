@@ -7,11 +7,12 @@ import com.imb2025.smedico.entity.SignosVitales;
 
 public class SignosVitalesMapper {
 
-	public SignosVitales fromDto(SignosVitalesRequestDto dto, Consulta consulta) {
+	public SignosVitales fromDto(SignosVitalesRequestDto dto) {
 		if (dto == null) {
 			return null;
 		}
-		
+		Consulta con = new Consulta ();
+		con.setId(dto.getIdConsulta());
 		SignosVitales s = new SignosVitales();
 		s.setFechaHora(dto.getFechaHora());
 		s.setPeso(dto.getPeso());
@@ -23,30 +24,41 @@ public class SignosVitalesMapper {
 		s.setPresionDiastolica(dto.getPresionDiastolica());
 		s.setSaturacionO2(dto.getSaturacionO2());
 		s.setObservaciones(dto.getObservaciones());
-		s.setConsulta(consulta);
+		s.setConsulta(con);
 
 		return s;
 	}
 
-	public SignosVitalesResponseDto toDto(SignosVitales s) {
-		if (s == null) {
-			return null;
-		} else {
-			return new SignosVitalesResponseDto(
-	                s.getId(),
-	                s.getFechaHora(),
-	                s.getPeso(),
-	                s.getAltura(),
-	                s.getImc(), 
-	                s.getTemperatura(),
-	                s.getFrecuenciaCardiaca(),
-	                s.getPresionSistolica(),
-	                s.getPresionDiastolica(),
-	                s.getSaturacionO2(),
-	                s.getObservaciones(),
-	                s.getConsulta().getId(),
-	                s.getVersion());
-		}
 
+	public SignosVitalesResponseDto toDto(SignosVitales s) {
+
+	    if (s == null) return null;
+
+	    Long idConsulta = null;
+	    if (s.getConsulta() != null) {
+	        try {
+	            idConsulta = s.getConsulta().getId();
+	        } catch (Exception e) {
+	            idConsulta = null;
+	        }
+	    }
+	    
+	    return new SignosVitalesResponseDto(
+	    		
+	        s.getId(),
+	        s.getFechaHora(),
+	        s.getPeso(),
+	        s.getAltura(),
+	        s.getImc(),
+	        s.getTemperatura(),
+	        s.getFrecuenciaCardiaca(),
+	        s.getPresionSistolica(),
+	        s.getPresionDiastolica(),
+	        s.getSaturacionO2(),
+	        s.getObservaciones(),
+	        s.getConsulta().getId(),
+	        s.getVersion()
+	    );
 	}
+
 }
