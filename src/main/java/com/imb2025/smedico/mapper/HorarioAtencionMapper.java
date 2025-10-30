@@ -42,7 +42,6 @@ public class HorarioAtencionMapper {
         responseDTO.setDiaSemana(horarioEntity.getDiaSemana());
         responseDTO.setHoraInicio(horarioEntity.getHoraInicio());
         responseDTO.setHoraFin(horarioEntity.getHoraFin());
-        responseDTO.setVersion(1); // Asumiendo versión inicial
         return responseDTO;
     }
 }
