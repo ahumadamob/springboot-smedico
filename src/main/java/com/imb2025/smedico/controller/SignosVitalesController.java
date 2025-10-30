@@ -51,7 +51,7 @@ public class SignosVitalesController {
 	@PostMapping
 	public ResponseEntity<ApiResponseSuccessDto<SignosVitalesResponseDto>> createSignosVitales(
 			@Valid @RequestBody SignosVitalesRequestDto dto) {
-		SignosVitales creada = service.create(dto);
+		SignosVitales creada = service.create(mapper.fromDto(dto));
 		SignosVitalesResponseDto respDto = mapper.toDto(creada);
 
 		ApiResponseSuccessDto<SignosVitalesResponseDto> resp = new ApiResponseSuccessDto<>(true,
@@ -63,7 +63,7 @@ public class SignosVitalesController {
 	@PutMapping("/{id}")
 	public ResponseEntity<ApiResponseSuccessDto<SignosVitalesResponseDto>> updateSignosVitales(@PathVariable Long id,
 			@Valid @RequestBody SignosVitalesRequestDto dto) {
-		SignosVitales actualizada = service.update(id, dto);
+		SignosVitales actualizada = service.update(id, mapper.fromDto(dto));
 		SignosVitalesResponseDto respDto = mapper.toDto(actualizada);
 
 		ApiResponseSuccessDto<SignosVitalesResponseDto> resp = new ApiResponseSuccessDto<>(true,
