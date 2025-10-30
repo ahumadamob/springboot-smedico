@@ -10,4 +10,6 @@ public interface IHorarioAtencionService {
     public HorarioAtencion findById(Long id);
     public boolean existsById(Long id);
     public void deleteById(Long id);
+    public long countHorariosByMedico(Long medicoId);
+    public List<HorarioAtencion> findHorariosByDia(String diaSemana);
 }

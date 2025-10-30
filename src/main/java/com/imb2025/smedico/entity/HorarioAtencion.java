@@ -19,8 +19,7 @@ public class HorarioAtencion extends BaseEntity {
 
     public HorarioAtencion() {}
 
-    public HorarioAtencion(Long id, Medico medico, String diaSemana, String horaInicio, String horaFin) {
-        super(id);
+    public HorarioAtencion(Medico medico, String diaSemana, String horaInicio, String horaFin) {
         this.medico = medico;
         this.diaSemana = diaSemana;
         this.horaInicio = horaInicio;
