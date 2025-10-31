@@ -10,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
-import com.imb2025.smedico.dto.SignosVitalesRequestDto;
+import com.imb2025.smedico.dto.mapper.SignosVitalesMapper;
+import com.imb2025.smedico.dto.request.SignosVitalesRequestDto;
+import com.imb2025.smedico.dto.response.SignosVitalesResponseDto;
 import com.imb2025.smedico.entity.SignosVitales;
 import com.imb2025.smedico.service.ISignosVitalesService;
 
@@ -22,6 +24,8 @@ public class SignosVitalesController {
 
 	@Autowired
 	private ISignosVitalesService service;
+	
+	SignosVitalesMapper mapper = new SignosVitalesMapper();
 
 	@GetMapping
 	public ResponseEntity<?> getAllSignosVitales() {
@@ -29,44 +33,40 @@ public class SignosVitalesController {
 		if (lista.isEmpty()) {
 			return ResponseEntity.noContent().build();
 		}
-		List<SignosVitalesRequestDto> dtos = lista.stream().map(service::toDto).collect(Collectors.toList());
-		ApiResponseSuccessDto<List<SignosVitalesRequestDto>> resp = new ApiResponseSuccessDto<>(true,
+		List<SignosVitalesResponseDto> dtos = lista.stream().map(mapper::toDto).collect(Collectors.toList());
+		ApiResponseSuccessDto<List<SignosVitalesResponseDto>> resp = new ApiResponseSuccessDto<>(true,
 				"Lista de signos vitales", dtos);
 		return ResponseEntity.ok(resp);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ApiResponseSuccessDto<SignosVitalesRequestDto>> getSignosVitalesById(@PathVariable Long id) {
+	public ResponseEntity<ApiResponseSuccessDto<SignosVitalesResponseDto>> getSignosVitalesById(@PathVariable Long id) {
 		SignosVitales data = service.findById(id);
-		SignosVitalesRequestDto dto = service.toDto(data);
-		ApiResponseSuccessDto<SignosVitalesRequestDto> resp = new ApiResponseSuccessDto<>(true,
+		SignosVitalesResponseDto dto = mapper.toDto(data);
+		ApiResponseSuccessDto<SignosVitalesResponseDto> resp = new ApiResponseSuccessDto<>(true,
 				"Signos Vitales encontrados", dto);
 		return ResponseEntity.ok(resp);
 	}
 
 	@PostMapping
-	public ResponseEntity<ApiResponseSuccessDto<SignosVitalesRequestDto>> createSignosVitales(
+	public ResponseEntity<ApiResponseSuccessDto<SignosVitalesResponseDto>> createSignosVitales(
 			@Valid @RequestBody SignosVitalesRequestDto dto) {
+		SignosVitales creada = service.create(mapper.fromDto(dto));
+		SignosVitalesResponseDto respDto = mapper.toDto(creada);
 
-		SignosVitales entity = service.fromDto(dto);
-		SignosVitales creada = service.create(entity);
-		SignosVitalesRequestDto respDto = service.toDto(creada);
-
-		ApiResponseSuccessDto<SignosVitalesRequestDto> resp = new ApiResponseSuccessDto<>(true,
+		ApiResponseSuccessDto<SignosVitalesResponseDto> resp = new ApiResponseSuccessDto<>(true,
 				"Signos Vitales creados con éxito", respDto);
 
 		return ResponseEntity.status(201).body(resp);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<ApiResponseSuccessDto<SignosVitalesRequestDto>> updateSignosVitales(@PathVariable Long id,
+	public ResponseEntity<ApiResponseSuccessDto<SignosVitalesResponseDto>> updateSignosVitales(@PathVariable Long id,
 			@Valid @RequestBody SignosVitalesRequestDto dto) {
+		SignosVitales actualizada = service.update(id, mapper.fromDto(dto));
+		SignosVitalesResponseDto respDto = mapper.toDto(actualizada);
 
-		SignosVitales entity = service.fromDto(dto);
-		SignosVitales actualizada = service.update(id, entity);
-		SignosVitalesRequestDto respDto = service.toDto(actualizada);
-
-		ApiResponseSuccessDto<SignosVitalesRequestDto> resp = new ApiResponseSuccessDto<>(true,
+		ApiResponseSuccessDto<SignosVitalesResponseDto> resp = new ApiResponseSuccessDto<>(true,
 				"Signos Vitales actualizados con éxito", respDto);
 
 		return ResponseEntity.ok(resp);
