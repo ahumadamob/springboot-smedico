@@ -1,24 +1,38 @@
 package com.imb2025.smedico.service;
 
+import java.util.List;
 import com.imb2025.smedico.dto.HabitacionPacienteRequestDTO;
 import com.imb2025.smedico.entity.HabitacionPaciente;
 
-import java.util.List;
-
 public interface HabitacionPacienteService {
 
+    // Obtener todas las habitaciones
     List<HabitacionPaciente> findAll();
 
-    HabitacionPaciente findById(Long id);
+    // Crear una nueva habitación
+    HabitacionPaciente create(HabitacionPaciente habitacionPaciente);
 
-    HabitacionPaciente save(HabitacionPaciente habitacionPaciente);
-
+    // Actualizar una habitación existente
     HabitacionPaciente update(Long id, HabitacionPacienteRequestDTO dto);
+    
+    
+    // Buscar habitación por ID
+    HabitacionPaciente findById(Long id);
+    
+    List<HabitacionPaciente> findBySectorIgnoreCase(String sector);
+    Long countBySectorIgnoreCase(String sector);
 
+
+    // Verificar existencia por ID
+    boolean existsById(Long id);
+
+    // Eliminar habitación por ID
     void deleteById(Long id);
 
-    boolean existePorId(Long id);
-
+    // Conversión desde DTO a entidad
     HabitacionPaciente fromDto(HabitacionPacienteRequestDTO dto);
-}
+    
+    HabitacionPacienteRequestDTO toDto(HabitacionPaciente habitacion);
 
+	HabitacionPaciente save(HabitacionPaciente entity);
+}

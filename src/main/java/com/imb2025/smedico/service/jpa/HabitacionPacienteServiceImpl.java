@@ -1,71 +1,107 @@
 package com.imb2025.smedico.service.jpa;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.imb2025.smedico.dto.HabitacionPacienteRequestDTO;
 import com.imb2025.smedico.entity.HabitacionPaciente;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.HabitacionPacienteRepository;
 import com.imb2025.smedico.service.HabitacionPacienteService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class HabitacionPacienteServiceImpl implements HabitacionPacienteService {
 
     @Autowired
-    private HabitacionPacienteRepository habitacionPacienteRepository;
+    private HabitacionPacienteRepository habitacionRepository;
 
     @Override
     public List<HabitacionPaciente> findAll() {
-        return habitacionPacienteRepository.findAll();
+        return habitacionRepository.findAll();
     }
 
     @Override
     public HabitacionPaciente findById(Long id) {
-        return habitacionPacienteRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Habitación no encontrada con ID: " + id));
+        return habitacionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Habitación no encontrada con ID " + id));
     }
 
     @Override
-    public HabitacionPaciente save(HabitacionPaciente habitacionPaciente) {
-        return habitacionPacienteRepository.save(habitacionPaciente);
+    public HabitacionPaciente create(HabitacionPaciente habitacion) {
+        return habitacionRepository.save(habitacion);
     }
 
     @Override
     public HabitacionPaciente update(Long id, HabitacionPacienteRequestDTO dto) {
-        HabitacionPaciente habitacion = habitacionPacienteRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("No se encontró la habitación con ID: " + id));
+        if (!habitacionRepository.existsById(id)) {
+            throw new ResourceNotFoundException(
+                    "No se puede actualizar. La habitación con ID " + id + " no existe.");
+        }
 
+        HabitacionPaciente habitacion = findById(id);
         mapearDTO(habitacion, dto);
-        return habitacionPacienteRepository.save(habitacion);
+        habitacion.setId(id);
+
+        return habitacionRepository.save(habitacion);
     }
 
     @Override
     public void deleteById(Long id) {
-        if (!habitacionPacienteRepository.existsById(id)) {
-            throw new ResourceNotFoundException("No se encontró la habitación con ID: " + id);
+        if (!habitacionRepository.existsById(id)) {
+            throw new ResourceNotFoundException(
+                    "No se puede eliminar. La habitación con ID " + id + " no existe.");
         }
-        habitacionPacienteRepository.deleteById(id);
+        habitacionRepository.deleteById(id);
     }
 
     @Override
-    public boolean existePorId(Long id) {
-        return habitacionPacienteRepository.existsById(id);
+    public boolean existsById(Long id) {
+        return habitacionRepository.existsById(id);
     }
 
     @Override
     public HabitacionPaciente fromDto(HabitacionPacienteRequestDTO dto) {
-        HabitacionPaciente habitacion = new HabitacionPaciente();
-        mapearDTO(habitacion, dto);
-        return habitacion;
+        HabitacionPaciente h = new HabitacionPaciente();
+        mapearDTO(h, dto);
+        return h;
+    }
+    
+    @Override
+    public HabitacionPacienteRequestDTO toDto(HabitacionPaciente h) {
+        HabitacionPacienteRequestDTO dto = new HabitacionPacienteRequestDTO();
+        dto.setNumeroHabitacion(h.getNumeroHabitacion());
+        dto.setPiso(h.getPiso());
+        dto.setSector(h.getSector());
+        dto.setCamasDisponibles(h.getCamasDisponibles());
+        dto.setDescripcion(h.getDescripcion());
+        return dto;
+    }
+    
+    @Override
+    public List<HabitacionPaciente> findBySectorIgnoreCase(String sector) {
+        return habitacionRepository.findBySectorIgnoreCase(sector);
     }
 
-    private void mapearDTO(HabitacionPaciente habitacion, HabitacionPacienteRequestDTO dto) {
-        habitacion.setNumeroHabitacion(dto.getNumeroHabitacion());
-        habitacion.setPiso(dto.getPiso());
-        habitacion.setSector(dto.getSector());
-        habitacion.setCamasDisponibles(dto.getCamasDisponibles());
-        habitacion.setDescripcion(dto.getDescripcion());
+    @Override
+    public Long countBySectorIgnoreCase(String sector) {
+        return habitacionRepository.countBySectorIgnoreCase(sector);
     }
+    
+
+    // Método helper para mapear DTO - entidad
+    private void mapearDTO(HabitacionPaciente h, HabitacionPacienteRequestDTO dto) {
+        h.setNumeroHabitacion(dto.getNumeroHabitacion());
+        h.setPiso(dto.getPiso());
+        h.setSector(dto.getSector());
+        h.setCamasDisponibles(dto.getCamasDisponibles());
+        h.setDescripcion(dto.getDescripcion());
+    }
+
+	@Override
+	public HabitacionPaciente save(HabitacionPaciente entity) {
+		return habitacionRepository.save(entity);
+	}
 }
+
