@@ -1,74 +1,80 @@
 package com.imb2025.smedico.service.jpa;
-//Implementacion
-import java.util.*;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.imb2025.smedico.dto.AsistenteRequestDTO;
+import com.imb2025.smedico.dto.request.AsistenteRequestDto;
 import com.imb2025.smedico.entity.Asistente;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.AsistenteRepository;
 import com.imb2025.smedico.service.IAsistenteService;
 
+/**
+ * Implementación de {@link IAsistenteService} usando JPA.
+ * Maneja la lógica de negocio para la entidad {@link Asistente}.
+ */
 @Service
 public class AsistenteServiceImpl implements IAsistenteService {
 
     @Autowired
-    private AsistenteRepository asistenteRepo;
+    private AsistenteRepository repo;
 
     @Override
     public List<Asistente> findAll() {
-        return asistenteRepo.findAll();
+        return repo.findAll();
     }
 
     @Override
     public Asistente findById(Long id) {
-        return asistenteRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Asistente con ID " + id + " no encontrado."));
+        return repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Asistente no encontrado con id " + id));
     }
 
     @Override
-    public Asistente create(AsistenteRequestDTO dto) {
-        try {
-            Asistente nuevo = fromDto(dto);
-            return asistenteRepo.save(nuevo);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al crear el asistente: " + e.getMessage());
-        }
+    public boolean existsById(Long id) {
+        return repo.existsById(id);
     }
 
+    @Override
+    public Asistente create(Asistente asistente) {
+        return repo.save(asistente);
+    }
 
     @Override
-    public Asistente update(Long id, AsistenteRequestDTO dto) {
-        try {
-            Asistente existente = asistenteRepo.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Asistente con ID " + id + " no encontrado."));
+    public Asistente update(Long id, Asistente asistente) {
+        Asistente existente = repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "No se puede actualizar. Asistente con id " + id + " no existe."));
 
-            existente.setNombre(dto.getNombre());
-            existente.setEmail(dto.getEmail());
-            existente.setTelefono(dto.getTelefono());
-            existente.setDni(dto.getDni());
+        existente.setApellido(asistente.getApellido());
+        existente.setNombre(asistente.getNombre());
+        existente.setEmail(asistente.getEmail());
+        existente.setTelefono(asistente.getTelefono());
+        existente.setDni(asistente.getDni());
 
-            return asistenteRepo.save(existente);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al actualizar el asistente: " + e.getMessage());
-        }
+        return repo.save(existente);
     }
 
     @Override
     public void deleteById(Long id) {
-        if (!asistenteRepo.existsById(id)) {
-            throw new RuntimeException("No se puede eliminar: asistente con ID " + id + " no existe.");
+        if (!repo.existsById(id)) {
+            throw new ResourceNotFoundException(
+                    "No se puede eliminar. Asistente con id " + id + " no existe.");
         }
-        asistenteRepo.deleteById(id);
+        repo.deleteById(id);
+    }
+    
+ // Métodos mágicos
+    @Override
+    public List<Asistente> findByApellido(String apellido) {
+        return repo.findByApellido(apellido);
     }
 
-	public static Asistente fromDto(AsistenteRequestDTO dto) {
-	    Asistente asistente = new Asistente();
-	    asistente.setTelefono(dto.getTelefono());
-	    asistente.setNombre(dto.getNombre());
-	    asistente.setDni(dto.getDni());
-	    asistente.setEmail(dto.getEmail());
-	    return asistente;
-	}
+    @Override
+    public Long countByNombre(String nombre) {
+        return repo.countByNombre(nombre);
+    }
 }

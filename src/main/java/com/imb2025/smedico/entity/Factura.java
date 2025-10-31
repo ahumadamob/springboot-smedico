@@ -1,56 +1,29 @@
 package com.imb2025.smedico.entity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-
 import java.time.LocalDate;
 
 @Entity
-public class Factura {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Factura extends BaseEntity{
 
     private LocalDate fecha;
 
     @ManyToOne
     private Paciente paciente;
-    
+
+    private Double monto;
+
     @ManyToOne
     private MedioPago medioPago;
 
-    private Double monto;
-    
-    
-    
-    public MedioPago getMedioPago() { //Agregado
-		return medioPago;
-	}
-
-	public void setMedioPago(MedioPago medioPago) { //Agregado
-		this.medioPago = medioPago;
-	}
-
-    public Factura() {
-    }
+    public Factura() {}
 
     public Factura(LocalDate fecha, Paciente paciente, Double monto, MedioPago medioPago) {
         this.fecha = fecha;
         this.paciente = paciente;
         this.monto = monto;
         this.medioPago = medioPago;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public LocalDate getFecha() {
@@ -77,4 +50,11 @@ public class Factura {
         this.monto = monto;
     }
 
+    public MedioPago getMedioPago() {
+        return medioPago;
+    }
+
+    public void setMedioPago(MedioPago medioPago) {
+        this.medioPago = medioPago;
+    }
 }

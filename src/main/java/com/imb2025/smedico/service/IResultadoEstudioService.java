@@ -1,14 +1,20 @@
 package com.imb2025.smedico.service;
 
-import java.util.List;
-
+import com.imb2025.smedico.dto.request.ResultadoEstudioRequestDto;
 import com.imb2025.smedico.entity.ResultadoEstudio;
 
-public interface IResultadoEstudioService {
+import java.time.LocalDate;
+import java.util.List;
 
-	
-	public List<ResultadoEstudio> findAll();
-	public ResultadoEstudio findById(long id);
-	public ResultadoEstudio save(ResultadoEstudio resultadoEstudio);
-	public void deleteById(long id);
+public interface IResultadoEstudioService {
+    public List<ResultadoEstudio> findAll();
+    public ResultadoEstudio create(ResultadoEstudio resultadoEstudio);
+    public ResultadoEstudio update(Long id, ResultadoEstudio resultadoEstudio);
+    public ResultadoEstudio findById(Long id);
+    public boolean existsById(Long id);
+    public void deleteById(Long id);
+ 
+    
+    public List<ResultadoEstudio> findByFechaCarga(LocalDate fechaCarga);
+	public long countByFechaCarga(LocalDate fechaCarga);
 }

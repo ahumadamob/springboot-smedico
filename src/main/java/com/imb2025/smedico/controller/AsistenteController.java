@@ -1,53 +1,130 @@
 package com.imb2025.smedico.controller;
-//Controlador
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.imb2025.smedico.dto.AsistenteRequestDTO;
+import com.imb2025.smedico.dto.ApiResponseSuccessDto;
+import com.imb2025.smedico.dto.request.AsistenteRequestDto;
+import com.imb2025.smedico.dto.response.AsistenteResponseDto;
 import com.imb2025.smedico.entity.Asistente;
+import com.imb2025.smedico.mapper.AsistenteMapper;
 import com.imb2025.smedico.service.IAsistenteService;
 
+import jakarta.validation.Valid;
+
 @RestController
-@RequestMapping("/asistente")
+@RequestMapping("/asistentes")
 public class AsistenteController {
 
     @Autowired
     private IAsistenteService service;
 
+    private AsistenteMapper mapper = new AsistenteMapper();
+
     @GetMapping
-    public List<Asistente> findAll() {
-        return service.findAll();
+    public ResponseEntity<ApiResponseSuccessDto<List<AsistenteResponseDto>>> findAll() {
+        List<Asistente> lista = service.findAll();
+
+        if (lista.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        List<AsistenteResponseDto> dtoList = lista.stream()
+                .map(mapper::toDto)
+                .toList();
+
+        ApiResponseSuccessDto<List<AsistenteResponseDto>> resp = new ApiResponseSuccessDto<>(
+                true,
+                "Listado de asistentes obtenido con éxito",
+                dtoList
+        );
+        return ResponseEntity.ok(resp);
     }
 
     @GetMapping("/{id}")
-    public Asistente findById(@PathVariable("id") Long id) {
-        return service.findById(id);
+    public ResponseEntity<ApiResponseSuccessDto<AsistenteResponseDto>> findById(@PathVariable Long id) {
+        Asistente asistente = service.findById(id);
+        AsistenteResponseDto dto = mapper.toDto(asistente);
+
+        ApiResponseSuccessDto<AsistenteResponseDto> resp = new ApiResponseSuccessDto<>
+        (true,"Asistente encontrado con éxito",dto);
+        return ResponseEntity.ok(resp);
     }
 
     @PostMapping
-    public Asistente save(@RequestBody AsistenteRequestDTO dto) {
-        return service.create(dto);
+    public ResponseEntity<ApiResponseSuccessDto<AsistenteResponseDto>> create(
+            @Valid @RequestBody AsistenteRequestDto dto) {
+
+        Asistente asistente = mapper.fromDto(dto);
+        Asistente creado = service.create(asistente);
+        AsistenteResponseDto respDto = mapper.toDto(creado);
+
+        ApiResponseSuccessDto<AsistenteResponseDto> resp = new ApiResponseSuccessDto<>(
+                true,
+                "Asistente creado con éxito",
+                respDto
+        );
+        return ResponseEntity.status(201).body(resp);
     }
 
     @PutMapping("/{id}")
-    public Asistente update(@PathVariable("id") Long id, @RequestBody AsistenteRequestDTO dto) {
-        return service.update(id, dto);
+    public ResponseEntity<ApiResponseSuccessDto<AsistenteResponseDto>> update(
+            @PathVariable Long id,
+            @Valid @RequestBody AsistenteRequestDto dto) {
+
+        Asistente asistente = mapper.fromDto(dto);
+        Asistente actualizado = service.update(id, asistente);
+        AsistenteResponseDto respDto = mapper.toDto(actualizado);
+
+        ApiResponseSuccessDto<AsistenteResponseDto> resp = new ApiResponseSuccessDto<>(
+                true,
+                "Asistente actualizado con éxito",
+                respDto
+        );
+        return ResponseEntity.ok(resp);
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") Long id) {
+    public ResponseEntity<ApiResponseSuccessDto<Void>> delete(@PathVariable Long id) {
         service.deleteById(id);
-        return "Asistente con ID " + id + " eliminado correctamente";
+
+        ApiResponseSuccessDto<Void> resp = new ApiResponseSuccessDto<>(
+                true,
+                "Asistente eliminado con éxito",
+                null
+        );
+        return ResponseEntity.ok(resp);
     }
-    
-    @ExceptionHandler(RuntimeException.class)
-    public Map<String, Object> handleRuntimeException(RuntimeException ex) {
-        Map<String, Object> errorMap = new HashMap<>();
-        errorMap.put("message", ex.getMessage());
-        return errorMap;
+
+    @GetMapping("/apellido/{apellido}")
+    public ResponseEntity<ApiResponseSuccessDto<List<AsistenteResponseDto>>> findByApellido(@PathVariable String apellido) {
+        List<Asistente> lista = service.findByApellido(apellido);
+
+        List<AsistenteResponseDto> dtoList = lista.stream()
+                .map(mapper::toDto)
+                .toList();
+
+        String mensaje = lista.isEmpty() ? "No se encontraron asistentes con apellido " + apellido
+                                         : "Asistentes con apellido " + apellido;
+
+        ApiResponseSuccessDto<List<AsistenteResponseDto>> resp = new ApiResponseSuccessDto<>(
+                true, mensaje, dtoList
+        );
+        return ResponseEntity.ok(resp);
+    }
+
+    @GetMapping("/count/{nombre}")
+    public ResponseEntity<ApiResponseSuccessDto<Long>> countByNombre(@PathVariable String nombre) {
+        Long cantidad = service.countByNombre(nombre);
+
+        String mensaje = "Cantidad de asistentes con nombre " + nombre + ": " + cantidad;
+
+        ApiResponseSuccessDto<Long> resp = new ApiResponseSuccessDto<>(
+                true, mensaje, cantidad
+        );
+        return ResponseEntity.ok(resp);
     }
 }

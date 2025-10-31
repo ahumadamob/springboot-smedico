@@ -1,14 +1,28 @@
 package com.imb2025.smedico.service;
 
-import java.util.List;
+import com.imb2025.smedico.dto.AfiliacionRequestDto;
 import com.imb2025.smedico.entity.Afiliacion;
 
-public interface  IAfiliacionService {
-	
-	public List<Afiliacion> findAll();
-	public Afiliacion findById(Long id);
-	public Afiliacion save(Afiliacion afiliacion);
-	public Afiliacion update(Long id, Afiliacion afiliacion);
-	public void deleteById(Long id);
-	
+import java.util.List;
+
+public interface IAfiliacionService {
+
+    List<Afiliacion> findAll();
+
+    Afiliacion create(Afiliacion afiliacion);
+
+    Afiliacion update(Long id, Afiliacion afiliacion);
+
+    Afiliacion findById(Long id);
+
+    boolean existsById(Long id);
+
+    void deleteById(Long id);
+
+    Afiliacion fromDto(AfiliacionRequestDto afiliacionRequestDto);
+
+    // métodos "mágicos" del repository
+    List<Afiliacion> findByIdGreaterThan(Long idMin);
+
+    long countByIdGreaterThan(Long idMin);
 }

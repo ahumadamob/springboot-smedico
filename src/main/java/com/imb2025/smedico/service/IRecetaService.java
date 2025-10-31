@@ -1,20 +1,20 @@
 package com.imb2025.smedico.service;
 
-import java.util.List;
-
-import com.imb2025.smedico.dto.RecetaRequestDTO;
+import com.imb2025.smedico.dto.request.RecetaRequestDto;
+import com.imb2025.smedico.entity.Medico;
+import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.entity.Receta;
 
-import imb.progra2025.p3ro2da.dto.AlumnoRequestDTO;
-import imb.progra2025.p3ro2da.entity.Alumno;
+import java.time.LocalDate;
+import java.util.List;
 
 public interface IRecetaService {
-	public List <Receta> findAll();
-	public Receta findById(Long id);
-	public Receta create(Receta receta);
-    public Receta update(Long id,Receta receta) throws Exception;
-	public void deleteById (Long id);
-	public Receta fromDto(RecetaRequestDTO requestDto) throws Exception;
-	boolean existsById(Long id);
-
-}
+    public List<Receta> findAll();
+    public Receta create(Receta receta);
+    public Receta update(Long id, Receta receta);
+    public Receta findById(Long id);
+    public boolean existsById(Long id);
+    public void deleteById(Long id);
+	public List<Receta> findByFecha(LocalDate fecha);
+	long countByFecha(LocalDate fecha);
+}	

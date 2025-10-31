@@ -1,9 +1,8 @@
 package com.imb2025.smedico.service.jpa;
 
-
-import com.imb2025.smedico.dto.PacienteRequestDTO;
-
+import com.imb2025.smedico.dto.request.PacienteRequestDto;
 import com.imb2025.smedico.entity.Paciente;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.PacienteRepository;
 import com.imb2025.smedico.service.IPacienteService;
 import org.springframework.stereotype.Service;
@@ -26,52 +25,59 @@ public class PacienteServiceImpl implements IPacienteService {
 
     @Override
     public Paciente findById(Long id) {
-        return pacienteRepository.findById(id).orElse(null);
+        return pacienteRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente no encontrado con id " + id));
     }
 
-
-    // Guardar nuevo paciente con manejo de excepciones
     @Override
-    public Paciente save(Paciente paciente) {
-        try {
-            return pacienteRepository.save(paciente);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al guardar el paciente: " + e.getMessage());
-        }
+    public boolean existsById(Long id) {
+        return pacienteRepository.existsById(id);
     }
 
-    // Actualizar paciente si existe
-    public Paciente update(Long id, Paciente paciente) throws Exception {
-        if (pacienteRepository.existsById(id)) {
-            paciente.setId(id); // aseguramos que el ID no se pierda
-            return pacienteRepository.save(paciente);
-        } else {
-            throw new Exception("Paciente no encontrado con id: " + id);
-        }
+    @Override
+    public Paciente create(Paciente paciente) {
+        return pacienteRepository.save(paciente);
+    }
+
+    @Override
+    public Paciente update(Long id, Paciente paciente) {
+        Paciente existente = pacienteRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente no encontrado con id " + id));
+        // actualizar campos
+        existente.setNombre(paciente.getNombre());
+        existente.setApellido(paciente.getApellido());
+        existente.setDni(paciente.getDni());
+        existente.setEmail(paciente.getEmail());
+        existente.setFechaNacimiento(paciente.getFechaNacimiento());
+        existente.setTelefono(paciente.getTelefono());
+        return pacienteRepository.save(existente);
     }
 
     @Override
     public void deleteById(Long id) {
-        pacienteRepository.deleteById(id);
+        Paciente existente = pacienteRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente no encontrado con id " + id));
+        pacienteRepository.delete(existente);
     }
 
-
-    // Convertir un DTO a una entidad Paciente
-    public Paciente fromDto(PacienteRequestDTO requestDTO) {
-        Paciente paciente = new Paciente();
-        paciente.setNombre(requestDTO.getNombre());
-        paciente.setApellido(requestDTO.getApellido());
-        paciente.setDni(requestDTO.getDni());
-        paciente.setEmail(requestDTO.getEmail());
-        paciente.setTelefono(requestDTO.getTelefono());
-        paciente.setFechaNacimiento(requestDTO.getFechaNacimiento());
-        return paciente;
-    }
 
 	@Override
-	public Paciente create(Paciente paciente) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Paciente> findAllOrder() {
+		return pacienteRepository.findByOrderByApellidoAscNombreAsc();
+	}
+
+	@Override
+	public List<Paciente> findByDni(String dni) {
+		return pacienteRepository.findByDni(dni);
+	}
+
+	@Override
+	public List<Paciente> findByDomainEmail(String domain) {
+		return pacienteRepository.findByEmailEndingWith(domain);
+	}
+
+	@Override
+	public Long countBy() {
+		return pacienteRepository.countBy();
 	}
 }
-

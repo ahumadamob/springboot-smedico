@@ -1,42 +1,56 @@
 package com.imb2025.smedico.entity;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
-public class DetalleReceta {
+@Table(name = "detalle_receta")
+public class DetalleReceta extends BaseEntity {  
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receta_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Receta receta;
 
-    private Long recetaId;
-    private Long medicamentoId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "medicamento_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Medicamento medicamento;
+
+    @Column(nullable = false)
     private String dosis;
+
+    @Column(nullable = false)
     private String frecuencia;
 
-    // Getters y Setters
-    public Long getId() {
-        return id;
+    public DetalleReceta() {}
+
+    public DetalleReceta(Receta receta, Medicamento medicamento, String dosis, String frecuencia) {
+        this.receta = receta;
+        this.medicamento = medicamento;
+        this.dosis = dosis;
+        this.frecuencia = frecuencia;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Receta getReceta() {
+        return receta;
     }
 
-    public Long getRecetaId() {
-        return recetaId;
+    public void setReceta(Receta receta) {
+        this.receta = receta;
     }
 
-    public void setRecetaId(Long recetaId) {
-        this.recetaId = recetaId;
+    public Medicamento getMedicamento() {
+        return medicamento;
     }
 
-    public Long getMedicamentoId() {
-        return medicamentoId;
-    }
-
-    public void setMedicamentoId(Long medicamentoId) {
-        this.medicamentoId = medicamentoId;
+    public void setMedicamento(Medicamento medicamento) {
+        this.medicamento = medicamento;
     }
 
     public String getDosis() {

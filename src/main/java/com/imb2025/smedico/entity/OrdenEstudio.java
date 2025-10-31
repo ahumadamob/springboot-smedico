@@ -1,82 +1,71 @@
 package com.imb2025.smedico.entity;
 
+import jakarta.persistence.Entity;
+
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 
-import jakarta.persistence.*;
-
 @Entity
-public class OrdenEstudio {
+public class OrdenEstudio extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     private LocalDate fecha;
 
     @ManyToOne
-    @JoinColumn(name = "medicoId") 
+    @JoinColumn(name = "medicoId")
     private Medico medico;
 
     @ManyToOne
     @JoinColumn(name = "pacienteId")
     private Paciente paciente;
 
-    //@ManyToOne
-    //@JoinColumn(name = "estudioId")
-    //private Estudio estudio;
-    //TODO: No se encuentra desarrollado la entidad Estudio
-    
-    // Constructor 
+    @ManyToOne
+    @JoinColumn(name = "estudioId")
+    private Estudio estudio;
+
     public OrdenEstudio() {}
-    
-    
-    public OrdenEstudio(LocalDate fecha, Medico medico,Paciente paciente) {
-    	this.fecha=fecha;
-    	this.paciente=paciente;
-    	this.medico=medico;
-    	//this.estudio=estudio;
-    }
-    
-        
-    // Getters y Setters
-    public Long getId() {
-        return id;
+
+    public OrdenEstudio(LocalDate fecha, Medico medico, Paciente paciente, Estudio estudio) {
+        this.fecha = fecha;
+        this.medico = medico;
+        this.paciente = paciente;
+        this.estudio = estudio;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+ 
 
     public LocalDate getFecha() {
         return fecha;
     }
 
     public Medico getMedico() {
-		return medico;
-	}
+        return medico;
+    }
 
-	public void setMedico(Medico medico) {
-		this.medico = medico;
-	}
+    public Paciente getPaciente() {
+        return paciente;
+    }
 
-	public Paciente getPaciente() {
-		return paciente;
-	}
+    public Estudio getEstudio() {
+        return estudio;
+    }
 
-	public void setPaciente(Paciente paciente) {
-		this.paciente = paciente;
-	}
 
-	
-	/*public EstudioEntity getEstudio() {
-		return estudio;
-	}
 
-	public void setEstudio(EstudioEntity estudio) {
-		this.estudio = estudio;
-	}*/
-
-	public void setFecha(LocalDate fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
+    }
+
+    public void setMedico(Medico medico) {
+        this.medico = medico;
+    }
+
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
+    }
+
+    public void setEstudio(Estudio estudio) {
+        this.estudio = estudio;
     }
 }

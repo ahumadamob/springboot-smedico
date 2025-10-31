@@ -1,71 +1,78 @@
 package com.imb2025.smedico.service.jpa;
 
+import com.imb2025.smedico.dto.MedioPagoRequestDto;
+import com.imb2025.smedico.entity.MedioPago;
+import com.imb2025.smedico.entity.MedioPago.TipoPago;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
+import com.imb2025.smedico.repository.MedioPagoRepository;
+import com.imb2025.smedico.service.IMedioPagoService;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.imb2025.smedico.repository.FacturaRepository;
-import com.imb2025.smedico.repository.MedioPagoRepository;
-import com.imb2025.smedico.dto.MedioPagoRequestDTO;
-import com.imb2025.smedico.entity.MedioPago;
-import com.imb2025.smedico.service.IMedioPagoService;
-
 @Service
 public class MedioPagoServiceImpl implements IMedioPagoService {
-	@Autowired
-	private MedioPagoRepository repo;
-	@Autowired
-	private FacturaRepository facturaRepository;
-	@Override
-	public List<MedioPago> findAll() {
-		return repo.findAll();
-	}
-	
-	
-	@Override
-	public MedioPago findById(Long id) {
-		Optional<MedioPago> opt;
-		opt = repo.findById(id);
-		if(opt.isPresent()) {
-			return opt.get();
-		}else {
-			return null;
-		}
-	}
+        @Autowired
+        private MedioPagoRepository repo;
+
+        @Override
+        public List<MedioPago> findAll() {
+                return repo.findAll(); 
+        }
+
 
 	@Override
-	public MedioPago save(MedioPago medioPago) {
-		return repo.save(medioPago);
-	}
-	
-	@Override
-	public MedioPago update(Long id, MedioPago medioPago) {
-		if (repo.existsById(id)) {
-			medioPago.setId(id);
-            return repo.save(medioPago);
-        } else {
-            return null;
+        public MedioPago findById(Long id) {
+                	return repo.findById(id)
+                		    .orElseThrow(() -> new ResourceNotFoundException(
+                		        "Entidad no encontrada, id: " + id)); 
         }
-	}
-	
+
+   @Override
+   public boolean existsById(Long id) {
+          return repo.existsById(id);
+   }
+
+	@Override
+        public MedioPago create(MedioPago medioPago) {
+                return repo.save(medioPago);
+        }
+
+	@Override
+        public MedioPago update(Long id, MedioPago medioPago) {
+                if (repo.existsById(id)) {
+                        medioPago.setId(id);
+                        return repo.save(medioPago);
+                }
+                return repo.findById(id)//c
+            		    .orElseThrow(() -> new ResourceNotFoundException(
+            		        "No se pudo actualizar. Entidad no encontrada de id " + id)); 
+        } 
+
 	@Override
 	public void deleteById(Long id) {
 		repo.deleteById(id);
 	}
-	
-	//Capturar excepciones sin afectar el flujo de ejecuciones
-	@Override
-	public MedioPago createMedioPago (MedioPagoRequestDTO dto) { 		
-		try {
-            MedioPago medioPago = new MedioPago();
-            medioPago.setNombre(dto.getNombre());
-            medioPago.setTipo(dto.getTipo());
 
-            return repo.save(medioPago);
-		} catch (Exception e) {
-	        System.out.println("Error al crear MedioPago: " + e.getMessage());
-	        return null; 
-	    }
-	}
+    @Override
+    public MedioPago fromDto(MedioPagoRequestDto dto) {
+    	MedioPago medioPago = new MedioPago();
+    	medioPago.setNombre(dto.getNombre());
+    	medioPago.setTipo(dto.getTipo());     
+    	return medioPago; 
+    }
+    
+    //a
+    @Override
+    public List<MedioPago> findByTipo(TipoPago tipo) {
+    	return repo.findByTipo(tipo);
+    }
+
+    //a
+    @Override
+    	public Long countByNombre(String nombre) {
+    	return repo.countByNombre(nombre);
+    }
+ 
+    
 }

@@ -1,21 +1,39 @@
 package com.imb2025.smedico.service;
 
-import java.util.List;
-import org.springframework.stereotype.Service;
-
+import com.imb2025.smedico.dto.EstadoTurnoRequestDto;
 import com.imb2025.smedico.entity.EstadoTurno;
-@Service
+import com.imb2025.smedico.exception.ResourceNotFoundException;
+
+import java.util.List;
 
 public interface IEstadoTurnoService {
-	public List<EstadoTurno> findAll(); //devuelve todos los registros de la tabla de bd
 
-    public EstadoTurno findById(Long id);// Optional se utiliza para devolver el "EstadoTurno" o en caso de estar vacio "Optional.empty()", eso es para evitar un NullException 
+    // Métodos CRUD existentes
+    List<EstadoTurno> findAll();
+    EstadoTurno findById(Long id) throws ResourceNotFoundException;
+    boolean existsById(Long id);
+    EstadoTurno create(EstadoTurno estadoTurno);
+    EstadoTurno update(Long id, EstadoTurno estadoTurno) throws ResourceNotFoundException;
+    void deleteById(Long id) throws ResourceNotFoundException;
 
-    public EstadoTurno save(EstadoTurno estadoTurno); // guarda un nuevo estado de turno
+    // Mapeo
+    EstadoTurno fromDto(EstadoTurnoRequestDto dto);
 
-    public EstadoTurno update(Long id, EstadoTurno estadoTurno); // actualiza un estado segun su id
+  
+    // TP07: Métodos de Filtro y Conteo
+    
 
-   public  void deleteById(Long id); // elimina un registro
-	
+    /**
+      Filtra la lista de EstadosTurno por subcadena en el nombre 
+      @param nombreFiltro La subcadena a buscar.
+      @return Lista de EstadosTurno filtrados.
+     */
+    List<EstadoTurno> findByNombreContaining(String nombreFiltro);
 
+    /**
+      Cuenta la cantidad de EstadosTurno con un nombre específico 
+      @param nombre El nombre exacto a contar.
+      @return El número de coincidencias.
+     */
+    long countByNombre(String nombre);
 }

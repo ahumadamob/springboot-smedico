@@ -1,17 +1,21 @@
-
-
 package com.imb2025.smedico.service;
 
+import com.imb2025.smedico.entity.DetalleFactura;
 
 import java.util.List;
-import com.imb2025.smedico.entity.DetalleFactura;
 
 public interface IDetalleFacturaService {
 
-    public List<DetalleFactura> findAll();
-	public DetalleFactura findById(Long id);
-	public DetalleFactura save(DetalleFactura detalleFactura);
-	public void deleteById(Long id);
-    
+    List<DetalleFactura> findAll();
+
+    DetalleFactura findById(Long id);
+
+    DetalleFactura save(DetalleFactura detalleFactura);
+
+    void deleteById(Long id);
+
+    boolean existsById(Long id);
+
+    List<DetalleFactura> findByDescripcion(String descripcion);
+
 }
-                    

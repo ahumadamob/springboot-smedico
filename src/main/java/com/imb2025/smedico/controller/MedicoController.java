@@ -1,14 +1,22 @@
 package com.imb2025.smedico.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.imb2025.smedico.dto.MedicoRequestDTO;
 import com.imb2025.smedico.entity.Medico;
+import com.imb2025.smedico.mapper.MedicoMapper;
 import com.imb2025.smedico.service.IMedicoService;
+
+import jakarta.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import com.imb2025.smedico.dto.ApiResponseSuccessDto;
+import com.imb2025.smedico.dto.request.MedicoRequestDto;
+import com.imb2025.smedico.dto.response.MedicoResponseDto;
 
 @RestController
 @RequestMapping("/medico")
@@ -16,48 +24,96 @@ public class MedicoController {
 
     @Autowired
     private IMedicoService service;
+    
+    
 
     @GetMapping
-    public ResponseEntity<List<Medico>> findAllMedicos() {
+    public ResponseEntity<ApiResponseSuccessDto<List<MedicoResponseDto>>> findAllMedicos() {
         List<Medico> lista = service.findAll();
-        if (lista.isEmpty()) {
-            return ResponseEntity.noContent().build(); 
+        List<MedicoResponseDto> listaResponse = new ArrayList<MedicoResponseDto>();
+        MedicoMapper mapper =  new MedicoMapper();
+        
+        for (Medico m: lista) {
+        	MedicoResponseDto dto = new MedicoResponseDto();
+        	dto =  mapper.toDto(m);
+        	listaResponse.add(dto);
         }
-        return ResponseEntity.ok(lista); 
+        
+        ApiResponseSuccessDto<List<MedicoResponseDto>> resp;
+        
+
+        if (lista.isEmpty()) {
+            resp = new ApiResponseSuccessDto<>(true, "No hay médicos disponibles", listaResponse);
+            return ResponseEntity.ok(resp); 
+        } else {
+            resp = new ApiResponseSuccessDto<>(true, "Lista de médicos", listaResponse);
+            return ResponseEntity.ok(resp);
+        }
     }
 
     @GetMapping("/{idmedico}")
-    public ResponseEntity<Medico> findById(@PathVariable("idmedico") Long id) {
+    public ResponseEntity<ApiResponseSuccessDto<MedicoResponseDto>> findById(@PathVariable("idmedico") Long id) {
+    	MedicoMapper mapper =  new MedicoMapper();
         Medico medico = service.findById(id);
-        if (medico == null) {
-            return ResponseEntity.noContent().build();  
-        }
-        return ResponseEntity.ok(medico);  
+        MedicoResponseDto dto = new MedicoResponseDto();
+        dto=mapper.toDto(medico);
+        
+        ApiResponseSuccessDto<MedicoResponseDto> resp =
+                new ApiResponseSuccessDto<>(true, "Médico encontrado", dto);
+        return ResponseEntity.ok(resp);
     }
 
     @PostMapping
-    public ResponseEntity<Medico> create(@RequestBody MedicoRequestDTO dto) throws Exception {
-        Medico medico = service.fromDto(dto);
+    public ResponseEntity<ApiResponseSuccessDto<Medico>> create(@Valid @RequestBody MedicoRequestDto dto) throws Exception {
+    	MedicoMapper mapper =  new MedicoMapper();
+        Medico medico = mapper.fromDto(dto);
         Medico creado = service.create(medico);
-        return ResponseEntity.ok(creado); 
+        ApiResponseSuccessDto<Medico> resp =
+                new ApiResponseSuccessDto<>(true, "Médico creado correctamente", creado);
+        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 
     @PutMapping("/{idmedico}")
-    public ResponseEntity<Medico> update(@PathVariable("idmedico") Long id, @RequestBody MedicoRequestDTO dto) throws Exception {
-        Medico medico = service.fromDto(dto);
+    public ResponseEntity<ApiResponseSuccessDto<Medico>> update(@PathVariable("idmedico") Long id,
+    		@Valid @RequestBody MedicoRequestDto dto) throws Exception {
+    	MedicoMapper mapper =  new MedicoMapper();
+        Medico medico = mapper.fromDto(dto);
+        medico.setId(id);
         Medico actualizado = service.update(id, medico);
-        return ResponseEntity.ok(actualizado); 
+        ApiResponseSuccessDto<Medico> resp =
+                new ApiResponseSuccessDto<>(true, "Médico actualizado correctamente", actualizado);
+        return ResponseEntity.ok(resp);
     }
 
     @DeleteMapping("/{idmedico}")
-    public ResponseEntity<String> delete(@PathVariable("idmedico") Long id) {
+    public ResponseEntity<ApiResponseSuccessDto<String>> delete(@PathVariable("idmedico") Long id) {
         service.deleteById(id);
-        return ResponseEntity.ok("Médico con ID " + id + " eliminado correctamente."); 
+        ApiResponseSuccessDto<String> resp =
+                new ApiResponseSuccessDto<>(true, "Médico eliminado correctamente", "Id: " + id);
+        return ResponseEntity.ok(resp);
+    }
+    
+ 
+    @GetMapping("/apellido/{apellido}")
+    public ResponseEntity<ApiResponseSuccessDto<List<Medico>>> findByApellido(
+            @PathVariable String apellido) {
+        List<Medico> lista = service.findByApellido(apellido);
+        ApiResponseSuccessDto<List<Medico>> resp =
+                new ApiResponseSuccessDto<>(true, "Médicos con apellido: " + apellido, lista);
+        return ResponseEntity.ok(resp);
     }
 
-  
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGlobalExceptions(Exception ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+
+    @GetMapping("/count/especialidad/{nombre}")
+    public ResponseEntity<ApiResponseSuccessDto<Long>> countByEspecialidad(
+            @PathVariable("nombre") String nombreEspecialidad) {
+        Long cantidad = service.countByEspecialidad(nombreEspecialidad);
+        ApiResponseSuccessDto<Long> resp =
+                new ApiResponseSuccessDto<>(true, "Cantidad de médicos en la especialidad: " + nombreEspecialidad, cantidad);
+        return ResponseEntity.ok(resp);
     }
+
+
+  
+   
 }
