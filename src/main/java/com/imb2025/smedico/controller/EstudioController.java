@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.imb2025.smedico.dto.EstudioResponseDto;
 import com.imb2025.smedico.dto.request.EstudioRequestDto;
+import com.imb2025.smedico.dto.response.EstudioResponseDto;
 import com.imb2025.smedico.entity.Estudio;
 import com.imb2025.smedico.mapper.EstudioMapper;
 import com.imb2025.smedico.service.IEstudioService;

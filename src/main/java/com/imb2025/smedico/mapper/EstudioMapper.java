@@ -2,8 +2,8 @@ package com.imb2025.smedico.mapper;
 
 import org.springframework.stereotype.Component;
 
-import com.imb2025.smedico.dto.EstudioResponseDto;
 import com.imb2025.smedico.dto.request.EstudioRequestDto;
+import com.imb2025.smedico.dto.response.EstudioResponseDto;
 import com.imb2025.smedico.entity.Especialidad;
 import com.imb2025.smedico.entity.Estudio;
 import com.imb2025.smedico.entity.ResultadoEstudio;
