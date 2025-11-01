@@ -2,7 +2,8 @@ package com.imb2025.smedico.service.jpa;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.imb2025.smedico.dto.ConsultaRequestDto;
+import com.imb2025.smedico.dto.mapper.ConsultaMapper;
+import com.imb2025.smedico.dto.request.ConsultaRequestDto;
 import com.imb2025.smedico.entity.Consulta;
 import com.imb2025.smedico.entity.Turno;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
@@ -51,53 +52,46 @@ public class ConsultaServiceImpl implements IConsultaService {
     public ConsultaServiceImpl(ConsultaRepository consultaRepository) {
         this.consultaRepository = consultaRepository;
     }
-    @Override   
+    @Override
     @Transactional
     public Consulta createFromDto(ConsultaRequestDto dto) {
-        // 1) Validar Turno existente
         Turno turno = turnoRepository.findById(dto.getTurnoId())
-                .orElseThrow(() -> new ResourceNotFoundException("Turno no encontrado con id " + dto.getTurnoId()));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Turno no encontrado con id " + dto.getTurnoId()));
 
-        // 2) Regla: un Turno solo puede estar asociado a una Consulta
-        if (repository.existsByTurno_Id(dto.getTurnoId())) {
-            // Podés mapear esta excepción a 422 en tu GlobalExceptionHandler
+        if (consultaRepository.existsByTurno_Id(dto.getTurnoId())) {
             throw new IllegalArgumentException("El turno ya está asignado a otra consulta");
         }
 
-        // 3) Mapear y persistir
-        Consulta c = new Consulta();
-        c.setFecha(dto.getFecha());
-        c.setTurno(turno);
-        c.setDuracionMin(dto.getDuracionMin());
-        c.setComentarios(dto.getComentarios());
-
-        return repository.save(c);
+        Consulta nueva = ConsultaMapper.fromDto(dto, turno);
+        return consultaRepository.save(nueva);
     }
     @Override
     @Transactional
     public Consulta updateFromDto(Long id, ConsultaRequestDto dto) {
-        // 1) Existe la consulta
-        Consulta existente = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Consulta no encontrada con id " + id));
+        // 1) Verificar existencia de la consulta
+        Consulta existente = consultaRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Consulta no encontrada con id " + id));
 
-        // 2) Validar Turno
+        // 2) Validar Turno destino
         Turno turno = turnoRepository.findById(dto.getTurnoId())
-                .orElseThrow(() -> new ResourceNotFoundException("Turno no encontrado con id " + dto.getTurnoId()));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Turno no encontrado con id " + dto.getTurnoId()));
 
-        // 3) Unicidad de turno (permitir si es la misma consulta)
-        if (repository.existsByTurno_IdAndIdNot(dto.getTurnoId(), id)) {
-            // tu consigna usa 409 para conflictos:
+        // 3) Unicidad: un Turno solo puede estar ligado a una Consulta (excepto la propia)
+        if (consultaRepository.existsByTurno_IdAndIdNot(dto.getTurnoId(), id)) {
             throw new IllegalArgumentException("El turno ya está asignado a otra consulta");
         }
 
-        // 4) Mapear cambios
+        // 4) Mapear cambios (solo campos originales)
         existente.setFecha(dto.getFecha());
         existente.setDuracionMin(dto.getDuracionMin());
         existente.setComentarios(dto.getComentarios());
         existente.setTurno(turno);
 
-        // 5) Persistir
-        return repository.save(existente);
+        // 5) Guardar
+        return consultaRepository.save(existente);
     }
 
 
