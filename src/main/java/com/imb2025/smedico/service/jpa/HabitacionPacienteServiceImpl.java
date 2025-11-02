@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.imb2025.smedico.dto.HabitacionPacienteRequestDTO;
+import com.imb2025.smedico.dto.request.HabitacionPacienteRequestDTO;
 import com.imb2025.smedico.entity.HabitacionPaciente;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.HabitacionPacienteRepository;
