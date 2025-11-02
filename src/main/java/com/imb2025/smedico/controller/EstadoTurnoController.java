@@ -1,8 +1,8 @@
 package com.imb2025.smedico.controller;
 
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
-import com.imb2025.smedico.mapper.EstadoTurnoMapper;
-import com.imb2025.smedico.dto.response.EstadoTurnoResponseDto;
+import com.imb2025.smedico.mapper.EstadoTurnoMapper; 
+import com.imb2025.smedico.dto.response.EstadoTurnoResponseDto; 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,10 +33,12 @@ public class EstadoTurnoController {
     // ------------------------------------------------------------------
     // TP07: Endpoint para Filtrar (findBy...) - Devuelve Response DTO
     // ------------------------------------------------------------------
+
     @GetMapping(params = {"filtro", "!count"}) 
     public ResponseEntity<ApiResponseSuccessDto<List<EstadoTurnoResponseDto>>> findByFiltro(@RequestParam(name = "filtro") String filtro) {
         List<EstadoTurno> estados = estadoTurnoService.findByNombreContaining(filtro);
 
+        // TP08: Convierte las entidades a Response DTOs
         List<EstadoTurnoResponseDto> dtos = estados.stream()
                 .map(mapper::toResponseDto) 
                 .collect(Collectors.toList());
@@ -72,6 +74,7 @@ public class EstadoTurnoController {
     public ResponseEntity<ApiResponseSuccessDto<List<EstadoTurnoResponseDto>>> getAll() {
         List<EstadoTurno> estados = estadoTurnoService.findAll();
 
+        // TP08: Convierte la lista de entidades a lista de Response DTOs
         List<EstadoTurnoResponseDto> dtos = estados.stream()
                 .map(mapper::toResponseDto) 
                 .toList();
@@ -87,6 +90,7 @@ public class EstadoTurnoController {
     public ResponseEntity<ApiResponseSuccessDto<EstadoTurnoResponseDto>> getById(@PathVariable Long id) {
         EstadoTurno estadoTurno = estadoTurnoService.findById(id);
 
+        // TP08: Convierte la entidad a Response DTO
         EstadoTurnoResponseDto dto = mapper.toResponseDto(estadoTurno);
         
         ApiResponseSuccessDto<EstadoTurnoResponseDto> response = new ApiResponseSuccessDto<>(
@@ -134,14 +138,14 @@ public class EstadoTurnoController {
         
         // Asignamos la versión del DTO a la entidad para que JPA la chequee en el update
         if (dto.getVersion() != null) {
-            // CORRECCIÓN: Convertimos el Integer (del DTO) a Long, ya que BaseEntity usa Long
+            // CORRECCIÓN FINAL: Aseguramos que la versión se pase como Long (BaseEntity)
             entidad.setVersion(dto.getVersion().longValue()); 
         }
 
         // 3. Persistencia
         EstadoTurno actualizado = estadoTurnoService.update(id, entidad);
 
-        // 4. NUEVO: DTO de respuesta usando el Mapper (incluye la nueva Version)
+        // 4. DTO de respuesta usando el Mapper (incluye la nueva Version)
         EstadoTurnoResponseDto responseDto = mapper.toResponseDto(actualizado);
 
         ApiResponseSuccessDto<EstadoTurnoResponseDto> response =
@@ -172,7 +176,7 @@ public class EstadoTurnoController {
                             null
                     ));
         } catch (Exception e) {
-            // Fallback genérico 
+            // Fallback genérico 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                    .body(new ApiResponseSuccessDto<>(
                            false, 

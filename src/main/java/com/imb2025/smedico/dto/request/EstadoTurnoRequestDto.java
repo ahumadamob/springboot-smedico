@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 public class EstadoTurnoRequestDto {
 	
     private Long id;
-    private Integer version; // NUEVO: Campo para control de concurrencia
+    private Long version; // CORREGIDO: De Integer a Long para coincidir con BaseEntity
 
     // Validaciones del tp 05
     @NotBlank(message = "El nombre no puede estar vacío")
@@ -28,10 +28,10 @@ public class EstadoTurnoRequestDto {
         this.nombre = nombre;
     }
     
-    public EstadoTurnoRequestDto(Long id, String nombre, Integer version) {
+    public EstadoTurnoRequestDto(Long id, String nombre, Long version) { // Constructor corregido
         this.id = id;
         this.nombre = nombre;
-        this.version = version; // Constructor con version para mapeo interno
+        this.version = version;
     }
 
     // --- Getters ---
@@ -39,7 +39,7 @@ public class EstadoTurnoRequestDto {
         return id;
     }
     
-    public Integer getVersion() { // ¡MÉTODO AÑADIDO PARA RESOLVER EL ERROR!
+    public Long getVersion() { // Getter corregido
         return version;
     }
     
@@ -52,7 +52,7 @@ public class EstadoTurnoRequestDto {
         this.id = id;
     }
     
-    public void setVersion(Integer version) { // Setter para deserialización
+    public void setVersion(Long version) { // Setter corregido
         this.version = version;
     }
     

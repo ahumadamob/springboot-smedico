@@ -2,29 +2,14 @@ package com.imb2025.smedico.repository;
 
 import com.imb2025.smedico.entity.EstadoTurno;
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.List;
 import java.util.Optional;
 
 public interface EstadoTurnoRepository extends JpaRepository<EstadoTurno, Long> {
 
     // -------------------------------------------------------------------------
-    // EJERCICIO 1: Métodos Mágicos de Filtro Booleano (esFinal)
+    // EJERCICIO 1: Métodos Mágicos de Filtro Booleano (esFinal) - ELIMINADOS
     // -------------------------------------------------------------------------
-
-    /**
-     * Busca y devuelve todos los EstadosTurno donde el atributo esFinal es TRUE.
-     * Esto se usará para el endpoint /finales.
-     * @return Una lista de EstadosTurno donde esFinal = TRUE.
-     */
-    List<EstadoTurno> findByEsFinalTrue();
-
-    /**
-     * Busca y devuelve todos los EstadosTurno donde el atributo esFinal es FALSE.
-     * Esto se usará para el endpoint /pendientes.
-     * @return Una lista de EstadosTurno donde esFinal = FALSE.
-     */
-    List<EstadoTurno> findByEsFinalFalse();
 
     // -------------------------------------------------------------------------
     // TP07: Métodos Mágicos de Filtro General y Conteo

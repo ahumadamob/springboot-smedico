@@ -4,14 +4,13 @@ import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.mapper.EstadoTurnoMapper; // Importamos el Mapper
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.imb2025.smedico.dto.request.EstadoTurnoRequestDto;
 import com.imb2025.smedico.entity.EstadoTurno;
 import com.imb2025.smedico.repository.EstadoTurnoRepository;
 import com.imb2025.smedico.service.IEstadoTurnoService;
+import com.imb2025.smedico.dto.request.EstadoTurnoRequestDto;
 
 @Service
 public class EstadoTurnoServiceImpl implements IEstadoTurnoService {
@@ -45,22 +44,6 @@ public class EstadoTurnoServiceImpl implements IEstadoTurnoService {
     }
     
     // ------------------------------------------------------------------
-    // EJERCICIO 1: Implementación de Filtros Booleanos
-    // ------------------------------------------------------------------
-
-    @Override
-    public List<EstadoTurno> findFinales() {
-        // Llama al Query Method mágico: findByEsFinalTrue()
-        return estadoTurnoRepository.findByEsFinalTrue();
-    }
-
-    @Override
-    public List<EstadoTurno> findPendientes() {
-        // Llama al Query Method mágico: findByEsFinalFalse()
-        return estadoTurnoRepository.findByEsFinalFalse();
-    }
-    
-    // ------------------------------------------------------------------
     // Métodos CRUD
     // ------------------------------------------------------------------
 
@@ -77,9 +60,9 @@ public class EstadoTurnoServiceImpl implements IEstadoTurnoService {
         return estadoTurnoRepository.existsById(id);
     }
 
-    // TP08: El controlador usa mapper.toEntity(dto) y luego llama a create(entidad)
     @Override
     public EstadoTurno create(EstadoTurno estadoTurno) {
+        // La entidad ya fue convertida de DTO en el Controlador
         return estadoTurnoRepository.save(estadoTurno);
     }
 
@@ -88,18 +71,16 @@ public class EstadoTurnoServiceImpl implements IEstadoTurnoService {
         // 1. Verifica la existencia
         EstadoTurno existente = findById(id);
         
-        // 2. Control de Concurrencia (Asigna la versión que el Controller envió desde el DTO)
+        // 2. Control de Concurrencia (Asigna la versión y los campos que el Controller envió)
         if (estadoTurno.getVersion() != null) {
-            existente.setVersion(estadoTurno.getVersion());
+            // Usa setVersion, que espera Long (de BaseEntity)
+            existente.setVersion(estadoTurno.getVersion()); 
         }
         
         // 3. Asigna los campos de negocio
         existente.setNombre(estadoTurno.getNombre());
-        if (estadoTurno.getEsFinal() != null) {
-            existente.setEsFinal(estadoTurno.getEsFinal());
-        }
         
-        // La Entidad hereda id, createdAt, updatedAt, version.
+        // 4. Se guarda (JPA verifica la versión)
         return estadoTurnoRepository.save(existente);
     }
 
@@ -109,15 +90,6 @@ public class EstadoTurnoServiceImpl implements IEstadoTurnoService {
         findById(id); 
         estadoTurnoRepository.deleteById(id);
     }
-
-    // ELIMINADO: Se elimina fromDto ya que la responsabilidad de mapeo es del Mapper (TP08)
-    // Se comenta ya que la interfaz ya no lo tiene (pasos anteriores)
-    /*
-    @Override
-    public EstadoTurno fromDto(EstadoTurnoRequestDto dto) {
-        // La implementación ha sido movida a EstadoTurnoMapper.toEntity
-        // Si la interfaz todavía tuviera fromDto, aquí se lanzaría una UnsupportedOperationException
-        return mapper.toEntity(dto);
-    }
-    */
+    
+    // ELIMINADO: Se elimina el método fromDto, ya que no existe en la interfaz.
 }
