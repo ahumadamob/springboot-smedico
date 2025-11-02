@@ -1,17 +1,17 @@
 package com.imb2025.smedico.controller;
 
-import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.DiagnosticoRequestDto;
 import com.imb2025.smedico.entity.Diagnostico;
 import com.imb2025.smedico.service.IDiagnosticoService;
 
 import jakarta.validation.Valid;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 @Validated
@@ -26,64 +26,73 @@ public class DiagnosticoController {
         this.service = service;
     }
 
-    // GET /diagnosticos
+    // GET /diagnosticos → lista todos
     @GetMapping
-    public ResponseEntity<ApiResponseSuccessDto<List<Diagnostico>>> getAll() {
+    public ResponseEntity<List<Diagnostico>> getAll() {
         List<Diagnostico> data = service.findAll();
-
         if (data.isEmpty()) {
-            // Si tu profe quiere 204 para lista vacía, descomenta esta línea:
-            // return ResponseEntity.noContent().build();
+            return ResponseEntity.noContent().build(); // 204 si no hay registros
         }
-
-        ApiResponseSuccessDto<List<Diagnostico>> resp =
-                new ApiResponseSuccessDto<>(true, "Listado de diagnósticos", data);
-        return ResponseEntity.ok(resp);
+        return ResponseEntity.ok(data); // 200 OK con la lista
     }
 
-    // GET /diagnosticos/{id}
+    // GET /diagnosticos/{id} → busca por id
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<Diagnostico>> getById(@PathVariable Long id) {
+    public ResponseEntity<Diagnostico> getById(@PathVariable Long id) {
         Diagnostico data = service.findById(id);
-        ApiResponseSuccessDto<Diagnostico> resp =
-                new ApiResponseSuccessDto<>(true, "Diagnóstico encontrado", data);
-        return ResponseEntity.ok(resp);
+        if (data == null) {
+            return ResponseEntity.notFound().build(); // 404 si no existe
+        }
+        return ResponseEntity.ok(data); // 200 OK con el diagnóstico
     }
 
-    // POST /diagnosticos
+    // POST /diagnosticos → crea uno nuevo
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<Diagnostico>> create(@Valid @RequestBody DiagnosticoRequestDto dto) {
+    public ResponseEntity<Diagnostico> create(@Valid @RequestBody DiagnosticoRequestDto dto) {
         Diagnostico nuevo = service.fromDto(dto);
         Diagnostico guardado = service.create(nuevo);
-
-        ApiResponseSuccessDto<Diagnostico> resp =
-                new ApiResponseSuccessDto<>(true, "Diagnóstico creado correctamente", guardado);
-
-        // Location: /diagnosticos/{id}
-        URI location = URI.create("/diagnosticos/" + guardado.getId());
-        return ResponseEntity.created(location).body(resp); // 201
+        return ResponseEntity.status(HttpStatus.CREATED).body(guardado); // 201 Created
     }
 
-    // PUT /diagnosticos/{id}
+    // PUT /diagnosticos/{id} → actualiza un diagnóstico
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<Diagnostico>> update(
-            @PathVariable Long id, @Valid @RequestBody DiagnosticoRequestDto dto) {
+    public ResponseEntity<Diagnostico> update(
+            @PathVariable Long id,
+            @Valid @RequestBody DiagnosticoRequestDto dto) {
 
-        Diagnostico toUpdate = service.fromDto(dto);
-        Diagnostico actualizado = service.update(id, toUpdate);
-
-        ApiResponseSuccessDto<Diagnostico> resp =
-                new ApiResponseSuccessDto<>(true, "Diagnóstico actualizado correctamente", actualizado);
-        return ResponseEntity.ok(resp); // 200
+        Diagnostico actualizado = service.update(id, service.fromDto(dto));
+        if (actualizado == null) {
+            return ResponseEntity.notFound().build(); // 404 si no existe
+        }
+        return ResponseEntity.ok(actualizado); // 200 OK con el actualizado
     }
 
-    // DELETE /diagnosticos/{id}
+    // DELETE /diagnosticos/{id} → elimina por id
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<Void>> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.deleteById(id);
-        ApiResponseSuccessDto<Void> resp =
-                new ApiResponseSuccessDto<>(true, "Diagnóstico eliminado correctamente", null);
-        return ResponseEntity.ok(resp); // 200
+        return ResponseEntity.noContent().build(); // 204 sin contenido
+    }
+
+
+    // GET /diagnosticos/find/{fecha} → busca diagnósticos por fecha
+    @GetMapping("/find/{fecha}")
+    public ResponseEntity<List<Diagnostico>> getDiagnosticosPorFecha(
+            @PathVariable("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
+
+        List<Diagnostico> lista = service.findByFechaDiagnostico(fecha);
+        if (lista.isEmpty()) {
+            return ResponseEntity.noContent().build(); // 204 si no hay
+        }
+        return ResponseEntity.ok(lista);
+    }
+
+    // GET /diagnosticos/count/{fecha} → cuenta diagnósticos por fecha
+    @GetMapping("/count/{fecha}")
+    public ResponseEntity<Long> countDiagnosticosPorFecha(
+            @PathVariable("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
+
+        long cantidad = service.countByFechaDiagnostico(fecha);
+        return ResponseEntity.ok(cantidad); // 200 OK con el número
     }
 }
-

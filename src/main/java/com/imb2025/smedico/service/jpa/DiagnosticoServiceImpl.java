@@ -9,6 +9,7 @@ import com.imb2025.smedico.service.IDiagnosticoService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -71,4 +72,15 @@ public class DiagnosticoServiceImpl implements IDiagnosticoService {
         d.setFechaDiagnostico(dto.getFechaDiagnostico());
         return d;
     }
+    
+    @Override
+    public List<Diagnostico> findByFechaDiagnostico(LocalDate fechaDiagnostico) {
+        return repo.findByFechaDiagnostico(fechaDiagnostico);
+    }
+
+    @Override
+    public long countByFechaDiagnostico(LocalDate fechaDiagnostico) {
+        return repo.countByFechaDiagnostico(fechaDiagnostico);
+    }
+
 }
