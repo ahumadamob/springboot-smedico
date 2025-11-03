@@ -4,14 +4,15 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.imb2025.smedico.exception.ResourceNotFoundException;
-import com.imb2025.smedico.dto.HistorialPacienteRequestDto;
+
+import com.imb2025.smedico.dto.request.HistorialPacienteRequestDto;
 import com.imb2025.smedico.entity.HistorialPaciente;
 import com.imb2025.smedico.entity.Paciente;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
+import com.imb2025.smedico.dto.mapper.HistorialPacienteMapper;
 import com.imb2025.smedico.repository.HistorialPacienteRepository;
 import com.imb2025.smedico.repository.PacienteRepository;
 import com.imb2025.smedico.service.IHistorialPacienteService;
-
 
 @Service
 public class HistorialPacienteServiceImpl implements IHistorialPacienteService {
@@ -30,10 +31,9 @@ public class HistorialPacienteServiceImpl implements IHistorialPacienteService {
     @Override
     public HistorialPaciente findById(Long id) {
         return repo.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException(
-                "HistorialPaciente no encontrado con id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("HistorialPaciente no encontrado con id " + id));
     }
-    
+
     @Override
     public List<HistorialPaciente> findByEvento(String evento) {
         return repo.findByEvento(evento);
@@ -53,40 +53,32 @@ public class HistorialPacienteServiceImpl implements IHistorialPacienteService {
     }
 
     @Override
-    public HistorialPaciente create(HistorialPaciente historial) {
-        System.out.println("Guardando historial: " + historial);
+    public HistorialPaciente create(HistorialPacienteRequestDto dto) {
+        Paciente paciente = repoPaciente.findById(dto.getPacienteId())
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente no encontrado " + dto.getPacienteId()));
+
+        HistorialPaciente historial = HistorialPacienteMapper.fromDto(dto, paciente);
         return repo.save(historial);
     }
 
     @Override
-    public HistorialPaciente update(Long id, HistorialPaciente historial) {
+    public HistorialPaciente update(Long id, HistorialPacienteRequestDto dto) {
         HistorialPaciente existente = repo.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("No existe el historial con ID " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("No existe el historial con ID " + id));
 
-        existente.setEvento(historial.getEvento());
-        existente.setFecha(historial.getFecha());
-        existente.setObservacion(historial.getObservacion());
-        existente.setPaciente(historial.getPaciente());
+        Paciente paciente = repoPaciente.findById(dto.getPacienteId())
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente no encontrado " + dto.getPacienteId()));
+
+        existente.setEvento(dto.getEvento());
+        existente.setFecha(dto.getFecha());
+        existente.setObservacion(dto.getObservacion());
+        existente.setPaciente(paciente);
 
         return repo.save(existente);
     }
-
-    @Override
-    public HistorialPaciente fromDto(HistorialPacienteRequestDto dto) {
-        Paciente paciente = repoPaciente.findById(dto.getPacienteId())
-            .orElseThrow(() -> new ResourceNotFoundException("Paciente no encontrado " + dto.getPacienteId()));
-        HistorialPaciente historial = new HistorialPaciente();
-
-        historial.setEvento(dto.getEvento());
-        historial.setFecha(dto.getFecha());
-        historial.setObservacion(dto.getObservacion());
-        historial.setPaciente(paciente);
-        return historial;
-    }
-
     @Override
     public boolean existsById(Long id) {
         return repo.existsById(id);
     }
-}
 
+}

@@ -1,19 +1,26 @@
 package com.imb2025.smedico.service;
 
-import com.imb2025.smedico.dto.HistorialPacienteRequestDto;
+import com.imb2025.smedico.dto.request.HistorialPacienteRequestDto;
 import com.imb2025.smedico.entity.HistorialPaciente;
+
+import java.time.LocalDate;
 import java.util.List;
 
 public interface IHistorialPacienteService {
-    public List<HistorialPaciente> findAll();
-    public HistorialPaciente create(HistorialPaciente historialPaciente);
-    public HistorialPaciente update(Long id, HistorialPaciente historialPaciente);
-    public HistorialPaciente findById(Long id);
-    public boolean existsById(Long id);
-    public void deleteById(Long id);
-    public HistorialPaciente fromDto(HistorialPacienteRequestDto historialPacienteRequestDto);
+
+    List<HistorialPaciente> findAll();
     
- // Nuevos métodos mágicos
+    HistorialPaciente create(HistorialPacienteRequestDto dto);
+    
+    HistorialPaciente update(Long id, HistorialPacienteRequestDto dto);
+    
+    HistorialPaciente findById(Long id);
+    
+    boolean existsById(Long id);
+    
+    void deleteById(Long id);
+
     List<HistorialPaciente> findByEvento(String evento);
-    Long countByFecha(java.time.LocalDate fecha);
+    
+    Long countByFecha(LocalDate fecha);
 }

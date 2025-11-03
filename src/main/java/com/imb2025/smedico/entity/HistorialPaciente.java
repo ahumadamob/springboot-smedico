@@ -14,17 +14,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
-public class HistorialPaciente {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class HistorialPaciente extends HistorialPacienteBaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "pacienteId", nullable = false)
     @JsonIgnore
     private Paciente paciente;
     
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 255)
     private String evento;
     
     @Column(nullable = false)
@@ -35,8 +32,7 @@ public class HistorialPaciente {
 
     public HistorialPaciente() {}
 
-    public HistorialPaciente(Long id, String evento, LocalDate fecha, String observacion, Paciente paciente) {
-        this.id = id;
+    public HistorialPaciente(String evento, LocalDate fecha, String observacion, Paciente paciente) {
         this.evento = evento;
         this.fecha = fecha;
         this.observacion = observacion;
@@ -48,13 +44,6 @@ public class HistorialPaciente {
         return paciente != null ? paciente.getId() : null;
     }
 
-
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
     public Paciente getPaciente() {
         return paciente;
     }
