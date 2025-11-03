@@ -1,34 +1,29 @@
 package com.imb2025.smedico.entity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.util.List;
 
+// Extiende de BaseEntity para heredar id, version, createdAt, updatedAt
 @Entity
-public class EstadoTurno {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class EstadoTurno extends BaseEntity { 
+    
     private String nombre;
+    
+    // Se elimina el campo 'esFinal' del Ejercicio 1.
 
     @OneToMany(mappedBy = "estadoTurno")
     private List<Turno> turnos;
 
     public EstadoTurno() {}
 
-    public EstadoTurno(Long id, String nombre, List<Turno> turnos) {
-        this.id = id;
+    // Constructor sin campos heredados
+    public EstadoTurno(String nombre, List<Turno> turnos) {
         this.nombre = nombre;
         this.turnos = turnos;
     }
-
-    public Long getId() {
-        return id;
-    }
-
+    
+    // --- Getters específicos ---
     public String getNombre() {
         return nombre;
     }
@@ -37,10 +32,7 @@ public class EstadoTurno {
         return turnos;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
+    // --- Setters específicos ---
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }

@@ -1,24 +1,27 @@
 package com.imb2025.smedico.service.jpa;
 
 import com.imb2025.smedico.exception.ResourceNotFoundException;
+import com.imb2025.smedico.mapper.EstadoTurnoMapper; // Importamos el Mapper
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.imb2025.smedico.dto.EstadoTurnoRequestDto;
 import com.imb2025.smedico.entity.EstadoTurno;
 import com.imb2025.smedico.repository.EstadoTurnoRepository;
 import com.imb2025.smedico.service.IEstadoTurnoService;
+import com.imb2025.smedico.dto.request.EstadoTurnoRequestDto;
 
 @Service
 public class EstadoTurnoServiceImpl implements IEstadoTurnoService {
 
     private final EstadoTurnoRepository estadoTurnoRepository;
+    private final EstadoTurnoMapper mapper; 
 
-    public EstadoTurnoServiceImpl(EstadoTurnoRepository estadoTurnoRepository) {
+    // Constructor con inyección de dependencias
+    public EstadoTurnoServiceImpl(EstadoTurnoRepository estadoTurnoRepository, EstadoTurnoMapper mapper) {
         this.estadoTurnoRepository = estadoTurnoRepository;
+        this.mapper = mapper;
     }
 
     @Override
@@ -32,16 +35,16 @@ public class EstadoTurnoServiceImpl implements IEstadoTurnoService {
 
     @Override
     public List<EstadoTurno> findByNombreContaining(String filtro) {
-        // Delega la llamada al Query Method del Repository (case-insensitive)
         return estadoTurnoRepository.findByNombreContainingIgnoreCase(filtro);
     }
 
     @Override
     public long countByNombre(String nombre) {
-        // Delega la llamada al Query Method del Repository (case-insensitive)
         return estadoTurnoRepository.countByNombreIgnoreCase(nombre);
     }
     
+    // ------------------------------------------------------------------
+    // Métodos CRUD
     // ------------------------------------------------------------------
 
     @Override
@@ -59,40 +62,34 @@ public class EstadoTurnoServiceImpl implements IEstadoTurnoService {
 
     @Override
     public EstadoTurno create(EstadoTurno estadoTurno) {
+        // La entidad ya fue convertida de DTO en el Controlador
         return estadoTurnoRepository.save(estadoTurno);
     }
 
     @Override
     public EstadoTurno update(Long id, EstadoTurno estadoTurno) {
-        Optional<EstadoTurno> existente = estadoTurnoRepository.findById(id);
-        if (existente.isPresent()) {
-            EstadoTurno actualizado = existente.get();
-            actualizado.setNombre(estadoTurno.getNombre());
-            return estadoTurnoRepository.save(actualizado);
+        // 1. Verifica la existencia
+        EstadoTurno existente = findById(id);
+        
+        // 2. Control de Concurrencia (Asigna la versión y los campos que el Controller envió)
+        if (estadoTurno.getVersion() != null) {
+            // Usa setVersion, que espera Long (de BaseEntity)
+            existente.setVersion(estadoTurno.getVersion()); 
         }
-        // Cambio aquí: Usamos ResourceNotFoundException en lugar de RuntimeException
-        throw new ResourceNotFoundException("EstadoTurno con id " + id + " no existe");
+        
+        // 3. Asigna los campos de negocio
+        existente.setNombre(estadoTurno.getNombre());
+        
+        // 4. Se guarda (JPA verifica la versión)
+        return estadoTurnoRepository.save(existente);
     }
 
     @Override
     public void deleteById(Long id) {
-        // Cambio aquí: Primero verificamos si existe y lanzamos la excepción si no lo hace
-        if (!estadoTurnoRepository.existsById(id)) {
-            throw new ResourceNotFoundException("EstadoTurno con id " + id + " no existe y no puede ser eliminado");
-        }
+        // Utilizamos findById para delegar el chequeo de existencia y la excepción
+        findById(id); 
         estadoTurnoRepository.deleteById(id);
     }
-
-    @Override
-    public EstadoTurno fromDto(EstadoTurnoRequestDto dto) {
-        EstadoTurno estadoTurno = new EstadoTurno();
-        
-        // Si el DTO tiene ID (para una actualización o referencia), lo establecemos
-        if (dto.getId() != null) {
-            estadoTurno.setId(dto.getId()); 
-        }
-        
-        estadoTurno.setNombre(dto.getNombre());
-        return estadoTurno;
-    }
+    
+    // ELIMINADO: Se elimina el método fromDto, ya que no existe en la interfaz.
 }
