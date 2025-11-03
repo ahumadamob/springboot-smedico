@@ -2,9 +2,11 @@ package com.imb2025.smedico.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "diagnostico")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Diagnostico {
 
     @Id
