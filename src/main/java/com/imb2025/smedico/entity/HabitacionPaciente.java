@@ -1,116 +1,63 @@
 package com.imb2025.smedico.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "habitacion_paciente")
-public class HabitacionPaciente {
+@Table(name = "habitaciones_paciente")
+public class HabitacionPaciente extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @NotNull(message = "El número de habitación no puede ser nulo")
-    @Min(value = 1, message = "El número de habitación debe ser mayor a 0")
-    @Column(name = "numero_habitacion", nullable = false)
-    private Integer numeroHabitacion;
-
-    @NotNull(message = "El piso no puede ser nulo")
-    @Column(nullable = false)
-    private Integer piso;
-
-    @NotBlank(message = "El sector no puede estar vacío")
-    @Size(min = 2, max = 50, message = "El sector debe tener entre 2 y 50 caracteres")
-    @Column(nullable = false, length = 50)
     private String sector;
+    private Integer numero;
+    private String estado;
+    private Integer cantidadCamas;
 
-    @NotNull(message = "Debe especificarse la cantidad de camas disponibles")
-    @Min(value = 0, message = "La cantidad de camas no puede ser negativa")
-    @Column(name = "camas_disponibles", nullable = false)
-    private Integer camasDisponibles;
-
-    @Size(max = 200, message = "La descripción puede tener hasta 200 caracteres")
-    @Column(length = 200)
-    private String descripcion;
-
-    //  Versión para control de concurrencia optimista (opcional, pero recomendable)
-    @Version
-    private Integer version;
-
-    //  Constructores
     public HabitacionPaciente() {}
 
-    public HabitacionPaciente(Integer numeroHabitacion, Integer piso, String sector,
-                              Integer camasDisponibles, String descripcion) {
-        this.numeroHabitacion = numeroHabitacion;
-        this.piso = piso;
+    public HabitacionPaciente(String sector, Integer numero, String estado, Integer cantidadCamas) {
         this.sector = sector;
-        this.camasDisponibles = camasDisponibles;
-        this.descripcion = descripcion;
+        this.numero = numero;
+        this.estado = estado;
+        this.cantidadCamas = cantidadCamas;
     }
 
-    public HabitacionPaciente(Long id, Integer numeroHabitacion, Integer piso, String sector,
-                              Integer camasDisponibles, String descripcion, Integer version) {
-        this.id = id;
-        this.numeroHabitacion = numeroHabitacion;
-        this.piso = piso;
-        this.sector = sector;
-        this.camasDisponibles = camasDisponibles;
-        this.descripcion = descripcion;
-        this.version = version;
-    }
-
-    //  Getters y Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public Integer getNumeroHabitacion() { return numeroHabitacion; }
-    public void setNumeroHabitacion(Integer numeroHabitacion) { this.numeroHabitacion = numeroHabitacion; }
-
-    public Integer getPiso() { return piso; }
-    public void setPiso(Integer piso) { this.piso = piso; }
-
+    // Getters y Setters
     public String getSector() { return sector; }
     public void setSector(String sector) { this.sector = sector; }
 
-    public Integer getCamasDisponibles() { return camasDisponibles; }
-    public void setCamasDisponibles(Integer camasDisponibles) { this.camasDisponibles = camasDisponibles; }
+    public Integer getNumero() { return numero; }
+    public void setNumero(Integer numero) { this.numero = numero; }
 
-    public String getDescripcion() { return descripcion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+    public String getEstado() { return estado; }
+    public void setEstado(String estado) { this.estado = estado; }
 
-    public Integer getVersion() { return version; }
-    public void setVersion(Integer version) { this.version = version; }
+    public Integer getCantidadCamas() { return cantidadCamas; }
+    public void setCantidadCamas(Integer cantidadCamas) { this.cantidadCamas = cantidadCamas; }
 
-    //  equals y hashCode basados en id
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof HabitacionPaciente)) return false;
-        HabitacionPaciente that = (HabitacionPaciente) o;
-        return id != null && id.equals(that.id);
-    }
+	public void setNumeroHabitacion(
+			@NotNull(message = "El número de habitación no puede ser nulo") @Min(value = 1, message = "El número de habitación debe ser mayor a 0") Integer numeroHabitacion) {
+		// TODO Auto-generated method stub
+		
+	}
 
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
+	public void setPiso(@NotNull(message = "El piso no puede ser nulo") Integer piso) {
+		// TODO Auto-generated method stub
+		
+	}
 
-    // 🔹 toString()
-    @Override
-    public String toString() {
-        return "HabitacionPaciente{" +
-                "id=" + id +
-                ", numeroHabitacion=" + numeroHabitacion +
-                ", piso=" + piso +
-                ", sector='" + sector + '\'' +
-                ", camasDisponibles=" + camasDisponibles +
-                ", descripcion='" + descripcion + '\'' +
-                ", version=" + version +
-                '}';
-    }
+	public void setCamasDisponibles(
+			@NotNull(message = "Debe especificarse la cantidad de camas disponibles") @Min(value = 0, message = "La cantidad de camas no puede ser negativa") Integer camasDisponibles) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setDescripcion(
+			@Size(max = 200, message = "La descripción puede tener hasta 200 caracteres") String descripcion) {
+		// TODO Auto-generated method stub
+		
+	}
 }
+

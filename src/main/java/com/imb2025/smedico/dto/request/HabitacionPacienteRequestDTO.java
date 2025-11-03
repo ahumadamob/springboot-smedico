@@ -1,9 +1,12 @@
-package com.imb2025.smedico.dto;
+package com.imb2025.smedico.dto.request;
+
+import com.imb2025.smedico.entity.HabitacionPaciente;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
 
 public class HabitacionPacienteRequestDTO {
 
@@ -25,9 +28,17 @@ public class HabitacionPacienteRequestDTO {
     @Size(max = 200, message = "La descripción puede tener hasta 200 caracteres")
     private String descripcion;
 
+    //  Constructor vacío
     public HabitacionPacienteRequestDTO() {}
 
-    public HabitacionPacienteRequestDTO(Integer numeroHabitacion, Integer piso, String sector, Integer camasDisponibles, String descripcion) {
+    //  Constructor con parametro
+    public HabitacionPacienteRequestDTO(
+            Integer numeroHabitacion,
+            Integer piso,
+            String sector,
+            Integer camasDisponibles,
+            String descripcion
+    ) {
         this.numeroHabitacion = numeroHabitacion;
         this.piso = piso;
         this.sector = sector;
@@ -35,7 +46,7 @@ public class HabitacionPacienteRequestDTO {
         this.descripcion = descripcion;
     }
 
-    // Getters y Setters
+    //  Getters y Setters
     public Integer getNumeroHabitacion() {
         return numeroHabitacion;
     }
@@ -75,4 +86,15 @@ public class HabitacionPacienteRequestDTO {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+    public HabitacionPaciente toEntity() {
+        HabitacionPaciente entidad = new HabitacionPaciente();
+        entidad.setNumeroHabitacion(this.numeroHabitacion);
+        entidad.setPiso(this.piso);
+        entidad.setSector(this.sector);
+        entidad.setCamasDisponibles(this.camasDisponibles);
+        entidad.setDescripcion(this.descripcion);
+        return entidad;
+    }
+    
 }
+
