@@ -4,15 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.imb2025.smedico.dto.EstudioRequestDto;
-import com.imb2025.smedico.entity.Especialidad;
 import com.imb2025.smedico.entity.Estudio;
-import com.imb2025.smedico.entity.ResultadoEstudio;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
-import com.imb2025.smedico.repository.EspecialidadRepository;
 import com.imb2025.smedico.repository.EstudioRepository;
-import com.imb2025.smedico.repository.ResultadoEstudioRepository;
 import com.imb2025.smedico.service.IEstudioService;
 
 @Service
@@ -21,11 +15,6 @@ public class EstudioServiceImpl implements IEstudioService {
     @Autowired
     private EstudioRepository repoEstudio;
 
-    @Autowired
-    private EspecialidadRepository repoEspecialidad;
-
-    @Autowired
-    private ResultadoEstudioRepository repoResultadoEstudio;
 
     @Override
     public List<Estudio> findAll() {
@@ -74,26 +63,6 @@ public class EstudioServiceImpl implements IEstudioService {
         return repoEstudio.save(existente);
     }
 
-    @Override
-    public Estudio fromDto(EstudioRequestDto dto) {
-        Especialidad especialidad = repoEspecialidad.findById(dto.getEspecialidadId())
-                .orElseThrow(() -> new ResourceNotFoundException("Especialidad no encontrada: " + dto.getEspecialidadId()));
-
-        ResultadoEstudio resultadoEstudio = null;
-        if (dto.getResultadoEstudioId() != null) {
-            resultadoEstudio = repoResultadoEstudio.findById(dto.getResultadoEstudioId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Resultado de estudio no encontrado: " + dto.getResultadoEstudioId()));
-        }
-
-        Estudio estudio = new Estudio();
-        estudio.setNombre(dto.getNombre());
-        estudio.setDescripcion(dto.getDescripcion());
-        estudio.setEspecialidad(especialidad);
-        estudio.setResultadoEstudio(resultadoEstudio);
-
-        return estudio;
-    }
-
     @Override public List<Estudio> findAllOrder() {
         return repoEstudio.findAllByOrderByNombreAsc();
     }
@@ -103,6 +72,6 @@ public class EstudioServiceImpl implements IEstudioService {
     }
 
     @Override public long countByEspecialidadId(Long especialidadId) {
-        return repoEstudio.countByEspecialidad_Id(especialidadId);
+        return repoEstudio.countByEspecialidadId(especialidadId);
     }
 }
