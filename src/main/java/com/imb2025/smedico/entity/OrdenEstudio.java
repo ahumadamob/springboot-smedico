@@ -68,4 +68,9 @@ public class OrdenEstudio extends BaseEntity {
     public void setEstudio(Estudio estudio) {
         this.estudio = estudio;
     }
+
+	public Long getVersion() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

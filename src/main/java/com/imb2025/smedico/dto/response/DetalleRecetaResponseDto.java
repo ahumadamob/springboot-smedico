@@ -6,11 +6,11 @@ import com.imb2025.smedico.entity.Medicamento;
 public class DetalleRecetaResponseDto {
 
     private Long id;
-    private Receta receta;            
-    private Medicamento medicamento; 
+    private Long receta;            
+    private Long medicamento; 
     private String dosis;
     private String frecuencia;
-    private Integer version;
+    private Long version;
 
     public Long getId() {
         return id;
@@ -20,20 +20,20 @@ public class DetalleRecetaResponseDto {
         this.id = id;
     }
 
-    public Receta getReceta() {
+    public Long getReceta() {
         return receta;
     }
 
-    public void setReceta(Receta receta) {
-        this.receta = receta;
+    public void setReceta(Long long1) {
+        this.receta = long1;
     }
 
-    public Medicamento getMedicamento() {
+    public Long getMedicamento() {
         return medicamento;
     }
 
-    public void setMedicamento(Medicamento medicamento) {
-        this.medicamento = medicamento;
+    public void setMedicamento(Long long1) {
+        this.medicamento = long1;
     }
 
     public String getDosis() {
@@ -52,11 +52,11 @@ public class DetalleRecetaResponseDto {
         this.frecuencia = frecuencia;
     }
 
-    public Integer getVersion() {
+    public Long getVersion() {
         return version;
     }
 
-    public void setVersion(Integer version) {
-        this.version = version;
+    public void setVersion(Long long1) {
+        this.version = long1;
     }
 }

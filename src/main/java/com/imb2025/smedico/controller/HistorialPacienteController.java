@@ -11,6 +11,9 @@ import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.request.HistorialPacienteRequestDto;
 import com.imb2025.smedico.dto.response.HistorialPacienteResponseDto;
 import com.imb2025.smedico.entity.HistorialPaciente;
+import com.imb2025.smedico.entity.Paciente;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
+import com.imb2025.smedico.repository.PacienteRepository;
 import com.imb2025.smedico.dto.mapper.HistorialPacienteMapper;
 import com.imb2025.smedico.service.IHistorialPacienteService;
 
@@ -41,12 +44,20 @@ public class HistorialPacienteController {
         return ResponseEntity.ok(resp);
     }
 
+    @Autowired
+    private PacienteRepository pacienteRepo;
+
     @PostMapping
     public ResponseEntity<ApiResponseSuccessDto<HistorialPacienteResponseDto>> create(
             @Valid @RequestBody HistorialPacienteRequestDto dto) {
 
-        HistorialPaciente historial = service.create(dto);
-        HistorialPacienteResponseDto responseDto = HistorialPacienteMapper.toResponseDto(historial);
+        Paciente paciente = pacienteRepo.findById(dto.getPacienteId())
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente no encontrado " + dto.getPacienteId()));
+
+        HistorialPaciente historial = HistorialPacienteMapper.fromDto(dto, paciente);
+
+        HistorialPaciente creado = service.create(historial);
+        HistorialPacienteResponseDto responseDto = HistorialPacienteMapper.toResponseDto(creado);
 
         ApiResponseSuccessDto<HistorialPacienteResponseDto> resp =
                 new ApiResponseSuccessDto<>(true, "Historial creado correctamente", responseDto);
@@ -58,13 +69,19 @@ public class HistorialPacienteController {
             @PathVariable Long id,
             @Valid @RequestBody HistorialPacienteRequestDto dto) {
 
-        HistorialPaciente actualizado = service.update(id, dto);
+        Paciente paciente = pacienteRepo.findById(dto.getPacienteId())
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente no encontrado " + dto.getPacienteId()));
+
+        HistorialPaciente historial = HistorialPacienteMapper.fromDto(dto, paciente);
+
+        HistorialPaciente actualizado = service.update(id, historial);
         HistorialPacienteResponseDto responseDto = HistorialPacienteMapper.toResponseDto(actualizado);
 
         ApiResponseSuccessDto<HistorialPacienteResponseDto> resp =
                 new ApiResponseSuccessDto<>(true, "Historial actualizado correctamente", responseDto);
         return ResponseEntity.ok(resp);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<String>> delete(@PathVariable Long id) {

@@ -3,9 +3,6 @@ package com.imb2025.smedico.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
@@ -14,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
-public class HistorialPaciente extends HistorialPacienteBaseEntity {
+public class HistorialPaciente extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "pacienteId", nullable = false)
@@ -29,6 +26,9 @@ public class HistorialPaciente extends HistorialPacienteBaseEntity {
     
     @Column(length = 255)
     private String observacion;
+    
+    @Column(name = "fecha_vigencia", nullable = false)
+    private LocalDate fechaVigencia;
 
     public HistorialPaciente() {}
 
@@ -68,5 +68,11 @@ public class HistorialPaciente extends HistorialPacienteBaseEntity {
     }
     public void setObservacion(String observacion) {
         this.observacion = observacion;
+    }
+    public LocalDate getFechaVigencia() {
+        return fechaVigencia;
+    }
+    public void setFechaVigencia(LocalDate fechaVigencia) {
+        this.fechaVigencia = fechaVigencia;
     }
 }

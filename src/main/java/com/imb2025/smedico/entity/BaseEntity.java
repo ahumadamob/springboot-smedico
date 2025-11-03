@@ -2,7 +2,6 @@ package com.imb2025.smedico.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @MappedSuperclass
@@ -12,57 +11,55 @@ public abstract class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(updatable = false)
+    @Column(name = "fecha_creacion", updatable = false, nullable = false)
     private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
     
+    @Column(name = "ultima_actualizacion")
+    private LocalDateTime updatedAt;
+
+    @Column(nullable = false)
     private Long version;
 
-    // Getters and Setters
+    // === Getters y Setters ===
     public Long getId() {
         return id;
-    }    
-    
-	
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Long getVersion() {
-		return version;
-	}
+        return version;
+    }
 
-	public void setVersion(Long version) {
-		this.version = version;
-	}
+    public void setVersion(Long version) {
+        this.version = version;
+    }
 
-	public void setCreatedAt(LocalDateTime createdAt) {
-		this.createdAt = createdAt;
-	}
-
-
-
-	public void setUpdatedAt(LocalDateTime updatedAt) {
-		this.updatedAt = updatedAt;
-	}
-
-
-
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     public LocalDateTime getCreatedAt() {
-		return createdAt;
-	}
-	
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     public LocalDateTime getUpdatedAt() {
-		return updatedAt;
-	}
+        return updatedAt;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
-        version = (long) 1;
+        updatedAt = LocalDateTime.now();
+        version = 1L;
     }
 
     @PreUpdate

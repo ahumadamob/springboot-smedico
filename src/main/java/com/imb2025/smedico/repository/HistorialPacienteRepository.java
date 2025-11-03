@@ -9,9 +9,11 @@ import com.imb2025.smedico.entity.HistorialPaciente;
 
 public interface HistorialPacienteRepository extends JpaRepository<HistorialPaciente, Long> {
 	
-    // Encuentra todos los historiales por evento
     List<HistorialPaciente> findByEvento(String evento);
 
-    // Cuenta cuántos historiales existen en una fecha específica
     Long countByFecha(LocalDate fecha);
+    
+    List<HistorialPaciente> findByFechaVigenciaGreaterThanEqual(LocalDate fecha);
+
+    List<HistorialPaciente> findByFechaVigenciaLessThan(LocalDate fecha);
 }

@@ -15,6 +15,7 @@ public class HistorialPacienteMapper {
         entidad.setEvento(dto.getEvento());
         entidad.setFecha(dto.getFecha());
         entidad.setObservacion(dto.getObservacion());
+        entidad.setFechaVigencia(dto.getFechaVigencia());
         entidad.setPaciente(paciente);
         return entidad;
     }
@@ -26,6 +27,7 @@ public class HistorialPacienteMapper {
         dto.setEvento(entidad.getEvento());
         dto.setFecha(entidad.getFecha());
         dto.setObservacion(entidad.getObservacion());
+        dto.setFechaVigencia(entidad.getFechaVigencia());
         dto.setVersion(entidad.getVersion());
         return dto;
     }

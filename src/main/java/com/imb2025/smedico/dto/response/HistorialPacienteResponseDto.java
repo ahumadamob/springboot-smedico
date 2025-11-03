@@ -9,16 +9,18 @@ public class HistorialPacienteResponseDto {
     private String evento;
     private LocalDate fecha;
     private String observacion;
+    private LocalDate fechaVigencia;
     private Long version;
 
     public HistorialPacienteResponseDto() {}
 
-    public HistorialPacienteResponseDto(Long id, Long pacienteId, String evento, LocalDate fecha, String observacion, Long version) {
+    public HistorialPacienteResponseDto(Long id, Long pacienteId, String evento, LocalDate fecha, String observacion,LocalDate fechaVigencia, Long version) {
         this.id = id;
         this.pacienteId = pacienteId;
         this.evento = evento;
         this.fecha = fecha;
         this.observacion = observacion;
+        this.fechaVigencia = fechaVigencia;
         this.version = version;
     }
 
@@ -56,6 +58,13 @@ public class HistorialPacienteResponseDto {
     }
     public void setObservacion(String observacion) {
         this.observacion = observacion;
+    }
+    
+    public LocalDate getFechaVigencia() {
+        return fechaVigencia;
+    }
+    public void setFechaVigencia(LocalDate fechaVigencia) {
+        this.fechaVigencia = fechaVigencia;
     }
 
     public Long getVersion() {

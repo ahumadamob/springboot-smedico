@@ -58,6 +58,17 @@
     		<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
     		<version>2.7.0</version>
 		</dependency>
+		<dependency>
+			<groupId>imb.progra2025</groupId>
+			<artifactId>p3ro2da</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.projectlombok</groupId>
+		    <artifactId>lombok</artifactId>
+		    <version>1.18.34</version>
+		    <scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
