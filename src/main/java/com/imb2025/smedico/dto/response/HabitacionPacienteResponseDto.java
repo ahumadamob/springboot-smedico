@@ -1,5 +1,7 @@
 package com.imb2025.smedico.dto.response;
 
+import java.time.LocalDate;
+
 public class HabitacionPacienteResponseDto {
 
     private Long id;
@@ -8,18 +10,21 @@ public class HabitacionPacienteResponseDto {
     private String sector;
     private Integer camasDisponibles;
     private String descripcion;
-    private Integer version;
-
-    public HabitacionPacienteResponseDto() {}
+    private String identificadorLegible;
+    private LocalDate fechaVigencia;
+    private Long version;
 
     public HabitacionPacienteResponseDto(Long id, Integer numeroHabitacion, Integer piso, String sector,
-                                         Integer camasDisponibles, String descripcion, Integer version) {
+                                         Integer camasDisponibles, String descripcion,  
+                                         String identificadorLegible, LocalDate fechaVigencia, Long version) {
         this.id = id;
         this.numeroHabitacion = numeroHabitacion;
         this.piso = piso;
         this.sector = sector;
         this.camasDisponibles = camasDisponibles;
         this.descripcion = descripcion;
+        this.identificadorLegible = identificadorLegible;
+        this.fechaVigencia = fechaVigencia;        
         this.version = version;
     }
 
@@ -72,11 +77,29 @@ public class HabitacionPacienteResponseDto {
         this.descripcion = descripcion;
     }
 
-    public Integer getVersion() {
+    
+	public String getIdentificadorLegible() {
+		return identificadorLegible;
+	}
+
+	public void setIdentificadorLegible(String identificadorLegible) {
+		this.identificadorLegible = identificadorLegible;
+	}
+
+	public LocalDate getFechaVigencia() {
+		return fechaVigencia;
+	}
+
+	public void setFechaVigencia(LocalDate fechaVigencia) {
+		this.fechaVigencia = fechaVigencia;
+	}
+
+    public Long getVersion() {
         return version;
     }
 
-    public void setVersion(Integer version) {
+    public void setVersion(Long version) {
         this.version = version;
     }
+	
 }

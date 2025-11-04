@@ -14,23 +14,23 @@ public class HabitacionPacienteMapper {
         entidad.setSector(dto.getSector());
         entidad.setCamasDisponibles(dto.getCamasDisponibles());
         entidad.setDescripcion(dto.getDescripcion());
+        entidad.setIdentificadorLegible(dto.getIdentificadorLegible());
+        entidad.setFechaVigencia(dto.getFechaVigencia());
         return entidad;
     }
 
     //  Convierte una entidad a DTO de respuesta
     public static HabitacionPacienteResponseDto toResponseDto(HabitacionPaciente entidad) {
-        if (entidad == null) {
-            return null;
-        }
-
-        return new HabitacionPacienteResponseDto(
+            return new HabitacionPacienteResponseDto(
             entidad.getId(),
             entidad.getNumeroHabitacion(),
             entidad.getPiso(),
             entidad.getSector(),
             entidad.getCamasDisponibles(),
             entidad.getDescripcion(),
-            entidad.getVersion() != null ? entidad.getVersion().intValue() : null
-        );
+            entidad.getIdentificadorLegible(),
+            entidad.getFechaVigencia(),
+            entidad.getVersion()
+            );
     }
 }

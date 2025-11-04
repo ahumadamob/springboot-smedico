@@ -1,5 +1,6 @@
 package com.imb2025.smedico.service.jpa;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,24 @@ public class HabitacionPacienteServiceImpl implements IHabitacionPacienteService
 
     @Override
     public HabitacionPaciente create(HabitacionPaciente habitacion) {
-        return habitacionRepository.save(habitacion);
+    	habitacionRepository.findByIdentificadorLegibleIgnoreCase(habitacion.getIdentificadorLegible())
+        .ifPresent(h -> {
+            throw new RuntimeException("identificadorLegible duplicado");
+        });
+
+    return habitacionRepository.save(habitacion);
     }
+    
+    @Override
+    public List<HabitacionPaciente> findByFechaVigenciaGreaterThanEqual(LocalDate fecha) {
+        return habitacionRepository.findByFechaVigenciaGreaterThanEqual(fecha);
+    }
+
+    @Override
+    public List<HabitacionPaciente> findByFechaVigenciaLessThan(LocalDate fecha) {
+        return habitacionRepository.findByFechaVigenciaLessThan(fecha);
+    }
+    
 
     @Override
     public HabitacionPaciente update(Long id, HabitacionPacienteRequestDTO dto) {

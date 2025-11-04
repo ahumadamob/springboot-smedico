@@ -1,5 +1,6 @@
 package com.imb2025.smedico.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,7 +18,7 @@ import com.imb2025.smedico.service.IHabitacionPacienteService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/v1/habitaciones")
+@RequestMapping("/habitaciones")
 public class HabitacionPacienteController {
 
     private final IHabitacionPacienteService service;
@@ -26,7 +27,7 @@ public class HabitacionPacienteController {
         this.service = service;
     }
 
-    /** 🔹¿Helper para respuestas estándar */
+    /** Helper para respuestas estándar */
     private <T> ResponseEntity<ApiResponseSuccessDto<T>> buildResponse(String message, T data, HttpStatus status) {
         ApiResponseSuccessDto<T> resp = new ApiResponseSuccessDto<>(true, message, data);
         return ResponseEntity.status(status).body(resp);
@@ -93,11 +94,32 @@ public class HabitacionPacienteController {
         return buildResponse("Habitaciones del sector: " + sector, lista, HttpStatus.OK);
     }
 
-    /** 🔹 Contar habitaciones por sector */
+    /** Contar habitaciones por sector */
     @GetMapping("/count/sector/{sector}")
     public ResponseEntity<ApiResponseSuccessDto<Long>> countBySector(@PathVariable String sector) {
         Long cantidad = service.countBySectorIgnoreCase(sector);
         return buildResponse("Cantidad de habitaciones en el sector: " + sector, cantidad, HttpStatus.OK);
     }
+    
+    @GetMapping("/vigentes")
+    public ResponseEntity<List<HabitacionPacienteResponseDto>> getVigentes() {
+        LocalDate hoy = LocalDate.now();
+        List<HabitacionPacienteResponseDto> lista = service.findByFechaVigenciaGreaterThanEqual(hoy)
+            .stream()
+            .map(HabitacionPacienteMapper::toResponseDto)
+            .toList();
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/vencidos")
+    public ResponseEntity<List<HabitacionPacienteResponseDto>> getVencidos() {
+        LocalDate hoy = LocalDate.now();
+        List<HabitacionPacienteResponseDto> lista = service.findByFechaVigenciaLessThan(hoy)
+            .stream()
+            .map(HabitacionPacienteMapper::toResponseDto)
+            .toList();
+        return ResponseEntity.ok(lista);
+    }
+    
 }
 

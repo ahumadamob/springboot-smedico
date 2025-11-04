@@ -1,5 +1,9 @@
 package com.imb2025.smedico.dto.request;
 
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.imb2025.smedico.entity.HabitacionPaciente;
 
 import jakarta.validation.constraints.Min;
@@ -28,6 +32,14 @@ public class HabitacionPacienteRequestDTO {
     @Size(max = 200, message = "La descripción puede tener hasta 200 caracteres")
     private String descripcion;
 
+    @NotBlank(message = "El identificador legible no puede estar vacío")
+    private String identificadorLegible;
+    
+    @NotNull(message = "La fecha de vigencia no puede ser nula")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fechaVigencia;
+    
+    
     //  Constructor vacío
     public HabitacionPacienteRequestDTO() {}
 
@@ -93,8 +105,26 @@ public class HabitacionPacienteRequestDTO {
         entidad.setSector(this.sector);
         entidad.setCamasDisponibles(this.camasDisponibles);
         entidad.setDescripcion(this.descripcion);
+        entidad.setIdentificadorLegible(this.identificadorLegible);
+        entidad.setFechaVigencia(this.fechaVigencia);
         return entidad;
     }
+
+	public String getIdentificadorLegible() {
+		return identificadorLegible;
+	}
+
+	public void setIdentificadorLegible(String identificadorLegible) {
+		this.identificadorLegible = identificadorLegible;
+	}
+
+	public LocalDate getFechaVigencia() {
+		return fechaVigencia;
+	}
+
+	public void setFechaVigencia(LocalDate fechaVigencia) {
+		this.fechaVigencia = fechaVigencia;
+	}
     
 }
 
