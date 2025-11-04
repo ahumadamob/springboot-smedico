@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.imb2025.smedico.dto.mapper.SignosVitalesMapper;
-import com.imb2025.smedico.dto.request.SignosVitalesRequestDto;
 import com.imb2025.smedico.entity.Consulta;
 import com.imb2025.smedico.entity.SignosVitales;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
@@ -41,6 +40,9 @@ public class SignosVitalesServiceImpl implements ISignosVitalesService {
 
     @Override
      public SignosVitales create(SignosVitales dto) {
+    	if (signos.findByCodigoRegistroIgnoreCase(dto.getCodigoRegistro()).isPresent()) {
+            throw new ResourceNotFoundException("codigoRegistro duplicado");
+        }
     	dto.setConsulta(consultaService.findById(dto.getConsulta().getId()));
         return signos.save(dto);
     }
@@ -69,6 +71,8 @@ public SignosVitales update(Long id, SignosVitales dto) {
         existente.setPresionDiastolica(dto.getPresionDiastolica());
         existente.setSaturacionO2(dto.getSaturacionO2());
         existente.setObservaciones(dto.getObservaciones());
+        existente.setFechaVigencia(dto.getFechaVigencia());
+        existente.setCodigoRegistro(dto.getCodigoRegistro());
         existente.setConsulta(consulta);
 
        
@@ -101,5 +105,16 @@ public Long countByConsulta(Long idConsulta) {
     public boolean existsById(Long id) {
         return signos.existsById(id);
     }
+    
+    @Override
+    public List<SignosVitales> findVigentes(LocalDate fecha) {
+        return signos.findByFechaVigenciaGreaterThanEqual(fecha);
+    }
+
+    @Override
+    public List<SignosVitales> findVencidos(LocalDate fecha) {
+        return signos.findByFechaVigenciaLessThan(fecha);
+    }
+
 
 }

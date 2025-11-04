@@ -1,11 +1,15 @@
 package com.imb2025.smedico.dto.request;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 
 public class SignosVitalesRequestDto {
 
@@ -51,12 +55,21 @@ public class SignosVitalesRequestDto {
     @NotNull(message = "El ID de la consulta es obligatorio")
     @Min(value = 1, message = "El ID de la consulta debe ser mayor a 0")
     private Long idConsulta;
+    
+    @NotNull(message = "La fecha de vigencia es obligatoria")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate fechaVigencia;
+    
+    @NotBlank(message = "El código de registro es obligatorio")
+    private String codigoRegistro;
+
+
 
     public SignosVitalesRequestDto() {}
 
     public SignosVitalesRequestDto(LocalDateTime fechaHora, Double peso, Double altura, Double imc, Double temperatura,
             Integer frecuenciaCardiaca, Integer presionSistolica, Integer presionDiastolica, Integer saturacionO2,
-            String observaciones, Long idConsulta) {
+            String observaciones, Long idConsulta, LocalDate fechaVigencia, String codigoRegistro) {
         this.fechaHora = fechaHora;
         this.peso = peso;
         this.altura = altura;
@@ -68,6 +81,8 @@ public class SignosVitalesRequestDto {
         this.saturacionO2 = saturacionO2;
         this.observaciones = observaciones;
         this.idConsulta = idConsulta;
+        this.fechaVigencia = fechaVigencia;
+        this.codigoRegistro = codigoRegistro;
     }
 
     // getters / setters
@@ -103,4 +118,19 @@ public class SignosVitalesRequestDto {
 
     public Long getIdConsulta() { return idConsulta; }
     public void setIdConsulta(Long idConsulta) { this.idConsulta = idConsulta; }
+
+	public LocalDate getFechaVigencia() {
+		return fechaVigencia;
+	}
+	public void setFechaVigencia(LocalDate fechaVigencia) {
+		this.fechaVigencia = fechaVigencia;
+	}
+
+	public String getCodigoRegistro() {
+		return codigoRegistro;
+	}
+	public void setCodigoRegistro(String codigoRegistro) {
+		this.codigoRegistro = codigoRegistro;
+	}
+
 }

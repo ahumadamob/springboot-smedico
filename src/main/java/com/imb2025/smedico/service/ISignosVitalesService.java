@@ -3,8 +3,6 @@ package com.imb2025.smedico.service;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.imb2025.smedico.dto.request.SignosVitalesRequestDto;
-import com.imb2025.smedico.entity.Consulta;
 import com.imb2025.smedico.entity.SignosVitales;
 
 public interface ISignosVitalesService {
@@ -16,4 +14,7 @@ public interface ISignosVitalesService {
     void deleteById(Long id);
     List<SignosVitales> findByFechas(LocalDate inicio, LocalDate fin);
     Long countByConsulta(Long idConsulta);
+    List<SignosVitales> findVigentes(LocalDate fecha);
+    List<SignosVitales> findVencidos(LocalDate fecha);
+
 }

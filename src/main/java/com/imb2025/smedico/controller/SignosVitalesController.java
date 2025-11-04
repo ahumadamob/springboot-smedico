@@ -94,5 +94,23 @@ public class SignosVitalesController {
     public Long countByConsulta(@PathVariable Long idConsulta) {
         return service.countByConsulta(idConsulta);
     }
+	
+	@GetMapping("/vigentes/{fecha}")
+	public ResponseEntity<?> getVigentes(
+	        @PathVariable("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
+
+	    List<SignosVitales> lista = service.findVigentes(fecha);
+	    List<SignosVitalesResponseDto> dtos = lista.stream().map(mapper::toDto).toList();
+	    return ResponseEntity.ok(dtos);
+	}
+
+	@GetMapping("/vencidos/{fecha}")
+	public ResponseEntity<?> getVencidos(
+	        @PathVariable("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
+
+	    List<SignosVitales> lista = service.findVencidos(fecha);
+	    List<SignosVitalesResponseDto> dtos = lista.stream().map(mapper::toDto).toList();
+	    return ResponseEntity.ok(dtos);
+	}
 
 }

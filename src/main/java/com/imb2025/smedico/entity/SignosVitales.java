@@ -1,5 +1,6 @@
 package com.imb2025.smedico.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
@@ -22,6 +23,10 @@ public class SignosVitales extends BaseEntity{
     private Integer saturacionO2;
 
     private String observaciones;
+    private LocalDate fechaVigencia;
+    private String codigoRegistro;
+
+
 
     @ManyToOne
     private Consulta consulta;
@@ -29,24 +34,25 @@ public class SignosVitales extends BaseEntity{
     public SignosVitales() {}
 
     public SignosVitales(LocalDateTime fechaHora, Double peso, Double altura, Double imc, Double temperatura,
-            Integer frecuenciaCardiaca, Integer presionSistolica, Integer presionDiastolica, Integer saturacionO2,
-            String observaciones, Consulta consulta) {
-        this.fechaHora = fechaHora;
-        this.peso = peso;
-        this.altura = altura;
-        this.imc = imc;
-        this.temperatura = temperatura;
-        this.frecuenciaCardiaca = frecuenciaCardiaca;
-        this.presionSistolica = presionSistolica;
-        this.presionDiastolica = presionDiastolica;
-        this.saturacionO2 = saturacionO2;
-        this.observaciones = observaciones;
-        this.consulta = consulta;
-    }
+			Integer frecuenciaCardiaca, Integer presionSistolica, Integer presionDiastolica, Integer saturacionO2,
+			String observaciones, LocalDate fechaVigencia, Consulta consulta, String codigoRegistro) {
+		super();
+		this.fechaHora = fechaHora;
+		this.peso = peso;
+		this.altura = altura;
+		this.imc = imc;
+		this.temperatura = temperatura;
+		this.frecuenciaCardiaca = frecuenciaCardiaca;
+		this.presionSistolica = presionSistolica;
+		this.presionDiastolica = presionDiastolica;
+		this.saturacionO2 = saturacionO2;
+		this.observaciones = observaciones;
+		this.fechaVigencia = fechaVigencia;
+		this.consulta = consulta;
+		this.codigoRegistro = codigoRegistro;
+	}
 
-    // getters y setters (nombres en camelCase)
-
-    public LocalDateTime getFechaHora() { return fechaHora; }
+	public LocalDateTime getFechaHora() { return fechaHora; }
     public void setFechaHora(LocalDateTime fechaHora) { this.fechaHora = fechaHora; }
 
     public Double getPeso() { return peso; }
@@ -78,4 +84,20 @@ public class SignosVitales extends BaseEntity{
 
     public Consulta getConsulta() { return consulta; }
     public void setConsulta(Consulta consulta) { this.consulta = consulta; }
+
+	public LocalDate getFechaVigencia() {
+		return fechaVigencia;
+	}
+	public void setFechaVigencia(LocalDate fechaVigencia) {
+		this.fechaVigencia = fechaVigencia;
+	}
+
+	public String getCodigoRegistro() {
+		return codigoRegistro;
+	}
+	public void setCodigoRegistro(String codigoRegistro) {
+		this.codigoRegistro = codigoRegistro;
+	}
+    
+	
 }

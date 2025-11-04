@@ -25,6 +25,8 @@ public class SignosVitalesMapper {
 		s.setSaturacionO2(dto.getSaturacionO2());
 		s.setObservaciones(dto.getObservaciones());
 		s.setConsulta(con);
+		s.setFechaVigencia(dto.getFechaVigencia());
+		s.setCodigoRegistro(dto.getCodigoRegistro());
 
 		return s;
 	}
@@ -42,10 +44,11 @@ public class SignosVitalesMapper {
 	            idConsulta = null;
 	        }
 	    }
-	    
+	 	    
 	    return new SignosVitalesResponseDto(
 	    		
 	        s.getId(),
+	        s.getVersion(),
 	        s.getFechaHora(),
 	        s.getPeso(),
 	        s.getAltura(),
@@ -56,8 +59,9 @@ public class SignosVitalesMapper {
 	        s.getPresionDiastolica(),
 	        s.getSaturacionO2(),
 	        s.getObservaciones(),
-	        s.getConsulta().getId(),
-	        s.getVersion()
+	        s.getConsulta().getId(),	        
+	        s.getFechaVigencia(),
+	        s.getCodigoRegistro()
 	    );
 	}
 

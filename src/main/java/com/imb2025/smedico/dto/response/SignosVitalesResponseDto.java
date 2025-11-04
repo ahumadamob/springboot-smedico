@@ -1,5 +1,6 @@
 package com.imb2025.smedico.dto.response;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class SignosVitalesResponseDto {
@@ -17,11 +18,16 @@ public class SignosVitalesResponseDto {
 	private Integer saturacionO2;
 	private String observaciones;
 	private Long idConsulta;
+	private LocalDate fechaVigencia;
+	private String codigoRegistro;
 
-	public SignosVitalesResponseDto(Long id, LocalDateTime fechaHora, Double peso, Double altura, Double imc,
-			Double temperatura, Integer frecuenciaCardiaca, Integer presionSistolica, Integer presionDiastolica,
-			Integer saturacionO2, String observaciones, Long idConsulta, Long version) {
+	public SignosVitalesResponseDto(Long id, Long version, LocalDateTime fechaHora, Double peso, Double altura,
+			Double imc, Double temperatura, Integer frecuenciaCardiaca, Integer presionSistolica,
+			Integer presionDiastolica, Integer saturacionO2, String observaciones, Long idConsulta,
+			LocalDate fechaVigencia,String codigoRegistro) {
+		super();
 		this.id = id;
+		this.version = version;
 		this.fechaHora = fechaHora;
 		this.peso = peso;
 		this.altura = altura;
@@ -33,7 +39,8 @@ public class SignosVitalesResponseDto {
 		this.saturacionO2 = saturacionO2;
 		this.observaciones = observaciones;
 		this.idConsulta = idConsulta;
-		this.version = version;
+		this.fechaVigencia = fechaVigencia;
+		this.codigoRegistro = codigoRegistro;
 	}
 
 	public Long getId() {
@@ -139,4 +146,22 @@ public class SignosVitalesResponseDto {
 	public void setIdConsulta(Long idConsulta) {
 		this.idConsulta = idConsulta;
 	}
+
+	public LocalDate getFechaVigencia() {
+		return fechaVigencia;
+	}
+
+	public void setFechaVigencia(LocalDate fechaVigencia) {
+		this.fechaVigencia = fechaVigencia;
+	}
+
+	public String getCodigoRegistro() {
+		return codigoRegistro;
+	}
+
+	public void setCodigoRegistro(String codigoRegistro) {
+		this.codigoRegistro = codigoRegistro;
+	}
+	
+	
 }
