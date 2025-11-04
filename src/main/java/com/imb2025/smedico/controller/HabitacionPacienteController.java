@@ -12,7 +12,7 @@ import com.imb2025.smedico.dto.request.HabitacionPacienteRequestDTO;
 import com.imb2025.smedico.dto.response.HabitacionPacienteResponseDto;
 import com.imb2025.smedico.entity.HabitacionPaciente;
 import com.imb2025.smedico.mapper.HabitacionPacienteMapper;
-import com.imb2025.smedico.service.HabitacionPacienteService;
+import com.imb2025.smedico.service.IHabitacionPacienteService;
 
 import jakarta.validation.Valid;
 
@@ -20,9 +20,9 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/v1/habitaciones")
 public class HabitacionPacienteController {
 
-    private final HabitacionPacienteService service;
+    private final IHabitacionPacienteService service;
 
-    public HabitacionPacienteController(HabitacionPacienteService service) {
+    public HabitacionPacienteController(IHabitacionPacienteService service) {
         this.service = service;
     }
 

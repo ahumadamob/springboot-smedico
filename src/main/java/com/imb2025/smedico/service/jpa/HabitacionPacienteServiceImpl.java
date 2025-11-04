@@ -9,10 +9,10 @@ import com.imb2025.smedico.dto.request.HabitacionPacienteRequestDTO;
 import com.imb2025.smedico.entity.HabitacionPaciente;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.HabitacionPacienteRepository;
-import com.imb2025.smedico.service.HabitacionPacienteService;
+import com.imb2025.smedico.service.IHabitacionPacienteService;
 
 @Service
-public class HabitacionPacienteServiceImpl implements HabitacionPacienteService {
+public class HabitacionPacienteServiceImpl implements IHabitacionPacienteService {
 
     @Autowired
     private HabitacionPacienteRepository habitacionRepository;
@@ -61,24 +61,6 @@ public class HabitacionPacienteServiceImpl implements HabitacionPacienteService 
         return habitacionRepository.existsById(id);
     }
 
-    @Override
-    public HabitacionPaciente fromDto(HabitacionPacienteRequestDTO dto) {
-        HabitacionPaciente h = new HabitacionPaciente();
-        mapearDTO(h, dto);
-        return h;
-    }
-    
-    @Override
-    public HabitacionPacienteRequestDTO toDto(HabitacionPaciente h) {
-        HabitacionPacienteRequestDTO dto = new HabitacionPacienteRequestDTO();
-        dto.setNumeroHabitacion(h.getNumeroHabitacion());
-        dto.setPiso(h.getPiso());
-        dto.setSector(h.getSector());
-        dto.setCamasDisponibles(h.getCamasDisponibles());
-        dto.setDescripcion(h.getDescripcion());
-        return dto;
-    }
-    
     @Override
     public List<HabitacionPaciente> findBySectorIgnoreCase(String sector) {
         return habitacionRepository.findBySectorIgnoreCase(sector);
