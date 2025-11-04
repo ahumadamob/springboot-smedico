@@ -69,21 +69,23 @@ public class MedioPagoController {
     @PostMapping
     public ResponseEntity<ApiResponseSuccessDto<MedioPagoResponseDto>> createMedioPago(@Valid @RequestBody MedioPagoRequestDto mediopagoRequestDto) { //corregido
     	MedioPagoMapper mapper = new MedioPagoMapper();
-		MedioPago creado = service.create(mapper.fromDto(dto));
+		MedioPago creado = service.create(mapper.fromDto(mediopagoRequestDto));
         MedioPagoResponseDto responseDto = mapper.toResponseDto(creado);
-        return ResponseEntity.status(HttpStatus.CREATED)
-            .body(new ApiResponseSuccessDto<>(true, "Medio de pago creado exitosamente!", responseDto));
+        ApiResponseSuccessDto<MedioPagoResponseDto> response = new ApiResponseSuccessDto<>(true, "Medio de pago creado exitosamente!", responseDto);
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<MedioPagoResponseDto>> updateMedioPago(@PathVariable Long id,@Valid @RequestBody MedioPagoRequestDto mediopagoDto) { //corregido
+    public ResponseEntity<ApiResponseSuccessDto<MedioPagoResponseDto>> updateMedioPago(@PathVariable Long id, @Valid @RequestBody MedioPagoRequestDto mediopagoDto) { //corregido
     	MedioPagoMapper mapper = new MedioPagoMapper();
-        MedioPago medioPago = mapper.fromDto(dto);
+        MedioPago medioPago = mapper.fromDto(mediopagoDto);
         medioPago.setId(id); 
         MedioPago actualizado = service.update(id, medioPago);
         MedioPagoResponseDto responseDto = mapper.toResponseDto(actualizado);
-        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Medio de pago actualizado exitosamente!", responseDto));
+        ApiResponseSuccessDto<MedioPagoResponseDto> response = new ApiResponseSuccessDto<>(true, "Medio de pago actualizado exitosamente!", responseDto);
+        return ResponseEntity.ok(response);
     }
 
 
