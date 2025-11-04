@@ -3,97 +3,101 @@ package com.imb2025.smedico.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
-import com.imb2025.smedico.dto.HabitacionPacienteRequestDTO;
+import com.imb2025.smedico.dto.request.HabitacionPacienteRequestDTO;
+import com.imb2025.smedico.dto.response.HabitacionPacienteResponseDto;
 import com.imb2025.smedico.entity.HabitacionPaciente;
+import com.imb2025.smedico.mapper.HabitacionPacienteMapper;
 import com.imb2025.smedico.service.HabitacionPacienteService;
 
 import jakarta.validation.Valid;
 
-// Controlador REST para la gestión de habitaciones de pacientes
 @RestController
-@RequestMapping("/habitaciones")
+@RequestMapping("/api/v1/habitaciones")
 public class HabitacionPacienteController {
 
-    @Autowired
-    private HabitacionPacienteService service;
+    private final HabitacionPacienteService service;
 
+    public HabitacionPacienteController(HabitacionPacienteService service) {
+        this.service = service;
+    }
 
+    /** 🔹¿Helper para respuestas estándar */
+    private <T> ResponseEntity<ApiResponseSuccessDto<T>> buildResponse(String message, T data, HttpStatus status) {
+        ApiResponseSuccessDto<T> resp = new ApiResponseSuccessDto<>(true, message, data);
+        return ResponseEntity.status(status).body(resp);
+    }
+
+    /**  Obtener todas las habitaciones */
     @GetMapping
-    public ResponseEntity<ApiResponseSuccessDto<List<HabitacionPacienteRequestDTO>>> getAll() {
-        List<HabitacionPaciente> lista = service.findAll();
-        List<HabitacionPacienteRequestDTO> dtos = lista.stream()
-                .map(service::toDto)
+    public ResponseEntity<ApiResponseSuccessDto<List<HabitacionPacienteResponseDto>>> getAll() {
+        List<HabitacionPaciente> entidades = service.findAll();
+        List<HabitacionPacienteResponseDto> lista = entidades.stream()
+                .map(HabitacionPacienteMapper::toResponseDto)
                 .collect(Collectors.toList());
-        ApiResponseSuccessDto<List<HabitacionPacienteRequestDTO>> resp =
-                new ApiResponseSuccessDto<>(true, "Lista de habitaciones obtenida correctamente", dtos);
-        return ResponseEntity.ok(resp);
+        return buildResponse("Listado de habitaciones obtenido correctamente", lista, HttpStatus.OK);
     }
 
+    /**  Obtener una habitación por ID */
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<HabitacionPaciente>> getHabitacionById(@PathVariable Long id) {
-        HabitacionPaciente habitacion = service.findById(id);
-        ApiResponseSuccessDto<HabitacionPaciente> resp =
-                new ApiResponseSuccessDto<>(true, "Habitación encontrada correctamente", habitacion);
-        return ResponseEntity.ok(resp);
+    public ResponseEntity<ApiResponseSuccessDto<HabitacionPacienteResponseDto>> getHabitacionById(@PathVariable Long id) {
+        HabitacionPaciente entidad = service.findById(id);
+        HabitacionPacienteResponseDto dto = HabitacionPacienteMapper.toResponseDto(entidad);
+        return buildResponse("Habitación encontrada correctamente", dto, HttpStatus.OK);
     }
 
-
+    /**  Crear una habitación */
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<HabitacionPaciente>> createHabitacion(
+    public ResponseEntity<ApiResponseSuccessDto<HabitacionPacienteResponseDto>> createHabitacion(
             @Valid @RequestBody HabitacionPacienteRequestDTO dto) {
 
-        HabitacionPaciente entity = service.fromDto(dto);
-        HabitacionPaciente creada = service.save(entity);
+        HabitacionPaciente entidad = HabitacionPacienteMapper.fromDto(dto);
+        HabitacionPaciente creada = service.save(entidad);
+        HabitacionPacienteResponseDto response = HabitacionPacienteMapper.toResponseDto(creada);
 
-        ApiResponseSuccessDto<HabitacionPaciente> resp =
-                new ApiResponseSuccessDto<>(true, "Habitación creada correctamente", creada);
-
-        return ResponseEntity.status(201).body(resp);
+        return buildResponse("Habitación creada correctamente", response, HttpStatus.CREATED);
     }
 
-  
+    /**  Actualizar una habitación */
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<HabitacionPaciente>> updateHabitacion(
+    public ResponseEntity<ApiResponseSuccessDto<HabitacionPacienteResponseDto>> updateHabitacion(
             @PathVariable Long id,
             @Valid @RequestBody HabitacionPacienteRequestDTO dto) {
 
+        HabitacionPaciente entidad = HabitacionPacienteMapper.fromDto(dto);
+        entidad.setId(id);
         HabitacionPaciente actualizada = service.update(id, dto);
+        HabitacionPacienteResponseDto response = HabitacionPacienteMapper.toResponseDto(actualizada);
 
-        ApiResponseSuccessDto<HabitacionPaciente> resp =
-                new ApiResponseSuccessDto<>(true, "Habitación actualizada correctamente", actualizada);
-
-        return ResponseEntity.ok(resp);
+        return buildResponse("Habitación actualizada correctamente", response, HttpStatus.OK);
     }
 
-
+    /**  Eliminar una habitación */
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<String>> deleteHabitacion(@PathVariable Long id) {
         service.deleteById(id);
-        ApiResponseSuccessDto<String> resp =
-                new ApiResponseSuccessDto<>(true, "Habitación eliminada correctamente", "ID eliminado: " + id);
-        return ResponseEntity.ok(resp);
+        return buildResponse("Habitación eliminada correctamente", "ID eliminado: " + id, HttpStatus.OK);
     }
 
-    
+    /**  Buscar por sector */
     @GetMapping("/sector/{sector}")
-    public ResponseEntity<ApiResponseSuccessDto<List<HabitacionPaciente>>> getBySector(@PathVariable String sector) {
-        List<HabitacionPaciente> lista = service.findBySectorIgnoreCase(sector);
-        ApiResponseSuccessDto<List<HabitacionPaciente>> resp =
-                new ApiResponseSuccessDto<>(true, "Habitaciones del sector: " + sector, lista);
-        return ResponseEntity.ok(resp);
+    public ResponseEntity<ApiResponseSuccessDto<List<HabitacionPacienteResponseDto>>> getBySector(@PathVariable String sector) {
+        List<HabitacionPaciente> entidades = service.findBySectorIgnoreCase(sector);
+        List<HabitacionPacienteResponseDto> lista = entidades.stream()
+                .map(HabitacionPacienteMapper::toResponseDto)
+                .collect(Collectors.toList());
+        return buildResponse("Habitaciones del sector: " + sector, lista, HttpStatus.OK);
     }
 
+    /** 🔹 Contar habitaciones por sector */
     @GetMapping("/count/sector/{sector}")
     public ResponseEntity<ApiResponseSuccessDto<Long>> countBySector(@PathVariable String sector) {
         Long cantidad = service.countBySectorIgnoreCase(sector);
-        ApiResponseSuccessDto<Long> resp =
-                new ApiResponseSuccessDto<>(true, "Cantidad de habitaciones en el sector: " + sector, cantidad);
-        return ResponseEntity.ok(resp);
+        return buildResponse("Cantidad de habitaciones en el sector: " + sector, cantidad, HttpStatus.OK);
     }
 }
 

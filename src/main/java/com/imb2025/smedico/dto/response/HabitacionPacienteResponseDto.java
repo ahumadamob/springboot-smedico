@@ -1,41 +1,37 @@
-package com.imb2025.smedico.dto;
+package com.imb2025.smedico.dto.response;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+public class HabitacionPacienteResponseDto {
 
-public class HabitacionPacienteRequestDTO {
-
-    @NotNull(message = "El número de habitación no puede ser nulo")
-    @Min(value = 1, message = "El número de habitación debe ser mayor a 0")
+    private Long id;
     private Integer numeroHabitacion;
-
-    @NotNull(message = "El piso no puede ser nulo")
     private Integer piso;
-
-    @NotBlank(message = "El sector no puede estar vacío")
-    @Size(min = 2, max = 50, message = "El sector debe tener entre 2 y 50 caracteres")
     private String sector;
-
-    @NotNull(message = "Debe especificarse la cantidad de camas disponibles")
-    @Min(value = 0, message = "La cantidad de camas no puede ser negativa")
     private Integer camasDisponibles;
-
-    @Size(max = 200, message = "La descripción puede tener hasta 200 caracteres")
     private String descripcion;
+    private Integer version;
 
-    public HabitacionPacienteRequestDTO() {}
+    public HabitacionPacienteResponseDto() {}
 
-    public HabitacionPacienteRequestDTO(Integer numeroHabitacion, Integer piso, String sector, Integer camasDisponibles, String descripcion) {
+    public HabitacionPacienteResponseDto(Long id, Integer numeroHabitacion, Integer piso, String sector,
+                                         Integer camasDisponibles, String descripcion, Integer version) {
+        this.id = id;
         this.numeroHabitacion = numeroHabitacion;
         this.piso = piso;
         this.sector = sector;
         this.camasDisponibles = camasDisponibles;
         this.descripcion = descripcion;
+        this.version = version;
     }
 
     // Getters y Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Integer getNumeroHabitacion() {
         return numeroHabitacion;
     }
@@ -74,5 +70,13 @@ public class HabitacionPacienteRequestDTO {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }
