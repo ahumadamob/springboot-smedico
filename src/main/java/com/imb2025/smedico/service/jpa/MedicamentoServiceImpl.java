@@ -1,6 +1,5 @@
 package com.imb2025.smedico.service.jpa;
 
-import com.imb2025.smedico.dto.MedicamentoRequestDto;
 import com.imb2025.smedico.entity.Medicamento;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.MedicamentoRepository;
@@ -55,15 +54,6 @@ public class MedicamentoServiceImpl implements IMedicamentoService {
 		        .orElseThrow(() -> new ResourceNotFoundException("El Medicamento con ID " + id + " no existe."));
 
 		    repoMedic.delete(medicamento);		
-	}
-	
-	@Override
-	public Medicamento fromDto(MedicamentoRequestDto dto) {
-		Medicamento medicamento = new Medicamento();
-	    medicamento.setNombre(dto.getNombre());
-	    medicamento.setDosisSugerida(dto.getDosisSugerida());
-	    medicamento.setPresentacion(dto.getPresentacion());
-	    return medicamento;
 	}
 	
 	@Override
