@@ -20,8 +20,21 @@ public class OrdenEstudioRequestDto {
 
     @NotNull(message="El campo estudioId es obligatorio")
     private Long estudioId;
+    
+    private String codigoOrden;
+    
+    private LocalDate fechaVigencia;
 
-    public OrdenEstudioRequestDto() {}
+
+	public LocalDate getFechaVigencia() {
+		return fechaVigencia;
+	}
+
+	public void setFechaVigencia(LocalDate fechaVigencia) {
+		this.fechaVigencia = fechaVigencia;
+	}
+
+	public OrdenEstudioRequestDto() {}
 
     public OrdenEstudioRequestDto(LocalDate fecha, Long medicoId, Long pacienteId, Long estudioId) {
         this.fecha = fecha;
@@ -30,6 +43,14 @@ public class OrdenEstudioRequestDto {
         this.estudioId = estudioId;
     }
 
+    public String getCodigoOrden() {
+		return codigoOrden;
+	}
+
+	public void setCodigoOrden(String codigoOrden) {
+		this.codigoOrden = codigoOrden;
+	}
+	
     public LocalDate getFecha() {
         return fecha;
     }

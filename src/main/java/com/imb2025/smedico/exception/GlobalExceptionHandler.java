@@ -1,6 +1,6 @@
 package com.imb2025.smedico.exception;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -8,6 +8,7 @@ import java.util.stream.StreamSupport;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 
+import org.apache.coyote.BadRequestException;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException; // CHANGE: para 409
 import org.springframework.http.HttpStatus;
@@ -142,6 +143,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponseErrorDto(false, errors));
     }
 
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ApiResponseErrorDto> handleBadRequest(BadRequestException ex) {
+        ApiResponseErrorDto errorResponse = new ApiResponseErrorDto(
+                false,
+                List.of(new FieldErrorDto("error", ex.getMessage()))
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
     // ---- Helpers ----
 
     private FieldErrorDto toFieldError(ConstraintViolation<?> cv) {

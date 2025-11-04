@@ -24,7 +24,15 @@ public class OrdenEstudio extends BaseEntity {
     @JoinColumn(name = "estudioId")
     private Estudio estudio;
 
-    public OrdenEstudio() {}
+    
+    private String codigoOrden;
+    
+    private LocalDate fechaVigencia;
+    
+    
+  
+
+	public OrdenEstudio() {}
 
     public OrdenEstudio(LocalDate fecha, Medico medico, Paciente paciente, Estudio estudio) {
         this.fecha = fecha;
@@ -34,8 +42,23 @@ public class OrdenEstudio extends BaseEntity {
     }
 
  
+    public LocalDate getFechaVigencia() {
+  		return fechaVigencia;
+  	}
 
-    public LocalDate getFecha() {
+  	public void setFechaVigencia(LocalDate fechaVigencia) {
+  		this.fechaVigencia = fechaVigencia;
+  	}
+    
+    public String getCodigoOrden() {
+		return codigoOrden;
+	}
+
+	public void setCodigoOrden(String codigoOrden) {
+		this.codigoOrden = codigoOrden;
+	}
+
+	public LocalDate getFecha() {
         return fecha;
     }
 

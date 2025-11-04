@@ -29,6 +29,13 @@ public interface IOrdenEstudioService {
 
     // Elimina una orden por ID
     void deleteById(Long id);
+    
+    boolean existsByCodigoOrdenIgnoreCase(String codigoOrden);
 
+    	
+    List<OrdenEstudio> findByFechaVigenciaGreaterThanEqual(LocalDate fecha);
+    List<OrdenEstudio> findByFechaVigenciaLessThan(LocalDate fecha);
+    
+    
 
 }

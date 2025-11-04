@@ -22,6 +22,10 @@ public interface OrdenEstudioRepository extends JpaRepository<OrdenEstudio, Long
 
 	long countByMedico(Medico medico);
 	
+	boolean existsByCodigoOrdenIgnoreCase(String codigoOrden);
 	
+    List<OrdenEstudio> findByFechaVigenciaGreaterThanEqual(LocalDate fecha);
+    List<OrdenEstudio> findByFechaVigenciaLessThan(LocalDate fecha);
+    
 
 }

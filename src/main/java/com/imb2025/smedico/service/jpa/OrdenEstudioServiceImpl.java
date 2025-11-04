@@ -90,6 +90,19 @@ public class OrdenEstudioServiceImpl implements IOrdenEstudioService{
 		return repo.countByMedico(medico);
 	}
 
+	@Override
+	public boolean existsByCodigoOrdenIgnoreCase(String codigoOrden) {
+		return repo.existsByCodigoOrdenIgnoreCase(codigoOrden);
+	}
 
 	
+	@Override
+	public List<OrdenEstudio> findByFechaVigenciaGreaterThanEqual(LocalDate fechaVigencia){
+		return repo.findByFechaVigenciaGreaterThanEqual(fechaVigencia);
+	}
+	
+	@Override
+	public List<OrdenEstudio> findByFechaVigenciaLessThan(LocalDate fechaVigencia){
+		return repo.findByFechaVigenciaLessThan(fechaVigencia);
+	}
 	}

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,47 +32,33 @@ public class OrdenEstudioController {
     private MedicoRepository medicoRepository;
     
 
+    @Autowired
+    private OrdenEstudioMapper mapper;
+
 
     // GET - Obtener todas las órdenes de estudio
     @GetMapping
     public ResponseEntity<ApiResponseSuccessDto<List<OrdenEstudioResponseDto>>> findAllOrdenEstudio() {
         List<OrdenEstudio> ordenes = service.findAll();
-        List<OrdenEstudioResponseDto> listaResponse = new ArrayList<OrdenEstudioResponseDto>();
-    	OrdenEstudioMapper mapper=new OrdenEstudioMapper();
+        List<OrdenEstudioResponseDto> listaResponse = ordenes.stream()
+                .map(mapper::toDto)
+                .toList();
 
-        for(OrdenEstudio o: ordenes){
-        	OrdenEstudioResponseDto dto = new OrdenEstudioResponseDto();
-         	dto=mapper.toDto(o);
-         	listaResponse.add(dto);
-         	
-        }
-        
-        String message;
-        if (ordenes.size() == 0) {
-            message = "No hay órdenes de estudio disponibles";
-        } else {
-            message = "Lista de órdenes de estudio";
-        }
+        String message = listaResponse.isEmpty() ?
+                "No hay órdenes de estudio disponibles" :
+                "Lista de órdenes de estudio";
 
-        ApiResponseSuccessDto<List<OrdenEstudioResponseDto>> resp =
-                new ApiResponseSuccessDto<>(true, message, listaResponse);
-
-        return ResponseEntity.ok(resp);
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, message, listaResponse));
     }
 
     // GET - Obtener una orden de estudio por ID
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<OrdenEstudioResponseDto>> findOrdenEstudioById(@PathVariable("id") Long id) {
- 
         OrdenEstudio orden = service.findById(id);
-        OrdenEstudioMapper mapper=new OrdenEstudioMapper();
-    	OrdenEstudioResponseDto dto= new OrdenEstudioResponseDto();
-        dto=mapper.toDto(orden); 
-        ApiResponseSuccessDto<OrdenEstudioResponseDto> resp =
-                new ApiResponseSuccessDto<>(true, "Orden de Estudio encontrada", dto);
-        return ResponseEntity.ok(resp);
+        return ResponseEntity.ok(
+                new ApiResponseSuccessDto<>(true, "Orden encontrada", mapper.toDto(orden))
+        );
     }
-
 
  // GET - Obtener órdenes de estudio por fecha
     @GetMapping("/fecha/{fecha}")
@@ -92,36 +79,51 @@ public class OrdenEstudioController {
         return ResponseEntity.ok(resp);
     }
 
+    
+    // GET - Obtener la cantidad de órdenes por médico
+    @GetMapping("/recurso/vigentes")
+    public ResponseEntity<ApiResponseSuccessDto<List<OrdenEstudioResponseDto>>> getVigentes() {
+        List<OrdenEstudio> ordenes = service.findByFechaVigenciaGreaterThanEqual(LocalDate.now());
+        List<OrdenEstudioResponseDto> lista = mapper.toResponseDtoList(ordenes);
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Órdenes de estudio vigentes", lista));
+    
+    }
 
+    // GET - Órdenes vencidas
+    @GetMapping("/recurso/vencidos")
+    public ResponseEntity<ApiResponseSuccessDto<List<OrdenEstudioResponseDto>>> getVencidos() {
+        List<OrdenEstudio> ordenes = service.findByFechaVigenciaLessThan(LocalDate.now());
+        List<OrdenEstudioResponseDto> lista = mapper.toResponseDtoList(ordenes);
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Órdenes de estudio vencidas", lista));
+    }
+    
 
     // POST - Crear una nueva orden de estudio
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<OrdenEstudio>> createOrdenEstudio(@Valid @RequestBody OrdenEstudioRequestDto dto) throws Exception {
-          
-    	
-    	OrdenEstudioMapper mapper=new OrdenEstudioMapper();
-    	
-    	OrdenEstudio orden = mapper.fromDto(dto);
-        ApiResponseSuccessDto<OrdenEstudio> resp =
-                new ApiResponseSuccessDto<>(true, "Orden de Estudio creada correctamente", orden);
+    public ResponseEntity<ApiResponseSuccessDto<OrdenEstudioResponseDto>> createOrdenEstudio(
+            @Valid @RequestBody OrdenEstudioRequestDto dto) throws Exception {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
+        if (service.existsByCodigoOrdenIgnoreCase(dto.getCodigoOrden())) {
+            throw new BadRequestException("codigoOrden duplicado");
+        }
+
+        OrdenEstudio guardada = service.create(mapper.fromDto(dto));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ApiResponseSuccessDto<>(true, "Orden creada correctamente", mapper.toDto(guardada)));
     }
 
     // PUT - Actualizar una orden de estudio
     @PutMapping("/{id}")
+    public ResponseEntity<ApiResponseSuccessDto<OrdenEstudioResponseDto>> updateOrdenEstudio(
+            @PathVariable Long id,
+            @Valid @RequestBody OrdenEstudioRequestDto dto) throws Exception {
 
-    public ResponseEntity<ApiResponseSuccessDto<OrdenEstudio>> updateOrdenEstudio(@PathVariable("id") Long id,@Valid @RequestBody OrdenEstudioRequestDto dto) throws Exception {
-        
-    	OrdenEstudioMapper mapper=new OrdenEstudioMapper();
-    	OrdenEstudio orden = mapper.fromDto(dto);  
-    	OrdenEstudio ordenActualizada = service.update(id, orden);
+        OrdenEstudio orden = mapper.fromDto(dto);
+        OrdenEstudio actualizada = service.update(id, orden);
 
-
-        ApiResponseSuccessDto<OrdenEstudio> resp =
-                new ApiResponseSuccessDto<>(true, "Orden de Estudio actualizada correctamente", ordenActualizada);
-
-        return ResponseEntity.ok(resp);
+        return ResponseEntity.ok(
+                new ApiResponseSuccessDto<>(true, "Orden actualizada correctamente", mapper.toDto(actualizada))
+        );
     }
 
     // DELETE - Eliminar una orden de estudio

@@ -16,8 +16,25 @@ public class OrdenEstudioResponseDto {
 	    private Medico medico;
 	   	private Estudio estudio;
 
+	   	private String codigoOrden;
 	    
+       private LocalDate fechaVigencia;
 
+		public LocalDate getFechaVigencia() {
+		return fechaVigencia;
+	}
+
+	public void setFechaVigencia(LocalDate fechaVigencia) {
+		this.fechaVigencia = fechaVigencia;
+	}
+
+		public String getCodigoOrden() {
+			return codigoOrden;
+		}
+
+		public void setCodigoOrden(String codigoOrden) {
+			this.codigoOrden = codigoOrden;
+		}
 
 	public Paciente getPaciente() {
 			return paciente;
