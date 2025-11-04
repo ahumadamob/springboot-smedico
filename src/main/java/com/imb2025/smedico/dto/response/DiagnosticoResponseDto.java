@@ -1,30 +1,27 @@
-package com.imb2025.smedico.entity;
+package com.imb2025.smedico.dto.response;
 
-import jakarta.persistence.*;
 import java.time.LocalDate;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@Entity
-@Table(name = "diagnostico")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Diagnostico extends BaseEntity {
+public class DiagnosticoResponseDto {
 
-    @Column(name = "consulta_id")
+    private Long id;
     private Long consultaId;
-
-    @Column(name = "descripcion")
     private String descripcion;
-
-    @Column(name = "fecha_diagnostico")
     private LocalDate fechaDiagnostico;
+    private Long version;
 
-    public Diagnostico() { }
+    public DiagnosticoResponseDto() { }
 
-    public Diagnostico(Long consultaId, String descripcion, LocalDate fechaDiagnostico) {
+    public DiagnosticoResponseDto(Long id, Long consultaId, String descripcion, LocalDate fechaDiagnostico, Long version) {
+        this.id = id;
         this.consultaId = consultaId;
         this.descripcion = descripcion;
         this.fechaDiagnostico = fechaDiagnostico;
+        this.version = version;
     }
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public Long getConsultaId() { return consultaId; }
     public void setConsultaId(Long consultaId) { this.consultaId = consultaId; }
@@ -34,4 +31,7 @@ public class Diagnostico extends BaseEntity {
 
     public LocalDate getFechaDiagnostico() { return fechaDiagnostico; }
     public void setFechaDiagnostico(LocalDate fechaDiagnostico) { this.fechaDiagnostico = fechaDiagnostico; }
+
+    public Long getVersion() { return version; }
+    public void setVersion(Long version) { this.version = version; }
 }

@@ -1,6 +1,7 @@
 package com.imb2025.smedico.service.jpa;
 
-import com.imb2025.smedico.dto.DiagnosticoRequestDto;
+import com.imb2025.smedico.dto.mapper.DiagnosticoMapper;
+import com.imb2025.smedico.dto.request.DiagnosticoRequestDto;
 import com.imb2025.smedico.entity.Diagnostico;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.DiagnosticoRepository;
@@ -66,12 +67,9 @@ public class DiagnosticoServiceImpl implements IDiagnosticoService {
 
     @Override
     public Diagnostico fromDto(DiagnosticoRequestDto dto) {
-        Diagnostico d = new Diagnostico();
-        d.setConsultaId(dto.getConsultaId());
-        d.setDescripcion(dto.getDescripcion());
-        d.setFechaDiagnostico(dto.getFechaDiagnostico());
-        return d;
+        return DiagnosticoMapper.fromDto(dto);
     }
+
     
     @Override
     public List<Diagnostico> findByFechaDiagnostico(LocalDate fechaDiagnostico) {
