@@ -30,13 +30,10 @@ public class ConsultaController {
     @Autowired
     private IConsultaService consultaService;
 
-    // ---------- Listado ----------
     @GetMapping
     public ResponseEntity<ApiResponseSuccessDto<List<ConsultaResponseDto>>> findAll() {
         List<ConsultaResponseDto> data = consultaService.findAll()
-                .stream()
-                .map(ConsultaMapper::toResponseDto)
-                .collect(Collectors.toList());
+                .stream().map(ConsultaMapper::toResponseDto).toList();
 
         var resp = new ApiResponseSuccessDto<List<ConsultaResponseDto>>();
         resp.setSuccess(true);
@@ -45,11 +42,9 @@ public class ConsultaController {
         return ResponseEntity.ok(resp);
     }
 
-    // ---------- Detalle por ID ----------
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<ConsultaResponseDto>> getById(@PathVariable Long id) {
         Consulta c = consultaService.findById(id);
-
         var resp = new ApiResponseSuccessDto<ConsultaResponseDto>();
         resp.setSuccess(true);
         resp.setData(ConsultaMapper.toResponseDto(c));
@@ -57,12 +52,11 @@ public class ConsultaController {
         return ResponseEntity.ok(resp);
     }
 
-    // ---------- Crear ----------
     @PostMapping
     public ResponseEntity<ApiResponseSuccessDto<ConsultaResponseDto>> create(
             @Valid @RequestBody ConsultaRequestDto dto) {
-
-        Consulta creada = consultaService.createFromDto(dto);
+        Consulta nueva = ConsultaMapper.fromRequestDto(dto);
+        Consulta creada = consultaService.create(nueva, dto.getTurnoId());
 
         var resp = new ApiResponseSuccessDto<ConsultaResponseDto>();
         resp.setSuccess(true);
@@ -71,13 +65,12 @@ public class ConsultaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 
-    // ---------- Actualizar ----------
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<ConsultaResponseDto>> update(
             @PathVariable Long id,
             @Valid @RequestBody ConsultaRequestDto dto) {
-
-        Consulta actualizada = consultaService.updateFromDto(id, dto);
+        Consulta cambios = ConsultaMapper.fromRequestDto(dto);
+        Consulta actualizada = consultaService.update(id, cambios, dto.getTurnoId());
 
         var resp = new ApiResponseSuccessDto<ConsultaResponseDto>();
         resp.setSuccess(true);
