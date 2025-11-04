@@ -1,6 +1,6 @@
 package com.imb2025.smedico.service.jpa;
 
-import com.imb2025.smedico.dto.MedioPagoRequestDto;
+
 import com.imb2025.smedico.entity.MedioPago;
 import com.imb2025.smedico.entity.MedioPago.TipoPago;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
@@ -39,28 +39,22 @@ public class MedioPagoServiceImpl implements IMedioPagoService {
         }
 
 	@Override
-        public MedioPago update(Long id, MedioPago medioPago) {
-                if (repo.existsById(id)) {
-                        medioPago.setId(id);
-                        return repo.save(medioPago);
-                }
-                return repo.findById(id)//c
-            		    .orElseThrow(() -> new ResourceNotFoundException(
-            		        "No se pudo actualizar. Entidad no encontrada de id " + id)); 
-        } 
+    public MedioPago update(Long id, MedioPago medioPago) {
+
+		if (this.existsById(id)) {
+			medioPago.setId(id);
+			
+			return repo.save(medioPago); 
+		}
+		
+		throw new ResourceNotFoundException( "No se pudo actualizar. Entidad no encontrada de id " + id);
+   
+     } 
 
 	@Override
 	public void deleteById(Long id) {
 		repo.deleteById(id);
 	}
-
-    @Override
-    public MedioPago fromDto(MedioPagoRequestDto dto) {
-    	MedioPago medioPago = new MedioPago();
-    	medioPago.setNombre(dto.getNombre());
-    	medioPago.setTipo(dto.getTipo());     
-    	return medioPago; 
-    }
     
     //a
     @Override

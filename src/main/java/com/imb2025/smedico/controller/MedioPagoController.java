@@ -1,5 +1,6 @@
 package com.imb2025.smedico.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.imb2025.smedico.dto.MedioPagoRequestDto;
+import com.imb2025.smedico.dto.request.MedioPagoRequestDto;
+import com.imb2025.smedico.dto.response.MedioPagoResponseDto;
 import com.imb2025.smedico.entity.MedioPago;
 import com.imb2025.smedico.entity.MedioPago.TipoPago;
+import com.imb2025.smedico.mapper.MedioPagoMapper;
 import com.imb2025.smedico.service.IMedioPagoService;
 
 import jakarta.validation.Valid;
@@ -35,65 +38,90 @@ public class MedioPagoController {
 	}
 	
     @GetMapping
-    public ResponseEntity<ApiResponseSuccessDto<List<MedioPago>>> findAllMedioPago() {
+    public ResponseEntity<ApiResponseSuccessDto<List<MedioPagoResponseDto>>> findAllMedioPago() {
     	List<MedioPago> lista = service.findAll();
+        List<MedioPagoResponseDto> listaResponseDto = new ArrayList<MedioPagoResponseDto>();
+        MedioPagoMapper medioPagoMapper = new MedioPagoMapper();
     	
-        String mensaje = lista.isEmpty()
-            ? "No hay registro de medios de pago"
-            : "Todos los registros de medios de pago";            
+        
+        for(MedioPago mediopago: lista) {
+        	MedioPagoResponseDto respDto = new MedioPagoResponseDto();
+        	respDto = medioPagoMapper.toResponseDto(mediopago);
+        	listaResponseDto.add(respDto);
+        }
+            
 
-        ApiResponseSuccessDto<List<MedioPago>> response =
-            new ApiResponseSuccessDto<>(true, mensaje, lista);    
+        ApiResponseSuccessDto<List<MedioPagoResponseDto>> response =
+            new ApiResponseSuccessDto<>(true, listaResponseDto.isEmpty() ? "No hay registro de medios de pago" : "Todos los registros de medios de pago", listaResponseDto);    
         return ResponseEntity.ok(response);
 
     }
 
     @GetMapping("/{idmediopago}")
-    public ResponseEntity<ApiResponseSuccessDto<MedioPago>> findMedioPagoByid(@PathVariable("idmediopago") Long id) {
-            MedioPago medioPago = service.findById(id); 
-            ApiResponseSuccessDto<MedioPago> response = new ApiResponseSuccessDto<>(true, "Medio de pago de id "+ id + " encontrado", medioPago);
-            return ResponseEntity.ok(response);
-    } 
-
-    @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<MedioPago>> createMedioPago(@Valid @RequestBody MedioPagoRequestDto mediopagoRequestDto) throws Exception {
-            MedioPago medioPago = service.fromDto(mediopagoRequestDto);
-            MedioPago creado = service.create(medioPago);
-            ApiResponseSuccessDto<MedioPago> response = new ApiResponseSuccessDto<>(true, "Medio de pago creado exitosamente!", medioPago);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    } 
-
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<MedioPago>> updateMedioPago(@PathVariable Long id,@Valid @RequestBody MedioPagoRequestDto mediopagoDto) throws Exception {
-            MedioPago medioPago = service.fromDto(mediopagoDto);
-            MedioPago actualizado = service.update(id, medioPago); 
-            ApiResponseSuccessDto<MedioPago> response = new ApiResponseSuccessDto<>(true,"Medio de pago actualizado exitosamente!", actualizado);
-    	    return ResponseEntity.ok(response); 
+    public ResponseEntity<ApiResponseSuccessDto<MedioPagoResponseDto>> findMedioPagoByid(@PathVariable("idmediopago") Long id) {
+        MedioPago medioPago = service.findById(id);
+        MedioPagoMapper mapper = new MedioPagoMapper();
+        MedioPagoResponseDto respDto = mapper.toResponseDto(medioPago);
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Medio de pago de id " + id + " encontrado", respDto));
     }
 
+
+    @PostMapping
+    public ResponseEntity<ApiResponseSuccessDto<MedioPagoResponseDto>> createMedioPago(@Valid @RequestBody MedioPagoRequestDto mediopagoRequestDto) { //corregido
+    	MedioPagoMapper mapper = new MedioPagoMapper();
+		MedioPago creado = service.create(mapper.fromDto(mediopagoRequestDto));
+        MedioPagoResponseDto responseDto = mapper.toResponseDto(creado);
+        ApiResponseSuccessDto<MedioPagoResponseDto> response = new ApiResponseSuccessDto<>(true, "Medio de pago creado exitosamente!", responseDto);
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponseSuccessDto<MedioPagoResponseDto>> updateMedioPago(@PathVariable Long id, @Valid @RequestBody MedioPagoRequestDto mediopagoDto) { //corregido
+    	MedioPagoMapper mapper = new MedioPagoMapper();
+        MedioPago medioPago = mapper.fromDto(mediopagoDto);
+        medioPago.setId(id); 
+        MedioPago actualizado = service.update(id, medioPago);
+        MedioPagoResponseDto responseDto = mapper.toResponseDto(actualizado);
+        ApiResponseSuccessDto<MedioPagoResponseDto> response = new ApiResponseSuccessDto<>(true, "Medio de pago actualizado exitosamente!", responseDto);
+        return ResponseEntity.ok(response);
+    }
+
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<String>> deleteMedioPago(@PathVariable Long id) throws Exception {
+    public ResponseEntity<ApiResponseSuccessDto<String>> deleteMedioPago(@PathVariable Long id) {
             service.deleteById(id); 
             ApiResponseSuccessDto<String> response = new ApiResponseSuccessDto<>(true, "Medio de pago eliminado exitosamente!", "id: "+ id);
             return ResponseEntity.ok(response);
     }
     
-    //a
+    
     @GetMapping("/tipo/{tipo}")
-    public ResponseEntity<ApiResponseSuccessDto<List<MedioPago>>> findByTipo(@PathVariable String tipo) {
+    public ResponseEntity<ApiResponseSuccessDto<List<MedioPagoResponseDto>>> findByTipo(@PathVariable String tipo) { //corregido
         TipoPago tipoEnum = TipoPago.valueOf(tipo.toUpperCase());
         List<MedioPago> lista = service.findByTipo(tipoEnum);
-        String mensaje = lista.isEmpty() ? "No se encontraron medios de pago del tipo " + tipo : "Medios de pago del tipo " + tipo;
-        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, mensaje, lista));
+		List<MedioPagoResponseDto> listaResponseDto = new ArrayList<>();//a
+		MedioPagoMapper mapper = new MedioPagoMapper();
+		
+		for (MedioPago mediopago : lista) {
+            listaResponseDto.add(mapper.toResponseDto(mediopago));
+        }
+        String mensaje = listaResponseDto.isEmpty()
+            ? "No se encontraron medios de pago del tipo " + tipo
+            : "Medios de pago del tipo " + tipo;
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, mensaje, listaResponseDto));
     }
 
-    //a
+
+    
     @GetMapping("/count/{nombre}")
     public ResponseEntity<ApiResponseSuccessDto<Long>> countByNombre(@PathVariable String nombre) {
         Long cantidad = service.countByNombre(nombre);
         String mensaje = "Cantidad de medios de pago con nombre '" + nombre + "': " + cantidad;
         return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, mensaje, cantidad));
     }
+
 
 
 }  
