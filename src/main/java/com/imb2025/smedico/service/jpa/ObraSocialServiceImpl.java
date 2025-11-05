@@ -1,22 +1,20 @@
 package com.imb2025.smedico.service.jpa;
 
+import com.imb2025.smedico.dto.request.ObraSocialRequestDto;
+import com.imb2025.smedico.dto.response.ObraSocialResponseDto;
+import com.imb2025.smedico.entity.ObraSocial;
+import com.imb2025.smedico.mapper.ObraSocialMapper;
+import com.imb2025.smedico.repository.ObraSocialRepository;
+import com.imb2025.smedico.service.IObraSocialService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.stereotype.Service;
-
-import com.imb2025.smedico.dto.ObraSocialRequestDto;
-import com.imb2025.smedico.dto.ObraSocialResponseDto;
-import com.imb2025.smedico.entity.ObraSocial;
-import com.imb2025.smedico.exception.ResourceNotFoundException;
-import com.imb2025.smedico.repository.ObraSocialRepository;
-import com.imb2025.smedico.service.IObraSocialService;
-
-/**
- * Implementación de IObraSocialService utilizando JPA.
- */
 @Service
 public class ObraSocialServiceImpl implements IObraSocialService {
 
@@ -27,89 +25,103 @@ public class ObraSocialServiceImpl implements IObraSocialService {
     public List<ObraSocialResponseDto> findAll() {
         return repository.findAll()
                 .stream()
-                .map(this::toDto) // ✅ Se convierte la entidad a DTO de respuesta
+                .map(ObraSocialMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public ObraSocialResponseDto findById(Long id) {
-        ObraSocial obraSocial = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entidad no encontrada con id " + id));
-        return toDto(obraSocial); // ✅ Devuelve DTO
+        ObraSocial entity = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "ObraSocial no encontrada"));
+        return ObraSocialMapper.toResponseDto(entity);
+    }
+
+    @Override
+    public ObraSocialResponseDto findByNombre(String nombre) {
+        ObraSocial entity = repository.findByNombre(nombre)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "ObraSocial no encontrada"));
+        return ObraSocialMapper.toResponseDto(entity);
     }
 
     @Override
     public ObraSocialResponseDto create(ObraSocialRequestDto dto) {
-        if (repository.existsByNombre(dto.getNombre())) {
-            throw new IllegalArgumentException("Ya existe una obra social con ese nombre.");
+
+        if (repository.findByIdentificadorLegibleIgnoreCase(dto.getIdentificadorLegible()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "{ \"errors\": [\"identificadorLegible duplicado\"] }");
         }
-        ObraSocial nueva = fromDto(dto);
+
+        ObraSocial nueva = ObraSocialMapper.fromDto(dto);
         ObraSocial guardada = repository.save(nueva);
-        return toDto(guardada); // ✅ Devuelve DTO
+        return ObraSocialMapper.toResponseDto(guardada);
     }
 
     @Override
     public ObraSocialResponseDto update(Long id, ObraSocialRequestDto dto) {
+        ObraSocial entity = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "ObraSocial no encontrada"));
+
+        entity.setIdentificadorLegible(dto.getIdentificadorLegible());
+        entity.setNombre(dto.getNombre());
+        entity.setTelefono(dto.getTelefono());
+        entity.setDireccion(dto.getDireccion());
+        entity.setCobertura(dto.getCobertura());
+        entity.setFechaVigencia(dto.getFechaVigencia());
+
+        ObraSocial actualizada = repository.save(entity);
+        return ObraSocialMapper.toResponseDto(actualizada);
+    }
+    @Override
+    public List<ObraSocialResponseDto> findVigentes() {
+        LocalDate hoy = LocalDate.now();
+        return repository.findByFechaVigenciaGreaterThanEqual(hoy)
+                .stream()
+                .map(ObraSocialMapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    // 🔹 Obtener registros vencidos (fechaVigencia < hoy)
+    @Override
+    public List<ObraSocialResponseDto> findVencidos() {
+        LocalDate hoy = LocalDate.now();
+        return repository.findByFechaVigenciaLessThan(hoy)
+                .stream()
+                .map(ObraSocialMapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    
+    @Override
+    public void delete(Long id) {
         if (!repository.existsById(id)) {
-            throw new ResourceNotFoundException("No existe la obra social con ID: " + id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ObraSocial no encontrada");
         }
-        ObraSocial entidad = fromDto(dto);
-        entidad.setId(id);
-        ObraSocial actualizada = repository.save(entidad);
-        return toDto(actualizada);
+        repository.deleteById(id);
     }
 
-    @Override
-    public void deleteById(Long id) {
-        try {
-            repository.deleteById(id);
-        } catch (EmptyResultDataAccessException e) {
-            throw new ResourceNotFoundException("No se encontró la obra social con ID: " + id);
-        }
-    }
+	@Override
+	public void deleteById(Long id) {
+		
+	}
 
-    @Override
-    public boolean existsById(Long id) {
-        return repository.existsById(id);
-    }
+	@Override
+	public boolean existsById(Long id) {
+		return false;
+	}
 
-    // ✅ Nuevo método mágico: contar por cobertura
-    @Override
-    public long countByCobertura(String cobertura) {
-        return repository.countByCobertura(cobertura);
-    }
+	@Override
+	public long countByCobertura(String cobertura) {
+		return 0;
+	}
 
-    // ✅ Nuevo método mágico: buscar por nombre
-    @Override
-    public ObraSocialResponseDto findByNombre(String nombre) {
-        ObraSocial obraSocial = repository.findByNombre(nombre)
-                .orElseThrow(() -> new ResourceNotFoundException("No se encontró obra social con nombre: " + nombre));
-        return toDto(obraSocial);
-    }
+	@Override
+	public List<ObraSocialResponseDto> findVigentes(LocalDate fecha) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    // ✅ Métodos auxiliares privados de conversión
-    private ObraSocial fromDto(ObraSocialRequestDto dto) {
-        return new ObraSocial(
-            dto.getNombre(),
-            dto.getTelefono(),
-            dto.getDireccion(),
-            dto.getCobertura()
-        );
-    }
-
-    private ObraSocialResponseDto toDto(ObraSocial entity) {
-        ObraSocialResponseDto dto = new ObraSocialResponseDto();
-        dto.setId(entity.getId());
-        dto.setNombre(entity.getNombre());
-        dto.setTelefono(entity.getTelefono());
-        dto.setDireccion(entity.getDireccion());
-        dto.setCobertura(entity.getCobertura());
-        return dto;
-    }
-
+	@Override
+	public List<ObraSocialResponseDto> findVencidos(LocalDate fecha) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
-
-
-
-
-
