@@ -37,7 +37,9 @@ public class EncuestaMapper {
     }
 
     public EncuestaResponseDto toDto(Encuesta encuesta) {
+    	
         EncuestaResponseDto dto = new EncuestaResponseDto();
+        
         dto.setId(encuesta.getId());
         dto.setVersion(encuesta.getVersion());
         dto.setComentario(encuesta.getComentario());
