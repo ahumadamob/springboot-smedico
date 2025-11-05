@@ -1,14 +1,12 @@
 package com.imb2025.smedico.service.jpa;
 
-import com.imb2025.smedico.dto.DiagnosticoRequestDto;
+import com.imb2025.smedico.dto.request.DiagnosticoRequestDto;
 import com.imb2025.smedico.entity.Diagnostico;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.DiagnosticoRepository;
 import com.imb2025.smedico.service.IDiagnosticoService;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,10 +20,7 @@ public class DiagnosticoServiceImpl implements IDiagnosticoService {
     }
 
     @Override
-    public List<Diagnostico> findAll() {
-        // No debería lanzar excepción; si la lista está vacía, el controller decide qué devolver
-        return repo.findAll();
-    }
+    public List<Diagnostico> findAll() { return repo.findAll(); }
 
     @Override
     public Diagnostico findById(Long id) {
@@ -35,10 +30,7 @@ public class DiagnosticoServiceImpl implements IDiagnosticoService {
 
     @Transactional
     @Override
-    public Diagnostico create(Diagnostico diagnostico) {
-        // save inserta si id == null
-        return repo.save(diagnostico);
-    }
+    public Diagnostico create(Diagnostico diagnostico) { return repo.save(diagnostico); }
 
     @Transactional
     @Override
@@ -60,9 +52,7 @@ public class DiagnosticoServiceImpl implements IDiagnosticoService {
     }
 
     @Override
-    public boolean existsById(Long id) {
-        return repo.existsById(id);
-    }
+    public boolean existsById(Long id) { return repo.existsById(id); }
 
     @Override
     public Diagnostico fromDto(DiagnosticoRequestDto dto) {
@@ -70,9 +60,12 @@ public class DiagnosticoServiceImpl implements IDiagnosticoService {
         d.setConsultaId(dto.getConsultaId());
         d.setDescripcion(dto.getDescripcion());
         d.setFechaDiagnostico(dto.getFechaDiagnostico());
+        d.setIdentificadorLegible(dto.getIdentificadorLegible());
+        d.setFechaVigencia(dto.getFechaVigencia());
         return d;
     }
-    
+
+    // TP7
     @Override
     public List<Diagnostico> findByFechaDiagnostico(LocalDate fechaDiagnostico) {
         return repo.findByFechaDiagnostico(fechaDiagnostico);
@@ -83,4 +76,20 @@ public class DiagnosticoServiceImpl implements IDiagnosticoService {
         return repo.countByFechaDiagnostico(fechaDiagnostico);
     }
 
+    // Ej.2
+    @Override
+    public boolean existsByIdentificadorLegibleIgnoreCase(String identificadorLegible) {
+        return repo.existsByIdentificadorLegibleIgnoreCase(identificadorLegible);
+    }
+
+    // Ej.3
+    @Override
+    public List<Diagnostico> findVigentes(LocalDate hoy) {
+        return repo.findByFechaVigenciaGreaterThanEqual(hoy);
+    }
+
+    @Override
+    public List<Diagnostico> findVencidos(LocalDate hoy) {
+        return repo.findByFechaVigenciaLessThan(hoy);
+    }
 }
