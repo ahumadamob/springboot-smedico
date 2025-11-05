@@ -1,6 +1,6 @@
 package com.imb2025.smedico.service;
 
-import com.imb2025.smedico.dto.ConsultorioRequestDto;
+import com.imb2025.smedico.dto.request.ConsultorioRequestDto;
 import com.imb2025.smedico.entity.Consultorio;
 import java.util.List;
 

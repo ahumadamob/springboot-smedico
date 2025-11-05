@@ -3,11 +3,12 @@ package com.imb2025.smedico.service.jpa;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.imb2025.smedico.dto.request.ConsultorioRequestDto;
 import com.imb2025.smedico.entity.Consultorio;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.ConsultorioRepository;
 import com.imb2025.smedico.service.IConsultorioService;
-import com.imb2025.smedico.dto.ConsultorioRequestDto;
 
 
 @Service
@@ -69,9 +70,9 @@ public class ConsultorioServiceImpl implements IConsultorioService {
     	}else {
     		throw new RuntimeException("El Consultorio " + id + " no existe");
     	}
-	}
-    
-    @Override
+    }
+   
+   @Override
 	public Consultorio fromDto(ConsultorioRequestDto dto) throws Exception {
     	if(dto.getNombre() == null || dto.getNombre().isBlank()) {
     		throw new IllegalArgumentException("El nombre no puede estar vacío");
