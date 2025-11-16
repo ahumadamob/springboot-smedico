@@ -43,22 +43,22 @@ public class SignosVitalesMapper {
 	        }
 	    }
 	    
-	    return new SignosVitalesResponseDto(
-	    		
-	        s.getId(),
-	        s.getFechaHora(),
-	        s.getPeso(),
-	        s.getAltura(),
-	        s.getImc(),
-	        s.getTemperatura(),
-	        s.getFrecuenciaCardiaca(),
-	        s.getPresionSistolica(),
-	        s.getPresionDiastolica(),
-	        s.getSaturacionO2(),
-	        s.getObservaciones(),
-	        s.getConsulta().getId(),
-	        s.getVersion()
-	    );
-	}
+        return new SignosVitalesResponseDto(
+
+                s.getId(),
+                s.getFechaHora(),
+                s.getPeso(),
+                s.getAltura(),
+                s.getImc(),
+                s.getTemperatura(),
+                s.getFrecuenciaCardiaca(),
+                s.getPresionSistolica(),
+                s.getPresionDiastolica(),
+                s.getSaturacionO2(),
+                s.getObservaciones(),
+                idConsulta,
+                s.getVersion()
+            );
+        }
 
 }

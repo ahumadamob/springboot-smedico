@@ -1,18 +1,12 @@
 package com.imb2025.smedico.service.jpa;
 
-import com.imb2025.smedico.dto.request.RecetaRequestDto;
-import com.imb2025.smedico.entity.Medico;
-import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.entity.Receta;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
-import com.imb2025.smedico.repository.MedicoRepository;
-import com.imb2025.smedico.repository.PacienteRepository;
 import com.imb2025.smedico.repository.RecetaRepository;
 import com.imb2025.smedico.service.IRecetaService;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +16,6 @@ public class RecetaServiceImpl implements IRecetaService {
 
     @Autowired
     private RecetaRepository repo;
-
-    @Autowired
-    private MedicoRepository medicoRepository;
-
-    @Autowired
-    private PacienteRepository pacienteRepository;
 
     @Override
     public List<Receta> findAll() {

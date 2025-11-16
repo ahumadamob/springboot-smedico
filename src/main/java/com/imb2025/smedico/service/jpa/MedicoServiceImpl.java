@@ -6,9 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.imb2025.smedico.entity.Medico;
-import com.imb2025.smedico.dto.request.MedicoRequestDto;
-import com.imb2025.smedico.entity.Especialidad;
-import com.imb2025.smedico.repository.EspecialidadRepository;
 import com.imb2025.smedico.repository.MedicoRepository;
 import com.imb2025.smedico.service.IMedicoService;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
@@ -18,9 +15,6 @@ public class MedicoServiceImpl implements IMedicoService {
 
     @Autowired
     private MedicoRepository repo;
-
-    @Autowired
-    private EspecialidadRepository repoEspecialidad;
 
     @Override
     public List<Medico> findAll() {

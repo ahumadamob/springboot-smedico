@@ -8,8 +8,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.imb2025.smedico.dto.mapper.SignosVitalesMapper;
-import com.imb2025.smedico.dto.request.SignosVitalesRequestDto;
 import com.imb2025.smedico.entity.Consulta;
 import com.imb2025.smedico.entity.SignosVitales;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
@@ -25,9 +23,6 @@ public class SignosVitalesServiceImpl implements ISignosVitalesService {
 
     @Autowired
     private IConsultaService consultaService;
-    
-    SignosVitalesMapper mapper = new SignosVitalesMapper();
-
     @Override
     public List<SignosVitales> findAll() {
         return signos.findAll();

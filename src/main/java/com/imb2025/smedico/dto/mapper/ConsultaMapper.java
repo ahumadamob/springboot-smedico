@@ -3,7 +3,6 @@ package com.imb2025.smedico.dto.mapper;
 import com.imb2025.smedico.dto.request.ConsultaRequestDto;
 import com.imb2025.smedico.dto.response.ConsultaResponseDto;
 import com.imb2025.smedico.entity.Consulta;
-import com.imb2025.smedico.entity.Turno;
 public final class ConsultaMapper {
     private ConsultaMapper() {}
 
