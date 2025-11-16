@@ -1,8 +1,5 @@
 package com.imb2025.smedico.service;
 
-import com.imb2025.smedico.dto.request.RecetaRequestDto;
-import com.imb2025.smedico.entity.Medico;
-import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.entity.Receta;
 
 import java.time.LocalDate;

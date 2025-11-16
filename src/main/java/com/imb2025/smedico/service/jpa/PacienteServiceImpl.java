@@ -1,6 +1,5 @@
 package com.imb2025.smedico.service.jpa;
 
-import com.imb2025.smedico.dto.request.PacienteRequestDto;
 import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.PacienteRepository;

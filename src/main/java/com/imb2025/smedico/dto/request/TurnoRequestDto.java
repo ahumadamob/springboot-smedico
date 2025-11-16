@@ -1,4 +1,4 @@
-package com.imb2025.smedico.dto.request.TurnoRequestDto;
+package com.imb2025.smedico.dto.request;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

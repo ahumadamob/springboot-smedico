@@ -2,7 +2,6 @@ package com.imb2025.smedico.dto.response;
 
 import com.imb2025.smedico.entity.MedioPago;
 import com.imb2025.smedico.entity.Paciente;
-import jakarta.persistence.ManyToOne;
 
 import java.time.LocalDate;
 

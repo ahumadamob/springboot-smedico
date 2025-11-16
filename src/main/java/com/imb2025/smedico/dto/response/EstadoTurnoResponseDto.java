@@ -1,7 +1,6 @@
 package com.imb2025.smedico.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import com.imb2025.smedico.entity.EstadoTurno; // Se mantiene el import por claridad, aunque el constructor se ha simplificado
 
 /**
  * DTO de respuesta para la entidad EstadoTurno. Cumple con los requisitos del TP08.

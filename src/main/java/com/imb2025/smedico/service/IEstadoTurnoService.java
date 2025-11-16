@@ -2,7 +2,6 @@ package com.imb2025.smedico.service;
 
 import com.imb2025.smedico.entity.EstadoTurno;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
-import com.imb2025.smedico.dto.request.EstadoTurnoRequestDto; 
 
 import java.util.List;
 
