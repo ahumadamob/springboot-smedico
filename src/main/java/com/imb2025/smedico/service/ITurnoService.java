@@ -1,7 +1,8 @@
 package com.imb2025.smedico.service;
 
-import com.imb2025.smedico.dto.request.TurnoRequestDto.TurnoRequestDto;
-import com.imb2025.smedico.dto.response.TurnoResponseDto.TurnoResponseDto;
+import com.imb2025.smedico.dto.request.TurnoRequestDto;
+import com.imb2025.smedico.dto.response.TurnoResponseDto;
+
 import java.time.LocalDate;
 import java.util.List;
 

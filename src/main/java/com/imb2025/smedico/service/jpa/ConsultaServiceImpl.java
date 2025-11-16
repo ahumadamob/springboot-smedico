@@ -1,24 +1,18 @@
 package com.imb2025.smedico.service.jpa;
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.imb2025.smedico.dto.mapper.ConsultaMapper;
-import com.imb2025.smedico.dto.request.ConsultaRequestDto;
 import com.imb2025.smedico.entity.Consulta;
 import com.imb2025.smedico.entity.Turno;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.ConsultaRepository;
 import com.imb2025.smedico.repository.TurnoRepository;
 import com.imb2025.smedico.service.IConsultaService;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 @Service
 @Transactional
 public class ConsultaServiceImpl implements IConsultaService {
