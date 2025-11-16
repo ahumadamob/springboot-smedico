@@ -1,18 +1,25 @@
 package com.imb2025.smedico.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "encuestas")
-public class Encuesta {
+public class Encuesta extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    @Size(max = 500)
     @Column(length = 500)
     private String comentario;
 
+    @Min(1)
+    @Max(10)
     @Column(nullable = false)
     private int puntaje;
 
@@ -24,18 +31,14 @@ public class Encuesta {
     @JoinColumn(name = "consulta_id", nullable = false)
     private Consulta consulta;
 
-    public Encuesta() { }
+    public Encuesta() {}
 
-    public Encuesta(Long id, Paciente paciente, Consulta consulta, int puntaje, String comentario) {
-        this.id = id;
+    public Encuesta(Paciente paciente, Consulta consulta, int puntaje, String comentario) {
         this.paciente = paciente;
         this.consulta = consulta;
         this.puntaje = puntaje;
         this.comentario = comentario;
     }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
     public String getComentario() { return comentario; }
     public void setComentario(String comentario) { this.comentario = comentario; }
