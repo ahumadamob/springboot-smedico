@@ -1,7 +1,5 @@
 package com.imb2025.smedico.dto.response;
 
-import com.imb2025.smedico.entity.Paciente;
-
 public class PacienteResponseDto {
 
     private Long id; 

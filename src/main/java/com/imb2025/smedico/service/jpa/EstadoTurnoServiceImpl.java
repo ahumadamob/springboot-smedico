@@ -1,7 +1,6 @@
 package com.imb2025.smedico.service.jpa;
 
 import com.imb2025.smedico.exception.ResourceNotFoundException;
-import com.imb2025.smedico.mapper.EstadoTurnoMapper; // Importamos el Mapper
 
 import java.util.List;
 
@@ -10,18 +9,15 @@ import org.springframework.stereotype.Service;
 import com.imb2025.smedico.entity.EstadoTurno;
 import com.imb2025.smedico.repository.EstadoTurnoRepository;
 import com.imb2025.smedico.service.IEstadoTurnoService;
-import com.imb2025.smedico.dto.request.EstadoTurnoRequestDto;
 
 @Service
 public class EstadoTurnoServiceImpl implements IEstadoTurnoService {
 
     private final EstadoTurnoRepository estadoTurnoRepository;
-    private final EstadoTurnoMapper mapper; 
 
     // Constructor con inyección de dependencias
-    public EstadoTurnoServiceImpl(EstadoTurnoRepository estadoTurnoRepository, EstadoTurnoMapper mapper) {
+    public EstadoTurnoServiceImpl(EstadoTurnoRepository estadoTurnoRepository) {
         this.estadoTurnoRepository = estadoTurnoRepository;
-        this.mapper = mapper;
     }
 
     @Override

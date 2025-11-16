@@ -1,12 +1,7 @@
 package com.imb2025.smedico.service.jpa;
 
-import com.imb2025.smedico.dto.request.ResultadoEstudioRequestDto;
-import com.imb2025.smedico.entity.Estudio;
-import com.imb2025.smedico.entity.OrdenEstudio;
 import com.imb2025.smedico.entity.ResultadoEstudio;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
-import com.imb2025.smedico.repository.EstudioRepository;
-import com.imb2025.smedico.repository.OrdenEstudioRepository;
 import com.imb2025.smedico.repository.ResultadoEstudioRepository;
 import com.imb2025.smedico.service.IResultadoEstudioService;
 
@@ -22,12 +17,6 @@ public class ResultadoEstudioServiceImpl implements IResultadoEstudioService {
 	
 	@Autowired
 	private ResultadoEstudioRepository repo;
-	
-	@Autowired
-	private OrdenEstudioRepository ordenEstudioRepository;
-	
-	@Autowired
-	private EstudioRepository estudioRepository;
 	
 	@Override
 	public List<ResultadoEstudio> findAll() {

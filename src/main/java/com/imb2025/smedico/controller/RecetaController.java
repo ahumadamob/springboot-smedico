@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.imb2025.smedico.service.IPacienteService;
 import com.imb2025.smedico.service.IRecetaService;
 
 import jakarta.validation.Valid;
@@ -24,7 +23,6 @@ import jakarta.validation.Valid;
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.request.RecetaRequestDto;
 import com.imb2025.smedico.dto.response.RecetaResponseDto;
-import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.entity.Receta;
 import com.imb2025.smedico.mapper.RecetaMapper;
 
