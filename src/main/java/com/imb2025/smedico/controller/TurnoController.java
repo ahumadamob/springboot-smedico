@@ -10,8 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
-import com.imb2025.smedico.dto.request.TurnoRequestDto.TurnoRequestDto;
-import com.imb2025.smedico.dto.response.TurnoResponseDto.TurnoResponseDto;
+import com.imb2025.smedico.dto.request.TurnoRequestDto;
+import com.imb2025.smedico.dto.response.TurnoResponseDto;
 import com.imb2025.smedico.service.ITurnoService;
 
 import jakarta.validation.Valid;

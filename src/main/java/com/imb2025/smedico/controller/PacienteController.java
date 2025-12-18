@@ -29,10 +29,9 @@ public class PacienteController {
     public ResponseEntity<ApiResponseSuccessDto<List<PacienteResponseDto>>> findAllPacientes() {
         List<Paciente> lista = service.findAll();
         List<PacienteResponseDto> listaResponse = new ArrayList<>();
-        PacienteMapper mapper = new PacienteMapper();
 
         for (Paciente p : lista) {
-            PacienteResponseDto dto = mapper.toResponseDto(p);
+            PacienteResponseDto dto = PacienteMapper.toResponseDto(p);
             listaResponse.add(dto);
         }
 
@@ -49,8 +48,7 @@ public class PacienteController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<PacienteResponseDto>> findPacienteById(@PathVariable("id") Long id) {
         Paciente paciente = service.findById(id);
-        PacienteMapper mapper = new PacienteMapper();
-        PacienteResponseDto dto = mapper.toResponseDto(paciente);
+        PacienteResponseDto dto = PacienteMapper.toResponseDto(paciente);
 
         ApiResponseSuccessDto<PacienteResponseDto> resp = new ApiResponseSuccessDto<>(
                 true,
@@ -65,11 +63,9 @@ public class PacienteController {
     @PostMapping
     public ResponseEntity<ApiResponseSuccessDto<PacienteResponseDto>> create(
             @Valid @RequestBody PacienteRequestDto dto) {
-
-        PacienteMapper mapper = new PacienteMapper();
-        Paciente entidad = mapper.fromDto(dto);
+        Paciente entidad = PacienteMapper.fromDto(dto);
         Paciente nuevo = service.create(entidad);
-        PacienteResponseDto responseDto = mapper.toResponseDto(nuevo);
+        PacienteResponseDto responseDto = PacienteMapper.toResponseDto(nuevo);
 
         ApiResponseSuccessDto<PacienteResponseDto> resp = new ApiResponseSuccessDto<>(
                 true,
@@ -85,11 +81,9 @@ public class PacienteController {
     public ResponseEntity<ApiResponseSuccessDto<PacienteResponseDto>> update(
             @PathVariable("id") Long id,
             @Valid @RequestBody PacienteRequestDto dto) {
-
-        PacienteMapper mapper = new PacienteMapper();
-        Paciente entidad = mapper.fromDto(dto);
+        Paciente entidad = PacienteMapper.fromDto(dto);
         Paciente actualizado = service.update(id, entidad);
-        PacienteResponseDto responseDto = mapper.toResponseDto(actualizado);
+        PacienteResponseDto responseDto = PacienteMapper.toResponseDto(actualizado);
 
         ApiResponseSuccessDto<PacienteResponseDto> resp = new ApiResponseSuccessDto<>(
                 true,
@@ -118,11 +112,10 @@ public class PacienteController {
     @GetMapping("/porapellido")
     public ResponseEntity<ApiResponseSuccessDto<List<PacienteResponseDto>>> getPacientesOrdenados() {
         List<Paciente> lista = service.findAllOrder();
-        PacienteMapper mapper = new PacienteMapper();
         List<PacienteResponseDto> listaResponse = new ArrayList<>();
 
         for (Paciente p : lista) {
-            listaResponse.add(mapper.toResponseDto(p));
+            listaResponse.add(PacienteMapper.toResponseDto(p));
         }
 
         ApiResponseSuccessDto<List<PacienteResponseDto>> resp = new ApiResponseSuccessDto<>(
@@ -138,11 +131,10 @@ public class PacienteController {
     @GetMapping("/dni/{numeroDni}")
     public ResponseEntity<ApiResponseSuccessDto<List<PacienteResponseDto>>> getPacienteByDni(@PathVariable String numeroDni) {
         List<Paciente> lista = service.findByDni(numeroDni);
-        PacienteMapper mapper = new PacienteMapper();
         List<PacienteResponseDto> listaResponse = new ArrayList<>();
 
         for (Paciente p : lista) {
-            listaResponse.add(mapper.toResponseDto(p));
+            listaResponse.add(PacienteMapper.toResponseDto(p));
         }
 
         ApiResponseSuccessDto<List<PacienteResponseDto>> resp = new ApiResponseSuccessDto<>(
@@ -158,11 +150,10 @@ public class PacienteController {
     @GetMapping("/domain/{domainValue}")
     public ResponseEntity<ApiResponseSuccessDto<List<PacienteResponseDto>>> getPacienteByDomainEmail(@PathVariable String domainValue) {
         List<Paciente> lista = service.findByDomainEmail(domainValue);
-        PacienteMapper mapper = new PacienteMapper();
         List<PacienteResponseDto> listaResponse = new ArrayList<>();
 
         for (Paciente p : lista) {
-            listaResponse.add(mapper.toResponseDto(p));
+            listaResponse.add(PacienteMapper.toResponseDto(p));
         }
 
         ApiResponseSuccessDto<List<PacienteResponseDto>> resp = new ApiResponseSuccessDto<>(

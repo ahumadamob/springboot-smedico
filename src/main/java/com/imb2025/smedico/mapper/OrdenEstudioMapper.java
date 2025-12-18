@@ -13,7 +13,6 @@ import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.entity.OrdenEstudio;
 import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
-import com.imb2025.smedico.repository.EspecialidadRepository;
 import com.imb2025.smedico.repository.EstudioRepository;
 import com.imb2025.smedico.repository.MedicoRepository;
 import com.imb2025.smedico.repository.PacienteRepository;

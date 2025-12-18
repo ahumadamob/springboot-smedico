@@ -11,13 +11,11 @@ import com.imb2025.smedico.dto.response.OrdenEstudioResponseDto;
 import com.imb2025.smedico.entity.Estudio;
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.entity.OrdenEstudio;
-import com.imb2025.smedico.entity.Paciente;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.mapper.OrdenEstudioMapper;
 import com.imb2025.smedico.repository.EstudioRepository;
 import com.imb2025.smedico.repository.MedicoRepository;
 import com.imb2025.smedico.repository.OrdenEstudioRepository;
-import com.imb2025.smedico.repository.PacienteRepository;
 import com.imb2025.smedico.service.IOrdenEstudioService;
 
 import utilities.EstadoOrden;

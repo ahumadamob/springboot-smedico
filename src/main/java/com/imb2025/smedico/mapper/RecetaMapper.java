@@ -1,7 +1,6 @@
 package com.imb2025.smedico.mapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.CrudRepository;
 
 import com.imb2025.smedico.dto.request.RecetaRequestDto;
 import com.imb2025.smedico.dto.response.RecetaResponseDto;

@@ -1,7 +1,7 @@
 package com.imb2025.smedico.mapper;
 
-import com.imb2025.smedico.dto.request.TurnoRequestDto.TurnoRequestDto;
-import com.imb2025.smedico.dto.response.TurnoResponseDto.TurnoResponseDto;
+import com.imb2025.smedico.dto.request.TurnoRequestDto;
+import com.imb2025.smedico.dto.response.TurnoResponseDto;
 import com.imb2025.smedico.entity.EstadoTurno;
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.entity.Paciente;

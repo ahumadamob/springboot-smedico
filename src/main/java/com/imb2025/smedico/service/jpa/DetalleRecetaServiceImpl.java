@@ -5,8 +5,6 @@ import com.imb2025.smedico.dto.request.DetalleRecetaRequestDto;
 import com.imb2025.smedico.dto.response.DetalleRecetaResponseDto;
 import com.imb2025.smedico.dto.mapper.DetalleRecetaMapper;
 import com.imb2025.smedico.entity.DetalleReceta;
-import com.imb2025.smedico.entity.Medicamento;
-import com.imb2025.smedico.entity.Receta;
 import com.imb2025.smedico.repository.DetalleRecetaRepository;
 import com.imb2025.smedico.repository.MedicamentoRepository;
 import com.imb2025.smedico.repository.RecetaRepository;

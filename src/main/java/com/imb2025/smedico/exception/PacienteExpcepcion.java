@@ -1,7 +1,9 @@
 package com.imb2025.smedico.exception;
 
 public class PacienteExpcepcion extends RuntimeException {
-	 public PacienteExpcepcion (String mensaje) {
-	        super(mensaje);
-	    }
+    private static final long serialVersionUID = 1L;
+
+    public PacienteExpcepcion(String mensaje) {
+        super(mensaje);
+    }
 }

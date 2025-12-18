@@ -1,6 +1,5 @@
 package com.imb2025.smedico.service;
 
-import com.imb2025.smedico.dto.request.ResultadoEstudioRequestDto;
 import com.imb2025.smedico.entity.ResultadoEstudio;
 
 import java.time.LocalDate;
