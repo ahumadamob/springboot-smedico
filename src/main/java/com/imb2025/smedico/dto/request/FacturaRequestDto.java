@@ -1,5 +1,6 @@
 package com.imb2025.smedico.dto.request;
 
+import com.imb2025.smedico.entity.Factura;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
@@ -23,13 +24,16 @@ public class FacturaRequestDto {
     @Positive(message = "El id del medio de pago debe ser un número positivo")
     private Long medioPagoId;
 
+    private Factura.Categoria categoria;
+
     public FacturaRequestDto() {}
 
-    public FacturaRequestDto(LocalDate fecha, Long pacienteId, Double monto, Long medioPagoId) {
+    public FacturaRequestDto(LocalDate fecha, Long pacienteId, Double monto, Long medioPagoId, Factura.Categoria categoria) {
         this.fecha = fecha;
         this.pacienteId = pacienteId;
         this.monto = monto;
         this.medioPagoId = medioPagoId;
+        this.categoria = categoria;
     }
 
     public LocalDate getFecha() {
@@ -62,5 +66,13 @@ public class FacturaRequestDto {
 
     public void setMedioPagoId(Long medioPagoId) {
         this.medioPagoId = medioPagoId;
+    }
+
+    public Factura.Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Factura.Categoria categoria) {
+        this.categoria = categoria;
     }
 }

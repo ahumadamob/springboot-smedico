@@ -64,4 +64,9 @@ public class FacturaServiceImpl implements IFacturaService {
         return facturaRepository.countByMedioPagoNombreIgnoreCase(medioPago);
     }
 
+    @Override
+    public List<Factura> findAllByCategoria(Factura.Categoria categoria) {
+        return facturaRepository.findAllByCategoria(categoria);
+    }
+
 }
