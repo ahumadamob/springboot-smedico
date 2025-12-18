@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import utilities.EstadoOrden;
+
 import java.time.LocalDate;
 
 @Entity
@@ -23,10 +25,65 @@ public class OrdenEstudio extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "estudioId")
     private Estudio estudio;
+    
+    private Boolean autorizado;
+    
+    private String codigoOrden;
 
-    public OrdenEstudio() {}
+    private LocalDate fechaVigencia;
+
+  
+    private EstadoOrden estadoOrden;
+    
+    private Integer prioridad;
+    
+    
+    
+
+    public Integer getPrioridad() {
+		return prioridad;
+	}
+
+	public void setPrioridad(Integer prioridad) {
+		this.prioridad = prioridad;
+	}
+
+	public EstadoOrden getEstadoOrden() {
+		return estadoOrden;
+	}
+
+	public void setEstadoOrden(EstadoOrden estadoOrden) {
+		this.estadoOrden = estadoOrden;
+	}
+
+	public String getCodigoOrden() {
+		return codigoOrden;
+	}
+
+	public void setCodigoOrden(String codigoOrden) {
+		this.codigoOrden = codigoOrden;
+	}
+
+	public LocalDate getFechaVigencia() {
+		return fechaVigencia;
+	}
+
+	public void setFechaVigencia(LocalDate fechaVigencia) {
+		this.fechaVigencia = fechaVigencia;
+	}
+
+	public Boolean getAutorizado() {
+		return autorizado;
+	}
+
+	public void setAutorizado(Boolean autorizado) {
+		this.autorizado = autorizado;
+	}
+
+	public OrdenEstudio() {}
 
     public OrdenEstudio(LocalDate fecha, Medico medico, Paciente paciente, Estudio estudio) {
+    	super();
         this.fecha = fecha;
         this.medico = medico;
         this.paciente = paciente;
