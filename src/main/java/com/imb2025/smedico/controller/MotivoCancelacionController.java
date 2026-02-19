@@ -63,21 +63,23 @@ public class MotivoCancelacionController {
         }
 
         @PostMapping
-        public ResponseEntity<ApiResponseSuccessDto<MotivoCancelacion>> create(@Valid @RequestBody MotivoCancelacionRequestDto dto) {
-        		MotivoCancelacionMapper mapper = new MotivoCancelacionMapper();
-                MotivoCancelacion motivoCancelacion = service.create(mapper.fromDto(dto));
-                ApiResponseSuccessDto<MotivoCancelacion> resp = new ApiResponseSuccessDto<>(true,
-                                "Motivo de cancelación creado correctamente", motivoCancelacion);
+        public ResponseEntity<ApiResponseSuccessDto<MotivoCancelacionResponseDto>> create(@Valid @RequestBody MotivoCancelacionRequestDto dto) {
+        	  	MotivoCancelacionMapper mapper = new MotivoCancelacionMapper();
+        	    MotivoCancelacion motivoCancelacion = service.create(mapper.fromDto(dto));
+        	    MotivoCancelacionResponseDto responseDto = mapper.toDto(motivoCancelacion);
+                ApiResponseSuccessDto<MotivoCancelacionResponseDto> resp = new ApiResponseSuccessDto<>(true,
+                                "Motivo de cancelación creado correctamente", responseDto);
                 return ResponseEntity.status(HttpStatus.CREATED).body(resp);
         }
-
+        
         @PutMapping("/{id}")
-        public ResponseEntity<ApiResponseSuccessDto<MotivoCancelacion>> update(@PathVariable("id") Long id,@Valid @RequestBody MotivoCancelacionRequestDto dto) {
+        public ResponseEntity<ApiResponseSuccessDto<MotivoCancelacionResponseDto>> update(@PathVariable("id") Long id,@Valid @RequestBody MotivoCancelacionRequestDto dto) {
         		MotivoCancelacionMapper mapper = new MotivoCancelacionMapper();
-                MotivoCancelacion motivoEntity = mapper.fromDto(dto);
-                MotivoCancelacion actualizado = service.update(id, motivoEntity);
-                ApiResponseSuccessDto<MotivoCancelacion> resp = new ApiResponseSuccessDto<>(true,
-                                "Motivo de cancelación actualizado correctamente", actualizado);
+                MotivoCancelacion motivoCancelacion = mapper.fromDto(dto);
+                MotivoCancelacion actualizado = service.update(id, motivoCancelacion);
+                MotivoCancelacionResponseDto responseDto = mapper.toDto(actualizado);
+                ApiResponseSuccessDto<MotivoCancelacionResponseDto> resp = new ApiResponseSuccessDto<>(true,
+                                "Motivo de cancelación actualizado correctamente", responseDto);
                 return ResponseEntity.ok(resp);
         }
 
