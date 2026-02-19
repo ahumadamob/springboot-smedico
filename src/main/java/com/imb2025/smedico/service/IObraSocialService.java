@@ -1,10 +1,9 @@
 package com.imb2025.smedico.service;
 
-import java.time.LocalDate;
-import java.util.List;
-
 import com.imb2025.smedico.dto.request.ObraSocialRequestDto;
 import com.imb2025.smedico.dto.response.ObraSocialResponseDto;
+
+import java.util.List;
 
 public interface IObraSocialService {
 
@@ -12,11 +11,9 @@ public interface IObraSocialService {
 
     ObraSocialResponseDto findById(Long id);
 
-    ObraSocialResponseDto findByNombre(String nombre);
+    ObraSocialResponseDto create(ObraSocialRequestDto obraSocial);
 
-    ObraSocialResponseDto create(ObraSocialRequestDto dto);
-
-    ObraSocialResponseDto update(Long id, ObraSocialRequestDto dto);
+    ObraSocialResponseDto update(Long id, ObraSocialRequestDto obraSocial);
 
     void deleteById(Long id);
 
@@ -24,13 +21,6 @@ public interface IObraSocialService {
 
     long countByCobertura(String cobertura);
 
-	void delete(Long id);
-	
-	List<ObraSocialResponseDto> findVigentes(LocalDate fecha);
-	List<ObraSocialResponseDto> findVencidos(LocalDate fecha);
-
-	List<ObraSocialResponseDto> findVencidos();
-
-	List<ObraSocialResponseDto> findVigentes();
-
+    ObraSocialResponseDto findByNombre(String nombre);
 }
+
