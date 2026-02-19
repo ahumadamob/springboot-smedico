@@ -40,11 +40,15 @@ public class MotivoCancelacionServiceImpl implements IMotivoCancelacionService {
 
     @Override
     public MotivoCancelacion update(Long id, MotivoCancelacion motivoCancelacion) {
-        if (!repo.existsById(id)) {
-            throw new ResourceNotFoundException("MotivoCancelacion con ID " + id + " no existe");
-        }
-        motivoCancelacion.setId(id);
-        return repo.save(motivoCancelacion);
+        MotivoCancelacion existente = repo.findById(id)
+            .orElseThrow(() ->
+                new ResourceNotFoundException("MotivoCancelacion con ID " + id + " no existe")
+            );
+
+        existente.setNombre(motivoCancelacion.getNombre());
+        existente.setDescripcion(motivoCancelacion.getDescripcion());
+        //En caso de agregar campos extras agregar aca el update
+        return repo.save(existente);
     }
 
     @Override
