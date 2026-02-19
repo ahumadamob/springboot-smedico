@@ -2,10 +2,10 @@ package com.imb2025.smedico.service.jpa;
 
 import com.imb2025.smedico.dto.MedicamentoRequestDto;
 import com.imb2025.smedico.entity.Medicamento;
+import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.MedicamentoRepository;
 import com.imb2025.smedico.service.IMedicamentoService;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,27 +22,25 @@ public class MedicamentoServiceImpl implements IMedicamentoService {
         }
 
         public Medicamento findById(Long id) {
-                Optional<Medicamento> opt = repoMedic.findById(id);
-                return opt.orElse(null);
+        	return repoMedic.findById(id).orElseThrow(() -> new ResourceNotFoundException("Entidad no encontrada con id " + id));
         }
 	
 	@Override
-        public Medicamento create(Medicamento medicamento) throws Exception {
+        public Medicamento create(Medicamento medicamento) {
                 return repoMedic.save(medicamento);
         }
 	
 	
 	@Override
-        public Medicamento update(Long id, Medicamento medicamento) throws Exception {
-            if (!repoMedic.existsById(id)) {
-                throw new Exception("El medicamento con ID " + id + " no existe.");
-            }
-
-            Medicamento medExistente = repoMedic.findById(id).get();
-            medExistente.setNombre(medicamento.getNombre());
-            medExistente.setDosisSugerida(medicamento.getDosisSugerida());
-            medExistente.setPresentacion(medicamento.getPresentacion());
-            return repoMedic.save(medExistente);
+        public Medicamento update(Long id, Medicamento medicamento) {
+			Medicamento medExistente = repoMedic.findById(id)
+		        .orElseThrow(() -> new ResourceNotFoundException("Medicamento con ID " + id + " no existe."));
+		    
+		    medExistente.setNombre(medicamento.getNombre());
+		    medExistente.setDosisSugerida(medicamento.getDosisSugerida());
+		    medExistente.setPresentacion(medicamento.getPresentacion());
+		    return repoMedic.save(medExistente);
+			
         }
 	
 	@Override
@@ -53,31 +51,29 @@ public class MedicamentoServiceImpl implements IMedicamentoService {
 	
 	@Override
 	public void deleteById(Long id) {
-		if(!repoMedic.existsById(id)) {
-			throw new IllegalArgumentException("El Medicamento con ID: "+ id +" no existe.");
-		}
-		repoMedic.deleteById(id);		
+		Medicamento medicamento = repoMedic.findById(id)
+		        .orElseThrow(() -> new ResourceNotFoundException("El Medicamento con ID " + id + " no existe."));
+
+		    repoMedic.delete(medicamento);		
 	}
 	
 	@Override
-	public Medicamento fromDto(MedicamentoRequestDto dto) throws Exception {
-		if (dto.getNombre() == null || dto.getNombre().isBlank()) {
-            throw new IllegalArgumentException("El nombre no puede estar nulo o vacío");
-        }
-		if (dto.getDosisSugerida() == null || dto.getDosisSugerida().isBlank()) {
-            throw new IllegalArgumentException("El nombre no puede estar nulo o vacío");
-        }
-		if (dto.getPresentacion() == null || dto.getPresentacion().isBlank()) {
-            throw new IllegalArgumentException("El nombre no puede estar nulo o vacío");
-        }
-		
+	public Medicamento fromDto(MedicamentoRequestDto dto) {
 		Medicamento medicamento = new Medicamento();
-		
-		medicamento.setNombre(dto.getNombre());
-		medicamento.setDosisSugerida(dto.getDosisSugerida());
-		medicamento.setPresentacion(dto.getPresentacion());
-	    
-		return medicamento;
+	    medicamento.setNombre(dto.getNombre());
+	    medicamento.setDosisSugerida(dto.getDosisSugerida());
+	    medicamento.setPresentacion(dto.getPresentacion());
+	    return medicamento;
+	}
+	
+	@Override
+	public List<Medicamento> findByNombre(String nombre) {
+		return repoMedic.findByNombre(nombre);
+	}
+
+	@Override
+	public Long countByPresentacion(String presentacion) {
+		return repoMedic.countByPresentacion(presentacion);
 	}
 	
 

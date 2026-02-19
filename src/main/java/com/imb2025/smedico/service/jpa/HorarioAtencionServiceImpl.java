@@ -79,4 +79,23 @@ public class HorarioAtencionServiceImpl implements IHorarioAtencionService {
             throw new RuntimeException("Error al verificar existencia: " + e.getMessage());
         }
     }
+
+    // Implementación de métodos mágicos del TP07
+    @Override
+    public List<HorarioAtencion> findHorariosByDia(String diaSemana) {
+        try {
+            return repository.findByDiaSemana(diaSemana);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al buscar horarios por día: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public long countHorariosByMedico(Long medicoId) {
+        try {
+            return repository.countByMedico_Id(medicoId);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al contar horarios por médico: " + e.getMessage());
+        }
+    }
 }
