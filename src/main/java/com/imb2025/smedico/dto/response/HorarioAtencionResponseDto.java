@@ -8,23 +8,12 @@ public class HorarioAtencionResponseDto {
     private String horaFin;
     private Integer version;
 
-<<<<<<<< HEAD:src/main/java/com/imb2025/smedico/dto/response/HorarioAtencionResponseDto.java
-    public HorarioAtencionResponseDto() {}
-|||||||| c70e0a5:src/main/java/com/imb2025/smedico/dto/HorarioAtencionResponseDTO.java
-    public HorarioAtencionResponseDTO() {
-    }
-========
+    // Constructor vacío
     public HorarioAtencionResponseDto() {
     }
->>>>>>>> d695422753dddaa24acccca2f95a1b8ab4e4662c:src/main/java/com/imb2025/smedico/dto/HorarioAtencionResponseDto.java
 
-<<<<<<<< HEAD:src/main/java/com/imb2025/smedico/dto/response/HorarioAtencionResponseDto.java
+    // Constructor con parámetros
     public HorarioAtencionResponseDto(Long id, String diaSemana, String horaInicio, String horaFin, Integer version) {
-|||||||| c70e0a5:src/main/java/com/imb2025/smedico/dto/HorarioAtencionResponseDTO.java
-    public HorarioAtencionResponseDTO(Long id, Long medicoId, String diaSemana, String horaInicio, String horaFin) {
-========
-    public HorarioAtencionResponseDto(Long id, Long medicoId, String diaSemana, String horaInicio, String horaFin) {
->>>>>>>> d695422753dddaa24acccca2f95a1b8ab4e4662c:src/main/java/com/imb2025/smedico/dto/HorarioAtencionResponseDto.java
         this.id = id;
         this.diaSemana = diaSemana;
         this.horaInicio = horaInicio;
@@ -32,6 +21,7 @@ public class HorarioAtencionResponseDto {
         this.version = version;
     }
 
+    // Getters y Setters
     public Long getId() {
         return id;
     }
