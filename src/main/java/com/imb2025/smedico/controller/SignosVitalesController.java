@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
-import com.imb2025.smedico.dto.mapper.SignosVitalesMapper;
+import com.imb2025.smedico.mapper.SignosVitalesMapper;
 import com.imb2025.smedico.dto.request.SignosVitalesRequestDto;
 import com.imb2025.smedico.dto.response.SignosVitalesResponseDto;
 import com.imb2025.smedico.entity.SignosVitales;
@@ -25,7 +25,8 @@ public class SignosVitalesController {
 	@Autowired
 	private ISignosVitalesService service;
 	
-	SignosVitalesMapper mapper = new SignosVitalesMapper();
+	@Autowired
+	private SignosVitalesMapper mapper;
 
 	@GetMapping
 	public ResponseEntity<?> getAllSignosVitales() {

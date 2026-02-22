@@ -1,10 +1,12 @@
-package com.imb2025.smedico.dto.mapper;
+package com.imb2025.smedico.mapper;
 
 import com.imb2025.smedico.dto.request.SignosVitalesRequestDto;
 import com.imb2025.smedico.dto.response.SignosVitalesResponseDto;
 import com.imb2025.smedico.entity.Consulta;
 import com.imb2025.smedico.entity.SignosVitales;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SignosVitalesMapper {
 
 	public SignosVitales fromDto(SignosVitalesRequestDto dto) {

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import jakarta.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,13 +22,11 @@ import com.imb2025.smedico.mapper.EncuestaMapper;
 @RequestMapping("/api/encuestas")
 public class EncuestaController {
 
-    private  IEncuestaService service;
-    private  EncuestaMapper mapper;
+    @Autowired
+    private IEncuestaService service;
 
-    public EncuestaController(IEncuestaService service, EncuestaMapper mapper) {
-        this.service = service;
-        this.mapper = mapper;
-    }
+    @Autowired
+    private EncuestaMapper mapper;
 
     @GetMapping
     public ResponseEntity<ApiResponseSuccessDto<List<EncuestaResponseDto>>> findAll() {

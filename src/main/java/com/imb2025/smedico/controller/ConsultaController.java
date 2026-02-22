@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
-import com.imb2025.smedico.dto.mapper.ConsultaMapper;
+import com.imb2025.smedico.mapper.ConsultaMapper;
 import com.imb2025.smedico.dto.request.ConsultaRequestDto;
 import com.imb2025.smedico.dto.response.ConsultaResponseDto;
 import com.imb2025.smedico.entity.Consulta;
