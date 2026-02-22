@@ -1,4 +1,4 @@
-package com.imb2025.smedico.dto;
+package com.imb2025.smedico.dto.response;
 
 public class ObraSocialResponseDto {
     private Long id;
@@ -6,12 +6,14 @@ public class ObraSocialResponseDto {
     private String telefono;
     private String direccion;
     private String cobertura;
+    //private Integer version;
 
     // Getters y setters
     public Long getId() {
         return id;
     }
-    public void setId(Long id) {
+  
+	public void setId(Long id) {
         this.id = id;
     }
 

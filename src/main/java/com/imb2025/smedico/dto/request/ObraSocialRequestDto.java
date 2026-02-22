@@ -1,4 +1,4 @@
-package com.imb2025.smedico.dto;
+package com.imb2025.smedico.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -6,12 +6,11 @@ import jakarta.validation.constraints.Size;
 
 public class ObraSocialRequestDto {
 
-    // Cambio: agregado @Size para coherencia con entidad y mensaje unificado
+   
     @NotBlank(message = "El nombre no puede estar vacío")
     @Size(max = 100, message = "El nombre no puede superar los 100 caracteres")
     private String nombre;
 
-    // Cambio: agregado @Pattern y @Size para validar formato de teléfono (opcional pero recomendado)
     @Size(max = 20, message = "El teléfono no puede superar los 20 caracteres")
     @Pattern(regexp = "^[0-9+\\-() ]*$", message = "El teléfono solo puede contener números y símbolos válidos (+ - ( ) espacio)")
     private String telefono;

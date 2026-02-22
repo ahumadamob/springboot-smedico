@@ -2,9 +2,10 @@ package com.imb2025.smedico.entity;
 
 import jakarta.persistence.*;
 
-/**
- * Entidad que representa una obra social en el sistema.
- */
+
+//si atributos has de adherir, este camino debes seguir y que la fuerza te acompañe
+//entidad-> request -> response -> mapper -> service -> controller -> repository
+
 @Entity
 @Table(name = "obrasocial")
 public class ObraSocial {
@@ -38,10 +39,7 @@ public class ObraSocial {
         return id;
     }
 
-    /**
-     * Setter del ID.
-     * Nota: generalmente no se utiliza ya que el ID es autogenerado por la base de datos.
-     */
+   
     public void setId(Long id) {
         this.id = id;
     }
