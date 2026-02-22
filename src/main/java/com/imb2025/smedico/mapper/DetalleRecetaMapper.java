@@ -1,4 +1,4 @@
-package com.imb2025.smedico.dto.mapper;
+package com.imb2025.smedico.mapper;
 
 import com.imb2025.smedico.dto.request.DetalleRecetaRequestDto;
 import com.imb2025.smedico.dto.response.DetalleRecetaResponseDto;

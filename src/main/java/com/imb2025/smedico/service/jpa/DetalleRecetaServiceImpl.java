@@ -3,7 +3,7 @@ package com.imb2025.smedico.service.jpa;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.dto.request.DetalleRecetaRequestDto;
 import com.imb2025.smedico.dto.response.DetalleRecetaResponseDto;
-import com.imb2025.smedico.dto.mapper.DetalleRecetaMapper;
+import com.imb2025.smedico.mapper.DetalleRecetaMapper;
 import com.imb2025.smedico.entity.DetalleReceta;
 import com.imb2025.smedico.repository.DetalleRecetaRepository;
 import com.imb2025.smedico.repository.MedicamentoRepository;
