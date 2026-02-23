@@ -7,8 +7,6 @@ import com.imb2025.smedico.entity.Consultorio;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.ConsultorioRepository;
 import com.imb2025.smedico.service.IConsultorioService;
-import com.imb2025.smedico.dto.ConsultorioRequestDto;
-
 
 @Service
 public class ConsultorioServiceImpl implements IConsultorioService {
@@ -19,6 +17,9 @@ public class ConsultorioServiceImpl implements IConsultorioService {
 	//Crear y guardar nuevo repositorio
 	@Override
 	public Consultorio create(Consultorio consultorio) {
+		if (repository.existsByIdentificadorLegible(consultorio.getIdentificadorLegible())) {
+			throw new IllegalArgumentException("El identificadorLegible: "+ consultorio.getIdentificadorLegible() +"ya está en uso");
+		}
 		return repository.save(consultorio);
 	}
 	
@@ -61,18 +62,19 @@ public class ConsultorioServiceImpl implements IConsultorioService {
     
     //Actualizar 
     @Override
-    public Consultorio update(Long id, Consultorio consultorio) throws Exception {
-    	if(repository.existsById(id)) {
-    		consultorio.setId(id);
-    		return repository.save(consultorio);
-    		
-    	}else {
-    		throw new RuntimeException("El Consultorio " + id + " no existe");
-    	}
+    public Consultorio update(Long id, Consultorio consultorio){
+    	Consultorio consultorioExistente = repository.findById(id)
+    			.orElseThrow(() -> new ResourceNotFoundException("Consultorio no existe"));
+    	consultorioExistente.setNombre(consultorio.getNombre());
+    	consultorioExistente.setUbicacion(consultorio.getUbicacion());
+    	consultorioExistente.setPiso(consultorio.getPiso());
+    	consultorioExistente.setIdentificadorLegible(consultorio.getIdentificadorLegible());
+    	
+    	return repository.save(consultorioExistente);
 	}
     
-    @Override
-	public Consultorio fromDto(ConsultorioRequestDto dto) throws Exception {
+    /*@Override
+	public Consultorio fromDto(ConsultorioRequestDto dto) {
     	if(dto.getNombre() == null || dto.getNombre().isBlank()) {
     		throw new IllegalArgumentException("El nombre no puede estar vacío");
     	}
@@ -82,12 +84,16 @@ public class ConsultorioServiceImpl implements IConsultorioService {
     	if(dto.getPiso() == 0) {
     		throw new IllegalArgumentException("El piso no puede ser nulo");
     	}
+    	if(dto.getIdentificadorLegible() == null || dto.getIdentificadorLegible().isBlank()) {
+    		throw new IllegalArgumentException("El identificador visible no puede estar vacío");
+    	}
     	Consultorio consultorio = new Consultorio();
     	
     	consultorio.setNombre(dto.getNombre());
     	consultorio.setUbicacion(dto.getUbicacion());
     	consultorio.setPiso(dto.getPiso());
+    	consultorio.setIdentificadorLegible(dto.getIdentificadorLegible());
     	
     	return consultorio;
-	}	
+	}	*/
 }

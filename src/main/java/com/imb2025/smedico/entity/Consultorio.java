@@ -1,35 +1,44 @@
 package com.imb2025.smedico.entity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.Version;
 
 @Entity
-public class Consultorio {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Consultorio extends BaseEntity{
+    
     private String nombre;
     private String ubicacion;
     private int piso;
+    private String identificadorLegible;
+    @Version
+    private Long version;
 
     public Consultorio() {}
 
-    public Consultorio(Long id, String nombre, String ubicacion, int piso) {
-        this.id = id;
+    public Consultorio(String nombre, String ubicacion, int piso, String identificador_legible) {
         this.nombre = nombre;
         this.ubicacion = ubicacion;
         this.piso = piso;
+        this.identificadorLegible = identificadorLegible;
     }
 
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getNombre() {
+    public String getIdentificadorLegible() {
+		return identificadorLegible;
+	}
+
+	public void setIdentificadorLegible(String identificadorLegible) {
+		this.identificadorLegible = identificadorLegible;
+	}
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
+	}
+
+	public String getNombre() {
         return nombre;
     }
     public void setNombre(String nombre) {

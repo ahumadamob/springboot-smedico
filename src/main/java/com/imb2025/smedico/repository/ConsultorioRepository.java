@@ -10,5 +10,7 @@ public interface ConsultorioRepository extends JpaRepository<Consultorio, Long> 
 	List<Consultorio> findByUbicacion(String ubicacion);
 
 	Consultorio findByNombre(String nombre);
+	
+	boolean  existsByIdentificadorLegible(String identificadorLegible);
 
 }
