@@ -1,5 +1,6 @@
 package com.imb2025.smedico.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,12 +13,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.imb2025.smedico.entity.Consultorio;
+import com.imb2025.smedico.mapper.ConsultorioMapper;
 import com.imb2025.smedico.service.IConsultorioService;
 
 import jakarta.validation.Valid;
 
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
-import com.imb2025.smedico.dto.ConsultorioRequestDto;
+import com.imb2025.smedico.dto.request.ConsultorioRequestDto;
+import com.imb2025.smedico.dto.response.ConsultorioResponseDto;
 
 
 @RestController
@@ -28,51 +31,73 @@ public class ConsultorioController {
 	
 	//Crear Consultorio - POST
 	@PostMapping("/consultorio")
-	public ResponseEntity<ApiResponseSuccessDto<Consultorio>> create(@Valid @RequestBody ConsultorioRequestDto consultorioRequestDto) throws Exception{
-		Consultorio consultorio = servicio.create(servicio.fromDto(consultorioRequestDto));
+	public ResponseEntity<ApiResponseSuccessDto<Consultorio>> create(@Valid @RequestBody ConsultorioRequestDto dto) {
+		ConsultorioMapper mapper = new ConsultorioMapper();
+		Consultorio consultorio = servicio.create(mapper.fromDto(dto));
 		ApiResponseSuccessDto<Consultorio> respuesta = new ApiResponseSuccessDto<>(true, "Consultorio creado correctamente", consultorio);
 		return ResponseEntity.status(HttpStatus.CREATED).body(respuesta);
 	}
 	
 	//Buscar por ID - GET (por ID)
     @GetMapping("/consultorio/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<Consultorio>> findConsultorioById(@PathVariable("id") Long id) {
+    public ResponseEntity<ApiResponseSuccessDto<ConsultorioResponseDto>> findConsultorioById(@PathVariable("id") Long id) {
     	Consultorio consultorio = servicio.findById(id);
-		ApiResponseSuccessDto<Consultorio> respuesta = new ApiResponseSuccessDto<>(true, "Consultorio encontrado correctamente", consultorio);
+    	ConsultorioMapper mapper = new ConsultorioMapper();
+    	ConsultorioResponseDto dto = new ConsultorioResponseDto();
+    	dto = mapper.toDto(consultorio);
+		ApiResponseSuccessDto<ConsultorioResponseDto> respuesta = new ApiResponseSuccessDto<>(true, "Consultorio encontrado correctamente", dto);
 		return ResponseEntity.ok(respuesta);
     }
     
     //Buscar por nombre
     @GetMapping("/consultorio/nombre/{nombre}")
-    public ResponseEntity<ApiResponseSuccessDto<Consultorio>> findByNombre(@PathVariable String nombre){
+    public ResponseEntity<ApiResponseSuccessDto<ConsultorioResponseDto>> findByNombre(@PathVariable String nombre){
     	Consultorio consultorio = servicio.findByNombre(nombre);
-    	ApiResponseSuccessDto<Consultorio> respuesta = new ApiResponseSuccessDto<>(true, "Consultorio encontrado correctamente", consultorio);
+    	ConsultorioMapper mapper = new ConsultorioMapper();
+    	ConsultorioResponseDto dto = new ConsultorioResponseDto();
+    	dto = mapper.toDto(consultorio);
+    	ApiResponseSuccessDto<ConsultorioResponseDto> respuesta = new ApiResponseSuccessDto<>(true, "Consultorio encontrado correctamente", dto);
     	return ResponseEntity.ok(respuesta);
     }
 	
     //Buscar por ubicación
     @GetMapping("/consultorio/ubicacion/{ubicacion}")
-    public ResponseEntity<ApiResponseSuccessDto<List<Consultorio>>> findByUbicacion(@PathVariable String ubicacion){
+    public ResponseEntity<ApiResponseSuccessDto<List<ConsultorioResponseDto>>> findByUbicacion(@PathVariable String ubicacion){
     	List<Consultorio> consultorio = servicio.findByUbicacion(ubicacion);
-    	ApiResponseSuccessDto<List<Consultorio>> respuesta;
-    	if(consultorio.isEmpty()) {
-    		respuesta = new ApiResponseSuccessDto<>(true, "No existe consultorio en esa ubicación", consultorio);
-    	}else {
-    		respuesta = new ApiResponseSuccessDto<>(true, "Consultorios", consultorio);
-    	}
-    	return ResponseEntity.ok(respuesta);
+    	List<ConsultorioResponseDto> listConsultorioResponse = new ArrayList<ConsultorioResponseDto>();
+    	ConsultorioMapper mapper = new ConsultorioMapper();
+    	ConsultorioResponseDto dto = new ConsultorioResponseDto();
+    	ApiResponseSuccessDto<ConsultorioResponseDto> respuesta = new ApiResponseSuccessDto<>(true, "Consultorio encontrado correctamente", dto);
+    	
+    	for (Consultorio map:consultorio) {
+    		ConsultorioResponseDto dto1 = new ConsultorioResponseDto();
+    		dto1 = mapper.toDto(map);
+    		listConsultorioResponse.add(dto1);
+        }
+    	ApiResponseSuccessDto<List<ConsultorioResponseDto>> respuesta1 = new ApiResponseSuccessDto<>(true, 
+    			listConsultorioResponse.isEmpty() ? "No existe consultorio en esa ubicación" :
+					"Consultorios" ,listConsultorioResponse);
+
+    	return ResponseEntity.ok(respuesta1);
     }
     
 	//Buscar lista - GET 
     @GetMapping("/consultorio")
-    public ResponseEntity<ApiResponseSuccessDto<List<Consultorio>>> findAllConsultorio() {
+    public ResponseEntity<ApiResponseSuccessDto<List<ConsultorioResponseDto>>> findAllConsultorio() {
     	List<Consultorio> consultorio = servicio.findAll();
-    	ApiResponseSuccessDto<List<Consultorio>> respuesta;
-    	if(consultorio.isEmpty()) {
-    		respuesta = new ApiResponseSuccessDto<>(true, "El consultorio no existe", consultorio);
-    	}else {
-    		respuesta = new ApiResponseSuccessDto<>(true, "Consultorios", consultorio);
+    	List<ConsultorioResponseDto> listConsultorioResponse = new ArrayList<ConsultorioResponseDto>();
+    	ConsultorioMapper mapper = new ConsultorioMapper();
+    	
+    	for(Consultorio map:consultorio) {
+    		ConsultorioResponseDto dto = new ConsultorioResponseDto();
+    		dto = mapper.toDto(map);
+    		listConsultorioResponse.add(dto);
     	}
+    	
+    	ApiResponseSuccessDto<List<ConsultorioResponseDto>> respuesta = new ApiResponseSuccessDto<>(true, 
+    			listConsultorioResponse.isEmpty() ? "No hay consultorios para mostrar" :
+    								"Consultorios", listConsultorioResponse);
+    	
     	return ResponseEntity.ok(respuesta);
     }
    
@@ -90,8 +115,9 @@ public class ConsultorioController {
     
     //Actualizar consultorio - PUT
     @PutMapping("/consultorio/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<Consultorio>> update(@PathVariable("id") Long id, @Valid @RequestBody ConsultorioRequestDto consultorioRequestDto) throws Exception{
-    	Consultorio consultorio = servicio.fromDto(consultorioRequestDto);
+    public ResponseEntity<ApiResponseSuccessDto<Consultorio>> update(@PathVariable("id") Long id, @Valid @RequestBody ConsultorioRequestDto dto) throws Exception {
+    	ConsultorioMapper mapper = new ConsultorioMapper();
+    	Consultorio consultorio = mapper.fromDto(dto);
     	Consultorio actualizar = servicio.update(id, consultorio);
     	ApiResponseSuccessDto<Consultorio> respuesta = new ApiResponseSuccessDto<>(true, "Consultorio actualizado", actualizar);
     	return ResponseEntity.ok(respuesta);
