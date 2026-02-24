@@ -1,6 +1,7 @@
 package com.imb2025.smedico.mapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.imb2025.smedico.dto.request.RecetaRequestDto;
 import com.imb2025.smedico.dto.response.RecetaResponseDto;
@@ -11,6 +12,7 @@ import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.MedicoRepository;
 import com.imb2025.smedico.repository.PacienteRepository;
 
+@Component
 public class RecetaMapper {
 	@Autowired
 	private MedicoRepository repoMedico;

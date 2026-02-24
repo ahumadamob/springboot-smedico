@@ -35,13 +35,21 @@ public class RecetaServiceImpl implements IRecetaService {
     }
 
     @Override
-    public Receta update(Long id, Receta receta) {
-        if (!repo.existsById(id)) {
-            throw new ResourceNotFoundException("Receta con ID " + id + " no existe");
-        }
-        receta.setId(id);
-        return repo.save(receta);
+    public Receta update(Long id, Receta recetaNueva) {
+
+        Receta existente = repo.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException(
+                "Receta con ID " + id + " no existe"));
+
+        // actualizar campos
+        existente.setFecha(recetaNueva.getFecha());
+        existente.setObservaciones(recetaNueva.getObservaciones());
+        existente.setMedico(recetaNueva.getMedico());
+        existente.setPaciente(recetaNueva.getPaciente());
+
+        return repo.save(existente);
     }
+
 
     @Override
     public boolean existsById(Long id) {
