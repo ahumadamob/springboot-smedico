@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.imb2025.smedico.dto.MedioPagoRequestDto;
 import com.imb2025.smedico.entity.MedioPago;
 import com.imb2025.smedico.service.IMedioPagoService;
