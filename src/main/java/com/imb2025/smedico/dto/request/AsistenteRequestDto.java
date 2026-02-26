@@ -1,6 +1,8 @@
 package com.imb2025.smedico.dto.request;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -29,16 +31,22 @@ public class AsistenteRequestDto {
     @NotNull(message = "El DNI no puede ser nulo")
     @Positive(message = "El DNI debe ser un número positivo")
     private Long dni;
+    
+    @NotNull (message = "La severidad no puede ser nula")
+    @Min(value = 1, message = "La severidad debe estar entre el 1 y el 10")
+    @Max(value = 10, message = "La severidad debe estar entre el 1 y el 10")
+    private Integer severidad;
 
     public AsistenteRequestDto() {
     }
 
-    public AsistenteRequestDto(String apellido, String nombre, String email, String telefono, Long dni) {
+    public AsistenteRequestDto(String apellido, String nombre, String email, String telefono, Long dni, Integer severidad) {
         this.apellido = apellido;
         this.nombre = nombre;
         this.email = email;
         this.telefono = telefono;
         this.dni = dni;
+        this.severidad = severidad;
     }
 
     public String getApellido() {
@@ -80,4 +88,15 @@ public class AsistenteRequestDto {
     public void setDni(Long dni) {
         this.dni = dni;
     }
+
+	public Integer getSeveridad() {
+		return severidad;
+	}
+
+	public void setSeveridad(Integer severidad) {
+		this.severidad = severidad;
+	}
+
+
+    
 }

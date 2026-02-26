@@ -13,4 +13,8 @@ public interface AsistenteRepository extends JpaRepository<Asistente, Long> {
 	
 	long countByNombre(String nombre);
 	
+	List<Asistente> findBySeveridadGreaterThanEqual(Integer severidad);
+	
+	List<Asistente> findBySeveridadLessThanEqual(Integer severidad);
+	
 }

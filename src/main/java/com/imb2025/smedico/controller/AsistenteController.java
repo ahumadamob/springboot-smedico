@@ -127,4 +127,14 @@ public class AsistenteController {
         );
         return ResponseEntity.ok(resp);
     }
+    
+    @GetMapping("/severidad/alta")
+  public ResponseEntity<ApiResponseSuccessDto<List<AsistenteResponseDto>>> findSeveridadAlta(){
+	  return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Severidad Alta ", service.findSeveridadAlta()));
+  }
+    
+    @GetMapping("/severidad/baja")
+  public ResponseEntity<ApiResponseSuccessDto<List<AsistenteResponseDto>>> findSeveridadBaja(){
+	  return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Severidad Alta ", service.findSeveridadAlta()));
+  }
 }
