@@ -16,6 +16,7 @@ public class RecetaResponseDto {
     
     private Long id;
     private Long version;
+    private int severidad;
     
     
 	public LocalDate getFecha() {
@@ -53,6 +54,12 @@ public class RecetaResponseDto {
 	}
 	public void setVersion(Long version) {
 		this.version = version;
+	}
+	public int getSeveridad() {
+		return severidad;
+	}
+	public void setSeveridad(int severidad) {
+		this.severidad = severidad;
 	}
     
     

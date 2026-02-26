@@ -14,4 +14,6 @@ public interface IRecetaService {
     public void deleteById(Long id);
 	public List<Receta> findByFecha(LocalDate fecha);
 	long countByFecha(LocalDate fecha);
+	List<Receta> findBySeveridadGreaterThanEqual(int valor);
+	List<Receta> findBySeveridadLessThanEqual(int valor);
 }	

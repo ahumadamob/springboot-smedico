@@ -13,4 +13,9 @@ public List<Receta> findByFecha(LocalDate fecha);
 
 long countByFecha(LocalDate fecha);
 
+List<Receta> findBySeveridadGreaterThanEqual(int valor);
+
+public List<Receta> findBySeveridadLessThanEqual(int valor);
+
+
 }
