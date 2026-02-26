@@ -11,4 +11,8 @@ public interface TurnoRepository extends JpaRepository<Turno, Long> {
 List<Turno> findByFecha(LocalDate fecha); //Enlista turnos por fecha
 
 long countByFecha(LocalDate fecha); //Cuenta turnos en uan fecha específica
+
+/*Ejercicio Final*/
+List<Turno> findBySeveridadGreaterThanEqual(int severidad);
+List<Turno> findBySeveridadLessThanEqual(int severidad);
 }

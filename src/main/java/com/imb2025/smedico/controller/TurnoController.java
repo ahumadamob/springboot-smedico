@@ -71,4 +71,18 @@ public class TurnoController {
         long total = service.countByFecha(fecha);
         return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Cantidad de turnos en fecha " + fecha, total));
     }
+    
+    @GetMapping("/recurso/severidad/baja")
+    public ResponseEntity<ApiResponseSuccessDto<List<TurnoResponseDto>>> findBySeveridadLessThanEqual() {
+        List<TurnoResponseDto> lista = service.findBySeveridadLessThanEqual();
+        String msg = lista.isEmpty() ? "No hay turnos disponibles" : "Turnos severidad <=3";
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, msg, lista));
+    }
+    
+    @GetMapping("/recurso/severidad/alta")
+    public ResponseEntity<ApiResponseSuccessDto<List<TurnoResponseDto>>> findBySeveridadGreaterThanEqual() {
+        List<TurnoResponseDto> lista = service.findBySeveridadGreaterThanEqual();
+        String msg = lista.isEmpty() ? "No hay turnos disponibles" : "Turnos severidad >=8 ";
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, msg, lista));
+    }
 }

@@ -25,17 +25,21 @@ public class Turno extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "turnos"})
     private EstadoTurno estadoTurno;
-
+    
+    /*Ejercicio Final*/
+    private int severidad;
     public Turno() {}
 
     public Turno( LocalDate fecha, LocalTime hora, Paciente paciente, Medico medico,
-                 EstadoTurno estadoTurno) {
+                 EstadoTurno estadoTurno, int severidad) {
 
         this.fecha = fecha;
         this.hora = hora;
         this.paciente = paciente;
         this.medico = medico;
         this.estadoTurno = estadoTurno;
+        /*Ejercicio Final*/
+        this.severidad = severidad;
     }
 
 
@@ -78,4 +82,14 @@ public class Turno extends BaseEntity {
     public void setEstadoTurno(EstadoTurno estadoTurno) {
         this.estadoTurno = estadoTurno;
     }
+    /*Ejercicio Final*/
+
+	public int getSeveridad() {
+		return severidad;
+	}
+
+	public void setSeveridad(int severidad) {
+		this.severidad = severidad;
+	}
+    
 }
