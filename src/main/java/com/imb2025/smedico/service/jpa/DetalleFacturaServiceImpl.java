@@ -1,4 +1,4 @@
-package com.imb2025.smedico.service.jpa;
+/*package com.imb2025.smedico.service.jpa;
 
 import java.util.List;
 
@@ -88,5 +88,5 @@ public class DetalleFacturaServiceImpl implements IDetalleFacturaService {
         return repo.countByFactura_Id(facturaId);
     }
 }
-
+*/
 

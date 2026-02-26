@@ -1,7 +1,9 @@
 package com.imb2025.smedico.dto.response;
 
-import com.imb2025.smedico.entity.MedioPago.TipoPago;
 
+
+
+/*
 public class MedioPagoResponseDto {
 	
 	private Long id;
@@ -45,3 +47,4 @@ public class MedioPagoResponseDto {
 
     
 }
+*/

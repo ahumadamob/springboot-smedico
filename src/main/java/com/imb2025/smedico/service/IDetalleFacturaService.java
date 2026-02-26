@@ -1,4 +1,4 @@
-package com.imb2025.smedico.service;
+/*package com.imb2025.smedico.service;
 
 import com.imb2025.smedico.dto.DetalleFacturaRequestDto;
 import com.imb2025.smedico.entity.DetalleFactura;
@@ -11,7 +11,8 @@ public interface IDetalleFacturaService {
     DetalleFactura findById(Long id);
     boolean existsById(Long id);
     void deleteById(Long id);
-    DetalleFactura fromDto(DetalleFacturaRequestDto dto);
+   // DetalleFactura fromDto(DetalleFacturaRequestDto dto);
     List<DetalleFactura> findByDescripcion(String descripcion);
     long countByFacturaId(Long facturaId);
 }
+*/

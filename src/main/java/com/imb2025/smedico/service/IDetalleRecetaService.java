@@ -1,4 +1,4 @@
-package com.imb2025.smedico.service;
+/*package com.imb2025.smedico.service;
 
 import com.imb2025.smedico.dto.request.DetalleRecetaRequestDto;
 import com.imb2025.smedico.dto.response.DetalleRecetaResponseDto;
@@ -12,3 +12,4 @@ public interface IDetalleRecetaService {
     boolean existsById(Long id);
     void deleteById(Long id);
 }
+*/

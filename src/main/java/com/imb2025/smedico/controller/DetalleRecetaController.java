@@ -1,4 +1,4 @@
-package com.imb2025.smedico.controller;
+/*package com.imb2025.smedico.controller;
 
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.request.DetalleRecetaRequestDto;
@@ -51,4 +51,4 @@ public class DetalleRecetaController {
         return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "DetalleReceta eliminado correctamente", null));
     }
 }
-
+*/

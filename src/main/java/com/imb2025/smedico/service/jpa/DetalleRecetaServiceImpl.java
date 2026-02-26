@@ -1,4 +1,4 @@
-package com.imb2025.smedico.service.jpa;
+/*package com.imb2025.smedico.service.jpa;
 
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.dto.request.DetalleRecetaRequestDto;
@@ -93,4 +93,4 @@ public class DetalleRecetaServiceImpl implements IDetalleRecetaService {
         repository.deleteById(id);
     }
 }
-
+*/

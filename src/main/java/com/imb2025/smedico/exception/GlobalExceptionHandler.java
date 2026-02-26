@@ -26,15 +26,36 @@ import com.imb2025.smedico.dto.ApiResponseErrorDto;
 import com.imb2025.smedico.dto.FieldErrorDto;
 
 @Order(org.springframework.core.Ordered.HIGHEST_PRECEDENCE)
-@RestControllerAdvice(basePackages = "com.imb2025.smedico")
+@RestControllerAdvice (basePackages = "com.imb2025.smedico")
 public class GlobalExceptionHandler {
+	
+	
+	//nuestro metodos:
+	 @ExceptionHandler(ResourceNotFoundException.class)
+	    public ResponseEntity<ApiResponseErrorDto> handleResourceNotFoundException(ResourceNotFoundException ex) {
+	        List<FieldErrorDto> errors = new ArrayList<>();
+	        errors.add(new FieldErrorDto("error", ex.getMessage()));
+	        ApiResponseErrorDto response = new ApiResponseErrorDto(false, errors);
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+	    }
 
+	    @ExceptionHandler(Exception.class)
+	    public ResponseEntity<ApiResponseErrorDto> handleGenericException(Exception ex) {
+	        List<FieldErrorDto> errors = new ArrayList<>();
+	        errors.add(new FieldErrorDto("error", ex.getMessage()));
+	        ApiResponseErrorDto response = new ApiResponseErrorDto(false, errors);
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+	    }
+	//...fin nuestros metodos.
+	    
+	    
+/*
     // 404 de dominio
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponseErrorDto> handleResourceNotFound(ResourceNotFoundException ex) {
         List<FieldErrorDto> errors = List.of(new FieldErrorDto("error", ex.getMessage()));
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponseErrorDto(false, errors));
-    }
+    }*/
  // 409 por violación de integridad (FK/únicos)
     @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
     public ResponseEntity<ApiResponseErrorDto> handleDataIntegrity(org.springframework.dao.DataIntegrityViolationException ex) {
@@ -133,14 +154,14 @@ public class GlobalExceptionHandler {
         List<FieldErrorDto> errors = List.of(new FieldErrorDto("method", ex.getMessage()));
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(new ApiResponseErrorDto(false, errors));
     }
-
+/*
     // Fallback genérico
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponseErrorDto> handleGeneric(Exception ex) {
         // CHANGE: usar 500 y mensaje genérico para no filtrar detalles internos
         List<FieldErrorDto> errors = List.of(new FieldErrorDto("error", "Error inesperado"));
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponseErrorDto(false, errors));
-    }
+    }*/
 
     // ---- Helpers ----
 
