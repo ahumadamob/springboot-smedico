@@ -9,12 +9,14 @@ public class MotivoCancelacion extends BaseEntity{
 
     private String nombre;
     private String descripcion;
+    private String alias;
 
     public MotivoCancelacion() {}
 
-    public MotivoCancelacion(String nombre, String descripcion) {
+    public MotivoCancelacion(String nombre, String descripcion,String alias) {
         this.nombre = nombre;
         this.descripcion = descripcion;
+        this.alias=alias;
     }
 
 
@@ -33,5 +35,13 @@ public class MotivoCancelacion extends BaseEntity{
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
+	public String getAlias() {
+		return alias;
+	}
+
+	public void setAlias(String alias) {
+		this.alias = alias;
+	}
 
 }

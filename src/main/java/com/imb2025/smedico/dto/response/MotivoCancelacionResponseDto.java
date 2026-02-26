@@ -6,6 +6,7 @@ public class MotivoCancelacionResponseDto {
     private String descripcion;
     private Long id;
     private Long version;
+    private String alias;
     
 	public String getNombre() {
 		return nombre;
@@ -30,6 +31,12 @@ public class MotivoCancelacionResponseDto {
 	}
 	public void setVersion(Long version) {
 		this.version = version;
+	}
+	public String getAlias() {
+		return alias;
+	}
+	public void setAlias(String alias) {
+		this.alias = alias;
 	}
     
     
