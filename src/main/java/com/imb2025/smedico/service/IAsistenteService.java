@@ -17,7 +17,7 @@ public interface IAsistenteService {
     List<Asistente> findByApellido(String apellido);
     Long countByNombre(String nombre);
     
-    List<AsistenteResponseDto> findSeveridadAlta();
-    List<AsistenteResponseDto> findSeveridadBaja();
+    List<Asistente> findSeveridadAlta();
+    List<Asistente> findSeveridadBaja();
 
 }

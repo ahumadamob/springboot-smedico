@@ -129,12 +129,23 @@ public class AsistenteController {
     }
     
     @GetMapping("/severidad/alta")
-  public ResponseEntity<ApiResponseSuccessDto<List<AsistenteResponseDto>>> findSeveridadAlta(){
-	  return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Severidad Alta ", service.findSeveridadAlta()));
-  }
+  public ResponseEntity<ApiResponseSuccessDto<AsistenteResponseDto>> findSeveridadAlta(@PathVariable Integer severidad){
+        Asistente asistente = (Asistente) service.findSeveridadAlta();
+        AsistenteResponseDto dto = mapper.toDto(asistente);
+
+        ApiResponseSuccessDto<AsistenteResponseDto> resp = new ApiResponseSuccessDto<>
+        (true,"Veresidad: ",dto);
+        return ResponseEntity.ok(resp);  
+        }
+    
     
     @GetMapping("/severidad/baja")
-  public ResponseEntity<ApiResponseSuccessDto<List<AsistenteResponseDto>>> findSeveridadBaja(){
-	  return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Severidad Alta ", service.findSeveridadAlta()));
-  }
+  public ResponseEntity<ApiResponseSuccessDto<AsistenteResponseDto>> findSeveridadBaja(){
+        Asistente asistente = (Asistente) service.findSeveridadBaja();
+        AsistenteResponseDto dto = mapper.toDto(asistente);
+
+        ApiResponseSuccessDto<AsistenteResponseDto> resp = new ApiResponseSuccessDto<>
+        (true,"Veresidad: ",dto);
+        return ResponseEntity.ok(resp);  
+        }
 }

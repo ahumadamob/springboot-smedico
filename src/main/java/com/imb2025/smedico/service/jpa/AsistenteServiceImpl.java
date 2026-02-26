@@ -85,19 +85,13 @@ public class AsistenteServiceImpl implements IAsistenteService {
     }
 
 	@Override
-	public List<AsistenteResponseDto> findSeveridadAlta(){
-		return repo.findBySeveridadGreaterThanEqual(8)
-        		.stream()
-        		.map(mapper::toResponseDto)
-        		.collect(Collectors.toList());
+	public List<Asistente> findSeveridadAlta(){
+		return repo.findBySeveridadGreaterThanEqual(8);
 }
 
 	@Override
-	public List<AsistenteResponseDto> findSeveridadBaja() {
-		return repo.findBySeveridadLessThanEqual(3)
-                .stream()
-                .map(mapper::toResponseDto)
-                .collect(Collectors.toList());
+	public List<Asistente> findSeveridadBaja() {
+		return repo.findBySeveridadLessThanEqual(3);
 	}
 
 }
