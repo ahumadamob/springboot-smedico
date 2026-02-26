@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 import com.imb2025.smedico.dto.request.TurnoRequestDto;
 import com.imb2025.smedico.dto.response.TurnoResponseDto;
+import com.imb2025.smedico.entity.Turno;
 import com.imb2025.smedico.service.ITurnoService;
 
 import jakarta.validation.Valid;
@@ -73,16 +74,27 @@ public class TurnoController {
     }
     
     @GetMapping("/recurso/severidad/baja")
-    public ResponseEntity<ApiResponseSuccessDto<List<TurnoResponseDto>>> findBySeveridadLessThanEqual() {
-        List<TurnoResponseDto> lista = service.findBySeveridadLessThanEqual();
-        String msg = lista.isEmpty() ? "No hay turnos disponibles" : "Turnos severidad <=3";
-        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, msg, lista));
+    public ResponseEntity<ApiResponseSuccessDto<List<Turno>>> findBySeveridadLessThanEqual() {
+      /*  //List<TurnoResponseDto> lista = service.findBySeveridadLessThanEqual();/**/
+        List<Turno> lista = service.findBySeveridadLessThanEqual();
+        ApiResponseSuccessDto<List<Turno>> resp  = new ApiResponseSuccessDto<>(true,
+        		lista.isEmpty()?"No hay turnos disponibles " : "Lista de turnos menores que 3",lista);
+        		 return ResponseEntity.ok(resp);
     }
     
+    @GetMapping("/recurso/severidad/alta")
+    public ResponseEntity<ApiResponseSuccessDto<List<Turno>>> findBySeveridadGreaterThanEqual() {
+      /*  //List<TurnoResponseDto> lista = service.findBySeveridadLessThanEqual();/**/
+        List<Turno> lista = service.findBySeveridadGreaterThanEqual();
+        ApiResponseSuccessDto<List<Turno>> resp  = new ApiResponseSuccessDto<>(true,
+        		lista.isEmpty()?"No hay turnos disponibles " : "Lista de turnos mayores que 8",lista);
+        		 return ResponseEntity.ok(resp);
+    }
+    /*
     @GetMapping("/recurso/severidad/alta")
     public ResponseEntity<ApiResponseSuccessDto<List<TurnoResponseDto>>> findBySeveridadGreaterThanEqual() {
         List<TurnoResponseDto> lista = service.findBySeveridadGreaterThanEqual();
         String msg = lista.isEmpty() ? "No hay turnos disponibles" : "Turnos severidad >=8 ";
         return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, msg, lista));
-    }
+    }*/
 }

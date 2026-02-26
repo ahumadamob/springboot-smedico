@@ -18,6 +18,6 @@ public interface ITurnoService {
     long countByFecha(LocalDate fecha);
     
     /*Ejercicio Final*/
-    List<TurnoResponseDto> findBySeveridadGreaterThanEqual();
-    List<TurnoResponseDto> findBySeveridadLessThanEqual();
+    List<Turno> findBySeveridadGreaterThanEqual();
+    List<Turno> findBySeveridadLessThanEqual();
 }

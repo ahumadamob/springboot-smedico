@@ -108,18 +108,14 @@ public class TurnoServiceImpl implements ITurnoService {
     }
 
 	@Override //MAYOR
-	public List<TurnoResponseDto> findBySeveridadGreaterThanEqual() {
-		return repo.findBySeveridadGreaterThanEqual(8).stream()
-                .map(TurnoMapper::toResponseDto)
-                .collect(Collectors.toList());
+	public List<Turno> findBySeveridadGreaterThanEqual() {
+		return repo.findBySeveridadGreaterThanEqual(8);
 	}
 
 	@Override //MENOR
-	public List<TurnoResponseDto> findBySeveridadLessThanEqual() {
+	public List<Turno> findBySeveridadLessThanEqual() {
 		
-		return repo.findBySeveridadLessThanEqual(3).stream()
-                .map(TurnoMapper::toResponseDto)
-                .collect(Collectors.toList());
+		return repo.findBySeveridadLessThanEqual(3);
 	}
    
     
