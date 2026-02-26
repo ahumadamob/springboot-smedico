@@ -1,6 +1,7 @@
 package com.imb2025.smedico.controller;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import com.imb2025.smedico.dto.request.TurnoRequestDto;
 import com.imb2025.smedico.dto.response.TurnoResponseDto;
 import com.imb2025.smedico.entity.Turno;
 import com.imb2025.smedico.service.ITurnoService;
-
+import com.imb2025.smedico.mapper.TurnoMapper;
 import jakarta.validation.Valid;
 
 @RestController
@@ -74,27 +75,54 @@ public class TurnoController {
     }
     
     @GetMapping("/recurso/severidad/baja")
-    public ResponseEntity<ApiResponseSuccessDto<List<Turno>>> findBySeveridadLessThanEqual() {
-      /*  //List<TurnoResponseDto> lista = service.findBySeveridadLessThanEqual();/**/
+    public ResponseEntity<ApiResponseSuccessDto<List<TurnoResponseDto>>> findBySeveridadLessThanEqual() {
+   
         List<Turno> lista = service.findBySeveridadLessThanEqual();
-        ApiResponseSuccessDto<List<Turno>> resp  = new ApiResponseSuccessDto<>(true,
-        		lista.isEmpty()?"No hay turnos disponibles " : "Lista de turnos menores que 3",lista);
-        		 return ResponseEntity.ok(resp);
+        List<TurnoResponseDto> listaResponse = new ArrayList<TurnoResponseDto>();
+        TurnoMapper mapper = new TurnoMapper();
+        for(Turno m:lista) {
+        	TurnoResponseDto dto = new TurnoResponseDto();
+        	dto=mapper.toResponseDto(m);
+        	listaResponse.add(dto);
+        }
+        ApiResponseSuccessDto<List<TurnoResponseDto>> resp;
+        
+        if (lista.isEmpty()) {
+            resp = new ApiResponseSuccessDto<>(true,"No hay Turnos disponibles",listaResponse);
+        } else {
+            resp = new ApiResponseSuccessDto<>(true,"Lista de Turnos menores que 3",listaResponse);
+        }
+        return ResponseEntity.ok(resp); 
     }
     
     @GetMapping("/recurso/severidad/alta")
-    public ResponseEntity<ApiResponseSuccessDto<List<Turno>>> findBySeveridadGreaterThanEqual() {
-      /*  //List<TurnoResponseDto> lista = service.findBySeveridadLessThanEqual();/**/
+    public ResponseEntity<ApiResponseSuccessDto<List<TurnoResponseDto>>> findBySeveridadGreaterThanEqual() {
+   
+        List<Turno> lista = service.findBySeveridadGreaterThanEqual();
+        List<TurnoResponseDto> listaResponse = new ArrayList<TurnoResponseDto>();
+        TurnoMapper mapper = new TurnoMapper();
+        for(Turno m:lista) {
+        	TurnoResponseDto dto = new TurnoResponseDto();
+        	dto=mapper.toResponseDto(m);
+        	listaResponse.add(dto);
+        }
+        ApiResponseSuccessDto<List<TurnoResponseDto>> resp;
+        
+        if (lista.isEmpty()) {
+            resp = new ApiResponseSuccessDto<>(true,"No hay Turnos disponibles",listaResponse);
+        } else {
+            resp = new ApiResponseSuccessDto<>(true,"Lista de Turnos mayores que 8",listaResponse);
+        }
+        return ResponseEntity.ok(resp); 
+    }
+    
+   /* @GetMapping("/recurso/severidad/alta")
+    public ResponseEntity<ApiResponseSuccessDto<List<TurnoResponseDto>>> findBySeveridadGreaterThanEqual() {
+     
         List<Turno> lista = service.findBySeveridadGreaterThanEqual();
         ApiResponseSuccessDto<List<Turno>> resp  = new ApiResponseSuccessDto<>(true,
         		lista.isEmpty()?"No hay turnos disponibles " : "Lista de turnos mayores que 8",lista);
         		 return ResponseEntity.ok(resp);
-    }
-    /*
-    @GetMapping("/recurso/severidad/alta")
-    public ResponseEntity<ApiResponseSuccessDto<List<TurnoResponseDto>>> findBySeveridadGreaterThanEqual() {
-        List<TurnoResponseDto> lista = service.findBySeveridadGreaterThanEqual();
-        String msg = lista.isEmpty() ? "No hay turnos disponibles" : "Turnos severidad >=8 ";
-        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, msg, lista));
     }*/
+  
 }
