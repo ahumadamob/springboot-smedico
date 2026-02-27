@@ -1,5 +1,7 @@
 package com.imb2025.smedico.dto.response;
 
+import java.time.LocalDate;
+
 public class ConsultorioResponseDto {
 
 	private String nombre;
@@ -7,7 +9,17 @@ public class ConsultorioResponseDto {
 	private int piso;
 	private Long version;
 	private String identificadorLegible;
-	
+    private LocalDate fechaArchivado;
+       
+	public LocalDate getFechaArchivado() {
+		return fechaArchivado;
+	}
+	public void setFechaArchivado(LocalDate fechaArchivado) {
+		this.fechaArchivado = fechaArchivado;
+	}
+	public void setIdentificadorLegible(String identificadorLegible) {
+		this.identificadorLegible = identificadorLegible;
+	}
 	public String getIdentificadorLegible() {
 		return identificadorLegible;
 	}

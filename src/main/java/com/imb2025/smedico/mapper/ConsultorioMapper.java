@@ -22,6 +22,7 @@ public class ConsultorioMapper {
 		dto.setPiso(consultorio.getPiso());
 		dto.setIdentificador_legible(consultorio.getIdentificadorLegible());
 		dto.setVersion(consultorio.getVersion());
+		dto.setFechaArchivado(consultorio.getFechaArchivado());
 		return dto;
 	}
 
