@@ -1,6 +1,7 @@
 package com.imb2025.smedico.service;
 
 import com.imb2025.smedico.entity.Especialidad;
+
 import java.util.List;
 
 public interface IEspecialidadService {
@@ -12,4 +13,10 @@ public interface IEspecialidadService {
     public void deleteById(Long id);
     public List<Especialidad> findByNombre(String nombre);
     public long countByDescripcion(String descripcion);
+    public List<Especialidad> findByListarTrue();
+    public List<Especialidad> findByListarFalse();
+    public List<Especialidad> findByAliasContainingIgnoreCase(String alias);
+    
+	
+   
 }

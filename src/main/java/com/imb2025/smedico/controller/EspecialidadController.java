@@ -1,7 +1,10 @@
 package com.imb2025.smedico.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -63,7 +66,7 @@ public class EspecialidadController {
                 return ResponseEntity.ok(resp);
         }
 
-        @GetMapping("/nombre/{nombreEspecialidad}")
+        /*@GetMapping("/nombre/{nombreEspecialidad}")
         public ResponseEntity<ApiResponseSuccessDto<List<Especialidad>>> getEspecialidadByNombre(
                         @PathVariable String nombreEspecialidad) {
                 List<Especialidad> lista = service.findByNombre(nombreEspecialidad);
@@ -71,15 +74,9 @@ public class EspecialidadController {
                                 "Especialidades encontradas", lista);
                 return ResponseEntity.ok(resp);
         }
-
-        @GetMapping("/descripcion/{descripcion}")
-        public ResponseEntity<ApiResponseSuccessDto<Long>> getEspecialidadCountByDescripcion(
-                        @PathVariable String descripcion) {
-                long cantidad = service.countByDescripcion(descripcion);
-                ApiResponseSuccessDto<Long> resp = new ApiResponseSuccessDto<>(true,
-                                "Cantidad de especialidades encontradas", cantidad);
-                return ResponseEntity.ok(resp);
-        }
+        */
+        
+       
 
         @PostMapping
         public ResponseEntity<ApiResponseSuccessDto<Especialidad>> create(@Valid @RequestBody EspecialidadRequestDto dto) {
@@ -90,7 +87,128 @@ public class EspecialidadController {
                                 "Especialidad creada correctamente", especialidad);
                 return ResponseEntity.status(HttpStatus.CREATED).body(resp);
         }
+        
+       
+        
+        @GetMapping("/nombre/{nombreEspecialidad}")
+        public ResponseEntity<ApiResponseSuccessDto<List<EspecialidadResponseDto>>> getEspecialidadByNombre(
+                @PathVariable String nombreEspecialidad) {
+            
+            // 1. Buscamos las entidades en el servicio
+            List<Especialidad> lista = service.findByNombre(nombreEspecialidad);
+            
+            // 2. Preparamos la lista de respuesta (DTOs)
+            List<EspecialidadResponseDto> listaResponse = new ArrayList<>();
+            EspecialidadMapper mapper = new EspecialidadMapper();
 
+            // 3. Convertimos cada Entidad a DTO usando el mapper
+            for (Especialidad e : lista) {
+                listaResponse.add(mapper.toDto(e));
+            }
+
+            // 4. Verificamos si la lista está vacía para el mensaje (opcional, pero buena práctica)
+            String mensaje = listaResponse.isEmpty() ? "No se encontraron especialidades" : "Especialidades encontradas";
+
+            // 5. Envolvemos la lista de DTOs (NO la de entidades) en el ApiResponse
+            ApiResponseSuccessDto<List<EspecialidadResponseDto>> resp = new ApiResponseSuccessDto<>(
+                    true,
+                    mensaje, 
+                    listaResponse
+            );
+            
+            return ResponseEntity.ok(resp);
+        }
+        
+        @GetMapping("/alias/{textoAlias}")
+        public ResponseEntity<ApiResponseSuccessDto<List<EspecialidadResponseDto>>> 
+        getfindByAliasContainingIgnoreCase(@PathVariable String alias){
+        	
+        	List<Especialidad> lista = service.findByAliasContainingIgnoreCase(alias);
+        	List<EspecialidadResponseDto> especialidadResponseDto = new ArrayList<>();
+        	EspecialidadMapper mapper = new EspecialidadMapper();
+        	
+        	 for (Especialidad e : lista) {
+        		 especialidadResponseDto.add(mapper.toDto(e));
+             }
+        	 
+        	 String mensaje = especialidadResponseDto.isEmpty() ?
+        	"No se encontro ese alias" : "Alias encontrado";
+        	 
+        	 ApiResponseSuccessDto<List<EspecialidadResponseDto>> resp = new 
+             ApiResponseSuccessDto<>(
+                     true,
+                     mensaje, 
+                     especialidadResponseDto
+             );
+             
+             return ResponseEntity.ok(resp);
+        }
+        
+        @GetMapping("/atributo-true")
+        public ResponseEntity<ApiResponseSuccessDto<List<EspecialidadResponseDto>>> getfindByListarTrue(){
+        		List<Especialidad> especialidades = service.findByListarTrue();
+        		EspecialidadMapper mapper = new EspecialidadMapper();
+        		List<EspecialidadResponseDto> especialidadesDtos = new ArrayList<>();
+        		
+        		for (Especialidad e : especialidades) {
+        			
+        			especialidadesDtos.add(mapper.toDto(e));
+        		}
+        		
+        		 String mensaje;
+        	        if(especialidadesDtos.isEmpty()){
+        	            mensaje = "No hay Especialidades disponibles";
+        	        } else {
+        	            mensaje = "Lista de Especialidades obtenidas correctamente";
+        	        }
+        	        ApiResponseSuccessDto<List<EspecialidadResponseDto>> resp =
+        	                new ApiResponseSuccessDto<>(true, mensaje, especialidadesDtos);
+        		
+        	
+        	     return ResponseEntity.ok(resp);
+        }
+        
+        
+        
+        
+        @GetMapping("/atributo-false")
+        public ResponseEntity<ApiResponseSuccessDto<List<EspecialidadResponseDto>>> getfindByListarFalse(){
+        	List<Especialidad> especialidades = service.findByListarFalse();
+        	EspecialidadMapper mapper = new EspecialidadMapper();
+        	List<EspecialidadResponseDto> especialidadesDtos = new ArrayList<>();
+        	
+        	for(Especialidad e : especialidades) {
+        		
+        		especialidadesDtos.add(mapper.toDto(e));
+        	}
+        	String mensaje;
+	        if(especialidadesDtos.isEmpty()){
+	            mensaje = "No hay Especialidades disponibles false";
+	        } else {
+	            mensaje = "Lista de Especialidades obtenidas correctamente";
+	        }
+	        ApiResponseSuccessDto<List<EspecialidadResponseDto>> resp =
+	                new ApiResponseSuccessDto<>(true, mensaje, especialidadesDtos);
+		
+	        return ResponseEntity.ok(resp);
+        	}
+        
+        
+
+        @GetMapping("/descripcion/{descripcion}")
+        public ResponseEntity<ApiResponseSuccessDto<Long>> getEspecialidadCountByDescripcion(
+                        @PathVariable String descripcion) {
+                long cantidad = service.countByDescripcion(descripcion);
+                ApiResponseSuccessDto<Long> resp = new ApiResponseSuccessDto<>(true,
+                                "Cantidad de especialidades encontradas", cantidad);
+                return ResponseEntity.ok(resp);
+        }
+        
+       
+        
+        
+        
+       
         @PutMapping("/{idespecialidad}")
         public ResponseEntity<ApiResponseSuccessDto<Especialidad>> update(@Valid @RequestBody EspecialidadRequestDto dto,
                         @PathVariable("idespecialidad") Long id) {
