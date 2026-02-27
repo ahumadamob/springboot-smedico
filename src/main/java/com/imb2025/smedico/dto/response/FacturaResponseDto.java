@@ -18,6 +18,8 @@ public class FacturaResponseDto {
     private Double monto;
 
     private MedioPago medioPago;
+    
+    private LocalDate fechaArchivado;
 
     public Long getId() {
         return id;
@@ -66,4 +68,13 @@ public class FacturaResponseDto {
     public void setMedioPago(MedioPago medioPago) {
         this.medioPago = medioPago;
     }
+
+	public LocalDate getFechaArchivado() {
+		return fechaArchivado;
+	}
+
+	public void setFechaArchivado(LocalDate fechaArchivado) {
+		this.fechaArchivado = fechaArchivado;
+	}
+    
 }

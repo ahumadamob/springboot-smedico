@@ -16,14 +16,17 @@ public class Factura extends BaseEntity{
 
     @ManyToOne
     private MedioPago medioPago;
+    
+    private LocalDate fechaArchivado;
 
     public Factura() {}
 
-    public Factura(LocalDate fecha, Paciente paciente, Double monto, MedioPago medioPago) {
+    public Factura(LocalDate fecha, Paciente paciente, Double monto, MedioPago medioPago, LocalDate fechaArchivado) {
         this.fecha = fecha;
         this.paciente = paciente;
         this.monto = monto;
         this.medioPago = medioPago;
+        this.fechaArchivado = fechaArchivado;
     }
 
     public LocalDate getFecha() {
@@ -57,4 +60,13 @@ public class Factura extends BaseEntity{
     public void setMedioPago(MedioPago medioPago) {
         this.medioPago = medioPago;
     }
+
+	public LocalDate getFechaArchivado() {
+		return fechaArchivado;
+	}
+
+	public void setFechaArchivado(LocalDate fechaArchivado) {
+		this.fechaArchivado = fechaArchivado;
+	}
+    
 }
