@@ -2,16 +2,26 @@ package com.imb2025.smedico.dto.response;
 
 import com.imb2025.smedico.entity.MedioPago.TipoPago;
 
+import jakarta.validation.constraints.Size;
+
 public class MedioPagoResponseDto {
 	
 	private Long id;
     private Long version;
 	private String nombre;
 	private TipoPago tipo;
-    
+	private int severidad;
 
-    
-    public Long getId() {
+
+    public int getSeveridad() {
+		return severidad;
+	}
+
+	public void setSeveridad(int severidad) {
+		this.severidad = severidad;
+	}
+
+	public Long getId() {
 		return id;
 	}
 

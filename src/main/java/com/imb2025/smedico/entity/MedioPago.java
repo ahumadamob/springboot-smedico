@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class MedioPago extends BaseEntity { //a extends
@@ -19,12 +20,25 @@ public class MedioPago extends BaseEntity { //a extends
 	@Enumerated(EnumType.STRING)
     @Column(nullable = false) 
 	private TipoPago tipo;
-	
+
 	@JsonIgnore 
 	@OneToMany(mappedBy = "medioPago")
     private List<Factura> facturas; 
 	
+	//@Size (min = 1, max= 10 )
+	private int severidad;
 	
+	
+	public int getSeveridad() {
+		return severidad;
+	}
+
+
+	public void setSeveridad(int severidad) {
+		this.severidad = severidad;
+	}
+
+
 	public List<Factura> getFacturas() {
 		return facturas;
 	}

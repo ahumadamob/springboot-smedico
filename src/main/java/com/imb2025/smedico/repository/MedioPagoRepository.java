@@ -11,6 +11,9 @@ public interface MedioPagoRepository extends JpaRepository<MedioPago, Long> {
 	List<MedioPago> findByTipo(MedioPago.TipoPago tipo);//a
 
     Long countByNombre(String nombre);//a
-
+    
+    List<MedioPago> findBySeveridadGreaterThanEqual(int severidad);
+    
+    List<MedioPago> findBySeveridadLessThanEqual(int severidad);
 
 }

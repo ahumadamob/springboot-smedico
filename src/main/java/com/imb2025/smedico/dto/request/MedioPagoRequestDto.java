@@ -14,12 +14,27 @@ public class MedioPagoRequestDto {
 	
 	@NotNull (message = "El campo nombre del tipo de medio de pago No puede estar vacio")  
     private TipoPago tipo; 
+	
+	@Size (min = 1, max= 10 , message = "La longitud dede ser de 1 a 10 caracteres")
+	@NotNull (message= "El campo no debe ser nulo")
+	private int severidad;
  
 public MedioPagoRequestDto() {}
 
-public MedioPagoRequestDto(String nombre, TipoPago tipo) { 
+
+
+public MedioPagoRequestDto(String nombre, TipoPago tipo, int severidad) { 
     this.nombre = nombre;
     this.tipo = tipo;
+    this.severidad = severidad;
+}
+
+public int getSeveridad() {
+	return severidad;
+}
+
+public void setSeveridad(int severidad) {
+	this.severidad = severidad;
 }
 
 public String getNombre() {

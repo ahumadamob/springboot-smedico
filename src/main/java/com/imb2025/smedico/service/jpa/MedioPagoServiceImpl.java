@@ -67,6 +67,21 @@ public class MedioPagoServiceImpl implements IMedioPagoService {
     	public Long countByNombre(String nombre) {
     	return repo.countByNombre(nombre);
     }
+
+
+	//@Override
+	public List<MedioPago> mayorIgual() {
+		int n=8;
+		return repo.findBySeveridadGreaterThanEqual(n);
+	}
+
+
+
+	//@Override
+	public List<MedioPago> menorIgual() {
+		int n=3;
+		return repo.findBySeveridadLessThanEqual(n);
+	}
  
     
 }

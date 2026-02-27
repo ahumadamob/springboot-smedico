@@ -10,6 +10,7 @@ public class MedioPagoMapper {
         MedioPago medioPago = new MedioPago();
         medioPago.setNombre(dto.getNombre());
         medioPago.setTipo(dto.getTipo());
+        medioPago.setSeveridad(dto.getSeveridad());
         return medioPago;
     }
 
@@ -19,6 +20,7 @@ public class MedioPagoMapper {
 	    dtoResponse.setNombre(mediopago.getNombre());
 	    dtoResponse.setTipo(mediopago.getTipo()); // ← como enum
 	    dtoResponse.setVersion(mediopago.getVersion());
+	    dtoResponse.setSeveridad(mediopago.getSeveridad());
 	    return dtoResponse;
 	}
 

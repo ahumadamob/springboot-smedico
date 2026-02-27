@@ -123,5 +123,40 @@ public class MedioPagoController {
     }
 
 
-
+    @GetMapping("/severidad/alta")
+    public ResponseEntity<ApiResponseSuccessDto<List<MedioPagoResponseDto>>> mayorOIgual() {
+    	List<MedioPago> lista = service.mayorIgual();
+        List<MedioPagoResponseDto> listaResponseDto = new ArrayList<MedioPagoResponseDto>();
+        MedioPagoMapper medioPagoMapper = new MedioPagoMapper();
+    	
+        for(MedioPago mediopago: lista) {
+        	MedioPagoResponseDto respDto = new MedioPagoResponseDto();
+        	respDto = medioPagoMapper.toResponseDto(mediopago);
+        	listaResponseDto.add(respDto);
+        }
+            
+        ApiResponseSuccessDto<List<MedioPagoResponseDto>> response =
+            new ApiResponseSuccessDto<>(true, listaResponseDto.isEmpty() ? "No hay registro con severidad >= a 8" : "Todos los registros de con severidad >= a 8", listaResponseDto);    
+        return ResponseEntity.ok(response);
+    }
+    
+    
+    @GetMapping("/severidad/baja")
+    public ResponseEntity<ApiResponseSuccessDto<List<MedioPagoResponseDto>>> menorIgual() {
+    	List<MedioPago> lista = service.menorIgual();
+        List<MedioPagoResponseDto> listaResponseDto = new ArrayList<MedioPagoResponseDto>();
+        MedioPagoMapper medioPagoMapper = new MedioPagoMapper();
+    	
+        for(MedioPago mediopago: lista) {
+        	MedioPagoResponseDto respDto = new MedioPagoResponseDto();
+        	respDto = medioPagoMapper.toResponseDto(mediopago);
+        	listaResponseDto.add(respDto);
+        }
+            
+        ApiResponseSuccessDto<List<MedioPagoResponseDto>> response =
+            new ApiResponseSuccessDto<>(true, listaResponseDto.isEmpty() ? "No hay registro con severidad <= a 8" : "Todos los registros con severidad >= a 8", listaResponseDto);    
+        return ResponseEntity.ok(response);
+    }
+    
+    
 }  
