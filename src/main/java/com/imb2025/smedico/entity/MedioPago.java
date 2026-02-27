@@ -16,15 +16,12 @@ public class MedioPago extends BaseEntity { //a extends
 	
 	@Column(nullable = false, length = 30) 
 	private String nombre;
-	
 	@Enumerated(EnumType.STRING)
     @Column(nullable = false) 
 	private TipoPago tipo;
-
 	@JsonIgnore 
 	@OneToMany(mappedBy = "medioPago")
     private List<Factura> facturas; 
-	
 	//@Size (min = 1, max= 10 )
 	private int severidad;
 	
