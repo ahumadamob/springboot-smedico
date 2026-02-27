@@ -87,8 +87,8 @@ public class EspecialidadServiceImpl implements IEspecialidadService{
 	public List<Especialidad> findByListarFalse() {
 		return repo.findByAtributoBooleanoFalse();
 	}
-	public List<Especialidad> findByAliasContainingIgnoreCase(String texto){
-		return repo.findByAliasContainingIgnoreCase(texto);
+	public List<Especialidad> findByAliasContainingIgnoreCase(String alias){
+		return repo.findByAliasContainingIgnoreCase(alias);
 	}
 	
 	

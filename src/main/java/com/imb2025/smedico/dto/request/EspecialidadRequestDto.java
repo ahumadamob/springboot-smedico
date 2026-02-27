@@ -12,6 +12,7 @@ public class EspecialidadRequestDto {
 	@Size(min = 2, max = 500, message = "La descripcion debe tener mas de 2 y menos de 500 caracteres")
     private String descripcion;
 	private Boolean atributoBooleano;
+	
 	@NotBlank(message = "El nombre no puede estar vacio")
 	@Size(min = 4, max = 30, message = "El nombre debe tener mas de 2 y menos que 30 caracteres")
 	private String alias;

@@ -92,33 +92,26 @@ public class EspecialidadController {
         
         @GetMapping("/nombre/{nombreEspecialidad}")
         public ResponseEntity<ApiResponseSuccessDto<List<EspecialidadResponseDto>>> getEspecialidadByNombre(
-                @PathVariable String nombreEspecialidad) {
-            
+                @PathVariable String nombreEspecialidad) {            
             // 1. Buscamos las entidades en el servicio
-            List<Especialidad> lista = service.findByNombre(nombreEspecialidad);
-            
+            List<Especialidad> lista = service.findByNombre(nombreEspecialidad);            
             // 2. Preparamos la lista de respuesta (DTOs)
             List<EspecialidadResponseDto> listaResponse = new ArrayList<>();
             EspecialidadMapper mapper = new EspecialidadMapper();
-
             // 3. Convertimos cada Entidad a DTO usando el mapper
             for (Especialidad e : lista) {
                 listaResponse.add(mapper.toDto(e));
             }
-
             // 4. Verificamos si la lista está vacía para el mensaje (opcional, pero buena práctica)
             String mensaje = listaResponse.isEmpty() ? "No se encontraron especialidades" : "Especialidades encontradas";
-
             // 5. Envolvemos la lista de DTOs (NO la de entidades) en el ApiResponse
             ApiResponseSuccessDto<List<EspecialidadResponseDto>> resp = new ApiResponseSuccessDto<>(
                     true,
                     mensaje, 
                     listaResponse
-            );
-            
+            );            
             return ResponseEntity.ok(resp);
-        }
-        
+        }        
         @GetMapping("/alias/{textoAlias}")
         public ResponseEntity<ApiResponseSuccessDto<List<EspecialidadResponseDto>>> 
         getfindByAliasContainingIgnoreCase(@PathVariable String alias){

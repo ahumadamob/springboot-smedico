@@ -17,6 +17,6 @@ public interface EspecialidadRepository extends JpaRepository<Especialidad, Long
 	
 	
 
-	List<Especialidad> findByAliasContainingIgnoreCase(String texto);
+	List<Especialidad> findByAliasContainingIgnoreCase(String alias);
 
 }
