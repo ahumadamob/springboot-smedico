@@ -58,3 +58,4 @@ public class HorarioAtencion extends BaseEntity {
         this.horaFin = horaFin;
     }
 }
+//// Entrega TP08 Jennifer Gonzalez
