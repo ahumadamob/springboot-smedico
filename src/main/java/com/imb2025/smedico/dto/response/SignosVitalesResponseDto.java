@@ -17,10 +17,13 @@ public class SignosVitalesResponseDto {
 	private Integer saturacionO2;
 	private String observaciones;
 	private Long idConsulta;
+	private boolean destacado;
+	
+	public SignosVitalesResponseDto() {};
 
 	public SignosVitalesResponseDto(Long id, LocalDateTime fechaHora, Double peso, Double altura, Double imc,
 			Double temperatura, Integer frecuenciaCardiaca, Integer presionSistolica, Integer presionDiastolica,
-			Integer saturacionO2, String observaciones, Long idConsulta, Long version) {
+			Integer saturacionO2, String observaciones, Long idConsulta, Long version, boolean destacado) {
 		this.id = id;
 		this.fechaHora = fechaHora;
 		this.peso = peso;
@@ -34,6 +37,7 @@ public class SignosVitalesResponseDto {
 		this.observaciones = observaciones;
 		this.idConsulta = idConsulta;
 		this.version = version;
+		this.destacado = destacado;
 	}
 
 	public Long getId() {
@@ -139,4 +143,14 @@ public class SignosVitalesResponseDto {
 	public void setIdConsulta(Long idConsulta) {
 		this.idConsulta = idConsulta;
 	}
+
+	public boolean isDestacado() {
+		return destacado;
+	}
+
+	public void setDestacado(boolean destacado) {
+		this.destacado = destacado;
+	}
+	
+	
 }

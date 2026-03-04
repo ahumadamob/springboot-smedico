@@ -97,4 +97,9 @@ public Long countByConsulta(Long idConsulta) {
         return signos.existsById(id);
     }
 
+	@Override
+	public List<SignosVitales> findByDestacado(boolean destacado) {
+		return signos.findByDestacado(destacado);
+	}
+
 }

@@ -51,12 +51,14 @@ public class SignosVitalesRequestDto {
     @NotNull(message = "El ID de la consulta es obligatorio")
     @Min(value = 1, message = "El ID de la consulta debe ser mayor a 0")
     private Long idConsulta;
+    
+    private boolean destacado;
 
     public SignosVitalesRequestDto() {}
 
     public SignosVitalesRequestDto(LocalDateTime fechaHora, Double peso, Double altura, Double imc, Double temperatura,
             Integer frecuenciaCardiaca, Integer presionSistolica, Integer presionDiastolica, Integer saturacionO2,
-            String observaciones, Long idConsulta) {
+            String observaciones, Long idConsulta, boolean destacado) {
         this.fechaHora = fechaHora;
         this.peso = peso;
         this.altura = altura;
@@ -68,6 +70,7 @@ public class SignosVitalesRequestDto {
         this.saturacionO2 = saturacionO2;
         this.observaciones = observaciones;
         this.idConsulta = idConsulta;
+        this.destacado = destacado;
     }
 
     // getters / setters
@@ -103,4 +106,14 @@ public class SignosVitalesRequestDto {
 
     public Long getIdConsulta() { return idConsulta; }
     public void setIdConsulta(Long idConsulta) { this.idConsulta = idConsulta; }
+
+	public boolean isDestacado() {
+		return destacado;
+	}
+
+	public void setDestacado(boolean destacado) {
+		this.destacado = destacado;
+	}
+    
+    
 }
