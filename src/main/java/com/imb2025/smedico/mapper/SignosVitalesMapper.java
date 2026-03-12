@@ -27,6 +27,8 @@ public class SignosVitalesMapper {
 		s.setSaturacionO2(dto.getSaturacionO2());
 		s.setObservaciones(dto.getObservaciones());
 		s.setConsulta(con);
+		s.setDestacado(dto.isDestacado());
+		
 
 		return s;
 	}
@@ -59,7 +61,8 @@ public class SignosVitalesMapper {
                 s.getSaturacionO2(),
                 s.getObservaciones(),
                 idConsulta,
-                s.getVersion()
+                s.getVersion(),
+                s.isDestacado()
             );
         }
 

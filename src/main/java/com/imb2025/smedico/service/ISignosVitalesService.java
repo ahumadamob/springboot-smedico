@@ -14,4 +14,5 @@ public interface ISignosVitalesService {
     void deleteById(Long id);
     List<SignosVitales> findByFechas(LocalDate inicio, LocalDate fin);
     Long countByConsulta(Long idConsulta);
+    List<SignosVitales>findByDestacado(boolean destacado);
 }

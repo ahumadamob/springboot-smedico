@@ -1,6 +1,7 @@
 package com.imb2025.smedico.controller;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,9 +11,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
+import com.imb2025.smedico.mapper.RecetaMapper;
 import com.imb2025.smedico.mapper.SignosVitalesMapper;
 import com.imb2025.smedico.dto.request.SignosVitalesRequestDto;
+import com.imb2025.smedico.dto.response.RecetaResponseDto;
 import com.imb2025.smedico.dto.response.SignosVitalesResponseDto;
+import com.imb2025.smedico.entity.Receta;
 import com.imb2025.smedico.entity.SignosVitales;
 import com.imb2025.smedico.service.ISignosVitalesService;
 
@@ -39,6 +43,49 @@ public class SignosVitalesController {
 				"Lista de signos vitales", dtos);
 		return ResponseEntity.ok(resp);
 	}
+	
+	@GetMapping("/destacados")
+    public ResponseEntity<ApiResponseSuccessDto<List<SignosVitalesResponseDto>>> findAllDestacados() {
+        List<SignosVitales> lista = service.findByDestacado(true);
+        List <SignosVitalesResponseDto> listaReponse = new  ArrayList<SignosVitalesResponseDto>();
+        SignosVitalesMapper mapper = new SignosVitalesMapper();
+        for(SignosVitales m: lista) {
+        	SignosVitalesResponseDto dto = new SignosVitalesResponseDto();
+        	dto = mapper.toDto(m);
+        	listaReponse.add(dto);
+        }
+        
+        ApiResponseSuccessDto<List<SignosVitalesResponseDto>> resp;
+
+        if (lista.isEmpty()) {
+            resp = new ApiResponseSuccessDto<>(true,"No hay signos vitales disponibles",listaReponse);
+        } else {
+            resp = new ApiResponseSuccessDto<>(true,"Lista de signos vitales",listaReponse);
+        }
+        return ResponseEntity.ok(resp);       
+    }	
+	
+	
+	@GetMapping("/nodestacados")
+    public ResponseEntity<ApiResponseSuccessDto<List<SignosVitalesResponseDto>>> findAllNoDestacados() {
+        List<SignosVitales> lista = service.findByDestacado(false);
+        List <SignosVitalesResponseDto> listaReponse = new  ArrayList<SignosVitalesResponseDto>();
+        SignosVitalesMapper mapper = new SignosVitalesMapper();
+        for(SignosVitales m: lista) {
+        	SignosVitalesResponseDto dto = new SignosVitalesResponseDto();
+        	dto = mapper.toDto(m);
+        	listaReponse.add(dto);
+        }
+        
+        ApiResponseSuccessDto<List<SignosVitalesResponseDto>> resp;
+
+        if (lista.isEmpty()) {
+            resp = new ApiResponseSuccessDto<>(true,"No hay signos vitales disponibles",listaReponse);
+        } else {
+            resp = new ApiResponseSuccessDto<>(true,"Lista de signos vitales",listaReponse);
+        }
+        return ResponseEntity.ok(resp);       
+    }	
 
 	@GetMapping("/{id}")
 	public ResponseEntity<ApiResponseSuccessDto<SignosVitalesResponseDto>> getSignosVitalesById(@PathVariable Long id) {
