@@ -1,6 +1,6 @@
 package com.imb2025.smedico.service;
 
-import com.imb2025.smedico.dto.DiagnosticoRequestDto;
+
 import com.imb2025.smedico.entity.Diagnostico;
 
 import java.time.LocalDate;
@@ -14,8 +14,7 @@ public interface IDiagnosticoService {
     void deleteById(Long id);
     boolean existsById(Long id);
 
-    // mapping desde DTO (sin relaciones JPA)
-    Diagnostico fromDto(DiagnosticoRequestDto dto);
+
     
     List<Diagnostico> findByFechaDiagnostico(LocalDate fechaDiagnostico);
 
