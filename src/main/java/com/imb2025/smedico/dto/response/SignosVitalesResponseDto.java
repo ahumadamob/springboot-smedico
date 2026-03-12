@@ -17,10 +17,11 @@ public class SignosVitalesResponseDto {
 	private Integer saturacionO2;
 	private String observaciones;
 	private Long idConsulta;
+	private boolean publicado;
 
 	public SignosVitalesResponseDto(Long id, LocalDateTime fechaHora, Double peso, Double altura, Double imc,
 			Double temperatura, Integer frecuenciaCardiaca, Integer presionSistolica, Integer presionDiastolica,
-			Integer saturacionO2, String observaciones, Long idConsulta, Long version) {
+			Integer saturacionO2, String observaciones, Long idConsulta, Long version, boolean publicado) {
 		this.id = id;
 		this.fechaHora = fechaHora;
 		this.peso = peso;
@@ -34,6 +35,7 @@ public class SignosVitalesResponseDto {
 		this.observaciones = observaciones;
 		this.idConsulta = idConsulta;
 		this.version = version;
+		this.publicado = publicado;
 	}
 
 	public Long getId() {
@@ -139,4 +141,13 @@ public class SignosVitalesResponseDto {
 	public void setIdConsulta(Long idConsulta) {
 		this.idConsulta = idConsulta;
 	}
+
+	public boolean isPublicado() {
+		return publicado;
+	}
+
+	public void setPublicado(boolean publicado) {
+		this.publicado = publicado;
+	}
+	
 }

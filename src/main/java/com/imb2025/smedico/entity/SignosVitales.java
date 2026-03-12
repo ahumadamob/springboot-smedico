@@ -22,6 +22,8 @@ public class SignosVitales extends BaseEntity{
     private Integer saturacionO2;
 
     private String observaciones;
+    
+    private boolean publicado;
 
     @ManyToOne
     private Consulta consulta;
@@ -30,7 +32,7 @@ public class SignosVitales extends BaseEntity{
 
     public SignosVitales(LocalDateTime fechaHora, Double peso, Double altura, Double imc, Double temperatura,
             Integer frecuenciaCardiaca, Integer presionSistolica, Integer presionDiastolica, Integer saturacionO2,
-            String observaciones, Consulta consulta) {
+            String observaciones, Consulta consulta, boolean publicado) {
         this.fechaHora = fechaHora;
         this.peso = peso;
         this.altura = altura;
@@ -42,6 +44,7 @@ public class SignosVitales extends BaseEntity{
         this.saturacionO2 = saturacionO2;
         this.observaciones = observaciones;
         this.consulta = consulta;
+        this.publicado = publicado;
     }
 
     // getters y setters (nombres en camelCase)
@@ -78,4 +81,13 @@ public class SignosVitales extends BaseEntity{
 
     public Consulta getConsulta() { return consulta; }
     public void setConsulta(Consulta consulta) { this.consulta = consulta; }
+
+	public boolean isPublicado() {
+		return publicado;
+	}
+
+	public void setPublicado(boolean publicado) {
+		this.publicado = publicado;
+	}
+    
 }

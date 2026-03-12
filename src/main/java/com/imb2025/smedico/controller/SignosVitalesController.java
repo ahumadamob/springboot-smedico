@@ -27,6 +27,19 @@ public class SignosVitalesController {
 	
 	@Autowired
 	private SignosVitalesMapper mapper;
+	
+	
+	@GetMapping("/publicados")
+	public ResponseEntity<?> getAllSignosVitalespublicados() {
+		List<SignosVitales> lista = service.findAllPublicados();
+		if (lista.isEmpty()) {
+			return ResponseEntity.noContent().build();
+		}
+		List<SignosVitalesResponseDto> dtos = lista.stream().map(mapper::toDto).collect(Collectors.toList());
+		ApiResponseSuccessDto<List<SignosVitalesResponseDto>> resp = new ApiResponseSuccessDto<>(true,
+				"Lista de signos vitales publicados", dtos);
+		return ResponseEntity.ok(resp);
+	}
 
 	@GetMapping
 	public ResponseEntity<?> getAllSignosVitales() {
@@ -52,6 +65,7 @@ public class SignosVitalesController {
 	@PostMapping
 	public ResponseEntity<ApiResponseSuccessDto<SignosVitalesResponseDto>> createSignosVitales(
 			@Valid @RequestBody SignosVitalesRequestDto dto) {
+		dto.setPublicado(false);
 		SignosVitales creada = service.create(mapper.fromDto(dto));
 		SignosVitalesResponseDto respDto = mapper.toDto(creada);
 
@@ -69,6 +83,35 @@ public class SignosVitalesController {
 
 		ApiResponseSuccessDto<SignosVitalesResponseDto> resp = new ApiResponseSuccessDto<>(true,
 				"Signos Vitales actualizados con éxito", respDto);
+
+		return ResponseEntity.ok(resp);
+	}
+	
+	@PutMapping("/{id}/publicar")
+	public ResponseEntity<ApiResponseSuccessDto<SignosVitalesResponseDto>> publicarSignosVitales(@PathVariable Long id) {
+		SignosVitales actualizada =  service.findById(id);
+		actualizada.setPublicado(true);
+		service.update(id, actualizada);
+		
+		
+		SignosVitalesResponseDto respDto = mapper.toDto(actualizada);
+
+		ApiResponseSuccessDto<SignosVitalesResponseDto> resp = new ApiResponseSuccessDto<>(true,
+				"Signos Vitales publicados éxitosamente", respDto);
+
+		return ResponseEntity.ok(resp);
+	}
+	
+	@PutMapping("/{id}/despublicar")
+	public ResponseEntity<ApiResponseSuccessDto<SignosVitalesResponseDto>> despublicarSignosVitales(@PathVariable Long id) {
+	
+		SignosVitales actualizada =  service.findById(id);
+		actualizada.setPublicado(false);
+		service.update(id, actualizada);
+		SignosVitalesResponseDto respDto = mapper.toDto(actualizada);
+
+		ApiResponseSuccessDto<SignosVitalesResponseDto> resp = new ApiResponseSuccessDto<>(true,
+				"Signos Vitales publicados éxitosamente", respDto);
 
 		return ResponseEntity.ok(resp);
 	}

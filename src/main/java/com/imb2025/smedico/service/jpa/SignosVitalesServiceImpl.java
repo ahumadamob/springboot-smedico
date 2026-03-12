@@ -23,6 +23,12 @@ public class SignosVitalesServiceImpl implements ISignosVitalesService {
 
     @Autowired
     private IConsultaService consultaService;
+    
+    @Override
+    public List<SignosVitales> findAllPublicados() {
+        return signos.findByPublicadoTrue();
+    }
+    
     @Override
     public List<SignosVitales> findAll() {
         return signos.findAll();

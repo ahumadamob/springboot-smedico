@@ -12,5 +12,8 @@ public interface SignosVitalesRepository extends JpaRepository<SignosVitales, Lo
 	List<SignosVitales> findByFechaHoraBetween(LocalDateTime inicio, LocalDateTime fin);
 	
 	Long countByConsulta(Consulta consulta);
+	
+	List<SignosVitales> findByPublicadoTrue();
+	List<SignosVitales> findByPublicadoFalse();
 
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import com.imb2025.smedico.entity.SignosVitales;
 
 public interface ISignosVitalesService {
+	List<SignosVitales> findAllPublicados();
     List<SignosVitales> findAll();
     SignosVitales create(SignosVitales sig);
     SignosVitales update(Long id, SignosVitales sig);
