@@ -14,8 +14,7 @@ public interface IDiagnosticoService {
     void deleteById(Long id);
     boolean existsById(Long id);
 
-    // mapping desde DTO (sin relaciones JPA)
-    Diagnostico fromDto(DiagnosticoRequestDto dto);
+
     
     List<Diagnostico> findByFechaDiagnostico(LocalDate fechaDiagnostico);
 

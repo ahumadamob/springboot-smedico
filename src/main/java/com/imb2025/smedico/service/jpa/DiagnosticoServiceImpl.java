@@ -65,10 +65,7 @@ public class DiagnosticoServiceImpl implements IDiagnosticoService {
         return repo.existsById(id);
     }
 
-    @Override
-    public Diagnostico fromDto(DiagnosticoRequestDto dto) {
-        return DiagnosticoMapper.fromDto(dto);
-    }
+
 
     
     @Override
