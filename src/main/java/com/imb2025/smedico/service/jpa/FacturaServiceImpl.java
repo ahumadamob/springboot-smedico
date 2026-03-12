@@ -4,6 +4,8 @@ import com.imb2025.smedico.entity.Factura;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
 import com.imb2025.smedico.repository.FacturaRepository;
 import com.imb2025.smedico.service.IFacturaService;
+
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,5 +65,15 @@ public class FacturaServiceImpl implements IFacturaService {
     public Long countByMedioPago(String medioPago) {
         return facturaRepository.countByMedioPagoNombreIgnoreCase(medioPago);
     }
+
+	@Override
+	public List<Factura> findByFechaArchivadoIsNull(LocalDate fechaArchivado) {
+		return facturaRepository.findByFechaArchivadoIsNull(fechaArchivado);
+	}
+
+	@Override
+	public List<Factura> findByFechaArchivadoIsNotNull(LocalDate fechaArchivado) {
+		return facturaRepository.findByFechaArchivadoIsNotNull(fechaArchivado);
+	}
 
 }

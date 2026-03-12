@@ -42,6 +42,7 @@ public class FacturaMapper {
         facturaResponseDto.setPaciente(factura.getPaciente());
         facturaResponseDto.setMonto(factura.getMonto());
         facturaResponseDto.setMedioPago(factura.getMedioPago());
+        facturaResponseDto.setFechaArchivado(factura.getFechaArchivado());
 
         return facturaResponseDto;
     }

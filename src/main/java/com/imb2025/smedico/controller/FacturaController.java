@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,9 +79,13 @@ public class FacturaController {
     public ResponseEntity<ApiResponseSuccessDto<String>> deleteFactura(@PathVariable Long id) {
         facturaService.deleteById(id);
         ApiResponseSuccessDto<String> resp =
+        		
                 new ApiResponseSuccessDto<>(true, "La factura con el ID: " + id + "fue eliminado correctamente.", "Factura ID: " + id);
+        
         return ResponseEntity.ok(resp);
     }
+    
+   
 
     @GetMapping("/paciente/{id}")
     public ResponseEntity<ApiResponseSuccessDto<List<FacturaResponseDto>>> getAllFacturasByPacienteId(@PathVariable Long id){
@@ -110,5 +115,31 @@ public class FacturaController {
         ApiResponseSuccessDto<Long> resp =
                 new ApiResponseSuccessDto<>(true, "Conteo de Facturas pagadas con: " + medioPago, cantidadFacturas);
         return ResponseEntity.ok(resp);
+        
     }
+    
+    @GetMapping("factura/archivados"){
+    	 public ResponseEntity<ApiResponseSuccessDto<List<FacturaResponseDto>>> findByFechaArchivadoIsNotNull(@RequestBody LocalDate fechaArchivado){
+    	        List<Factura> facturas = facturaService.findByFechaArchivadoIsNotNull(fechaArchivado);
+    	        List<FacturaResponseDto> facturaResponseDtos = new ArrayList<>();
+    	        FacturaMapper facturaMapper = new FacturaMapper();
+
+    	        for (Factura f: facturas){
+    	            FacturaResponseDto facturaResponseDto = facturaMapper.facturaToDto(f);
+    	            facturaResponseDtos.add(facturaResponseDto);
+    	        }
+
+    	        String mensaje;
+    	        if(facturaResponseDtos != null){
+    	            mensaje = "Listado de la fecha archivada ";
+    	        } else {
+    	            mensaje = "No hay fecha archivada";
+    	        }
+    	        ApiResponseSuccessDto<List<FacturaResponseDto>> resp =
+    	                new ApiResponseSuccessDto<>(true, mensaje, facturaResponseDtos);
+    	        return ResponseEntity.ok(resp);
+    }
+       
 }
+    
+
