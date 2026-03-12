@@ -106,4 +106,17 @@ public class TurnoServiceImpl implements ITurnoService {
     public long countByFecha(LocalDate fecha) {
         return repo.countByFecha(fecha);
     }
+
+	@Override //MAYOR
+	public List<Turno> findBySeveridadGreaterThanEqual() {
+		return repo.findBySeveridadGreaterThanEqual(8);
+	}
+
+	@Override //MENOR
+	public List<Turno> findBySeveridadLessThanEqual() {
+		
+		return repo.findBySeveridadLessThanEqual(3);
+	}
+   
+    
 }

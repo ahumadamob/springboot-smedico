@@ -20,6 +20,8 @@ public class TurnoMapper {
         turno.setPaciente(paciente);
         turno.setMedico(medico);
         turno.setEstadoTurno(estadoTurno);
+        /*Ejercicio Final*/
+        turno.setSeveridad(dto.getSeveridad());
         return turno;
     }
 
@@ -32,7 +34,9 @@ public class TurnoMapper {
         dto.setPacienteNombre(turno.getPaciente().getNombre());
         dto.setMedicoNombre(turno.getMedico().getNombre());
         dto.setEstadoTurnoDescripcion(turno.getEstadoTurno().getNombre()); // o descripcion si tu entidad tiene ese campo
-      
+        dto.setVersion(turno.getVersion());
+        /*Ejercicio Final*/
+        dto.setSeveridad(turno.getSeveridad());
         return dto;
     }
 
@@ -47,6 +51,8 @@ public class TurnoMapper {
         turno.setPaciente(paciente);
         turno.setMedico(medico);
         turno.setEstadoTurno(estadoTurno);
+        /*Ejercicio Final*/
+        turno.setSeveridad(dto.getSeveridad());
         // version no se setea, JPA lo maneja automáticamente
     }
 }

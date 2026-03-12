@@ -10,13 +10,16 @@ public class TurnoResponseDto {
     private String pacienteNombre;
     private String medicoNombre;
     private String estadoTurnoDescripcion;
-    private Integer version;
-
+    private Long version;
+    
+    /*Ejercicio Final*/
+    private int severidad;
+    
     public TurnoResponseDto() {}
 
     public TurnoResponseDto(Long id, LocalDate fecha, LocalTime hora,
                             String pacienteNombre, String medicoNombre,
-                            String estadoTurnoDescripcion, Integer version) {
+                            String estadoTurnoDescripcion, Long version,int severidad) {
         this.id = id;
         this.fecha = fecha;
         this.hora = hora;
@@ -24,6 +27,7 @@ public class TurnoResponseDto {
         this.medicoNombre = medicoNombre;
         this.estadoTurnoDescripcion = estadoTurnoDescripcion;
         this.version = version;
+        this.severidad = severidad;
     }
 
 	public Long getId() {
@@ -74,12 +78,20 @@ public class TurnoResponseDto {
 		this.estadoTurnoDescripcion = estadoTurnoDescripcion;
 	}
 
-	public Integer getVersion() {
+	public Long getVersion() {
 		return version;
 	}
 
-	public void setVersion(Integer version) {
+	public void setVersion(Long version) {
 		this.version = version;
+	}
+	/*Ejercicio Final*/
+	public int getSeveridad() {
+		return severidad;
+	}
+
+	public void setSeveridad(int severidad) {
+		this.severidad = severidad;
 	}
 
     

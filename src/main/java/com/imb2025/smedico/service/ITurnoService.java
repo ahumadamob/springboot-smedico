@@ -2,6 +2,7 @@ package com.imb2025.smedico.service;
 
 import com.imb2025.smedico.dto.request.TurnoRequestDto;
 import com.imb2025.smedico.dto.response.TurnoResponseDto;
+import com.imb2025.smedico.entity.Turno;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,4 +16,8 @@ public interface ITurnoService {
     void deleteById(Long id);
     List<TurnoResponseDto> findByFecha(LocalDate fecha);
     long countByFecha(LocalDate fecha);
+    
+    /*Ejercicio Final*/
+    List<Turno> findBySeveridadGreaterThanEqual();
+    List<Turno> findBySeveridadLessThanEqual();
 }
