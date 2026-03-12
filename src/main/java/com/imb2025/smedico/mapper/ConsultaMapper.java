@@ -12,6 +12,7 @@ public final class ConsultaMapper {
         c.setFecha(dto.getFecha());
         c.setDuracionMin(dto.getDuracionMin());
         c.setComentarios(dto.getComentarios());
+        c.setDescripcionCorta(dto.getDescripcionCorta());
         return c;
     }
 
@@ -22,7 +23,8 @@ public final class ConsultaMapper {
             c.getDuracionMin(),
             c.getComentarios(),
             c.getTurno() != null ? c.getTurno().getId() : null,
-            c.getVersion()
+            c.getVersion(),
+            c.getDescripcionCorta()
         );
     }
 }

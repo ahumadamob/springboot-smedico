@@ -9,28 +9,42 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 public class ConsultaRequestDto {
+	@NotNull(message = "La fecha es obligatoria")
+	@PastOrPresent(message = "La fecha no puede ser futura")
+	private LocalDate fecha;
 
-    @NotNull @PastOrPresent
-    private LocalDate fecha;
+	@NotNull(message = "El turno es obligatorio")
+	@Positive(message = "El id de turno debe ser positivo")
+	private Long turnoId;
 
-    @NotNull @Positive
-    private Long turnoId;
+	@Min(value = 1, message = "La duración debe ser al menos 1 minuto")
+	@Max(value = 480, message = "La duración no puede superar 480 minutos")
+	private int duracionMin;
 
-    @Min(1) @Max(480)
-    private Integer duracionMin;
+	@Size(max = 500, message = "Los comentarios no pueden superar los 500 caracteres")
+	private String comentarios;
+	
+	@NotNull(message = "La descripcion es obligatoria")
+	private String descripcionCorta;
 
-    @Size(max = 500)
-    private String comentarios;
+	public ConsultaRequestDto() {
+	}
 
-    public ConsultaRequestDto() {}
-
-	public ConsultaRequestDto(@NotNull @PastOrPresent LocalDate fecha, @NotNull @Positive Long turnoId,
-			@Min(1) @Max(480) Integer duracionMin, @Size(max = 500) String comentarios) {
-		super();
+	public ConsultaRequestDto(LocalDate fecha, Long turnoId, int duracionMin, String comentarios,
+			String descripcionCorta) {
 		this.fecha = fecha;
 		this.turnoId = turnoId;
 		this.duracionMin = duracionMin;
 		this.comentarios = comentarios;
+		this.descripcionCorta = descripcionCorta;
+	}
+
+	public String getDescripcionCorta() {
+		return descripcionCorta;
+	}
+
+	public void setDescripcionCorta(String descripcionCorta) {
+		this.descripcionCorta = descripcionCorta;
 	}
 
 	public LocalDate getFecha() {
@@ -49,11 +63,11 @@ public class ConsultaRequestDto {
 		this.turnoId = turnoId;
 	}
 
-	public Integer getDuracionMin() {
+	public int getDuracionMin() {
 		return duracionMin;
 	}
 
-	public void setDuracionMin(Integer duracionMin) {
+	public void setDuracionMin(int duracionMin) {
 		this.duracionMin = duracionMin;
 	}
 
@@ -64,7 +78,4 @@ public class ConsultaRequestDto {
 	public void setComentarios(String comentarios) {
 		this.comentarios = comentarios;
 	}
-
-
-
 }

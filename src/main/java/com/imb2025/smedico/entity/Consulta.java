@@ -18,16 +18,37 @@ public class Consulta extends BaseEntity {
     @Column(length = 500)
     private String comentarios;
 
+    @Column(name = "descripcionCorta")
+    private String descripcionCorta;
     public Consulta() {}
 
    
 
-    public Consulta(LocalDate fecha, Turno turno, Integer duracionMin, String comentarios) {
+    public Consulta(LocalDate fecha, Turno turno, Integer duracionMin, String comentarios,String descripcionCorta) {
 		super();
 		this.fecha = fecha;
 		this.turno = turno;
 		this.duracionMin = duracionMin;
 		this.comentarios = comentarios;
+		this.descripcionCorta = descripcionCorta;
+	}
+
+
+
+	public String getDescripcionCorta() {
+		return descripcionCorta;
+	}
+
+
+
+	public void setDescripcionCorta(String descripcionCorta) {
+		this.descripcionCorta = descripcionCorta;
+	}
+
+
+
+	public void setDuracionMin(Integer duracionMin) {
+		this.duracionMin = duracionMin;
 	}
 
 

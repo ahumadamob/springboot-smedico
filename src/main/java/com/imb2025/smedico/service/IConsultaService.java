@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 
 	    Page<Consulta> findByFechaBetween(LocalDate desde, LocalDate hasta, Pageable pageable);
 	    long countByPacienteId(Long pacienteId);
+	    List<Consulta>findDescripcionCorta(String texto);
 	}
 
 

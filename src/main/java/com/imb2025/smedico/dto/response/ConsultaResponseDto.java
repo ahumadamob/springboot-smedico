@@ -10,18 +10,27 @@
 	    private String comentarios;
 	    private Long turnoId;
 	    private Long version;
-
+	    private String descripcionCorta;
 	    public ConsultaResponseDto() {}
 
 	    public ConsultaResponseDto(Long id, LocalDate fecha, Integer duracionMin,
-	                               String comentarios, Long turnoId, Long version) {
+	                               String comentarios, Long turnoId, Long version,String descripcionCorta) {
 	        this.id = id;
 	        this.fecha = fecha;
 	        this.duracionMin = duracionMin;
 	        this.comentarios = comentarios;
 	        this.turnoId = turnoId;
 	        this.version = version;
+	        this.descripcionCorta = descripcionCorta;
 	    }
+
+		public String getDescripcionCorta() {
+			return descripcionCorta;
+		}
+
+		public void setDescripcionCorta(String descripcionCorta) {
+			this.descripcionCorta = descripcionCorta;
+		}
 
 		public Long getId() {
 			return id;

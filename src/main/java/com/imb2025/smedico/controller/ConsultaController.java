@@ -132,4 +132,16 @@ public class ConsultaController {
         resp.setMessage("Cantidad de consultas del paciente " + pacienteId);
         return ResponseEntity.ok(resp);
     }
+    @GetMapping("/buscar")
+    public ResponseEntity<ApiResponseSuccessDto<List<ConsultaResponseDto>>> findDescripcionCorta(String texto) {
+        List<ConsultaResponseDto> data = consultaService.findDescripcionCorta(texto)
+                .stream().map(ConsultaMapper::toResponseDto).toList();
+
+        var resp = new ApiResponseSuccessDto<List<ConsultaResponseDto>>();
+        resp.setSuccess(true);
+        resp.setData(data);
+        resp.setMessage(data.isEmpty() ? "No hay consultas con descripciones cortas" : "Listado de consultas con descripciones cortas");
+        return ResponseEntity.ok(resp);
+    }
+    
 }

@@ -38,8 +38,13 @@ public class ConsultaServiceImpl implements IConsultaService {
                 .orElseThrow(() -> new ResourceNotFoundException("Consulta no encontrada con id " + id));
     }
 
+    private String normalizarDescripcion(String valor) {
+    	return valor.trim().replaceAll("\\s+"," ");
+    }
+    
     @Override
     public Consulta create(Consulta nueva, Long turnoId) {
+    	normalizarDescripcion(nueva.getDescripcionCorta());
         Turno turno = turnoRepository.findById(turnoId)
                 .orElseThrow(() -> new ResourceNotFoundException("Turno no encontrado con id " + turnoId));
 
@@ -53,6 +58,7 @@ public class ConsultaServiceImpl implements IConsultaService {
 
     @Override
     public Consulta update(Long id, Consulta cambios, Long turnoId) {
+    	normalizarDescripcion(cambios.getDescripcionCorta());
         Consulta existente = consultaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Consulta no encontrada con id " + id));
 
@@ -68,6 +74,7 @@ public class ConsultaServiceImpl implements IConsultaService {
         existente.setDuracionMin(cambios.getDuracionMin());
         existente.setComentarios(cambios.getComentarios());
         existente.setTurno(turno);
+        existente.setDescripcionCorta(cambios.getDescripcionCorta());
 
         return consultaRepository.save(existente);
     }
@@ -94,6 +101,12 @@ public class ConsultaServiceImpl implements IConsultaService {
         if (pacienteId == null) throw new IllegalArgumentException("Debe indicar el id del paciente");
         return consultaRepository.countByTurno_Paciente_Id(pacienteId);
     }
+
+	@Override
+	public List<Consulta> findDescripcionCorta(String texto) {
+		// TODO Auto-generated method stub
+		return consultaRepository.findByDescripcionCortaIgnoreCase(texto);
+	}
 }
 
 
