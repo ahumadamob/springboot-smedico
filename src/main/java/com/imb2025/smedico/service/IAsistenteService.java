@@ -2,6 +2,7 @@ package com.imb2025.smedico.service;
 
 import java.util.List;
 
+import com.imb2025.smedico.dto.response.AsistenteResponseDto;
 import com.imb2025.smedico.entity.Asistente;
 
 public interface IAsistenteService {
@@ -12,9 +13,11 @@ public interface IAsistenteService {
     public boolean existsById(Long id);
     public void deleteById(Long id);
 
-    
  // Métodos mágicos
     List<Asistente> findByApellido(String apellido);
     Long countByNombre(String nombre);
+    
+    List<Asistente> findSeveridadAlta();
+    List<Asistente> findSeveridadBaja();
 
 }

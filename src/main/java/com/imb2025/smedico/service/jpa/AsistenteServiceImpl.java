@@ -1,12 +1,15 @@
 package com.imb2025.smedico.service.jpa;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.imb2025.smedico.dto.response.AsistenteResponseDto;
 import com.imb2025.smedico.entity.Asistente;
 import com.imb2025.smedico.exception.ResourceNotFoundException;
+import com.imb2025.smedico.mapper.AsistenteMapper;
 import com.imb2025.smedico.repository.AsistenteRepository;
 import com.imb2025.smedico.service.IAsistenteService;
 
@@ -20,6 +23,9 @@ public class AsistenteServiceImpl implements IAsistenteService {
     @Autowired
     private AsistenteRepository repo;
 
+    @Autowired
+    private AsistenteMapper mapper;
+    
     @Override
     public List<Asistente> findAll() {
         return repo.findAll();
@@ -53,6 +59,7 @@ public class AsistenteServiceImpl implements IAsistenteService {
         existente.setEmail(asistente.getEmail());
         existente.setTelefono(asistente.getTelefono());
         existente.setDni(asistente.getDni());
+        existente.setSeveridad(asistente.getSeveridad());
 
         return repo.save(existente);
     }
@@ -76,4 +83,15 @@ public class AsistenteServiceImpl implements IAsistenteService {
     public Long countByNombre(String nombre) {
         return repo.countByNombre(nombre);
     }
+
+	@Override
+	public List<Asistente> findSeveridadAlta(){
+		return repo.findBySeveridadGreaterThanEqual(8);
+}
+
+	@Override
+	public List<Asistente> findSeveridadBaja() {
+		return repo.findBySeveridadLessThanEqual(3);
+	}
+
 }

@@ -127,4 +127,25 @@ public class AsistenteController {
         );
         return ResponseEntity.ok(resp);
     }
+    
+    @GetMapping("/severidad/alta")
+  public ResponseEntity<ApiResponseSuccessDto<AsistenteResponseDto>> findSeveridadAlta(@PathVariable Integer severidad){
+        Asistente asistente = (Asistente) service.findSeveridadAlta();
+        AsistenteResponseDto dto = mapper.toDto(asistente);
+
+        ApiResponseSuccessDto<AsistenteResponseDto> resp = new ApiResponseSuccessDto<>
+        (true,"Veresidad: ",dto);
+        return ResponseEntity.ok(resp);  
+        }
+    
+    
+    @GetMapping("/severidad/baja")
+  public ResponseEntity<ApiResponseSuccessDto<AsistenteResponseDto>> findSeveridadBaja(){
+        Asistente asistente = (Asistente) service.findSeveridadBaja();
+        AsistenteResponseDto dto = mapper.toDto(asistente);
+
+        ApiResponseSuccessDto<AsistenteResponseDto> resp = new ApiResponseSuccessDto<>
+        (true,"Veresidad: ",dto);
+        return ResponseEntity.ok(resp);  
+        }
 }

@@ -9,6 +9,7 @@ public class AsistenteResponseDto {
     private String nombre;
     private Long dni;
     private String email;
+    private Integer severidad;
     
 	public Long getId() {
 		return id;
@@ -46,6 +47,11 @@ public class AsistenteResponseDto {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-    
+	public Integer getSeveridad() {
+		return severidad;
+	}
+	public void setSeveridad(Integer severidad) {
+		this.severidad = severidad;
+	}    
     
 }
