@@ -49,10 +49,10 @@ public class ObraSocialController {
         return ResponseEntity.ok(resp);
     }
 
-    @PostMapping
+   /* @PostMapping
     public ResponseEntity<ApiResponseSuccessDto<ObraSocialResponseDto>> createObraSocial(
             @Valid @RequestBody ObraSocialRequestDto dto) {
-
+   
         ObraSocialResponseDto nueva = service.create(dto);
 
         ApiResponseSuccessDto<ObraSocialResponseDto> response = new ApiResponseSuccessDto<>();
@@ -61,7 +61,40 @@ public class ObraSocialController {
         response.setData(nueva);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
+    }*/
+    
+
+	@PostMapping
+	public ResponseEntity<ApiResponseSuccessDto<ObraSocialResponseDto>> save(
+	@Valid @RequestBody ObraSocialRequestDto dto) {
+
+
+	if (service.existCodigoReferenciaIgnoreCase(dto.getCodigoReferencia())) {
+	    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	            .body(new ApiResponseSuccessDto<>(false, "El codigo '" + dto.getCodigoReferencia() + "' ya está en uso.", null));
+	}
+
+	if (dto.getCodigoReferencia()==dto.getCodigoReferencia().trim().toUpperCase().replace(" ", "")) {
+	    return ResponseEntity.badRequest()
+	            .body(new ApiResponseSuccessDto<ObraSocialResponseDto>(false, "Error: El nombre debe tener al menos 3 caracteres.", null));
+	}
+
+	
+	ObraSocialResponseDto response = service.create(dto);
+
+	return ResponseEntity.status(HttpStatus.CREATED)
+	        .body(new ApiResponseSuccessDto<>(true, "Obra Social creada exitosamente", response));
+	}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<ObraSocialResponseDto>> updateObraSocial(
@@ -114,6 +147,20 @@ public class ObraSocialController {
         response.setSuccess(true);
         response.setData(cantidad);
         response.setMessage("Cantidad de obras sociales con cobertura '" + cobertura + "'.");
+
+        return ResponseEntity.ok(response);
+    }
+    
+    @GetMapping("/codigo/{codigoReferencia}")
+    public ResponseEntity<ApiResponseSuccessDto<ObraSocialResponseDto>> getByCodigoReferencia(
+            @RequestParam String codigoReferencia) {
+
+        ObraSocialResponseDto encontrada = service.findByCodigoReferenciaIgnoreCase(codigoReferencia);
+
+        ApiResponseSuccessDto<ObraSocialResponseDto> response = new ApiResponseSuccessDto<>();
+        response.setSuccess(true);
+        response.setData(encontrada);
+        response.setMessage("Obra social encontrada por CodigoReferencia.");
 
         return ResponseEntity.ok(response);
     }

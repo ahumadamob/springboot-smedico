@@ -22,6 +22,8 @@ public class ObraSocialRequestDto {
     @NotBlank(message = "Debe especificar la cobertura o plan")
     @Size(max = 100, message = "La cobertura no puede superar los 100 caracteres")
     private String cobertura;
+    
+    private String codigoReferencia;
 
     public ObraSocialRequestDto() {}
 
@@ -60,5 +62,15 @@ public class ObraSocialRequestDto {
     public void setCobertura(String cobertura) {
         this.cobertura = cobertura;
     }
+
+	public String getCodigoReferencia() {
+		return codigoReferencia;
+	}
+
+	public void setCodigoReferencia(String codigoReferencia) {
+		this.codigoReferencia = codigoReferencia;
+	}
+    
+    
 }
 

@@ -47,6 +47,7 @@ public class ObraSocialServiceImpl implements IObraSocialService {
         existente.setTelefono(dto.getTelefono());
         existente.setDireccion(dto.getDireccion());
         existente.setCobertura(dto.getCobertura());
+        existente.setCodigoReferencia(dto.getCodigoReferencia());
 
         ObraSocial updated = repository.save(existente);
         return mapper.toResponseDto(updated);
@@ -84,6 +85,19 @@ public class ObraSocialServiceImpl implements IObraSocialService {
                 .orElseThrow(() -> new ResourceNotFoundException("Obra social no encontrada con nombre: " + nombre));
         return mapper.toResponseDto(entity);
     }
+    
+    @Override
+    public ObraSocialResponseDto findByCodigoReferenciaIgnoreCase(String codigoReferencia) {
+        ObraSocial entity = repository.findByNombre(codigoReferencia)
+                .orElseThrow(() -> new ResourceNotFoundException("Obra social no encontrada con : " + codigoReferencia));
+        return mapper.toResponseDto(entity);
+    }
+
+    @Override
+	public boolean existCodigoReferenciaIgnoreCase(String codigoReferencia) {
+		return repository.existByCodigoReferenciaIgnoreCase(codigoReferencia);
+	}
+  
 }
 
 

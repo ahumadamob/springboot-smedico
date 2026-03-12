@@ -26,6 +26,9 @@ public class ObraSocial {
     @Column(length = 100)
     private String cobertura;
 
+    @Column(nullable = false, unique = true)
+    private String codigoReferencia;
+    
     public ObraSocial() {}
 
     public ObraSocial(String nombre, String telefono, String direccion, String cobertura) {
@@ -71,6 +74,15 @@ public class ObraSocial {
     public void setCobertura(String cobertura) {
         this.cobertura = cobertura;
     }
+
+	public String getCodigoReferencia() {
+		return codigoReferencia;
+	}
+
+	public void setCodigoReferencia(String codigoReferencia) {
+		this.codigoReferencia = codigoReferencia;
+	}
+    
 }
 
 

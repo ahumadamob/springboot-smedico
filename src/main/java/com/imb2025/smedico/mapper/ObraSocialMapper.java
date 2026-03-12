@@ -19,6 +19,7 @@ public ObraSocial fromDto(ObraSocialRequestDto dto) {
 	obs.setDireccion(dto.getDireccion());
 	obs.setNombre(dto.getNombre());
 	obs.setTelefono(dto.getTelefono());
+	obs.setCodigoReferencia(dto.getCodigoReferencia());
 	
 	return obs;
 }
@@ -33,6 +34,7 @@ public ObraSocialResponseDto toResponseDto(ObraSocial obs) {
     response.setTelefono(obs.getTelefono());
     response.setDireccion(obs.getDireccion());
     response.setCobertura(obs.getCobertura());
+    response.setCodigoReferencia(obs.getCodigoReferencia());
 
     return response;
 }

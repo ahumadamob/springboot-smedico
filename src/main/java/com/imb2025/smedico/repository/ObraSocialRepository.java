@@ -11,6 +11,9 @@ public interface ObraSocialRepository extends JpaRepository<ObraSocial, Long> {
 
    
     Optional<ObraSocial> findByNombre(String nombre);
+    Optional<ObraSocial> findByCodigoReferenciaIgnoreCase(String codigoReferencia);
+    Boolean existByCodigoReferenciaIgnoreCase(String codigoReferencia);
+    
 
     boolean existsByNombre(String nombre);
 
