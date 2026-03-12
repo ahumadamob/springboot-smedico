@@ -1,5 +1,7 @@
 package com.imb2025.smedico.entity;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Version;
 
@@ -10,16 +12,18 @@ public class Consultorio extends BaseEntity{
     private String ubicacion;
     private int piso;
     private String identificadorLegible;
+    private LocalDate fechaArchivado;
     @Version
     private Long version;
 
     public Consultorio() {}
 
-    public Consultorio(String nombre, String ubicacion, int piso, String identificador_legible) {
+    public Consultorio(String nombre, String ubicacion, int piso, String identificadorLegible, LocalDate fechaArchivado) {
         this.nombre = nombre;
         this.ubicacion = ubicacion;
         this.piso = piso;
         this.identificadorLegible = identificadorLegible;
+        this.fechaArchivado = fechaArchivado;
     }
 
     public String getIdentificadorLegible() {
@@ -56,4 +60,11 @@ public class Consultorio extends BaseEntity{
     public void setPiso(int piso) {
         this.piso = piso;
     }
+    public LocalDate getFechaArchivado() {
+		return fechaArchivado;
+	}
+
+	public void setFechaArchivado(LocalDate fechaArchivado) {
+		this.fechaArchivado = fechaArchivado;
+	}
 }

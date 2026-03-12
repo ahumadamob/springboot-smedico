@@ -1,5 +1,7 @@
 package com.imb2025.smedico.controller;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -74,20 +76,38 @@ public class ConsultorioController {
 	//Buscar lista - GET 
     @GetMapping("/consultorio")
     public ResponseEntity<ApiResponseSuccessDto<List<Consultorio>>> findAllConsultorio() {
-    	List<Consultorio> consultorio = service.findAll();
+    	//Llamo el service
+    	List<Consultorio> listaConsultorio = service.findAll();
+    	//Mappeo la entidad
+    	ConsultorioMapper mapper = new ConsultorioMapper();
+    	//Convierto a dto
+    	List<ConsultorioResponseDto> listaResponse = new ArrayList<ConsultorioResponseDto>();
+    	//Elaboro la respuesta
+    	for (Consultorio c : listaConsultorio) {
+    		ConsultorioResponseDto dto = new ConsultorioResponseDto();
+    		dto = mapper.toDto(c);
+    		listaResponse.add(dto);
+    	}
     	ApiResponseSuccessDto<List<Consultorio>> respuesta;
-    	if(consultorio.isEmpty()) {
-    		respuesta = new ApiResponseSuccessDto<>(true, "El consultorio no existe", consultorio);
+    	if(listaConsultorio.isEmpty()) {
+    		respuesta = new ApiResponseSuccessDto<>(true, "El consultorio no existe", listaConsultorio);
     	}else {
-    		respuesta = new ApiResponseSuccessDto<>(true, "Consultorios", consultorio);
+    		respuesta = new ApiResponseSuccessDto<>(true, "Consultorios", listaConsultorio);
     	}
     	return ResponseEntity.ok(respuesta);
     }
    
     //Eliminar por ID - DELETE
     @DeleteMapping("/consultorio/{id}")
-    public ResponseEntity<ApiResponseSuccessDto<String>> delete(@PathVariable("id") Long id) {
+    public void update(@PathVariable() Long id, @Valid @RequestBody Consultorio consultorio) {
+    	Consultorio consultorio1 = service.findById(id);
+    	consultorio1.setFechaArchivado(LocalDate.now());
+    	service.update(id, consultorio1);
+    } 
+    
+    /*public ResponseEntity<ApiResponseSuccessDto<String>> delete(@PathVariable("id") Long id) {
     	ConsultorioMapper mapper = new ConsultorioMapper();
+    	LocalDate hoy = LocalDate.now();
         Consultorio consultorio = service.findById(id);
         if (consultorio == null) {
         	ApiResponseSuccessDto<String> respuesta = new ApiResponseSuccessDto<>
@@ -96,9 +116,9 @@ public class ConsultorioController {
         }
         service.deleteById(id);
         ApiResponseSuccessDto<String> respuesta = new ApiResponseSuccessDto<>
-    	(true, "Consultorio eliminado correctamente", "ID eliminado: " + id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(respuesta);
-    }
+    	(true, "Consultorio eliminado correctamente" + hoy, "ID eliminado: " + id);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(respuesta);
+    }*/
     
     //Actualizar consultorio - PUT
     @PutMapping("/consultorio/{id}")
@@ -110,4 +130,25 @@ public class ConsultorioController {
     	ApiResponseSuccessDto<ConsultorioResponseDto> respuesta = new ApiResponseSuccessDto<>(true, "Consultorio actualizado", responseDto);
     	return ResponseEntity.ok(respuesta);
     }  
+    
+    @GetMapping("/consultorio/archivado")
+    public ResponseEntity<ApiResponseSuccessDto<List<ConsultorioResponseDto>>> findByFechaArchivado(){
+    	//Llamo al service
+    	List<Consultorio> listaConsultorio = service.findByFechaArchivadoIsNull();
+    	//Mappeo la entidad
+    	ConsultorioMapper mapper = new ConsultorioMapper();
+    	//Convierto a dto
+    	List<ConsultorioResponseDto> listaResponse = new ArrayList<ConsultorioResponseDto>();
+    	//Preparo respuesta
+    	for (Consultorio c : listaConsultorio) {
+    		ConsultorioResponseDto dto = new ConsultorioResponseDto();
+    		dto = mapper.toDto(c);
+    		listaResponse.add(dto);
+    	}
+    	ApiResponseSuccessDto<List<ConsultorioResponseDto>> respuesta = null;
+    	if(listaConsultorio.isEmpty()) {
+    		respuesta = new ApiResponseSuccessDto<>(true, "Consultorio Archivado", listaResponse);
+    	}
+    	return ResponseEntity.ok(respuesta);
+    }
 }

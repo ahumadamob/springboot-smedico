@@ -72,6 +72,18 @@ public class ConsultorioServiceImpl implements IConsultorioService {
     	
     	return repository.save(consultorioExistente);
 	}
+
+	@Override
+	public List<Consultorio> findByFechaArchivadoIsNull() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Consultorio> findByFechaArchivadoInNotNull() {
+		// TODO Auto-generated method stub
+		return null;
+	}
     
     /*@Override
 	public Consultorio fromDto(ConsultorioRequestDto dto) {
