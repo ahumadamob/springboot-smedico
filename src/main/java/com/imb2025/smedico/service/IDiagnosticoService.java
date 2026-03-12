@@ -1,6 +1,6 @@
 package com.imb2025.smedico.service;
 
-import com.imb2025.smedico.dto.request.DiagnosticoRequestDto;
+
 import com.imb2025.smedico.entity.Diagnostico;
 
 import java.time.LocalDate;
