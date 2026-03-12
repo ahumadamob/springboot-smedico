@@ -22,5 +22,7 @@ public interface IObraSocialService {
     long countByCobertura(String cobertura);
 
     ObraSocialResponseDto findByNombre(String nombre);
+    ObraSocialResponseDto findByCodigoReferenciaIgnoreCase(String codigoReferencia);
+    boolean existCodigoReferenciaIgnoreCase (String codigoReferencia);
 }
 

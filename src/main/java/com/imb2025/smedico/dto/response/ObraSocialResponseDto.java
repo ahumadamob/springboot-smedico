@@ -6,6 +6,7 @@ public class ObraSocialResponseDto {
     private String telefono;
     private String direccion;
     private String cobertura;
+    private String codigoReferencia;
     //private Integer version;
 
     // Getters y setters
@@ -44,6 +45,15 @@ public class ObraSocialResponseDto {
     public void setCobertura(String cobertura) {
         this.cobertura = cobertura;
     }
+
+	public String getCodigoReferencia() {
+		return codigoReferencia;
+	}
+
+	public void setCodigoReferencia(String codigoReferencia) {
+		this.codigoReferencia = codigoReferencia;
+	}
+    
 }
 
 
