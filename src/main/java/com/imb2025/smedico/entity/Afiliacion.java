@@ -4,43 +4,40 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "afiliaciones") // CAMBIO: nombre explícito de tabla
-public class Afiliacion {
+@Table(name = "afiliaciones")
+public class Afiliacion extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false) // CAMBIO: no se permite null
+    @Column(nullable = false)
     private Long numeroAfiliado;
 
-    @Column(nullable = false) // CAMBIO: no se permite null
+    @Column(nullable = false)
     private LocalDate fechaVigenciaDesde;
 
-    @Column(nullable = false) // CAMBIO: no se permite null
+    @Column(nullable = false)
     private LocalDate fechaHasta;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false) // CAMBIO: fetch LAZY + optional
+
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "paciente_id", nullable = false)
     private Paciente paciente;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false) // CAMBIO: fetch LAZY + optional
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "obra_id", nullable = false)
     private ObraSocial obra;
 
     public Afiliacion() {}
 
-    public Afiliacion(Long id, Long numeroAfiliado, LocalDate fechaVigenciaDesde, LocalDate fechaHasta,
-                      Paciente paciente, ObraSocial obra) {
-        this.id = id;
+    public Afiliacion(Long numeroAfiliado,
+                      LocalDate fechaVigenciaDesde,
+                      LocalDate fechaHasta,
+                      Paciente paciente,
+                      ObraSocial obra) {
         this.numeroAfiliado = numeroAfiliado;
         this.fechaVigenciaDesde = fechaVigenciaDesde;
         this.fechaHasta = fechaHasta;
         this.paciente = paciente;
         this.obra = obra;
     }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
     public Long getNumeroAfiliado() { return numeroAfiliado; }
     public void setNumeroAfiliado(Long numeroAfiliado) { this.numeroAfiliado = numeroAfiliado; }
 
@@ -56,4 +53,3 @@ public class Afiliacion {
     public ObraSocial getObra() { return obra; }
     public void setObra(ObraSocial obra) { this.obra = obra; }
 }
-
