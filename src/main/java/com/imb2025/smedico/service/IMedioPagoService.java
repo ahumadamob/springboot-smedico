@@ -16,5 +16,11 @@ public interface IMedioPagoService {
 	List<MedioPago> findByTipo(TipoPago tipo);
 	Long countByNombre(String nombre);
 	boolean existsById(Long id);
+	public List<MedioPago> findByPublicadoTrue(Long id, MedioPago medioPago); 
+	List<MedioPago> findByPublicadoFalse(Long id, MedioPago medioPago);
+	MedioPago findByIdPublicados(Long id);
+	
+	
+	
 	
 }

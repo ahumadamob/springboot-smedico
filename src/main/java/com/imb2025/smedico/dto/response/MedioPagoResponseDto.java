@@ -9,9 +9,20 @@ public class MedioPagoResponseDto {
 	private String nombre;
 	private TipoPago tipo;
     
+	private boolean publicado;
 
     
-    public Long getId() {
+   
+
+	public boolean isPublicado() {
+		return publicado;
+	}
+
+	public void setPublicado(boolean publicado) {
+		this.publicado = publicado;
+	}
+
+	public Long getId() {
 		return id;
 	}
 
