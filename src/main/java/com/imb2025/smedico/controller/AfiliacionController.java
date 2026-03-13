@@ -140,7 +140,9 @@ public class AfiliacionController {
                 afiliacion.getFechaVigenciaDesde(),
                 afiliacion.getFechaHasta(),
                 afiliacion.getPaciente() != null ? afiliacion.getPaciente().getId() : null,
-                afiliacion.getObra() != null ? afiliacion.getObra().getId() : null
+                afiliacion.getObra() != null ? afiliacion.getObra().getId() : null, null	
+                		  
+                		
         );
     }
 }

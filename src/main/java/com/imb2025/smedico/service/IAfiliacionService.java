@@ -14,6 +14,10 @@ public interface IAfiliacionService {
     Afiliacion update(Long id, Afiliacion afiliacion);
 
     Afiliacion findById(Long id);
+    
+    Afiliacion findByDescripcionCorta(String DescripcionCorta);
+    
+    boolean existsByDescripcionCorta(String DescripcionCorta);
 
     boolean existsById(Long id);
 

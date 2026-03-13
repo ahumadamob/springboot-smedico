@@ -9,16 +9,19 @@ public class AfiliacionResponseDto {
     private LocalDate fechaHasta;
     private Long idPaciente;
     private Long idObra;
+    private String descripcionCorta;
 
-    public AfiliacionResponseDto(Long id, Long numeroAfiliado,
+
+	public AfiliacionResponseDto(Long id, Long numeroAfiliado,
                                  LocalDate fechaVigenciaDesde, LocalDate fechaHasta,
-                                 Long idPaciente, Long idObra) {
+                                 Long idPaciente, Long idObra ,String descripcionCorta) {
         this.id = id;
         this.numeroAfiliado = numeroAfiliado;
         this.fechaVigenciaDesde = fechaVigenciaDesde;
         this.fechaHasta = fechaHasta;
         this.idPaciente = idPaciente;
         this.idObra = idObra;
+        this.descripcionCorta= descripcionCorta;
     }
 
     // Getters y setters
@@ -39,4 +42,8 @@ public class AfiliacionResponseDto {
 
     public Long getIdObra() { return idObra; }
     public void setIdObra(Long idObra) { this.idObra = idObra; }
+
+	public String getDescripcionCorta() {return descripcionCorta;}
+
+	public void setDescripcionCorta(String descripcionCorta) {this.descripcionCorta = descripcionCorta;}
 }

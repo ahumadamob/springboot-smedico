@@ -1,6 +1,7 @@
 package com.imb2025.smedico.service.jpa;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import com.imb2025.smedico.service.IAfiliacionService;
 @Service
 @Transactional
 public class AfiliacionServiceImpl implements IAfiliacionService {
+	
 
     private final AfiliacionRepository afiliacionRepository;
     private final PacienteRepository pacienteRepository;
@@ -110,7 +112,7 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
         return afiliacionRepository.existsById(id);
     }
 
-    // ---- Implementación de los métodos "mágicos" ----
+
     @Override
     public List<Afiliacion> findByIdGreaterThan(Long idMin) {
         if (idMin == null || idMin < 0) {
@@ -138,4 +140,28 @@ public class AfiliacionServiceImpl implements IAfiliacionService {
                 "El rango de fechas es inválido");
         }
     }
-}
+        public String valor;
+ 
+
+		@Override
+		public Afiliacion findByDescripcionCorta(String DescripcionCorta) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public boolean existsByDescripcionCorta(String DescripcionCorta) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+		
+		private String normalizarDescripcion(String valor) {
+		    if (valor == null) return null;
+		  
+		    return valor.trim().replaceAll("\\s+", " ");
+		}
+
+	
+    	
+    }
+

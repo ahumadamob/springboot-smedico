@@ -27,16 +27,22 @@ public class AfiliacionRequestDto {
     @NotNull(message = "El ID de la obra social es obligatorio") // CAMBIO
     @Min(value = 1, message = "El ID de la obra debe ser mayor a 0") // CAMBIO
     private Long idobra;
+    
+    @NotNull(message = "El ID de la obra social es obligatorio")
+    private String descripcionCorta;
 
-    public AfiliacionRequestDto() {}
+    
+
+	public AfiliacionRequestDto() {}
 
     public AfiliacionRequestDto(Long numeroAfiliado, LocalDate fechaVigenciaDesde, LocalDate fechaHasta,
-                                Long idpaciente, Long idobra) {
+                                Long idpaciente, Long idobra, String descripcionCorta) {
         this.numeroAfiliado = numeroAfiliado;
         this.fechaVigenciaDesde = fechaVigenciaDesde;
         this.fechaHasta = fechaHasta;
         this.idpaciente = idpaciente;
         this.idobra = idobra;
+        this.descripcionCorta = descripcionCorta;
     }
 
     public Long getNumeroAfiliado() { return numeroAfiliado; }
@@ -53,4 +59,8 @@ public class AfiliacionRequestDto {
 
     public Long getIdobra() { return idobra; }
     public void setIdobra(Long idobra) { this.idobra = idobra; }
+
+	public String getDescripcionCorta() {return descripcionCorta;}
+
+	public void setDescripcionCorta(String descripcionCorta) {this.descripcionCorta = descripcionCorta;}
 }
