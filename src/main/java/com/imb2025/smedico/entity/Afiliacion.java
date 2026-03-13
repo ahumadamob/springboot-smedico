@@ -25,17 +25,22 @@ public class Afiliacion {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false) // CAMBIO: fetch LAZY + optional
     private ObraSocial obra;
+    
+    @Column(nullable = false)
+    private String descripcionCorta;
 
-    public Afiliacion() {}
+   
+	public Afiliacion() {}
 
     public Afiliacion(Long id, Long numeroAfiliado, LocalDate fechaVigenciaDesde, LocalDate fechaHasta,
-                      Paciente paciente, ObraSocial obra) {
+                      Paciente paciente, ObraSocial obra, String descripcionCorta ) {
         this.id = id;
         this.numeroAfiliado = numeroAfiliado;
         this.fechaVigenciaDesde = fechaVigenciaDesde;
         this.fechaHasta = fechaHasta;
         this.paciente = paciente;
         this.obra = obra;
+        this.descripcionCorta= descripcionCorta;
     }
 
     public Long getId() { return id; }
@@ -55,5 +60,10 @@ public class Afiliacion {
 
     public ObraSocial getObra() { return obra; }
     public void setObra(ObraSocial obra) { this.obra = obra; }
+    
+    public String getDescripcionCorta() { return descripcionCorta;	}
+
+	public void setDescripcionCorta(String descripcionCorta) {this.descripcionCorta = descripcionCorta;}
+
 }
 
