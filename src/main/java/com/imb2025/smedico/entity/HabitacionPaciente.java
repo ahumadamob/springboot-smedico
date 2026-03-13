@@ -1,5 +1,7 @@
 package com.imb2025.smedico.entity;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
@@ -12,17 +14,31 @@ public class HabitacionPaciente extends BaseEntity {
     private String sector;
     private Integer camasDisponibles;
     private String descripcion;
+    private String observacionInterna;
+    private String identificadorLegible;
+    private LocalDate fechaVigencia;
 
     public HabitacionPaciente() {}
 
 	public HabitacionPaciente(Integer numeroHabitacion, Integer piso, String sector, Integer camasDisponibles,
-			String descripcion) {
+			String descripcion, String observacionInterna, String identificadorLegible, LocalDate fechaVigencia) {
 		super();
 		this.numeroHabitacion = numeroHabitacion;
 		this.piso = piso;
 		this.sector = sector;
 		this.camasDisponibles = camasDisponibles;
 		this.descripcion = descripcion;
+		this.observacionInterna = observacionInterna;
+		this.identificadorLegible = identificadorLegible;
+		this.fechaVigencia = fechaVigencia;
+	}
+
+	public String getObservacionInterna() {
+		return observacionInterna;
+	}
+
+	public void setObservacionInterna(String observacionInterna) {
+		this.observacionInterna = observacionInterna;
 	}
 
 	public Integer getNumeroHabitacion() {
@@ -64,6 +80,24 @@ public class HabitacionPaciente extends BaseEntity {
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
+
+	public String getIdentificadorLegible() {
+		return identificadorLegible;
+	}
+
+	public void setIdentificadorLegible(String identificadorLegible) {
+		this.identificadorLegible = identificadorLegible;
+	}
+
+	public LocalDate getFechaVigencia() {
+		return fechaVigencia;
+	}
+
+	public void setFechaVigencia(LocalDate fechaVigencia) {
+		this.fechaVigencia = fechaVigencia;
+	}
+
+
 
     
     
