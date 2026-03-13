@@ -15,11 +15,14 @@ import java.util.List;
 public class DiagnosticoServiceImpl implements IDiagnosticoService {
 
     private final DiagnosticoRepository repo;
+	private Diagnostico diagnostico;
 
     public DiagnosticoServiceImpl(DiagnosticoRepository repo) {
         this.repo = repo;
     }
 
+    
+    
     @Override
     public List<Diagnostico> findAll() {
         // No debería lanzar excepción; si la lista está vacía, el controller decide qué devolver
@@ -75,5 +78,55 @@ public class DiagnosticoServiceImpl implements IDiagnosticoService {
     public long countByFechaDiagnostico(LocalDate fechaDiagnostico) {
         return repo.countByFechaDiagnostico(fechaDiagnostico);
     }
+    
+    
+    @Transactional
+    @Override
+    public Diagnostico codigoReferencia(Long id, Diagnostico diagnostico) {
+        if (!repo.existsById(id)) {
+            throw new ResourceNotFoundException("No se puede actualizar. Diagnóstico no encontrado con id " + id);
+        }
+
+        String codigoNormalizado = normalizarCodigo(diagnostico.getCodigoReferencia());
+        diagnostico.setCodigoReferencia(codigoNormalizado);
+
+        if (repo.existsByCodigoReferenciaIgnoreCaseAndIdNot(codigoNormalizado, id)) {
+            throw new RuntimeException("El código de referencia ya existe");
+        }
+
+        diagnostico.setId(id);
+        return repo.save(diagnostico);
+    }
+    
+
+	
+	private String normalizarCodigo(String codigo) {
+	    return codigo
+	            .trim()
+	            .replace(" ", "")
+	            .toUpperCase();
+	}
+
+
+
+	@Override
+	public boolean existsByCodigoReferenciaIgnoreCase(String codigoReferencia) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+
+	@Override
+	public Diagnostico update1(Long id, Diagnostico diagnostico) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+
+
+
+
+
 
 }

@@ -3,7 +3,9 @@ package com.imb2025.smedico.controller;
 import com.imb2025.smedico.dto.request.DiagnosticoRequestDto;
 import com.imb2025.smedico.dto.response.DiagnosticoResponseDto;
 import com.imb2025.smedico.entity.Diagnostico;
-import com.imb2025.smedico.dto.mapper.DiagnosticoMapper;
+import com.imb2025.smedico.mapper.DiagnosticoMapper;
+import com.imb2025.smedico.dto.ApiResponseErrorDto;
+import com.imb2025.smedico.dto.FieldErrorDto;
 import com.imb2025.smedico.service.IDiagnosticoService;
 
 import jakarta.validation.Valid;
@@ -109,4 +111,21 @@ public class DiagnosticoController {
         long cantidad = service.countByFechaDiagnostico(fecha);
         return ResponseEntity.ok(cantidad);
     }
+    
+   
+    
+    @GetMapping("/codigoReferencia")
+    public ResponseEntity<List<DiagnosticoResponseDto>> buscarPorCodigoReferencia(@RequestParam String texto) {
+
+        if (texto == null || texto.trim().isEmpty()) {
+            throw new IllegalArgumentException("texto de busqueda obligatorio");
+        }
+        
+        return (ResponseEntity<List<DiagnosticoResponseDto>>) ResponseEntity.ok();
+    }
+    
+   
+    
+    
+    
 }
