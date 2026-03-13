@@ -19,5 +19,9 @@ public interface IDiagnosticoService {
     List<Diagnostico> findByFechaDiagnostico(LocalDate fechaDiagnostico);
 
     long countByFechaDiagnostico(LocalDate fechaDiagnostico);
+    
+    boolean existsByCodigoReferenciaIgnoreCase(String codigoReferencia);
+	Diagnostico update1(Long id, Diagnostico diagnostico);
+	Diagnostico codigoReferencia(Long id, Diagnostico diagnostico);
 
 }

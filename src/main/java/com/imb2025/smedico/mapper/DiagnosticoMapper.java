@@ -1,4 +1,4 @@
-package com.imb2025.smedico.dto.mapper;
+package com.imb2025.smedico.mapper;
 
 import com.imb2025.smedico.dto.request.DiagnosticoRequestDto;
 import com.imb2025.smedico.dto.response.DiagnosticoResponseDto;
@@ -12,6 +12,7 @@ public class DiagnosticoMapper {
         d.setConsultaId(dto.getConsultaId());
         d.setDescripcion(dto.getDescripcion());
         d.setFechaDiagnostico(dto.getFechaDiagnostico());
+        d.setCodigoReferencia(dto.getCodigoReferencia());
         return d;
     }
 
@@ -22,7 +23,8 @@ public class DiagnosticoMapper {
                 d.getConsultaId(),
                 d.getDescripcion(),
                 d.getFechaDiagnostico(),
-                d.getVersion()
+                d.getVersion(),
+                d.getCodigoReferencia()
         );
     }
 }

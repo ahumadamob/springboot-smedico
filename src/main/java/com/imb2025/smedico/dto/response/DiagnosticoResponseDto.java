@@ -9,15 +9,17 @@ public class DiagnosticoResponseDto {
     private String descripcion;
     private LocalDate fechaDiagnostico;
     private Long version;
+    private String codigoReferencia;
 
     public DiagnosticoResponseDto() { }
 
-    public DiagnosticoResponseDto(Long id, Long consultaId, String descripcion, LocalDate fechaDiagnostico, Long version) {
+    public DiagnosticoResponseDto(Long id, Long consultaId, String descripcion, LocalDate fechaDiagnostico, Long version, String codigoReferencia) {
         this.id = id;
         this.consultaId = consultaId;
         this.descripcion = descripcion;
         this.fechaDiagnostico = fechaDiagnostico;
         this.version = version;
+        this.codigoReferencia = codigoReferencia;
     }
 
     public Long getId() { return id; }
@@ -34,4 +36,14 @@ public class DiagnosticoResponseDto {
 
     public Long getVersion() { return version; }
     public void setVersion(Long version) { this.version = version; }
+
+	public String getCodigoReferencia() {
+		return codigoReferencia;
+	}
+
+	public void setCodigoReferencia(String codigoReferencia) {
+		this.codigoReferencia = codigoReferencia;
+	}
+    
+    
 }

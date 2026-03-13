@@ -20,13 +20,18 @@ public class DiagnosticoRequestDto {
     @NotNull(message = "La fecha de diagnóstico es obligatoria")
     @PastOrPresent(message = "La fecha de diagnóstico no puede ser en el futuro")
     private LocalDate fechaDiagnostico;
+    
+    @NotNull (message = "El código de referencia no puede ser nulo")   
+    @NotBlank(message = "El código de referencia es obligatorio")
+    private String codigoReferencia;
 
     public DiagnosticoRequestDto() { }
 
-    public DiagnosticoRequestDto(Long consultaId, String descripcion, LocalDate fechaDiagnostico) {
+    public DiagnosticoRequestDto(Long consultaId, String descripcion, LocalDate fechaDiagnostico, String codigoReferencia) {
         this.consultaId = consultaId;
         this.descripcion = descripcion;
         this.fechaDiagnostico = fechaDiagnostico;
+        this.codigoReferencia = codigoReferencia;
     }
 
     public Long getConsultaId() { return consultaId; }
@@ -37,4 +42,14 @@ public class DiagnosticoRequestDto {
 
     public LocalDate getFechaDiagnostico() { return fechaDiagnostico; }
     public void setFechaDiagnostico(LocalDate fechaDiagnostico) { this.fechaDiagnostico = fechaDiagnostico; }
+
+	public String getCodigoReferencia() {
+		return codigoReferencia;
+	}
+
+	public void setCodigoReferencia(String codigoReferencia) {
+		this.codigoReferencia = codigoReferencia;
+	}
+    
+    
 }

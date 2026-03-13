@@ -17,13 +17,17 @@ public class Diagnostico extends BaseEntity {
 
     @Column(name = "fecha_diagnostico")
     private LocalDate fechaDiagnostico;
+    
+    @Column(name = "codigo_referencia", unique = true, nullable = false)
+    private String codigoReferencia;
 
     public Diagnostico() { }
 
-    public Diagnostico(Long consultaId, String descripcion, LocalDate fechaDiagnostico) {
+    public Diagnostico(Long consultaId, String descripcion, LocalDate fechaDiagnostico, String codigoReferencia) {
         this.consultaId = consultaId;
         this.descripcion = descripcion;
         this.fechaDiagnostico = fechaDiagnostico;
+        this.codigoReferencia = codigoReferencia;
     }
 
     public Long getConsultaId() { return consultaId; }
@@ -34,4 +38,14 @@ public class Diagnostico extends BaseEntity {
 
     public LocalDate getFechaDiagnostico() { return fechaDiagnostico; }
     public void setFechaDiagnostico(LocalDate fechaDiagnostico) { this.fechaDiagnostico = fechaDiagnostico; }
+
+	public String getCodigoReferencia() {
+		return codigoReferencia;
+	}
+
+	public void setCodigoReferencia(String codigoReferencia) {
+		this.codigoReferencia = codigoReferencia;
+	}
+    
+    
 }
