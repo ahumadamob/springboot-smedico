@@ -1,5 +1,7 @@
 package com.imb2025.smedico.dto.response;
 
+import java.time.LocalDate;
+
 public class HabitacionPacienteResponseDto {
 
     private Long id;
@@ -8,22 +10,37 @@ public class HabitacionPacienteResponseDto {
     private String sector;
     private Integer camasDisponibles;
     private String descripcion;
+
+    private String identificadorLegible;
+    private LocalDate fechaVigencia;
     private Integer version;
+    private String observacionInterna;
 
-    public HabitacionPacienteResponseDto() {}
+    public HabitacionPacienteResponseDto(Long id,
+                                          Integer numeroHabitacion,
+                                          Integer piso,
+                                          String sector,
+                                          Integer camasDisponibles,
+                                          String descripcion,
+                                          String identificadorLegible,
+                                          LocalDate fechaVigencia,
+                                          Integer version) {
 
-    public HabitacionPacienteResponseDto(Long id, Integer numeroHabitacion, Integer piso, String sector,
-                                         Integer camasDisponibles, String descripcion, Integer version) {
         this.id = id;
         this.numeroHabitacion = numeroHabitacion;
         this.piso = piso;
         this.sector = sector;
         this.camasDisponibles = camasDisponibles;
         this.descripcion = descripcion;
+        this.identificadorLegible = identificadorLegible;
+        this.fechaVigencia = fechaVigencia;
         this.version = version;
     }
 
-    // Getters y Setters
+    public HabitacionPacienteResponseDto() {}
+
+    // GETTERS Y SETTERS
+
     public Long getId() {
         return id;
     }
@@ -72,11 +89,28 @@ public class HabitacionPacienteResponseDto {
         this.descripcion = descripcion;
     }
 
-    public Integer getVersion() {
-        return version;
+    public String getIdentificadorLegible() {
+        return identificadorLegible;
     }
 
-    public void setVersion(Integer version) {
-        this.version = version;
+    public void setIdentificadorLegible(String identificadorLegible) {
+        this.identificadorLegible = identificadorLegible;
+    }
+
+    public LocalDate getFechaVigencia() {
+        return fechaVigencia;
+    }
+
+    public void setFechaVigencia(LocalDate fechaVigencia) {
+        this.fechaVigencia = fechaVigencia;
+    }
+
+
+    public String getObservacionInterna() {
+        return observacionInterna;
+    }
+
+    public void setObservacionInterna(String observacionInterna) {
+        this.observacionInterna = observacionInterna;
     }
 }
