@@ -14,7 +14,17 @@ public class MedioPagoRequestDto {
 	
 	@NotNull (message = "El campo nombre del tipo de medio de pago No puede estar vacio")  
     private TipoPago tipo; 
+	
+	private boolean publicado;
  
+	public boolean isPublicado() {
+		return publicado;
+	}
+
+	public void setPublicado(boolean publicado) {
+		this.publicado = publicado;
+	}
+
 public MedioPagoRequestDto() {}
 
 public MedioPagoRequestDto(String nombre, TipoPago tipo) { 

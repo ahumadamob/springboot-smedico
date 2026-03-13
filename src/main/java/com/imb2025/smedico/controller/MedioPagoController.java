@@ -31,12 +31,9 @@ import com.imb2025.smedico.dto.ApiResponseSuccessDto;
 public class MedioPagoController {
 
 	@Autowired
-	private final IMedioPagoService service;
+	private IMedioPagoService service;
 
-	public MedioPagoController(IMedioPagoService service) {
-	    this.service = service;
-	}
-	
+
     @GetMapping
     public ResponseEntity<ApiResponseSuccessDto<List<MedioPagoResponseDto>>> findAllMedioPago() {
     	List<MedioPago> lista = service.findAll();
@@ -122,6 +119,40 @@ public class MedioPagoController {
         return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, mensaje, cantidad));
     }
 
+    @PutMapping("mediopago/{id}/publicar")
+    public ResponseEntity<ApiResponseSuccessDto<MedioPagoResponseDto>> publicar(@PathVariable Long id, @Valid @RequestBody MedioPagoRequestDto mediopagoDto) {
+    	MedioPagoMapper mapper = new MedioPagoMapper();
+        MedioPago medioPago = mapper.fromDto(mediopagoDto);
+        medioPago.setId(id); 
+        MedioPago actualizado = (MedioPago) service.findByPublicadoTrue(id, medioPago);
+        MedioPagoResponseDto responseDto = mapper.toResponseDto(actualizado);
+        ApiResponseSuccessDto<MedioPagoResponseDto> response = new ApiResponseSuccessDto<>(true, "Medio de pago actualizado exitosamente!", responseDto);
+        return ResponseEntity.ok(response);
+    }
+    
+    @PutMapping("mediopago/{id}/despublicar")
+    public ResponseEntity<ApiResponseSuccessDto<MedioPagoResponseDto>> despublicar(@PathVariable Long id, @Valid @RequestBody MedioPagoRequestDto mediopagoDto) {
+    	MedioPagoMapper mapper = new MedioPagoMapper();
+        MedioPago medioPago = mapper.fromDto(mediopagoDto);
+        medioPago.setId(id); 
+        MedioPago actualizado = (MedioPago) service.findByPublicadoTrue(id, medioPago);
+        MedioPagoResponseDto responseDto = mapper.toResponseDto(actualizado);
+        ApiResponseSuccessDto<MedioPagoResponseDto> response = new ApiResponseSuccessDto<>(true, "Medio de pago actualizado exitosamente!", responseDto);
+        return ResponseEntity.ok(response);
+    }
+    
+    @GetMapping("/mediopago/publicados/{id}")
+    public ResponseEntity<ApiResponseSuccessDto<MedioPagoResponseDto>> findByIdPublicados(@PathVariable("id") Long id) {
+        
+    	MedioPago medioPago = service.findByIdPublicados(id);
+        MedioPagoMapper mapper = new MedioPagoMapper();
+        MedioPagoResponseDto respDto = mapper.toResponseDto(medioPago);
+        return ResponseEntity.ok(new ApiResponseSuccessDto<>(true, "Medio de pago de id " + id + " encontrado", respDto));
+    }
+    
+} 
+
+    
+    
 
 
-}  

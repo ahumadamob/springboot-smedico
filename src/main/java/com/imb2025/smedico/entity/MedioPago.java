@@ -24,7 +24,20 @@ public class MedioPago extends BaseEntity { //a extends
 	@OneToMany(mappedBy = "medioPago")
     private List<Factura> facturas; 
 	
+	private boolean publicado;
+
 	
+	
+	public boolean isPublicado() {
+		return publicado;
+	}
+
+
+	public void setPublicado(boolean publicado) {
+		this.publicado = publicado;
+	}
+
+
 	public List<Factura> getFacturas() {
 		return facturas;
 	}
