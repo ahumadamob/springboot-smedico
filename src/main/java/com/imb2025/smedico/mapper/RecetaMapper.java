@@ -33,6 +33,7 @@ public class RecetaMapper {
         receta.setMedico(medico);
         receta.setObservaciones(dto.getObservaciones());
         receta.setPaciente(paciente);
+        receta.setSeveridad(dto.getSeveridad());
 
         return receta;
     }
@@ -45,6 +46,7 @@ public class RecetaMapper {
     	dto.setObservaciones(receta.getObservaciones());
     	dto.setPaciente(receta.getPaciente());
     	dto.setVersion(receta.getVersion());
+    	dto.setSeveridad(receta.getSeveridad());
     	
     	return dto;
     	

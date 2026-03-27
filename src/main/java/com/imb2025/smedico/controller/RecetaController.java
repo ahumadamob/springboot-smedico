@@ -106,8 +106,47 @@ public class RecetaController {
         return ResponseEntity.ok(resp);
     
 	}
-	
+	// final
+	@GetMapping("/recurso/severidad/alta")
+    public ResponseEntity<ApiResponseSuccessDto<List<RecetaResponseDto>>> findBySeveridadGreaterThanEqual(){
+        List<Receta> lista = service.findBySeveridadGreaterThanEqual(8);
+        List <RecetaResponseDto> listaReponse = new  ArrayList<RecetaResponseDto>();
+		RecetaMapper mapper = new RecetaMapper();
+        for(Receta m: lista) {
+        	RecetaResponseDto dto = new RecetaResponseDto();
+        	dto = mapper.toDto(m);
+        	listaReponse.add(dto);
+        }
+        
+        ApiResponseSuccessDto<List<RecetaResponseDto>> resp;
 
+        if (lista.isEmpty()) {
+            resp = new ApiResponseSuccessDto<>(true,"No hay recetas disponibles",listaReponse);
+        } else {
+            resp = new ApiResponseSuccessDto<>(true,"Lista de recetas",listaReponse);
+        }
+        return ResponseEntity.ok(resp);       
+    }
+	@GetMapping("/recurso/severidad/baja")
+    public ResponseEntity<ApiResponseSuccessDto<List<RecetaResponseDto>>> findBySeveridadLessThanEqual(){
+        List<Receta> lista = service.findBySeveridadLessThanEqual(4);
+        List <RecetaResponseDto> listaReponse = new  ArrayList<RecetaResponseDto>();
+		RecetaMapper mapper = new RecetaMapper();
+        for(Receta m: lista) {
+        	RecetaResponseDto dto = new RecetaResponseDto();
+        	dto = mapper.toDto(m);
+        	listaReponse.add(dto);
+        }
+        
+        ApiResponseSuccessDto<List<RecetaResponseDto>> resp;
+
+        if (lista.isEmpty()) {
+            resp = new ApiResponseSuccessDto<>(true,"No hay recetas disponibles",listaReponse);
+        } else {
+            resp = new ApiResponseSuccessDto<>(true,"Lista de recetas",listaReponse);
+        }
+        return ResponseEntity.ok(resp);       
+    }
 	
 }
 

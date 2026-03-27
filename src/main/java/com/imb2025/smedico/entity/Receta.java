@@ -24,15 +24,18 @@ public class Receta extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "paciente_id", nullable = false)
     private Paciente paciente;
+    
+    private int severidad;
 
 
     public Receta() {}
 
-    public Receta( LocalDate fecha, String observaciones, Medico medico, Paciente paciente) {
+    public Receta( LocalDate fecha, String observaciones, Medico medico, Paciente paciente, int severidad) {
         this.fecha = fecha;
         this.observaciones = observaciones;
         this.medico = medico;
         this.paciente = paciente;
+        this.severidad=severidad;
     }
 
     public LocalDate getFecha() {
@@ -62,4 +65,13 @@ public class Receta extends BaseEntity{
     public void setPaciente(Paciente paciente) {
         this.paciente = paciente;
     }
+
+	public int getSeveridad() {
+		return severidad;
+	}
+
+	public void setSeveridad(int severidad) {
+		this.severidad = severidad;
+	}
+    //mayor o igual y menor o igual
 }

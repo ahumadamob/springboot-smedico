@@ -31,6 +31,13 @@ public class RecetaServiceImpl implements IRecetaService {
 
     @Override
     public Receta create(Receta receta) {
+    	
+    	if(receta.getSeveridad()>10 || receta.getSeveridad()==0) {
+    		
+        	throw new ResourceNotFoundException("La severidad debe estar entre 1 y 10");
+		
+    	}
+    	
         return repo.save(receta);
     }
 
@@ -74,6 +81,21 @@ public class RecetaServiceImpl implements IRecetaService {
     public long countByFecha(LocalDate fecha) {
         return repo.countByFecha(fecha);
         }
+    @Override
+    public List<Receta> findBySeveridadGreaterThanEqual (int valor) {
+    	//if (valor <=8) {
+	      //  throw new ResourceNotFoundException("La prioridad debe ser mayor a 7");
+	        //}
+      return repo.findBySeveridadGreaterThanEqual(valor);
 
+    }
+    @Override
+    public List<Receta> findBySeveridadLessThanEqual (int valor) {
+    	//if (valor >4)  {
+	      //  throw new ResourceNotFoundException("La prioridad debe ser menor a 4");
+	    //}
+      return repo.findBySeveridadLessThanEqual(valor);
+
+    }
     
 }

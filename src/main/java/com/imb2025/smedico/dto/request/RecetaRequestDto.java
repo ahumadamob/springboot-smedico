@@ -16,14 +16,17 @@ public class RecetaRequestDto {
     private Long medicoId;
     @NotNull(message = "El paciente es obligatorio")
     private Long pacienteId;
+    
+    private int severidad;
 
     public RecetaRequestDto() {}
 
-    public RecetaRequestDto(LocalDate fecha, String observaciones, Long medicoId, Long pacienteId) {
+    public RecetaRequestDto(LocalDate fecha, String observaciones, Long medicoId, Long pacienteId, int severidad) {
         this.fecha = fecha;
         this.observaciones = observaciones;
         this.medicoId = medicoId;
         this.pacienteId = pacienteId;
+        this.severidad=severidad;
     }
 
     public LocalDate getFecha() {
@@ -57,4 +60,13 @@ public class RecetaRequestDto {
     public void setPacienteId(Long pacienteId) {
         this.pacienteId = pacienteId;
     }
+
+	public int getSeveridad() {
+		return severidad;
+	}
+
+	public void setSeveridad(int severidad) {
+		this.severidad = severidad;
+	}
+    
 }
