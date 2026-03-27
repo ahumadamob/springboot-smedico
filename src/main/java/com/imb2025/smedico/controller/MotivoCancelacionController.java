@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.imb2025.smedico.dto.ApiResponseSuccessDto;
@@ -112,5 +113,19 @@ public class MotivoCancelacionController {
                                 cantidad);
                 return ResponseEntity.ok(resp);
         }
+
+       
+        @GetMapping("/recurso/buscar-alias")
+        public ResponseEntity<ApiResponseSuccessDto<List<MotivoCancelacion>>> findByAliasContainingIgnoreCase(@RequestParam String alias) {
+                List<MotivoCancelacion> lista = service.findByAliasContainingIgnoreCase(alias);
+                ApiResponseSuccessDto<List<MotivoCancelacion>> resp = new ApiResponseSuccessDto<>(true,
+                                lista.isEmpty() ? "No hay motivos de cancelación con ese alias disponibles"
+                                                : "Lista de motivos de cancelación:",
+                                lista);
+                return ResponseEntity.ok(resp);
+        }
+        
+        //http://localhost:8080/motivocancelacion/recurso/buscar-alias?alias=testhola
+
 
 }

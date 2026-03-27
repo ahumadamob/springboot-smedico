@@ -68,4 +68,9 @@ public class MotivoCancelacionServiceImpl implements IMotivoCancelacionService {
     public long countByDescripcion(String descripcion) {
         return repo.countByDescripcion(descripcion);
     }
+    
+    @Override
+    public List<MotivoCancelacion> findByAliasContainingIgnoreCase(String texto) {
+        return repo.findByAliasContainingIgnoreCase(texto);
+    }
 }

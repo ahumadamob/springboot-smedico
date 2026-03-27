@@ -10,6 +10,7 @@ public class MotivoCancelacionMapper {
         MotivoCancelacion motivoCancelacion = new MotivoCancelacion();
         motivoCancelacion.setNombre(dto.getNombre());
         motivoCancelacion.setDescripcion(dto.getDescripcion());
+        motivoCancelacion.setAlias(dto.getAlias());
         return motivoCancelacion;
     }
     
@@ -19,6 +20,7 @@ public class MotivoCancelacionMapper {
     	dto.setDescripcion(motivoCancelacion.getDescripcion());
     	dto.setNombre(motivoCancelacion.getNombre());
     	dto.setVersion(motivoCancelacion.getVersion());
+    	dto.setAlias(motivoCancelacion.getAlias());
     	
     	return dto;
     }
