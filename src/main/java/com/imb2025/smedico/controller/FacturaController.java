@@ -111,4 +111,72 @@ public class FacturaController {
                 new ApiResponseSuccessDto<>(true, "Conteo de Facturas pagadas con: " + medioPago, cantidadFacturas);
         return ResponseEntity.ok(resp);
     }
+
+    @GetMapping("/recurso/categoria/alta")
+    public ResponseEntity<ApiResponseSuccessDto<List<FacturaResponseDto>>> findAllAltas(){
+        List<Factura> facturas = facturaService.findAllByCategoria(Factura.Categoria.ALTA);
+        List<FacturaResponseDto> facturaResponseDtos = new ArrayList<>();
+        FacturaMapper facturaMapper = new FacturaMapper();
+
+        for (Factura f: facturas){
+            FacturaResponseDto facturaResponseDto = facturaMapper.facturaToDto(f);
+            facturaResponseDtos.add(facturaResponseDto);
+        }
+
+        String mensaje;
+        if(facturaResponseDtos.isEmpty()){
+            mensaje = "No hay facturas con categoría ALTA disponibles";
+        } else {
+            mensaje = "Lista de Facturas obtenidas correctamente";
+        }
+        ApiResponseSuccessDto<List<FacturaResponseDto>> resp =
+                new ApiResponseSuccessDto<>(true, mensaje, facturaResponseDtos);
+        return ResponseEntity.ok(resp);
+    }
+
+    @GetMapping("/recurso/categoria/media")
+    public ResponseEntity<ApiResponseSuccessDto<List<FacturaResponseDto>>> findAllMedia(){
+        List<Factura> facturas = facturaService.findAllByCategoria(Factura.Categoria.MEDIA);
+        List<FacturaResponseDto> facturaResponseDtos = new ArrayList<>();
+        FacturaMapper facturaMapper = new FacturaMapper();
+
+        for (Factura f: facturas){
+            FacturaResponseDto facturaResponseDto = facturaMapper.facturaToDto(f);
+            facturaResponseDtos.add(facturaResponseDto);
+        }
+
+        String mensaje;
+        if(facturaResponseDtos.isEmpty()){
+            mensaje = "No hay facturas con categoría MEDIA disponibles";
+        } else {
+            mensaje = "Lista de Facturas obtenidas correctamente";
+        }
+        ApiResponseSuccessDto<List<FacturaResponseDto>> resp =
+                new ApiResponseSuccessDto<>(true, mensaje, facturaResponseDtos);
+        return ResponseEntity.ok(resp);
+    }
+
+    @GetMapping("/recurso/categoria/baja")
+    public ResponseEntity<ApiResponseSuccessDto<List<FacturaResponseDto>>> findAllBaja(){
+        List<Factura> facturas = facturaService.findAllByCategoria(Factura.Categoria.BAJA);
+        List<FacturaResponseDto> facturaResponseDtos = new ArrayList<>();
+        FacturaMapper facturaMapper = new FacturaMapper();
+
+        for (Factura f: facturas){
+            FacturaResponseDto facturaResponseDto = facturaMapper.facturaToDto(f);
+            facturaResponseDtos.add(facturaResponseDto);
+        }
+
+        String mensaje;
+        if(facturaResponseDtos.isEmpty()){
+            mensaje = "No hay facturas con categoría BAJA disponibles";
+        } else {
+            mensaje = "Lista de Facturas obtenidas correctamente";
+        }
+        ApiResponseSuccessDto<List<FacturaResponseDto>> resp =
+                new ApiResponseSuccessDto<>(true, mensaje, facturaResponseDtos);
+        return ResponseEntity.ok(resp);
+    }
+
+
 }

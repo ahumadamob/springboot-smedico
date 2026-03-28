@@ -29,6 +29,7 @@ public class FacturaMapper {
         factura.setMedioPago(medioPago);
         factura.setMonto(requestDTO.getMonto());
         factura.setPaciente(paciente);
+        factura.setCategoria(requestDTO.getCategoria());
 
         return factura;
     }
@@ -42,6 +43,7 @@ public class FacturaMapper {
         facturaResponseDto.setPaciente(factura.getPaciente());
         facturaResponseDto.setMonto(factura.getMonto());
         facturaResponseDto.setMedioPago(factura.getMedioPago());
+        facturaResponseDto.setCategoria(factura.getCategoria());
 
         return facturaResponseDto;
     }

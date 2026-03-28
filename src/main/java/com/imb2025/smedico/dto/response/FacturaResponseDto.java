@@ -1,5 +1,6 @@
 package com.imb2025.smedico.dto.response;
 
+import com.imb2025.smedico.entity.Factura;
 import com.imb2025.smedico.entity.MedioPago;
 import com.imb2025.smedico.entity.Paciente;
 
@@ -18,6 +19,8 @@ public class FacturaResponseDto {
     private Double monto;
 
     private MedioPago medioPago;
+
+    private Factura.Categoria categoria;
 
     public Long getId() {
         return id;
@@ -65,5 +68,13 @@ public class FacturaResponseDto {
 
     public void setMedioPago(MedioPago medioPago) {
         this.medioPago = medioPago;
+    }
+
+    public Factura.Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Factura.Categoria categoria) {
+        this.categoria = categoria;
     }
 }
