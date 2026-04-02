@@ -1,10 +1,13 @@
 package com.imb2025.smedico.dto.response;
-
-import java.time.LocalDate;
+ 
+import java.time.LocalDate; 
 
 import com.imb2025.smedico.entity.Estudio;
 import com.imb2025.smedico.entity.Medico;
 import com.imb2025.smedico.entity.Paciente;
+
+import utilities.EstadoOrden;
+
 
 
 public class OrdenEstudioResponseDto {
@@ -15,8 +18,61 @@ public class OrdenEstudioResponseDto {
 	    private Paciente paciente;
 	    private Medico medico;
 	   	private Estudio estudio;
+	   	private Boolean autorizado;
+	    private LocalDate fechaVigencia;
+	    private String codigoOrden;
+	    
+	    
+	
+	    private EstadoOrden estadoOrden;
+	    
+	    private Integer prioridad;
+	    
+ 
+
+	    public Integer getPrioridad() {
+			return prioridad;
+		}
+
+		public void setPrioridad(Integer prioridad) {
+			this.prioridad = prioridad;
+		}
+
+
+	    public EstadoOrden getEstadoOrden() {
+	 		return estadoOrden;
+	 	}
+
+	 	public void setEstadoOrden(EstadoOrden estadoOrden) {
+	 		this.estadoOrden = estadoOrden;
+	 	}
+	    
+
+	    public String getCodigoOrden() {
+			return codigoOrden;
+		}
+
+		public void setCodigoOrden(String codigoOrden) {
+			this.codigoOrden = codigoOrden;
+		}
 
 	    
+
+	    public LocalDate getFechaVigencia() {
+			return fechaVigencia;
+		}
+
+		public void setFechaVigencia(LocalDate fechaVigencia) {
+			this.fechaVigencia = fechaVigencia;
+		}
+		
+	    public Boolean getAutorizado() {
+			return autorizado;
+		}
+
+		public void setAutorizado(Boolean autorizado) {
+			this.autorizado = autorizado;
+		}
 
 
 	public Paciente getPaciente() {
